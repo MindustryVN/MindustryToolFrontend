@@ -1,0 +1,43 @@
+.home {
+    width: 100%;
+    height: 100%;
+	color: white;
+
+	overflow: hidden hidden;
+}
+
+.home::before {
+	background-image: url('https://cdn.discordapp.com/attachments/1010376385862316103/1106142719933423706/light_theme_4.png');
+    content: '';
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: -1;
+
+    display: block;
+    background-size: cover;
+	background-position: center center;
+    filter: brightness(80%);
+    width: 100%;
+    height: 100%;
+}
+
+.content {
+    display: block;
+    align-items: center;
+    justify-items: center;
+    padding: 15px;
+    margin: 50px;
+}
+
+.link-container {
+    display: block;
+}
+
+.link {
+	color: white;
+}
+
+.link:hover {
+    color:chartreuse;
+}

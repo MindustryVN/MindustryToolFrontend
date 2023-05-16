@@ -1,0 +1,16 @@
+.tag {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--dark-transparent-background);
+
+	border-radius: 5px;
+	margin: 3px;
+	padding: 2px;
+	font-size: 14px;
+}
+
+.tag-text {
+	display: flex;
+	align-items: center;
+}

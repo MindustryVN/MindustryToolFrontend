@@ -1,0 +1,64 @@
+.dropbox {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+
+	margin: auto;
+	width: 50%;
+	height: 40px;
+	min-width: 170px;
+	background-color: var(--dark-transparent-background);
+
+	margin-top: 5px;
+	border-radius: 5px;
+
+    justify-content: center;
+}
+
+.dropbox-input {
+	display: flex;
+	width: 100%;
+	align-items: center;
+}
+
+.dropbox-text {
+	display: flex;
+	align-items: center;
+
+	width: 100%;
+
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.dropbox-popup {
+	width: inherit;
+	height: 1px;
+}
+
+.dropbox-element {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.dropbox-element:hover {
+	background-color: var(--light-transparent-background);
+}
+
+.dropbox-element-container::-webkit-scrollbar {
+	display: none;
+}
+
+.dropbox-element-container {
+	display: block;
+	position: absolute;
+	width: inherit;
+	max-height: 50%;
+	border-radius: 5px;
+	margin-top: 5px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+
+	background-color: var(--dark-transparent-background);
+	overflow: hidden scroll;
+}

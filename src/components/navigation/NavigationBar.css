@@ -1,0 +1,62 @@
+.navigation-bar {
+	position: fixed;
+	height: 100%;
+	z-index: 999;
+	height: 100%;
+}
+
+.icon .popup {
+	position: fixed;
+	top: 0;
+	max-width: 0;
+	display: block;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	height: 100%;
+	visibility: hidden;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.icon:hover {
+	visibility: hidden;
+}
+
+.icon:hover .popup {
+	visibility: visible;
+	max-width: 300px;
+}
+
+.icon:hover .popup::before {
+	visibility: visible;
+	max-width: 300px;
+}
+
+.menu-icon:hover {
+	cursor: pointer;
+}
+
+.menu-icon {
+	display: block;
+	color: white;
+}
+
+.nav-link-container {
+	display: block;
+}
+
+.nav-link {
+	color: white;
+	background-color: transparent;
+	outline: none;
+	border: none;
+	margin: 3px;
+	padding: 5px;
+	font-family: 'Courier New', Courier, monospace;
+	font-weight: bold;
+}
+
+.nav-link:hover {
+	background-color: white;
+	color: black;
+}
