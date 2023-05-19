@@ -42,9 +42,7 @@ const Schematic = () => {
 
 	function loadPage(page: number) {
 		setLoading(true);
-		const config = { params: { page: page } };
-
-		Api.get(`schematics`, config)
+		Api.get(`schematics/page/${page}`)
 			.then((result) => {
 				if (result.status === 200 && result.data && result.data.length > 0) {
 					setSchematicList([...schematicList, ...result.data]);
