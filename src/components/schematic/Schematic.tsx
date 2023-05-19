@@ -47,6 +47,8 @@ const Schematic = () => {
 				if (result.status === 200 && result.data && result.data.length > 0) {
 					setSchematicList([...schematicList, ...result.data]);
 					setPage(page + 1);
+					if (result.data.length < 10) setHasMoreContent(false);
+					
 				} else setHasMoreContent(false);
 			})
 			.catch((error) => console.log(error))
