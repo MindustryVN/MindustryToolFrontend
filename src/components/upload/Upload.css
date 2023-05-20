@@ -168,3 +168,7 @@
 	border: none;
 	cursor: pointer;
 }
+
+#utb {
+	display: none;
+}

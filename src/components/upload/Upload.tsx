@@ -176,7 +176,7 @@ const Upload = () => {
 					<div className='preview-image-container'>
 						<label htmlFor='ufb'>
 							{image ? <img className='preview-image' src={PNG_IMAGE_PREFIX + image} alt='Upload a file'></img> : <div className='preview-image'>Upload a file</div>}
-							<input id='ufb' type='file' style={{ display: 'none' }} onChange={(event) => handleFileChange(event)}></input>
+							<input id='ufb' type='file' onChange={(event) => handleFileChange(event)}></input>
 						</label>
 						<input className='upload-code-button' placeholder='Code' value={code} onChange={handleCodeChange} />
 					</div>
