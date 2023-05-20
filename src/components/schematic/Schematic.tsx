@@ -2,23 +2,17 @@ import './Schematic.css';
 
 import { SearchIcon, ArrowDownIcon, ArrowUpIcon, CopyIcon, DownloadIcon, DeleteIcon } from '../util/Icon';
 import { useState, useEffect, ChangeEvent } from 'react';
+import { SCHEMATIC_TAG } from './Tag';
 import { useNavigate } from 'react-router-dom';
-import { tags } from './SchematicTag';
+import { capitalize } from '../util/Util';
+import { API } from '../../AxiosConfig';
 
 import SchematicInfo from './SchematicInfo';
 import LazyLoadImage from '../util/LazyLoadImage';
-import CustomTag from './SchematicTag';
 import SearchBar from '../shared/SearchBar';
 import Dropbox from '../shared/Dropbox';
 import React from 'react';
 import Tag from '../shared/Tag';
-import Api from '../../AxiosConfig';
-import { capitalize } from '../util/Util';
-
-function hasOption(tag: CustomTag) {
-	if (tag.getValues() == null) return false;
-	return tag.getValues().length > 0;
-}
 
 const Schematic = () => {
 	const [hasMoreContent, setHasMoreContent] = useState(true);
@@ -27,10 +21,10 @@ const Schematic = () => {
 	const [page, setPage] = useState(0);
 	const [schematicList, setSchematicList] = useState<SchematicInfo[]>([]);
 
-	const [tag, setTag] = useState(tags[0]);
+	const [tag, setTag] = useState(SCHEMATIC_TAG[0]);
 	const [content, setContent] = useState('');
 
-	const [query, setQuery] = useState<SchematicQuery[]>([]);
+	const [query, setQuery] = useState<TagQuery[]>([]);
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
@@ -42,13 +36,12 @@ const Schematic = () => {
 
 	function loadPage(page: number) {
 		setLoading(true);
-		Api.get(`schematics/page/${page}`)
+		API.get(`schematics/page/${page}`)
 			.then((result) => {
 				if (result.status === 200 && result.data && result.data.length > 0) {
 					setSchematicList([...schematicList, ...result.data]);
 					setPage(page + 1);
 					if (result.data.length < 10) setHasMoreContent(false);
-					
 				} else setHasMoreContent(false);
 			})
 			.catch((error) => console.log(error))
@@ -134,7 +127,7 @@ const Schematic = () => {
 	const tagSubmitButton = (
 		<button
 			title='submit'
-			className='search-button'
+			className='submit-button'
 			onClick={(event) => {
 				handleAddTag();
 				event.stopPropagation();
@@ -148,7 +141,7 @@ const Schematic = () => {
 			<div className='search-container'>
 				{
 					<Dropbox value={'Tag: ' + tag.category}>
-						{tags.map((t, index) => (
+						{SCHEMATIC_TAG.filter((t) => !query.find((q) => q.category === t.category)).map((t, index) => (
 							<div
 								key={index}
 								onClick={() => {
@@ -160,7 +153,7 @@ const Schematic = () => {
 						))}
 					</Dropbox>
 				}
-				{hasOption(tag) ? (
+				{tag.hasOption() ? (
 					<Dropbox value={'Value: ' + content} submitButton={tagSubmitButton}>
 						{tag.getValues().map((content: string, index: number) => (
 							<div
@@ -173,19 +166,10 @@ const Schematic = () => {
 						))}
 					</Dropbox>
 				) : (
-					<SearchBar
-						placeholder='Search'
-						value={content}
-						onChange={handleContentInput}
-						submitButton={
-							<button className='search-button' title='submit' onClick={() => handleAddTag()}>
-								<SearchIcon />
-							</button>
-						}
-					/>
+					<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
 				)}
 				<div className='tag-container'>
-					{query.map((t: SchematicQuery, index: number) => (
+					{query.map((t: TagQuery, index: number) => (
 						<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} onRemove={handleRemoveTag} />
 					))}
 				</div>

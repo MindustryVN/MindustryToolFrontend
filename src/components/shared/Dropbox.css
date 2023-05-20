@@ -3,16 +3,12 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 
-	margin: auto;
-	width: 50%;
 	height: 40px;
 	min-width: 170px;
+	border-radius: 5px;
 	background-color: var(--dark-transparent-background);
 
-	margin-top: 5px;
-	border-radius: 5px;
-
-    justify-content: center;
+	justify-content: center;
 }
 
 .dropbox-input {
@@ -32,8 +28,7 @@
 }
 
 .dropbox-popup {
-	width: inherit;
-	height: 1px;
+	position: relative;
 }
 
 .dropbox-element {
@@ -50,14 +45,17 @@
 }
 
 .dropbox-element-container {
-	display: block;
 	position: absolute;
-	width: inherit;
-	max-height: 50%;
+	display: block;
+	width: 100%;
+	max-height: 50dvh;
+	max-height: 50vh;
+	
 	border-radius: 5px;
-	margin-top: 5px;
-	padding-bottom: 5px;
-	padding-top: 5px;
+	padding-bottom: 0.25rem;
+	padding-top: 0.25rem;
+
+	margin-top: 0.5rem;
 
 	background-color: var(--dark-transparent-background);
 	overflow: hidden scroll;

@@ -1,5 +1,5 @@
 import React from 'react';
-import Api from '../../AxiosConfig';
+import { API } from '../../AxiosConfig';
 import { PNG_IMAGE_PREFIX } from '../../Config';
 
 export interface IHash {
@@ -14,7 +14,7 @@ export default class LazyLoadImage extends React.Component<{ className: string; 
 		let data = LazyLoadImage.imageMap[this.props.path];
 		if (data) this.setState({ src: data });
 		else
-			Api.get(this.props.path) //
+			API.get(this.props.path) //
 				.then((result) => {
 					let data = PNG_IMAGE_PREFIX + result.data;
 					this.setState(() => ({ src: data }));

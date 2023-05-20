@@ -1,6 +1,6 @@
 import './SearchBar.css';
 
-import React, { Component, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 export default class SearchBar extends React.Component<{ placeholder: string; value: string; onChange: (event: React.ChangeEvent<HTMLInputElement>) => void; submitButton?: ReactNode }> {
 	render() {

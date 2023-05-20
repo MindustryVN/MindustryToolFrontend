@@ -14,7 +14,7 @@ export default class Dropbox extends React.Component<{ value: string; submitButt
 	render() {
 		return (
 			<div className='dropbox'>
-				<div className='dropbox-input' onClick={() => this.setState({ showDropbox: true })}>
+				<div className='dropbox-input' onClick={() => this.setState({ showDropbox: !this.state.showDropbox })}>
 					<div className='dropbox-text'>{this.props.value}</div>
 					{this.props.submitButton}
 				</div>

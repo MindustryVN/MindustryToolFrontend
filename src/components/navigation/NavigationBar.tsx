@@ -33,6 +33,9 @@ const NavigationBar = () => {
 						<div className='nav-link' onClick={() => navigate('/upload')}>
 							Upload
 						</div>
+						<div className='nav-link' onClick={() => navigate('/admin')}>
+							Admin
+						</div>
 					</div>
 				</div>
 			</div>
