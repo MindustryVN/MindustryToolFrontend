@@ -118,6 +118,11 @@
 }
 
 .schematic-info-container {
+	max-height: 70vh;
+	max-width: 70vw;
+	max-height: 70dvh;
+	max-width: 70dvw;
+
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
