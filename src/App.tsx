@@ -9,10 +9,10 @@ const Home = React.lazy(() => import('./components/home/Home'));
 const User = React.lazy(() => import('./components/user/User'));
 const Logic = React.lazy(() => import('./components/logic/Logic'));
 const Schematic = React.lazy(() => import('./components/schematic/Schematic'));
-
 const Login = React.lazy(() => import('./components/login/Login'));
 const Logout = React.lazy(() => import('./components/logout/Logout'));
 const Upload = React.lazy(() => import('./components/upload/Upload'));
+const Admin = React.lazy(() => import('./components/admin/Admin'));
 
 import NavigationBar from './components/navigation/NavigationBar';
 
@@ -33,6 +33,8 @@ function App() {
 						<Route path='/login' element={<Login />} />
 						<Route path='/logout' element={<Logout />} />
 						<Route path='/upload' element={<Upload />} />
+						{/* TODO: Verify before enter */}
+						{/* <Route path='/admin' element={<Admin />} /> */}
 					</Routes>
 				</Suspense>
 			</Router>
