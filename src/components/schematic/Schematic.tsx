@@ -73,6 +73,9 @@ const Schematic = () => {
 	function buildSchematicInfo(schematic: SchematicInfo | null) {
 		if (schematic == null) return <></>;
 
+		var blob = new Blob([schematic.data], { type: 'text/plain' });
+		const url = window.URL.createObjectURL(blob);
+
 		return (
 			<div className='schematic-info-modal' onClick={() => setShowSchematicModel(false)}>
 				<div className='schematic-info-pane'>
@@ -108,10 +111,15 @@ const Schematic = () => {
 									}}>
 									<ArrowDownIcon />
 								</div>
-								<div className='schematic-info-button'>
+								<a className='schematic-info-button' href={url} download={`${schematic.name}.msch`}>
 									<DownloadIcon />
-								</div>
-								<div className='schematic-info-button'>
+								</a>
+								<div
+									className='schematic-info-button'
+									onClick={() => {
+										navigator.clipboard.writeText(schematic.data);
+										alert('Copied');
+									}}>
 									<CopyIcon />
 								</div>
 								<div className='schematic-info-button'>
