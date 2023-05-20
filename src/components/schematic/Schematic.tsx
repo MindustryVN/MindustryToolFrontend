@@ -111,14 +111,13 @@ const Schematic = () => {
 									}}>
 									<ArrowDownIcon />
 								</div>
-								<a className='schematic-info-button' href={url} download={`${schematic.name}.msch`}>
+								<a className='schematic-info-button' href={url} download={`${schematic.name.trim().replaceAll(' ','_')}.msch`}>
 									<DownloadIcon />
 								</a>
 								<div
 									className='schematic-info-button'
 									onClick={() => {
-										navigator.clipboard.writeText(schematic.data);
-										alert('Copied');
+										navigator.clipboard.writeText(schematic.data).then(() => alert('Copied'));
 									}}>
 									<CopyIcon />
 								</div>
