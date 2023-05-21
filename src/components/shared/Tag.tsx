@@ -1,6 +1,6 @@
-import "./Tag.css"
+import './Tag.css';
 
-import { capitalize } from '../util/Util';
+import { capitalize } from './Util';
 
 import React from 'react';
 

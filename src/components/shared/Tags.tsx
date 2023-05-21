@@ -24,6 +24,6 @@ export const SCHEMATIC_TAG = [
 ];
 
 
-export const UPLOAD_SCHEMATIC_TAG = SCHEMATIC_TAG.filter((t) => !["name"].includes(t.category))
+export const UPLOAD_SCHEMATIC_TAG = SCHEMATIC_TAG.filter((t) => !["name", "size"].includes(t.category))
 
 export default CustomTag;

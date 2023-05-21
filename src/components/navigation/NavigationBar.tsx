@@ -3,7 +3,7 @@ import './NavigationBar.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { CopyIcon, HomeIcon, MapIcon, MenuIcon } from '../util/Icon';
+import { CopyIcon, HomeIcon, MapIcon, MenuIcon } from '../shared/Icon';
 
 const NavigationBar = () => {
 	const navigate = useNavigate();

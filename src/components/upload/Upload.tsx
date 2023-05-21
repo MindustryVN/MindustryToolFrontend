@@ -7,10 +7,10 @@ import React from 'react';
 import Tag from '../shared/Tag';
 
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../Config';
-import { capitalize, getFileExtension } from '../util/Util';
+import { capitalize, getFileExtension } from '../shared/Util';
 import { ChangeEvent, useState } from 'react';
-import { UPLOAD_SCHEMATIC_TAG } from '../schematic/Tag';
-import { SearchIcon } from '../util/Icon';
+import { UPLOAD_SCHEMATIC_TAG } from '../shared/Tags';
+import { SearchIcon } from '../shared/Icon';
 import { API } from '../../AxiosConfig';
 
 const UPLOAD_INVALID_EXTENSION = 'Invalid file extension';

@@ -1,14 +1,14 @@
 import './Schematic.css';
 
-import { SearchIcon, ArrowDownIcon, ArrowUpIcon, CopyIcon, DownloadIcon, DeleteIcon } from '../util/Icon';
+import { SearchIcon, ArrowDownIcon, ArrowUpIcon, CopyIcon, DownloadIcon, DeleteIcon } from '../shared/Icon';
 import { useState, useEffect, ChangeEvent } from 'react';
-import { SCHEMATIC_TAG } from './Tag';
+import { SCHEMATIC_TAG } from '../shared/Tags';
 import { useNavigate } from 'react-router-dom';
-import { capitalize } from '../util/Util';
+import { capitalize } from '../shared/Util';
 import { API } from '../../AxiosConfig';
 
 import SchematicInfo from './SchematicInfo';
-import LazyLoadImage from '../util/LazyLoadImage';
+import LazyLoadImage from '../shared/LazyLoadImage';
 import SearchBar from '../shared/SearchBar';
 import Dropbox from '../shared/Dropbox';
 import React from 'react';
@@ -111,7 +111,7 @@ const Schematic = () => {
 									}}>
 									<ArrowDownIcon />
 								</div>
-								<a className='schematic-info-button' href={url} download={`${schematic.name.trim().replaceAll(' ','_')}.msch`}>
+								<a className='schematic-info-button' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 									<DownloadIcon />
 								</a>
 								<div
