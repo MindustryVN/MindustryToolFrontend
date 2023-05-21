@@ -36,7 +36,7 @@ const Schematic = () => {
 
 	function loadPage(page: number) {
 		setLoading(true);
-		API.get(`schematics/page/${page}`)
+		API.get(`schematics/page/${page}`, { params: { tags: `${query.map((q) => `${q.category}:${q.value}`).join()}` } })
 			.then((result) => {
 				if (result.status === 200 && result.data && result.data.length > 0) {
 					setSchematicList([...schematicList, ...result.data]);
@@ -133,7 +133,7 @@ const Schematic = () => {
 	}
 	const tagSubmitButton = (
 		<button
-			title='submit'
+			title='Add'
 			className='submit-button'
 			onClick={(event) => {
 				handleAddTag();

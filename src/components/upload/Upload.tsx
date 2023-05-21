@@ -15,12 +15,12 @@ import { API } from '../../AxiosConfig';
 
 const UPLOAD_INVALID_EXTENSION = 'Invalid file extension';
 const UPLOAD_NETWORK_ERROR = 'Network error try later';
-const UPLOAD_SET_FILE = 'Upload a file';
-const UPLOAD_UPLOAD = 'Upload';
-const UPLOAD_INVALID_CODE = 'Invalid schematic code';
-const UPlOAD_FAILED = 'Upload failed';
 const UPlOAD_SUCCESSFULLY = 'Upload successfully';
+const UPLOAD_INVALID_CODE = 'Invalid schematic code';
+const UPLOAD_SET_FILE = 'Upload a file';
 const UPLOAD_NO_DATA = 'No schematic or map provided';
+const UPlOAD_FAILED = 'Upload failed';
+const UPLOAD_UPLOAD = 'Upload';
 
 const config = {
 	headers: {
@@ -98,7 +98,7 @@ const Upload = () => {
 	function handleSubmit() {
 		let formData = new FormData();
 		formData.append('authorId', 'Community');
-		formData.append('tags', `[${query.map((q) => `${q.category}:${q.value}`).join()}]`);
+		formData.append('tags', `${query.map((q) => `${q.category}:${q.value}`).join()}`);
 		let endpoint;
 
 		if (file !== undefined) {
@@ -127,8 +127,7 @@ const Upload = () => {
 					alert(UPlOAD_SUCCESSFULLY);
 				})
 				.catch((error) => {
-					console.log(error);
-					alert(`${UPlOAD_FAILED}: ${error.response.data.message}`);
+					if (error.response && error.response.data) alert(`${UPlOAD_FAILED}: ${error.response.data.message}`);
 				});
 		} else {
 			setUploadStatus(UPLOAD_INVALID_EXTENSION);
@@ -159,7 +158,7 @@ const Upload = () => {
 
 	const tagSubmitButton = (
 		<button
-			title='submit'
+			title='Add'
 			className='submit-button'
 			onClick={(event) => {
 				handleAddTag();
