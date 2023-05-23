@@ -3,15 +3,13 @@ import './NavigationBar.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { CopyIcon, HomeIcon, MapIcon, MenuIcon } from '../shared/Icon';
-
 const NavigationBar = () => {
 	const navigate = useNavigate();
 
 	return (
 		<div className='navigation-bar'>
 			<div className='icon'>
-				<MenuIcon />
+				<img className='menu-icon' src='/assets/icons/dots.png' alt='check' />
 				<div className='popup'>
 					<img src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt=''></img>
 					<div className='nav-link-container'>

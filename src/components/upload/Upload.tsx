@@ -2,6 +2,7 @@ import './Upload.css';
 
 import UploadFile from './UploadFile';
 import SearchBar from '../shared/SearchBar';
+import TagQuery from '../shared/TagQuery';
 import Dropbox from '../shared/Dropbox';
 import React from 'react';
 import Tag from '../shared/Tag';
@@ -9,8 +10,7 @@ import Tag from '../shared/Tag';
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../Config';
 import { capitalize, getFileExtension } from '../shared/Util';
 import { ChangeEvent, useState } from 'react';
-import { UPLOAD_SCHEMATIC_TAG } from '../shared/Tags';
-import { SearchIcon } from '../shared/Icon';
+import { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../shared/Tags';
 import { API } from '../../AxiosConfig';
 
 const UPLOAD_INVALID_EXTENSION = 'Invalid file extension';
@@ -41,17 +41,17 @@ const Upload = () => {
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		if (!event.target) return;
 
-		let files = event.target.files;
+		const files = event.target.files;
 		if (!files || files.length <= 0) return;
 
-		let extension: string = getFileExtension(files[0]);
+		const extension: string = getFileExtension(files[0]);
 
 		if (extension === SCHEMATIC_FILE_EXTENSION || extension === MAP_FILE_EXTENSION) {
 			setFile({ file: files[0], type: extension });
 			setCode('');
 
-			let endpoint = getApiEndpoint(extension);
-			let form = new FormData();
+			const endpoint = getApiEndpoint(extension);
+			const form = new FormData();
 			form.append('file', files[0]);
 			if (endpoint) {
 				API.post(endpoint + '/preview', form, config)
@@ -71,7 +71,7 @@ const Upload = () => {
 	function handleCodeChange(event: ChangeEvent<HTMLInputElement>) {
 		if (!event.target) return;
 
-		let str = event.target.value;
+		const str = event.target.value;
 		if (!str.startsWith('bXNja')) {
 			setUploadStatus(UPLOAD_INVALID_CODE);
 			return;
@@ -96,14 +96,14 @@ const Upload = () => {
 	}
 
 	function handleSubmit() {
-		let formData = new FormData();
+		const formData = new FormData();
 		formData.append('authorId', 'Community');
-		formData.append('tags', `${query.map((q) => `${q.category}:${q.value}`).join()}`);
+		formData.append('tags', `${query.map((q) => `${q.toString()}`).join()}`);
 		let endpoint;
 
 		if (file !== undefined) {
-			let currentFile = file.file;
-			let extension = getFileExtension(currentFile);
+			const currentFile = file.file;
+			const extension = getFileExtension(currentFile);
 			if (extension === 'msch' || extension === 'msav') {
 				setFile({ file: currentFile, type: extension });
 				formData.append('file', currentFile);
@@ -123,6 +123,7 @@ const Upload = () => {
 					setCode('');
 					setFile(undefined);
 					setImage(undefined);
+					setQuery([]);
 					setUploadStatus(UPLOAD_SET_FILE);
 					alert(UPlOAD_SUCCESSFULLY);
 				})
@@ -136,7 +137,7 @@ const Upload = () => {
 
 	function handleContentInput(event: ChangeEvent<HTMLInputElement>) {
 		if (event) {
-			let input = event.target.value;
+			const input = event.target.value;
 			setContent(input.trim());
 		}
 	}
@@ -146,13 +147,11 @@ const Upload = () => {
 	}
 
 	function handleAddTag() {
-		if (query.find((q) => q.category.toLowerCase() === tag.category.toLowerCase()) !== undefined) {
-			alert(capitalize(tag.category) + ' tag exists in your search query ');
-			return;
-		}
+		const q = query.filter((q) => q.category !== tag.category);
+		const v = tag.getValues();
 
-		if (tag.getValues() == null || (tag !== null && tag.getValues().find((c: string) => c === content) !== undefined)) {
-			setQuery([...query, { category: tag.category, color: tag.color, value: content }]);
+		if (v === null || (v !== null && v.find((c: TagChoice) => c.value === content) !== undefined)) {
+			setQuery([...q, new TagQuery(tag.category, tag.color, content)]);
 		} else alert('Invalid tag ' + tag.category + ': ' + content);
 	}
 
@@ -164,7 +163,7 @@ const Upload = () => {
 				handleAddTag();
 				event.stopPropagation();
 			}}>
-			<SearchIcon />
+			<img src='/assets/icons/check.png' alt='check' />
 		</button>
 	);
 
@@ -195,15 +194,16 @@ const Upload = () => {
 							</Dropbox>
 							{tag.hasOption() ? (
 								<Dropbox value={'Value: ' + content} submitButton={tagSubmitButton}>
-									{tag.getValues().map((content: string, index: number) => (
-										<div key={index} onClick={() => setContent(content)}>
-											{content}
+									{tag.getValues().map((content: { name: string; value: string }, index: number) => (
+										<div key={index} onClick={() => setContent(content.value)}>
+											{content.name}
 										</div>
 									))}
 								</Dropbox>
 							) : (
 								<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
 							)}
+							Tag:
 							<div className='tag-container'>
 								{query.map((t: TagQuery, index: number) => (
 									<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} onRemove={handleRemoveTag} />

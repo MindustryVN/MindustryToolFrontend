@@ -11,12 +11,12 @@ export default class LazyLoadImage extends React.Component<{ className: string; 
 
 	state = { src: '', error: false };
 	componentDidMount() {
-		let data = LazyLoadImage.imageMap[this.props.path];
+		const data = LazyLoadImage.imageMap[this.props.path];
 		if (data) this.setState({ src: data });
 		else
 			API.get(this.props.path) //
 				.then((result) => {
-					let data = PNG_IMAGE_PREFIX + result.data;
+					const data = PNG_IMAGE_PREFIX + result.data;
 					this.setState(() => ({ src: data }));
 					LazyLoadImage.imageMap[this.props.path] = data;
 				})
