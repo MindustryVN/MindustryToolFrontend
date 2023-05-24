@@ -3,9 +3,10 @@ interface SchematicInfo {
 	name: string;
 	data: string;
 	authorId: string;
+	description : string;
+	tags: string[];
 	like: number;
 	dislike: number;
-	tags: string[];
 }
 
 export default SchematicInfo;

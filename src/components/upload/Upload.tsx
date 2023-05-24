@@ -8,7 +8,7 @@ import React from 'react';
 import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../shared/Tag';
 
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../Config';
-import { capitalize, getFileExtension } from '../shared/Util';
+import { capitalize, getFileExtension } from '../util/Util';
 import { ChangeEvent, useState } from 'react';
 import { API } from '../../AxiosConfig';
 
@@ -35,7 +35,7 @@ const Upload = () => {
 
 	const [tag, setTag] = useState(UPLOAD_SCHEMATIC_TAG[0]);
 	const [content, setContent] = useState('');
-	const [query, setQuery] = useState<TagQuery[]>([]);
+	const [tags, setTags] = useState<TagQuery[]>([]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		if (!event.target) return;
@@ -95,26 +95,32 @@ const Upload = () => {
 	}
 
 	function handleSubmit() {
-		const formData = new FormData();
-		formData.append('authorId', 'Community');
-		formData.append('tags', `${query.map((q) => `${q.toString()}`).join()}`);
-		let endpoint;
-
-		if (file !== undefined) {
-			const currentFile = file.file;
-			const extension = getFileExtension(currentFile);
-			if (extension === 'msch' || extension === 'msav') {
-				setFile({ file: currentFile, type: extension });
-				formData.append('file', currentFile);
-				endpoint = getApiEndpoint(extension);
-			}
-		} else if (code !== undefined && code.length > 8) {
-			formData.append('code', code);
-			endpoint = 'schematics';
-		} else {
-			setUploadStatus(UPLOAD_NO_DATA);
+		if (tags === null || tags.length === 0) {
+			alert('No tags provided');
 			return;
 		}
+
+		const formData = new FormData();
+		formData.append('authorId', 'community');
+		formData.append('tags', `${tags.map((q) => `${q.toString()}`).join()}`);
+		let endpoint;
+
+		if (tag)
+			if (file !== undefined) {
+				const currentFile = file.file;
+				const extension = getFileExtension(currentFile);
+				if (extension === 'msch' || extension === 'msav') {
+					setFile({ file: currentFile, type: extension });
+					formData.append('file', currentFile);
+					endpoint = getApiEndpoint(extension);
+				}
+			} else if (code !== undefined && code.length > 8) {
+				formData.append('code', code);
+				endpoint = 'schematics';
+			} else {
+				setUploadStatus(UPLOAD_NO_DATA);
+				return;
+			}
 
 		if (endpoint) {
 			API.post(endpoint, formData, config)
@@ -122,7 +128,7 @@ const Upload = () => {
 					setCode('');
 					setFile(undefined);
 					setImage(undefined);
-					setQuery([]);
+					setTags([]);
 					setUploadStatus(UPLOAD_SET_FILE);
 					alert(UPlOAD_SUCCESSFULLY);
 				})
@@ -142,15 +148,15 @@ const Upload = () => {
 	}
 
 	function handleRemoveTag(index: number) {
-		setQuery([...query.filter((_, i) => i !== index)]);
+		setTags([...tags.filter((_, i) => i !== index)]);
 	}
 
 	function handleAddTag() {
-		const q = query.filter((q) => q.category !== tag.category);
+		const q = tags.filter((q) => q.category !== tag.category);
 		const v = tag.getValues();
 
 		if (v === null || (v !== null && v.find((c: TagChoice) => c.value === content) !== undefined)) {
-			setQuery([...q, new TagQuery(tag.category, tag.color, content)]);
+			setTags([...q, new TagQuery(tag.category, tag.color, content)]);
 		} else alert('Invalid tag ' + tag.category + ': ' + content);
 	}
 
@@ -166,6 +172,9 @@ const Upload = () => {
 		</button>
 	);
 
+	let tagValue = tag.getValues();
+	tagValue = tagValue == null ? [] : tagValue;
+
 	return (
 		<div className='upload'>
 			<div className='upload-model'>
@@ -179,23 +188,23 @@ const Upload = () => {
 					</div>
 					<div className='upload-description-container'>
 						<div className='search-container'>
-							<Dropbox value={'Tag: ' + tag.category}>
-								{UPLOAD_SCHEMATIC_TAG.filter((t) => !query.find((q) => q.category === t.category)).map((t, index) => (
+							<Dropbox value={'Tag: ' + capitalize(tag.category)}>
+								{UPLOAD_SCHEMATIC_TAG.filter((t) => !tags.find((q) => q.category === t.category)).map((t, index) => (
 									<div
 										key={index}
 										onClick={() => {
 											setTag(t);
 											setContent('');
 										}}>
-										{t.category}
+										{capitalize(t.category)}
 									</div>
 								))}
 							</Dropbox>
 							{tag.hasOption() ? (
-								<Dropbox value={'Value: ' + content} submitButton={tagSubmitButton}>
-									{tag.getValues().map((content: { name: string; value: string }, index: number) => (
+								<Dropbox value={'Value: ' + capitalize(content)} submitButton={tagSubmitButton}>
+									{tagValue.map((content: { name: string; value: string }, index: number) => (
 										<div key={index} onClick={() => setContent(content.value)}>
-											{content.name}
+											{capitalize(content.name)}
 										</div>
 									))}
 								</Dropbox>
@@ -203,8 +212,19 @@ const Upload = () => {
 								<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
 							)}
 							<div className='tag-container'>
-								{query.map((t: TagQuery, index: number) => (
-									<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} onRemove={handleRemoveTag} />
+								{tags.map((t: TagQuery, index: number) => (
+									<Tag
+										key={index}
+										index={index}
+										name={t.category}
+										value={t.value}
+										color={t.color}
+										removeButton={
+											<div className='remove-tag-button' onClick={() => handleRemoveTag(index)}>
+												<img src='/assets/icons/quit.png' alt='quit'></img>
+											</div>
+										}
+									/>
 								))}
 							</div>
 						</div>

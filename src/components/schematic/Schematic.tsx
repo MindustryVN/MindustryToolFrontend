@@ -1,8 +1,7 @@
 import './Schematic.css';
 
 import { useState, useEffect, ChangeEvent, ReactElement, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { capitalize } from '../shared/Util';
+import { capitalize } from '../util/Util';
 import { API } from '../../AxiosConfig';
 
 import SchematicInfo from './SchematicInfo';
@@ -12,6 +11,7 @@ import TagQuery from '../shared/TagQuery';
 import Dropbox from '../shared/Dropbox';
 import React from 'react';
 import Tag, { CustomTag, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG, TagChoice } from '../shared/Tag';
+import UserName from '../user/UserName';
 
 const MAX_ITEM_PER_PAGE = 10;
 
@@ -37,9 +37,7 @@ const Schematic = () => {
 
 	const currentQuery = useRef<{ tag: TagQuery[]; sort: TagChoice }>({ tag: [], sort: SCHEMATIC_SORT_CHOICE[0] });
 
-	const navigate = useNavigate();
-
-	useEffect(() => loadPage(), [tagQuery, sortQuery]);
+	useEffect(() => loadPage(), [sortQuery]);
 
 	function loadPage() {
 		setLoaderState(LoaderState.LOADING);
@@ -113,13 +111,15 @@ const Schematic = () => {
 						<LazyLoadImage className='schematic-info-image' path={`schematics/${schematic.id}/image`}></LazyLoadImage>
 						<div className='schematic-info-desc-container'>
 							<span>Name: {capitalize(schematic.name)}</span>
-							<a onClick={() => navigate(`/user/${schematic.authorId}`)}>Author: {schematic.authorId}</a>
+							<span>
+								Author: <UserName userId={schematic.authorId} />
+							</span>
 							<span>Like: {schematic.like}</span>
 							<span>Dislike: {schematic.dislike}</span>
+							<p>{schematic.description}</p>
 							<section>
-								Tags:
 								{tagArray.map((t: TagQuery, index: number) => (
-									<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} onRemove={handleRemoveTag} />
+									<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} />
 								))}
 							</section>
 							<section className='schematic-info-button-container'>
@@ -188,11 +188,14 @@ const Schematic = () => {
 		}
 	}
 
+	let tagValue = tag.getValues();
+	tagValue = tagValue == null ? [] : tagValue;
+
 	return (
 		<div className='schematic'>
 			<section className='search-container'>
 				<Dropbox
-					value={'Tag: ' + tag.category}
+					value={'Tag: ' + capitalize(tag.category)}
 					submitButton={
 						<button className='submit-button' title='Search' type='button' onClick={(e) => loadPage()}>
 							<img src='/assets/icons/search.png' alt='search'></img>
@@ -205,14 +208,14 @@ const Schematic = () => {
 								setTag(t);
 								setContent('');
 							}}>
-							{t.category}
+							{capitalize(t.category)}
 						</div>
 					))}
 				</Dropbox>
 
 				{tag.hasOption() ? (
-					<Dropbox value={'Value: ' + content} submitButton={tagSubmitButton}>
-						{tag.getValues().map((content: { name: string; value: string }, index: number) => (
+					<Dropbox value={'Value: ' + capitalize(content)} submitButton={tagSubmitButton}>
+						{tagValue.map((content: { name: string; value: string }, index: number) => (
 							<div key={index} onClick={() => setContent(content.value)}>
 								{capitalize(content.name)}
 							</div>
@@ -223,7 +226,18 @@ const Schematic = () => {
 				)}
 				<div className='tag-container'>
 					{tagQuery.map((t: TagQuery, index: number) => (
-						<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} onRemove={handleRemoveTag} />
+						<Tag
+							key={index}
+							index={index}
+							name={t.category}
+							value={t.value}
+							color={t.color}
+							removeButton={
+								<div className='remove-tag-button' onClick={() => handleRemoveTag(index)}>
+									<img src='/assets/icons/quit.png' alt='quit'></img>
+								</div>
+							}
+						/>
 					))}
 				</div>
 			</section>
