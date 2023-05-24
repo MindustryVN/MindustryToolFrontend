@@ -162,8 +162,9 @@ const Upload = () => {
 
 	const tagSubmitButton = (
 		<button
-			title='Add'
 			className='submit-button'
+			title='Add'
+			type='button'
 			onClick={(event) => {
 				handleAddTag();
 				event.stopPropagation();

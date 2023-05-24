@@ -157,10 +157,12 @@ const Schematic = () => {
 			</div>
 		);
 	}
+
 	const tagSubmitButton = (
 		<button
 			className='submit-button'
 			title='Add'
+			type='button'
 			onClick={(event) => {
 				handleAddTag();
 				event.stopPropagation();
