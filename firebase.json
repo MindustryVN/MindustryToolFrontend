@@ -8,11 +8,23 @@
     ],
     "headers": [
       {
-        "source": "/**",
+        "source": "**",
         "headers": [
           {
-            "key": "Cache-Control",
-            "value": "no-cache"
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "deny"
+          },
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-XSS-Protection",
+            "value": "1; mode=block"
           }
         ]
       },
