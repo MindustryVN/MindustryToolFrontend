@@ -230,7 +230,7 @@ const Upload = () => {
 							</div>
 						</div>
 						<div className='upload-button-group'>
-							<button className='upload-file-button' onClick={() => handleSubmit()}>
+							<button className='upload-file-button' type='button' onClick={() => handleSubmit()}>
 								{uploadStatus}
 							</button>
 						</div>
