@@ -5,12 +5,11 @@ import SearchBar from '../shared/SearchBar';
 import TagQuery from '../shared/TagQuery';
 import Dropbox from '../shared/Dropbox';
 import React from 'react';
-import Tag from '../shared/Tag';
+import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../shared/Tag';
 
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../Config';
 import { capitalize, getFileExtension } from '../shared/Util';
 import { ChangeEvent, useState } from 'react';
-import { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../shared/Tags';
 import { API } from '../../AxiosConfig';
 
 const UPLOAD_INVALID_EXTENSION = 'Invalid file extension';

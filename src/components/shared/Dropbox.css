@@ -14,6 +14,7 @@
 .dropbox-input {
 	display: flex;
 	width: 100%;
+	height: 100%;
 	align-items: center;
 }
 
@@ -22,6 +23,7 @@
 	align-items: center;
 
 	width: 100%;
+	height: 100%;
 
 	padding-left: 10px;
 	padding-right: 10px;
@@ -38,10 +40,6 @@
 
 .dropbox-element:hover {
 	background-color: var(--light-transparent-background);
-}
-
-.dropbox-element-container::-webkit-scrollbar {
-	display: none;
 }
 
 .dropbox-element-container {

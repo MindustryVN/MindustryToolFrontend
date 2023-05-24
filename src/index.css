@@ -18,6 +18,11 @@ body,
 	--background-image-1: url('/assets/images/light_theme.png');
 }
 
+*::-webkit-scrollbar {
+	display: none;
+}
+
+
 div {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;

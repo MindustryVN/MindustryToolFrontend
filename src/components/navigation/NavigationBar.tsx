@@ -7,7 +7,7 @@ const NavigationBar = () => {
 	const navigate = useNavigate();
 
 	return (
-		<div className='navigation-bar'>
+		<nav className='navigation-bar'>
 			<div className='icon'>
 				<img className='menu-icon' src='/assets/icons/dots.png' alt='check' />
 				<div className='popup'>
@@ -37,7 +37,7 @@ const NavigationBar = () => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</nav>
 	);
 };
 

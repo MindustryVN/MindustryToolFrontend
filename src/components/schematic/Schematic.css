@@ -25,6 +25,28 @@
 	text-decoration: underline red;
 }
 
+.sort-container {
+	display: flex;
+	width: 100%;
+	gap: 0.25rem;
+	justify-content: center;
+}
+
+
+.sort-choice {
+	color: white;
+	padding: 0.2rem;
+	background-color: var(--dark-transparent-background);
+	border: 1px solid var(--light-transparent-background);
+	border-radius: 5px;
+	outline: none;
+}
+
+.selected {
+	color: black;
+	background-color: var(--light-transparent-background);
+}
+
 .schematic-container {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, var(--preview-image-min-size));
@@ -52,10 +74,15 @@
 }
 
 .schematic-preview-description {
-	height: 2rem;
 	font-weight: 600;
-	text-align: center;
 	font-size: small;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+	height: 2rem;
 }
 
 .schematic-container-footer {
@@ -152,12 +179,16 @@
 .schematic-info-button {
 	cursor: pointer;
 	color: white;
+	outline: none;
+	border: none;
+	background-color: transparent;
 }
 
 .submit-button {
 	background-color: transparent;
 	border: none;
 	cursor: pointer;
+	height: 100%;
 }
 
 .tag-container {

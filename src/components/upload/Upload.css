@@ -66,10 +66,6 @@
 	background-color: var(--light-transparent-background);
 }
 
-.preview-container::-webkit-scrollbar {
-	display: none;
-}
-
 .upload-description-container {
 	display: flex;
 	flex-direction: column;

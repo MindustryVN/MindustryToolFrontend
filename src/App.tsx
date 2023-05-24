@@ -33,8 +33,7 @@ function App() {
 						<Route path='/login' element={<Login />} />
 						<Route path='/logout' element={<Logout />} />
 						<Route path='/upload' element={<Upload />} />
-						{/* TODO: Verify before enter */}
-						{/* <Route path='/admin' element={<Admin />} /> */}
+						<Route path='/admin' element={<Admin />} />{' '}
 					</Routes>
 				</Suspense>
 			</Router>
