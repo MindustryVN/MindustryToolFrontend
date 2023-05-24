@@ -15,9 +15,15 @@ import Tag, { CustomTag, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG, TagChoice } from 
 
 const MAX_ITEM_PER_PAGE = 10;
 
+enum LoaderState {
+	LOADING,
+	ERROR,
+	MORE,
+	NO_MORE
+}
+
 const Schematic = () => {
-	const [hasMoreContent, setHasMoreContent] = useState(true);
-	const [isLoading, setLoading] = useState(false);
+	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
 
 	const [schematicList, setSchematicList] = useState<SchematicInfo[][]>([[]]);
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicInfo>();
@@ -36,7 +42,7 @@ const Schematic = () => {
 	useEffect(() => loadPage(), [tagQuery, sortQuery]);
 
 	function loadPage() {
-		setLoading(true);
+		setLoaderState(LoaderState.LOADING);
 
 		if (tagQuery !== currentQuery.current.tag || sortQuery !== currentQuery.current.sort) {
 			setSchematicList([[]]);
@@ -56,12 +62,13 @@ const Schematic = () => {
 					let schematics: SchematicInfo[] = result.data;
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
-					if (schematics.length < 10) setHasMoreContent(false);
+					if (schematics.length < 10) setLoaderState(LoaderState.NO_MORE);
+					else setLoaderState(LoaderState.MORE);
+
 					setSchematicList([...schematicList]);
-				} else setHasMoreContent(false);
+				} else setLoaderState(LoaderState.NO_MORE);
 			})
-			.catch((error) => console.log(error))
-			.finally(() => setLoading(false));
+			.catch((error) => console.log(error));
 	}
 
 	function handleContentInput(event: ChangeEvent<HTMLInputElement>) {
@@ -229,11 +236,11 @@ const Schematic = () => {
 			</section>
 			<section className='schematic-container'>{schematicArray}</section>
 			<div className='schematic-container-footer'>
-				{isLoading ? (
+				{loaderState === LoaderState.LOADING ? (
 					<div className='loading-spinner'></div>
 				) : (
 					<button className='load-more-button' onClick={() => loadPage()}>
-						{hasMoreContent ? 'Load more' : 'No schematic left'}
+						{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 					</button>
 				)}
 			</div>

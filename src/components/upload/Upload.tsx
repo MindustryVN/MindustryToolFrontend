@@ -67,16 +67,16 @@ const Upload = () => {
 		}
 	}
 
-	function handleCodeChange(event: ChangeEvent<HTMLInputElement>) {
+	function handleCodeChange(event: ChangeEvent<HTMLTextAreaElement>) {
 		if (!event.target) return;
 
 		const str = event.target.value;
+		setCode(str);
 		if (!str.startsWith('bXNja')) {
 			setUploadStatus(UPLOAD_INVALID_CODE);
 			return;
 		}
 
-		setCode(str);
 		setFile(undefined);
 
 		API.get('/schematics/preview', { params: { code: str } })
@@ -175,7 +175,7 @@ const Upload = () => {
 							{image ? <img className='preview-image' src={PNG_IMAGE_PREFIX + image} alt='Upload a file'></img> : <div className='preview-image'>Upload a file</div>}
 							<input id='ufb' type='file' onChange={(event) => handleFileChange(event)}></input>
 						</label>
-						<input className='upload-code-button' placeholder='Code' value={code} onChange={handleCodeChange} />
+						<textarea className='upload-code-button' placeholder='Code' value={code} onChange={handleCodeChange} />
 					</div>
 					<div className='upload-description-container'>
 						<div className='search-container'>
@@ -202,7 +202,6 @@ const Upload = () => {
 							) : (
 								<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
 							)}
-							Tag:
 							<div className='tag-container'>
 								{query.map((t: TagQuery, index: number) => (
 									<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} onRemove={handleRemoveTag} />
