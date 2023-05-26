@@ -1,12 +1,16 @@
 .navigation-bar {
 	position: fixed;
-	height: 100%;
-	height: 100%;
+	top: 0;
 	z-index: 999;
+
+	height: 100vh;
+	height: 100dvh;
 }
 
 .icon .popup {
 	position: fixed;
+	overflow: hidden scroll;
+
 	display: block;
 	padding: 10px;
 	top: 0;
@@ -42,11 +46,12 @@
 	margin: 3px;
 	padding: 5px;
 
+	font-size: 18px;
+
 	color: white;
 	background-color: transparent;
 
 	font-weight: bold;
-	font-family: 'Courier New', Courier, monospace;
 }
 
 .nav-link:hover {

@@ -1,5 +1,5 @@
 import './Upload.css';
-import '../../Styles.css';
+import '../../styles.css';
 
 import UploadFile from './UploadFile';
 import SearchBar from '../common/SearchBar';
@@ -208,7 +208,7 @@ const Upload = () => {
 								)}
 							</div>
 						)}
-						<div className='search-container'>
+						<div className='upload-search-container'>
 							<Dropbox value={'Tag: ' + capitalize(tag.category)}>
 								{UPLOAD_SCHEMATIC_TAG.filter((t) => !tags.find((q) => q.category === t.category)).map((t, index) => (
 									<div

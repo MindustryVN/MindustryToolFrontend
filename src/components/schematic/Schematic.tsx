@@ -1,5 +1,5 @@
 import './Schematic.css';
-import '../../Styles.css';
+import '../../styles.css';
 
 import { useState, useEffect, ChangeEvent, ReactElement, useRef } from 'react';
 import { capitalize } from '../util/Util';
@@ -116,9 +116,9 @@ const Schematic = () => {
 							</span>
 							<span>Like: {schematic.like}</span>
 							<span>Dislike: {schematic.dislike}</span>
-							{schematic.description && <p>{schematic.description}</p>}
+							{schematic.description && <span>{schematic.description}</span>}
 							{schematic.requirement && (
-								<section className='text-center small-gap'>
+								<section className='flexbox-row small-gap'>
 									{schematic.requirement.map((r, index) => (
 										<span key={index} className='text-center'>
 											<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />

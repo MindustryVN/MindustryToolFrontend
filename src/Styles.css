@@ -27,20 +27,20 @@
 	outline: none;
 	border: none;
 	background-color: transparent;
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .button-normal {
-    background-color: var(--dark-transparent-background);
+	background-color: var(--dark-transparent-background);
 	color: white;
 	border: 1px solid gray;
 	border-radius: 5px;
 	outline: none;
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .button-normal:hover {
-    background-color: var(--light-transparent-background);
+	background-color: var(--light-transparent-background);
 	color: black;
 	border: 1px solid gray;
 	border-radius: 5px;
@@ -48,12 +48,12 @@
 }
 
 .button-selected {
-    background-color: var(--light-transparent-background);
+	background-color: var(--light-transparent-background);
 	color: black;
 	border: 1px solid white;
 	border-radius: 5px;
 	outline: none;
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .small-icon {
@@ -69,6 +69,8 @@
 .text-center {
 	display: flex;
 	text-align: center;
+	align-items: center;
+	justify-content: center;
 }
 
 .small-gap {
@@ -87,4 +89,10 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.flexbox-row {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
 }

@@ -1,5 +1,5 @@
 import './NavigationBar.css';
-import '../../Styles.css';
+import '../../styles.css';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
