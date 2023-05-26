@@ -134,4 +134,4 @@ export const SCHEMATIC_SORT_CHOICE = [
 	new TagChoice('most liked', 'like:1') //
 ];
 
-export const UPLOAD_SCHEMATIC_TAG = SCHEMATIC_TAG.filter((t) => !['name', 'size'].includes(t.category));
+export const UPLOAD_SCHEMATIC_TAG = SCHEMATIC_TAG.filter((t) => !['name', 'size', 'verify'].includes(t.category));

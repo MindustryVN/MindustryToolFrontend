@@ -10,6 +10,7 @@
 	background-color: var(--dark-transparent-background);
 
 	justify-content: center;
+	overflow: hidden;
 }
 
 .dropbox-input {
@@ -61,5 +62,5 @@
 	margin-top: 1rem;
 
 	background-color: var(--dark-transparent-background);
-	overflow: hidden scroll;
+	overflow: hidden auto;
 }
