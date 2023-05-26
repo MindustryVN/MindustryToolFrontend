@@ -1,16 +1,18 @@
 import './Upload.css';
+import '../../Styles.css';
 
 import UploadFile from './UploadFile';
-import SearchBar from '../shared/SearchBar';
-import TagQuery from '../shared/TagQuery';
-import Dropbox from '../shared/Dropbox';
+import SearchBar from '../common/SearchBar';
+import TagQuery from '../common/TagQuery';
+import Dropbox from '../common/Dropbox';
 import React from 'react';
-import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../shared/Tag';
 
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../Config';
+import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../common/Tag';
 import { capitalize, getFileExtension } from '../util/Util';
 import { ChangeEvent, useState } from 'react';
 import { API } from '../../AxiosConfig';
+import SchematicPreview from '../schematic/SchematicPreview';
 
 const UPLOAD_INVALID_EXTENSION = 'Invalid file extension';
 const UPLOAD_NETWORK_ERROR = 'Network error try later';
@@ -30,7 +32,7 @@ const config = {
 const Upload = () => {
 	const [file, setFile] = useState<UploadFile>();
 	const [code, setCode] = useState<string>('');
-	const [image, setImage] = useState<string>();
+	const [preview, setPreview] = useState<SchematicPreview>();
 	const [uploadStatus, setUploadStatus] = useState(UPLOAD_SET_FILE);
 
 	const [tag, setTag] = useState(UPLOAD_SCHEMATIC_TAG[0]);
@@ -55,7 +57,8 @@ const Upload = () => {
 			if (endpoint) {
 				API.post(endpoint + '/preview', form, config)
 					.then((result) => {
-						setImage(result.data);
+						let preview: SchematicPreview = result.data;
+						setPreview(preview);
 						setUploadStatus(UPLOAD_UPLOAD);
 					})
 					.catch(() => {
@@ -81,7 +84,8 @@ const Upload = () => {
 
 		API.get('/schematics/preview', { params: { code: str } })
 			.then((result) => {
-				setImage(result.data);
+				let preview: SchematicPreview = result.data;
+				setPreview(preview);
 				setUploadStatus(UPLOAD_UPLOAD);
 			})
 			.catch(() => {
@@ -127,7 +131,7 @@ const Upload = () => {
 				.then(() => {
 					setCode('');
 					setFile(undefined);
-					setImage(undefined);
+					setPreview(undefined);
 					setTags([]);
 					setUploadStatus(UPLOAD_SET_FILE);
 					alert(UPlOAD_SUCCESSFULLY);
@@ -162,7 +166,7 @@ const Upload = () => {
 
 	const tagSubmitButton = (
 		<button
-			className='submit-button'
+			className='button-transparent'
 			title='Add'
 			type='button'
 			onClick={(event) => {
@@ -177,17 +181,33 @@ const Upload = () => {
 	tagValue = tagValue == null ? [] : tagValue;
 
 	return (
-		<div className='upload'>
-			<div className='upload-model'>
-				<div className='preview-container'>
+		<div className='upload flexbox-center image-background'>
+			<div className='upload-model flexbox-center'>
+				<div className='preview-container dark-background flexbox-center'>
 					<div className='preview-image-container'>
 						<label htmlFor='ufb'>
-							{image ? <img className='preview-image' src={PNG_IMAGE_PREFIX + image} alt='Upload a file'></img> : <div className='preview-image'>Upload a file</div>}
+							{preview ? <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file'></img> : <div className='preview-image'>Upload a file</div>}
 							<input id='ufb' type='file' onChange={(event) => handleFileChange(event)}></input>
 						</label>
-						<textarea className='upload-code-button' placeholder='Code' value={code} onChange={handleCodeChange} />
+						<textarea className='upload-code-area' placeholder='Code' value={code} onChange={handleCodeChange} />
 					</div>
-					<div className='upload-description-container'>
+					<div className='upload-description-container flexbox-center'>
+						{preview && (
+							<div>
+								<span>Name: {preview.name}</span>
+								{preview.description && <p> {preview.description}</p>}
+								{preview.requirement && (
+									<section className='text-center small-gap'>
+										{preview.requirement.map((r, index) => (
+											<span key={index} className='text-center'>
+												<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+												<span> {r.amount} </span>
+											</span>
+										))}
+									</section>
+								)}
+							</div>
+						)}
 						<div className='search-container'>
 							<Dropbox value={'Tag: ' + capitalize(tag.category)}>
 								{UPLOAD_SCHEMATIC_TAG.filter((t) => !tags.find((q) => q.category === t.category)).map((t, index) => (
@@ -221,7 +241,7 @@ const Upload = () => {
 										value={t.value}
 										color={t.color}
 										removeButton={
-											<div className='remove-tag-button' onClick={() => handleRemoveTag(index)}>
+											<div className='remove-tag-button button-transparent' onClick={() => handleRemoveTag(index)}>
 												<img src='/assets/icons/quit.png' alt='quit'></img>
 											</div>
 										}
@@ -229,7 +249,7 @@ const Upload = () => {
 								))}
 							</div>
 						</div>
-						<div className='upload-button-group'>
+						<div className='flexbox-center'>
 							<button className='upload-file-button' type='button' onClick={() => handleSubmit()}>
 								{uploadStatus}
 							</button>

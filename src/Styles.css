@@ -1,0 +1,90 @@
+.dark-background {
+	background-color: var(--dark-transparent-background);
+}
+
+.no-background {
+	background-color: transparent;
+	border: none;
+	outline: none;
+}
+
+.image-background::before {
+	content: '';
+	position: fixed;
+	left: 0;
+	right: 0;
+	z-index: -1;
+	display: block;
+	background-image: var(--background-image-1);
+	background-size: cover;
+	background-position: center;
+	filter: brightness(40%);
+	width: 100%;
+	height: 100%;
+}
+
+.button-transparent {
+	outline: none;
+	border: none;
+	background-color: transparent;
+    cursor: pointer;
+}
+
+.button-normal {
+    background-color: var(--dark-transparent-background);
+	color: white;
+	border: 1px solid gray;
+	border-radius: 5px;
+	outline: none;
+    cursor: pointer;
+}
+
+.button-normal:hover {
+    background-color: var(--light-transparent-background);
+	color: black;
+	border: 1px solid gray;
+	border-radius: 5px;
+	outline: none;
+}
+
+.button-selected {
+    background-color: var(--light-transparent-background);
+	color: black;
+	border: 1px solid white;
+	border-radius: 5px;
+	outline: none;
+    cursor: pointer;
+}
+
+.small-icon {
+	height: 1rem;
+	width: 1rem;
+}
+
+.medium-icon {
+	height: 2rem;
+	width: 2rem;
+}
+
+.text-center {
+	display: flex;
+	text-align: center;
+}
+
+.small-gap {
+	gap: 0.25rem;
+}
+
+.model {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+}
+
+.flexbox-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

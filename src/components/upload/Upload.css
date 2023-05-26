@@ -4,40 +4,13 @@
 	width: 100%;
 	height: 100%;
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
 	overflow: hidden;
 }
 
-.upload::before {
-	position: fixed;
-	content: '';
-	left: 0;
-	right: 0;
-	z-index: -1;
-
-	display: block;
-	background-size: cover;
-	background-position: center;
-	background-image: var(--background-image-1);
-	filter: brightness(40%);
-	width: 100%;
-	height: 100%;
-}
-
 .upload-model {
-	display: flex;
 	flex-direction: row;
 	margin: auto;
-	justify-content: center;
-	align-items: center;
-	height: 80vh;
-	width: 80vw;
-	padding: 5px;
 
-	background-color: var(--dark-transparent-background);
 	border-radius: 5px;
 	border: 2px solid var(--light-transparent-background);
 }
@@ -46,15 +19,18 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	height: 80vh;
-	width: 80vw;
-	justify-content: center;
-	gap: 10px;
+
+	gap: 0.5rem;
+
+	height: 90vh;
+	width: 90vw;
+	height: 90dvh;
+	width: 90dvw;
 
 	overflow: hidden scroll;
 }
 
-.upload-code-button {
+.upload-code-area {
 	color: white;
 	height: 2rem;
 	resize: none;
@@ -64,21 +40,16 @@
 	outline: none;
 }
 
-.upload-code-button:hover {
-	background-color: var(--light-transparent-background);
-}
-
 .upload-description-container {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	flex-wrap: wrap;
 	gap: 1rem;
 
 	width: 40vw;
+	height: 40vh;
 	width: 40dvw;
-
-	align-items: center;
-	justify-content: center;
+	height: 40dvh;
 }
 
 .upload-file-button {
@@ -119,11 +90,6 @@
 	justify-content: center;
 }
 
-.upload-button-group {
-	display: flex;
-	justify-content: center;
-}
-
 .upload-file-button {
 	padding: 3px;
 	color: white;
@@ -135,36 +101,21 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
+
 	min-height: 2rem;
-}
-
-.remove-tag-button {
-	background-color: transparent;
-	border: none;
-	outline: none;
-
-	display: flex;
-	align-items: flex-end;
-	padding-left: 4px;
-	padding-right: 4px;
-	cursor: pointer;
 }
 
 .search-container {
 	display: flex;
 	flex-direction: column;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 
-	width: 50%;
+	justify-content: center;
+	align-items: center;
+
+	width: 100%;
 
 	gap: 0.25rem;
-	padding: 2rem;
-}
-
-.submit-button {
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
 }
 
 #ufb {

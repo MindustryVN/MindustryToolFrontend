@@ -18,7 +18,7 @@ import NavigationBar from './components/navigation/NavigationBar';
 
 function App() {
 	return (
-		<div className='app'>
+		<div className='app image-background'>
 			<Router>
 				<img className='mindustry-logo' src='https://cdn.discordapp.com/attachments/1010373926100148356/1106488674935394394/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='Error' hidden></img>
 				<NavigationBar />

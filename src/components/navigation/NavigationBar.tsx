@@ -1,4 +1,5 @@
 import './NavigationBar.css';
+import '../../Styles.css';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,8 +10,8 @@ const NavigationBar = () => {
 	return (
 		<nav className='navigation-bar'>
 			<div className='icon'>
-				<img className='menu-icon' src='/assets/icons/dots.png' alt='check' />
-				<div className='popup'>
+				<img className='menu-icon medium-icon' src='/assets/icons/dots.png' alt='check' />
+				<div className='popup dark-background'>
 					<img src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt=''></img>
 					<div className='nav-link-container'>
 						<div className='nav-link' onClick={() => navigate('/home')}>

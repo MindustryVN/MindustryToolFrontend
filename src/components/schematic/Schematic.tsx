@@ -1,17 +1,18 @@
 import './Schematic.css';
+import '../../Styles.css';
 
 import { useState, useEffect, ChangeEvent, ReactElement, useRef } from 'react';
 import { capitalize } from '../util/Util';
 import { API } from '../../AxiosConfig';
 
+import Tag, { CustomTag, TagChoice, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG } from '../common/Tag';
 import SchematicInfo from './SchematicInfo';
-import LazyLoadImage from '../shared/LazyLoadImage';
-import SearchBar from '../shared/SearchBar';
-import TagQuery from '../shared/TagQuery';
-import Dropbox from '../shared/Dropbox';
-import React from 'react';
-import Tag, { CustomTag, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG, TagChoice } from '../shared/Tag';
+import LazyLoadImage from '../common/LazyLoadImage';
+import SearchBar from '../common/SearchBar';
+import TagQuery from '../common/TagQuery';
 import UserName from '../user/UserName';
+import Dropbox from '../common/Dropbox';
+import React from 'react';
 
 const MAX_ITEM_PER_PAGE = 10;
 
@@ -58,6 +59,7 @@ const Schematic = () => {
 			.then((result) => {
 				if (result.status === 200 && result.data) {
 					let schematics: SchematicInfo[] = result.data;
+					console.log(schematics);
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
 					if (schematics.length < 10) setLoaderState(LoaderState.NO_MORE);
@@ -89,9 +91,7 @@ const Schematic = () => {
 		} else alert('Invalid tag ' + tag.category + ': ' + content);
 	}
 
-	function buildSchematicInfo(schematic: SchematicInfo | null) {
-		if (schematic == null) return <></>;
-
+	function buildSchematicInfo(schematic: SchematicInfo) {
 		const blob = new Blob([schematic.data], { type: 'text/plain' });
 		const tagArray: TagQuery[] = [];
 		for (let t of schematic.tags) {
@@ -105,9 +105,9 @@ const Schematic = () => {
 		const url = window.URL.createObjectURL(blob);
 
 		return (
-			<div className='schematic-info-modal' onClick={() => setShowSchematicModel(false)}>
-				<div className='schematic-info-pane'>
-					<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
+			<div className='schematic-info-modal model flexbox-center image-background' onClick={() => setShowSchematicModel(false)}>
+				<div className='flexbox-center'>
+					<div className='schematic-info-container dark-background' onClick={(event) => event.stopPropagation()}>
 						<LazyLoadImage className='schematic-info-image' path={`schematics/${schematic.id}/image`}></LazyLoadImage>
 						<div className='schematic-info-desc-container'>
 							<span>Name: {capitalize(schematic.name)}</span>
@@ -116,38 +116,50 @@ const Schematic = () => {
 							</span>
 							<span>Like: {schematic.like}</span>
 							<span>Dislike: {schematic.dislike}</span>
-							<p>{schematic.description}</p>
-							<section>
-								{tagArray.map((t: TagQuery, index: number) => (
-									<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} />
-								))}
-							</section>
+							{schematic.description && <p>{schematic.description}</p>}
+							{schematic.requirement && (
+								<section className='text-center small-gap'>
+									{schematic.requirement.map((r, index) => (
+										<span key={index} className='text-center'>
+											<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+											<span> {r.amount} </span>
+										</span>
+									))}
+								</section>
+							)}
+							{tagArray && (
+								<section className='tag-container'>
+									{tagArray.map((t: TagQuery, index: number) => (
+										<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} />
+									))}
+								</section>
+							)}
 							<section className='schematic-info-button-container'>
 								<button
-									className='schematic-info-button'
+									className='button-transparent'
 									onClick={() => {
 										if (currentSchematic) currentSchematic.like += 1;
 									}}>
 									<img src='/assets/icons/play-2.png' className='model-icon' style={{ rotate: '-90deg' }} alt='check' />
 								</button>
 								<button
-									className='schematic-info-button'
+									className='button-transparent'
 									onClick={() => {
 										if (currentSchematic) currentSchematic.dislike += 1;
 									}}>
 									<img src='/assets/icons/play-2.png' className='model-icon' style={{ rotate: '90deg' }} alt='check' />
 								</button>
-								<a className='schematic-info-button' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+								<a className='button-transparent' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 									<img src='/assets/icons/upload.png' className='model-icon' alt='check' />
 								</a>
 								<button
-									className='schematic-info-button'
+									className='button-transparent'
 									onClick={() => {
 										navigator.clipboard.writeText(schematic.data).then(() => alert('Copied'));
 									}}>
 									<img src='/assets/icons/copy.png' className='model-icon' alt='check' />
 								</button>
-								<button className='schematic-info-button'>
+								<button className='button-transparent'>
 									<img src='/assets/icons/trash-16.png' className='model-icon' alt='check' />
 								</button>
 							</section>
@@ -160,7 +172,7 @@ const Schematic = () => {
 
 	const tagSubmitButton = (
 		<button
-			className='submit-button'
+			className='button-transparent'
 			title='Add'
 			type='button'
 			onClick={(event) => {
@@ -184,7 +196,7 @@ const Schematic = () => {
 						setShowSchematicModel(true);
 					}}>
 					<LazyLoadImage className='schematic-image' path={`schematics/${schematic.id}/image`}></LazyLoadImage>
-					<div className='schematic-preview-description'>{capitalize(schematic.name)}</div>
+					<div className='schematic-preview-description flexbox-center'>{capitalize(schematic.name)}</div>
 				</div>
 			);
 		}
@@ -199,7 +211,7 @@ const Schematic = () => {
 				<Dropbox
 					value={'Tag: ' + capitalize(tag.category)}
 					submitButton={
-						<button className='submit-button' title='Search' type='button' onClick={(e) => loadPage()}>
+						<button className='button-transparent' title='Search' type='button' onClick={(e) => loadPage()}>
 							<img src='/assets/icons/search.png' alt='search'></img>
 						</button>
 					}>
@@ -226,7 +238,7 @@ const Schematic = () => {
 				) : (
 					<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
 				)}
-				<div className='tag-container'>
+				<section className='tag-container'>
 					{tagQuery.map((t: TagQuery, index: number) => (
 						<Tag
 							key={index}
@@ -235,31 +247,31 @@ const Schematic = () => {
 							value={t.value}
 							color={t.color}
 							removeButton={
-								<div className='remove-tag-button' onClick={() => handleRemoveTag(index)}>
+								<button className='remove-tag-button button-transparent' type='button' onClick={() => handleRemoveTag(index)}>
 									<img src='/assets/icons/quit.png' alt='quit'></img>
-								</div>
+								</button>
 							}
 						/>
 					))}
-				</div>
+				</section>
 			</section>
 			<section className='sort-container'>
 				{SCHEMATIC_SORT_CHOICE.map((c: TagChoice, index) => (
-					<button className={c == sortQuery ? 'sort-choice selected' : 'sort-choice'} type='button' key={index} onClick={() => setSortQuery(c)}>
+					<button className={'sort-choice ' + (c == sortQuery ? 'button-selected' : 'button-normal')} type='button' key={index} onClick={() => setSortQuery(c)}>
 						{capitalize(c.name)}
 					</button>
 				))}
 			</section>
 			<section className='schematic-container'>{schematicArray}</section>
-			<div className='schematic-container-footer'>
+			<footer className='schematic-container-footer'>
 				{loaderState === LoaderState.LOADING ? (
 					<div className='loading-spinner'></div>
 				) : (
-					<button className='load-more-button' onClick={() => loadPage()}>
+					<button className='load-more-button button-normal' onClick={() => loadPage()}>
 						{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 					</button>
 				)}
-			</div>
+			</footer>
 			{showSchematicModel === true && currentSchematic !== undefined && buildSchematicInfo(currentSchematic)}
 		</div>
 	);

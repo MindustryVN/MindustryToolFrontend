@@ -1,4 +1,5 @@
 import './Tag.css';
+import '../../Styles.css';
 
 import { capitalize } from '../util/Util';
 
@@ -8,7 +9,7 @@ export default class Tag extends React.Component<{ index: number; name: string; 
 	render() {
 		return (
 			<div className='tag' style={{ backgroundColor: this.props.color }}>
-				<div className='tag-text'>
+				<div className='flexbox-center'>
 					{capitalize(this.props.name)}: {capitalize(this.props.value)}
 				</div>
 				{this.props.removeButton}
@@ -120,6 +121,10 @@ export const SCHEMATIC_TAG = [
 		new TagChoice('attack', 'attack'),
 		new TagChoice('sandbox', 'sandbox'), //
 		new TagChoice('hex', 'hex')
+	]),
+	new CustomTag('verify', '#FFD700', () => [
+		new TagChoice('verified', 'verified'), //
+		new TagChoice('unverified', 'unverified')
 	])
 ];
 
