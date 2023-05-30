@@ -1,27 +1,17 @@
-import './UploadPage.css';
+import './UploadSchematicPage.css';
 import '../../styles.css';
 
-import UploadFile from './UploadFile';
+import SchematicPreview from '../schematic/SchematicPreview';
 import SearchBar from '../common/SearchBar';
 import TagQuery from '../common/TagQuery';
 import Dropbox from '../common/Dropbox';
 import React from 'react';
 
-import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
+import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
 import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../common/Tag';
 import { capitalize, getFileExtension } from '../../util/StringUtils';
 import { ChangeEvent, useState } from 'react';
 import { API } from '../../AxiosConfig';
-import SchematicPreview from '../schematic/SchematicPreview';
-
-const UPLOAD_INVALID_EXTENSION = 'Invalid file extension';
-const UPLOAD_NETWORK_ERROR = 'Network error try later';
-const UPlOAD_SUCCESSFULLY = 'Upload successfully';
-const UPLOAD_INVALID_CODE = 'Invalid schematic code';
-const UPLOAD_SET_FILE = 'Upload a file';
-const UPLOAD_NO_DATA = 'No schematic or map provided';
-const UPlOAD_FAILED = 'Upload failed';
-const UPLOAD_UPLOAD = 'Upload';
 
 const config = {
 	headers: {
@@ -29,11 +19,10 @@ const config = {
 	}
 };
 
-const Upload = () => {
-	const [file, setFile] = useState<UploadFile>();
+const Upload = ({ user }: { user: UserInfo | undefined }) => {
+	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
 	const [preview, setPreview] = useState<SchematicPreview>();
-	const [uploadStatus, setUploadStatus] = useState(UPLOAD_SET_FILE);
 
 	const [tag, setTag] = useState(UPLOAD_SCHEMATIC_TAG[0]);
 	const [content, setContent] = useState('');
@@ -47,26 +36,16 @@ const Upload = () => {
 
 		const extension: string = getFileExtension(files[0]);
 
-		if (extension === SCHEMATIC_FILE_EXTENSION || extension === MAP_FILE_EXTENSION) {
-			setFile({ file: files[0], type: extension });
+		if (extension === SCHEMATIC_FILE_EXTENSION) {
+			setFile(files[0]);
 			setCode('');
 
-			const endpoint = getApiEndpoint(extension);
 			const form = new FormData();
 			form.append('file', files[0]);
-			if (endpoint) {
-				API.post(endpoint + '/preview', form, config)
-					.then((result) => {
-						let preview: SchematicPreview = result.data;
-						setPreview(preview);
-						setUploadStatus(UPLOAD_UPLOAD);
-					})
-					.catch(() => {
-						setUploadStatus(UPLOAD_NETWORK_ERROR);
-					});
-			} else setUploadStatus(UPLOAD_INVALID_EXTENSION);
-		} else {
-			setUploadStatus(UPLOAD_INVALID_EXTENSION);
+
+			API.post('schematics/preview', form, config)
+				.then((result) => setPreview(result.data))
+				.catch(() => {});
 		}
 	}
 
@@ -76,26 +55,14 @@ const Upload = () => {
 		const str = event.target.value;
 		setCode(str);
 		if (!str.startsWith('bXNja')) {
-			setUploadStatus(UPLOAD_INVALID_CODE);
 			return;
 		}
 
 		setFile(undefined);
 
 		API.get('/schematics/preview', { params: { code: str } })
-			.then((result) => {
-				let preview: SchematicPreview = result.data;
-				setPreview(preview);
-				setUploadStatus(UPLOAD_UPLOAD);
-			})
-			.catch(() => {
-				setUploadStatus(UPLOAD_NETWORK_ERROR);
-			});
-	}
-
-	function getApiEndpoint(fileExtension: string) {
-		if (fileExtension === SCHEMATIC_FILE_EXTENSION) return 'schematics';
-		else if (fileExtension === MAP_FILE_EXTENSION) return 'maps';
+			.then((result) => setPreview(result.data))
+			.catch(() => {});
 	}
 
 	function handleSubmit() {
@@ -105,43 +72,34 @@ const Upload = () => {
 		}
 
 		const formData = new FormData();
-		formData.append('authorId', 'community');
+		const authorId = user ? user.id : 'community';
+		formData.append('authorId', authorId);
 		formData.append('tags', `${tags.map((q) => `${q.toString()}`).join()}`);
-		let endpoint;
 
 		if (tag)
-			if (file !== undefined) {
-				const currentFile = file.file;
-				const extension = getFileExtension(currentFile);
-				if (extension === 'msch' || extension === 'msav') {
-					setFile({ file: currentFile, type: extension });
-					formData.append('file', currentFile);
-					endpoint = getApiEndpoint(extension);
+			if (file) {
+				const extension = getFileExtension(file);
+				if (extension === SCHEMATIC_FILE_EXTENSION) {
+					setFile(file);
+					formData.append('file', file);
 				}
 			} else if (code !== undefined && code.length > 8) {
 				formData.append('code', code);
-				endpoint = 'schematics';
 			} else {
-				setUploadStatus(UPLOAD_NO_DATA);
 				return;
 			}
 
-		if (endpoint) {
-			API.post(endpoint, formData, config)
-				.then(() => {
-					setCode('');
-					setFile(undefined);
-					setPreview(undefined);
-					setTags([]);
-					setUploadStatus(UPLOAD_SET_FILE);
-					alert(UPlOAD_SUCCESSFULLY);
-				})
-				.catch((error) => {
-					if (error.response && error.response.data) alert(`${UPlOAD_FAILED}: ${error.response.data.message}`);
-				});
-		} else {
-			setUploadStatus(UPLOAD_INVALID_EXTENSION);
-		}
+		API.post('schematics', formData, config)
+			.then(() => {
+				setCode('');
+				setFile(undefined);
+				setPreview(undefined);
+				setTags([]);
+				alert('UPLOAD SUCCESSFULLY');
+			})
+			.catch((error) => {
+				if (error.response && error.response.data) alert(`"UPLOAD FAILED: ${error.response.data.message}`);
+			});
 	}
 
 	function handleContentInput(event: ChangeEvent<HTMLInputElement>) {
@@ -194,6 +152,8 @@ const Upload = () => {
 					<div className='upload-description-container flexbox-center'>
 						{preview && (
 							<div>
+								{<span>Author: {user ? user.name : 'community'}</span>}
+								<br />
 								<span>Name: {preview.name}</span>
 								{preview.description && <p> {preview.description}</p>}
 								{preview.requirement && (
@@ -251,7 +211,7 @@ const Upload = () => {
 						</div>
 						<div className='flexbox-center'>
 							<button className='upload-file-button' type='button' onClick={() => handleSubmit()}>
-								{uploadStatus}
+								Upload
 							</button>
 						</div>
 					</div>

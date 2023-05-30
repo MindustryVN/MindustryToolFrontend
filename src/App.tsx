@@ -1,7 +1,7 @@
 import './App.css';
 import './styles.css';
 
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import React, { Suspense, useEffect, useState } from 'react';
 
@@ -11,7 +11,7 @@ const User = React.lazy(() => import('./components/user/UserPage'));
 const Logic = React.lazy(() => import('./components/logic/LogicPage'));
 const Schematic = React.lazy(() => import('./components/schematic/SchematicPage'));
 const Login = React.lazy(() => import('./components/login/LoginPage'));
-const Upload = React.lazy(() => import('./components/upload/UploadPage'));
+const Upload = React.lazy(() => import('./components/upload/UploadSchematicPage'));
 const Admin = React.lazy(() => import('./components/admin/AdminPage'));
 
 import NavigationBar from './components/navigation/NavigationBar';
@@ -89,7 +89,7 @@ function App() {
 						<Route path='/home' element={<Home />} />
 						<Route path='/logic' element={<Logic />} />
 						<Route path='/login' element={<Login />} />
-						<Route path='/upload' element={<Upload />} />
+						<Route path='/upload' element={<Upload user={currentUser} />} />
 						<Route path='/schematic' element={<Schematic />} />
 						<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 						<Route
