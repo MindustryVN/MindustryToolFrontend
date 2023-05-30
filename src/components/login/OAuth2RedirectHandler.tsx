@@ -20,7 +20,7 @@ export default class OAuth2RedirectHandler extends Component {
 			return (
 				<Navigate
 					to={{
-						hash: '-1'
+						pathname: '/user'
 					}}
 				/>
 			);

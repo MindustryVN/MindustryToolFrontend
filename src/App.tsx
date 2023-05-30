@@ -48,7 +48,7 @@ function App() {
 		} catch (e) {
 			handleLogOut();
 		}
-	});
+	}, []);
 
 	function setUser(user: UserInfo) {
 		setAuthenticated(true);
