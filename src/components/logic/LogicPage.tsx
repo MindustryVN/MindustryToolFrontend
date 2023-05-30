@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Logic.css";
+import './LogicPage.css';
 
 const Logic = () => {
 	return (

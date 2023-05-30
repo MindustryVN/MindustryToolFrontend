@@ -1,4 +1,4 @@
-import './Upload.css';
+import './UploadPage.css';
 import '../../styles.css';
 
 import UploadFile from './UploadFile';
@@ -7,9 +7,9 @@ import TagQuery from '../common/TagQuery';
 import Dropbox from '../common/Dropbox';
 import React from 'react';
 
-import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../Config';
+import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
 import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../common/Tag';
-import { capitalize, getFileExtension } from '../util/Util';
+import { capitalize, getFileExtension } from '../../util/StringUtils';
 import { ChangeEvent, useState } from 'react';
 import { API } from '../../AxiosConfig';
 import SchematicPreview from '../schematic/SchematicPreview';

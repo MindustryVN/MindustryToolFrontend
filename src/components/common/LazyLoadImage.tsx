@@ -1,6 +1,6 @@
 import React from 'react';
 import { API } from '../../AxiosConfig';
-import { PNG_IMAGE_PREFIX } from '../../Config';
+import { PNG_IMAGE_PREFIX } from '../../config/Config';
 
 export interface IHash {
 	[details: string]: string;

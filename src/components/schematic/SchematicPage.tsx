@@ -1,8 +1,8 @@
-import './Schematic.css';
+import './SchematicPage.css';
 import '../../styles.css';
 
 import { useState, useEffect, ChangeEvent, ReactElement, useRef } from 'react';
-import { capitalize } from '../util/Util';
+import { capitalize } from '../../util/StringUtils';
 import { API } from '../../AxiosConfig';
 
 import Tag, { CustomTag, TagChoice, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG } from '../common/Tag';
@@ -59,7 +59,6 @@ const Schematic = () => {
 			.then((result) => {
 				if (result.status === 200 && result.data) {
 					let schematics: SchematicInfo[] = result.data;
-					console.log(schematics);
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
 					if (schematics.length < 10) setLoaderState(LoaderState.NO_MORE);

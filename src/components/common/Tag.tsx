@@ -1,7 +1,7 @@
 import './Tag.css';
 import '../../styles.css';
 
-import { capitalize } from '../util/Util';
+import { capitalize } from '../../util/StringUtils';
 
 import React, { ReactElement } from 'react';
 

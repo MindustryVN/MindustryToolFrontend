@@ -1,7 +1,7 @@
 import React from "react";
 
 
-import "./Map.css";
+import './MapPage.css';
 
 const Map = () => {
 	return (

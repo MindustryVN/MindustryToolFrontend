@@ -1,10 +1,14 @@
 class UserInfo {
-    username: string;
-    discriminator: string;
+	id: string;
+    email: string;
+	name: string;
+	imageUrl: string;
 
-    constructor(username: string, discriminator: string){
-        this.username = username;
-        this.discriminator = discriminator;
+
+    constructor(id: string, email: string, name: string, imageUrl: string){
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.imageUrl = imageUrl;
     }
 }
-

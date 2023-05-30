@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+import { API_BASE_URL } from './config/Config';
+
 export const API = axios.create({
-	// baseURL: 'http://localhost:8080/api/v1/',
-	baseURL: 'https://mindustry-tool-backend.onrender.com/api/v1/',
+	baseURL: API_BASE_URL,
 	headers: { 'ngrok-skip-browser-warning': 'true' }
 });
