@@ -9,7 +9,7 @@ export default class UserPage extends Component<{ user: UserInfo | undefined }> 
 				<div className='user-info flexbox-center'>
 					<div>Id: {this.props.user.id}</div>
 					<div>Name: {this.props.user.name}</div>
-					<img src={this.props.user.imageUrl} alt='Avatar'></img>
+					<img src={this.props.user.imageUrl} alt='user avatar'></img>
 				</div>
 			);
 	}
