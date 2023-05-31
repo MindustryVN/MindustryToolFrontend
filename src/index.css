@@ -23,7 +23,7 @@ body,
 	--dark-transparent-background: rgba(20, 20, 20, 0.6);
 	--light-transparent-background: rgba(255, 255, 255, 0.6);
 	--preview-image-min-size: 192px;
-	--background-image-1: url('/assets/images/light_theme.png');
+	--background-image-1: url('/assets/images/background/light_theme.png');
 }
 
 *::-webkit-scrollbar {

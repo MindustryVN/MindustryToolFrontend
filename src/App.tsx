@@ -81,7 +81,7 @@ function App() {
 						<a href='/login'>Login</a>
 					</button>
 				)}
-				<NavigationBar authenticated={authenticated} />
+				<NavigationBar authenticated={authenticated} user={currentUser} />
 				<Suspense fallback={<label className='flexbox-center'>Loading</label>}>
 					<Routes>
 						<Route path='/' element={<Home />} />
@@ -104,7 +104,7 @@ function App() {
 							path='/admin'
 							element={
 								<PrivateRoute authenticated={authenticated}>
-									<Admin />
+									<Admin user={currentUser} />
 								</PrivateRoute>
 							}
 						/>
