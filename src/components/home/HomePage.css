@@ -1,11 +1,8 @@
 .home {
 	width: 100%;
 	height: 100%;
-	color: white;
-
-	overflow: hidden hidden;
+	overflow: hidden auto;
 }
-
 
 .content {
 	display: block;
@@ -17,10 +14,6 @@
 
 .link-container {
 	display: block;
-}
-
-.link {
-	color: white;
 }
 
 .link:hover {

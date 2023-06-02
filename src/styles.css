@@ -11,16 +11,15 @@
 .image-background::before {
 	content: '';
 	position: fixed;
-	left: 0;
-	right: 0;
 	z-index: -1;
 	display: block;
 	background-image: var(--background-image-1);
 	background-size: cover;
 	background-position: center;
 	filter: brightness(50%);
-	width: 120%;
-	height: 120%;
+	width: 100%;
+	height: 100%;
+	scale: 1.2;
 }
 
 .button-transparent {
@@ -32,7 +31,6 @@
 
 .button-normal {
 	background-color: var(--dark-transparent-background);
-	color: white;
 	border: 1px solid gray;
 	border-radius: 5px;
 	outline: none;

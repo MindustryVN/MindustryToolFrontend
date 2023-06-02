@@ -1,6 +1,9 @@
 .schematic {
 	position: relative;
-	overflow: auto;
+	overflow: hidden auto;
+
+	height: 100%;
+	width: 100%;
 }
 
 .search-container {
