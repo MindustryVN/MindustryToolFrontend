@@ -28,15 +28,7 @@ function App() {
 	useEffect(() => {
 		try {
 			setLoading(true);
-			const userData = localStorage.getItem(USER_DATA);
 
-			if (userData) {
-				const user = JSON.parse(userData);
-				if (user) {
-					setUser(user);
-					setLoading(false);
-				}
-			}
 			let accessToken = localStorage.getItem(ACCESS_TOKEN);
 			if (accessToken) {
 				let headers = { Authorization: 'Bearer ' + accessToken };
@@ -44,6 +36,7 @@ function App() {
 					.then((result) => setUser(result.data))
 					.catch((error) => console.log(error))
 					.finally(() => setLoading(false));
+					
 			} else setLoading(false);
 		} catch (e) {
 			handleLogOut();
@@ -51,10 +44,10 @@ function App() {
 	}, []);
 
 	function setUser(user: UserInfo) {
-		setAuthenticated(true);
-		setCurrentUser(user);
-
-		localStorage.setItem(USER_DATA, JSON.stringify(user));
+		if (user) {
+			setAuthenticated(true);
+			setCurrentUser(user);
+		} else console.log('Login failed');
 	}
 
 	function handleLogOut() {

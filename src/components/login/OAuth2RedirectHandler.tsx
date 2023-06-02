@@ -17,12 +17,10 @@ export default class OAuth2RedirectHandler extends Component {
 
 		if (token) {
 			localStorage.setItem(ACCESS_TOKEN, token);
-			return <Navigate to={{ pathname: '/user' }} />;
-			
+			return <Navigate to={{ pathname: '/home' }} />;
 		} else {
 			const error = this.getUrlParameter('error');
 			console.log(error);
-
 			return <Navigate to={{ pathname: '/login' }} />;
 		}
 	}
