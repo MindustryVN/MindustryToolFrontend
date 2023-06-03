@@ -19,8 +19,10 @@ body,
 	color: white;
 
 	font-weight: 500;
-	font-display: block;
+	text-orientation: sideways;
+	
 }
+
 
 a {
 	color: rgb(50, 200, 200);
