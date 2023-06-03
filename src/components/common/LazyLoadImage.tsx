@@ -1,10 +1,7 @@
 import React from 'react';
 import { API } from '../../AxiosConfig';
 import { PNG_IMAGE_PREFIX } from '../../config/Config';
-
-export interface IHash {
-	[details: string]: string;
-}
+import { IHash } from './IHash';
 
 export default class LazyLoadImage extends React.Component<{ className: string; path: string }, { src: string; error: boolean }> {
 	static imageMap: IHash = {};

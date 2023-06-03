@@ -1,61 +1,33 @@
-import './SchematicPage.css';
 import '../../styles.css';
+import './VerifySchematicPage.css';
 
-import { useState, useEffect, ChangeEvent, ReactElement, useRef } from 'react';
 import { capitalize } from '../../util/StringUtils';
+import React, { ReactElement, useEffect, useState } from 'react';
+import Tag, { CustomTag, SCHEMATIC_TAG } from '../../components/common/Tag';
 import { API } from '../../AxiosConfig';
+import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 
-import Tag, { CustomTag, TagChoice, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG } from '../common/Tag';
-import SchematicInfo from './SchematicInfo';
-import LazyLoadImage from '../common/LazyLoadImage';
-import SearchBar from '../common/SearchBar';
-import TagQuery from '../common/TagQuery';
+import TagQuery from '../../components/common/TagQuery';
 import UserName from '../user/UserName';
-import Dropbox from '../common/Dropbox';
-import React from 'react';
+import SchematicInfo from '../schematic/SchematicInfo';
+import LazyLoadImage from '../../components/common/LazyLoadImage';
 
-const MAX_ITEM_PER_PAGE = 10;
-
-enum LoaderState {
-	LOADING,
-	ERROR,
-	MORE,
-	NO_MORE
-}
-
-const Schematic = () => {
+export const VerifySchematicPage = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
 
 	const [schematicList, setSchematicList] = useState<SchematicInfo[][]>([[]]);
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicInfo>();
 
-	const [tag, setTag] = useState(SCHEMATIC_TAG[0]);
-	const [sortQuery, setSortQuery] = useState<TagChoice>(SCHEMATIC_SORT_CHOICE[0]);
-	const [content, setContent] = useState('');
-	const [tagQuery, setTagQuery] = useState<TagQuery[]>([]);
-
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
-	const currentQuery = useRef<{ tag: TagQuery[]; sort: TagChoice }>({ tag: [], sort: SCHEMATIC_SORT_CHOICE[0] });
-
-	useEffect(() => loadPage(), [sortQuery]);
+	useEffect(() => loadPage(), []);
 
 	function loadPage() {
 		setLoaderState(LoaderState.LOADING);
 
-		if (tagQuery !== currentQuery.current.tag || sortQuery !== currentQuery.current.sort) {
-			setSchematicList([[]]);
-			currentQuery.current = { tag: tagQuery, sort: sortQuery };
-		}
-
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
-		API.get(`schematics/page/${schematicList.length + (newPage ? 0 : -1)}`, {
-			params: {
-				tags: `${tagQuery.map((q) => `${q.toString()}`).join()}`, //
-				sort: sortQuery.value
-			}
-		})
+		API.get(`schematicupload/page/${schematicList.length + (newPage ? 0 : -1)}`)
 			.then((result) => {
 				if (result.status === 200 && result.data) {
 					let schematics: SchematicInfo[] = result.data;
@@ -68,26 +40,6 @@ const Schematic = () => {
 				} else setLoaderState(LoaderState.NO_MORE);
 			})
 			.catch((error) => console.log(error));
-	}
-
-	function handleContentInput(event: ChangeEvent<HTMLInputElement>) {
-		if (event) {
-			const input = event.target.value;
-			setContent(input.trim());
-		}
-	}
-
-	function handleRemoveTag(index: number) {
-		setTagQuery([...tagQuery.filter((_, i) => i !== index)]);
-	}
-
-	function handleAddTag() {
-		const q = tagQuery.filter((q) => q.category !== tag.category);
-		const v = tag.getValues();
-
-		if (v === null || (v !== null && v.find((c: TagChoice) => c.value === content) !== undefined)) {
-			setTagQuery([...q, new TagQuery(tag.category, tag.color, content)]);
-		} else alert('Invalid tag ' + tag.category + ': ' + content);
 	}
 
 	function buildSchematicInfo(schematic: SchematicInfo) {
@@ -169,19 +121,6 @@ const Schematic = () => {
 		);
 	}
 
-	const tagSubmitButton = (
-		<button
-			className='button-transparent'
-			title='Add'
-			type='button'
-			onClick={(event) => {
-				handleAddTag();
-				event.stopPropagation();
-			}}>
-			<img src='/assets/icons/check.png' alt='check' />
-		</button>
-	);
-
 	const schematicArray: ReactElement[] = [];
 	for (let p = 0; p < schematicList.length; p++) {
 		for (let i = 0; i < schematicList[p].length; i++) {
@@ -201,66 +140,8 @@ const Schematic = () => {
 		}
 	}
 
-	let tagValue = tag.getValues();
-	tagValue = tagValue == null ? [] : tagValue;
-
 	return (
-		<div className='schematic'>
-			<section className='search-container'>
-				<Dropbox
-					value={'Tag: ' + capitalize(tag.category)}
-					submitButton={
-						<button className='button-transparent' title='Search' type='button' onClick={(e) => loadPage()}>
-							<img src='/assets/icons/search.png' alt='search'></img>
-						</button>
-					}>
-					{SCHEMATIC_TAG.filter((t) => !tagQuery.find((q) => q.category === t.category)).map((t, index) => (
-						<div
-							key={index}
-							onClick={() => {
-								setTag(t);
-								setContent('');
-							}}>
-							{capitalize(t.category)}
-						</div>
-					))}
-				</Dropbox>
-
-				{tag.hasOption() ? (
-					<Dropbox value={'Value: ' + capitalize(content)} submitButton={tagSubmitButton}>
-						{tagValue.map((content: { name: string; value: string }, index: number) => (
-							<div key={index} onClick={() => setContent(content.value)}>
-								{capitalize(content.name)}
-							</div>
-						))}
-					</Dropbox>
-				) : (
-					<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
-				)}
-				<section className='tag-container'>
-					{tagQuery.map((t: TagQuery, index: number) => (
-						<Tag
-							key={index}
-							index={index}
-							name={t.category}
-							value={t.value}
-							color={t.color}
-							removeButton={
-								<button className='remove-tag-button button-transparent' type='button' onClick={() => handleRemoveTag(index)}>
-									<img src='/assets/icons/quit.png' alt='quit'></img>
-								</button>
-							}
-						/>
-					))}
-				</section>
-			</section>
-			<section className='sort-container'>
-				{SCHEMATIC_SORT_CHOICE.map((c: TagChoice, index) => (
-					<button className={'sort-choice ' + (c == sortQuery ? 'button-selected' : 'button-normal')} type='button' key={index} onClick={() => setSortQuery(c)}>
-						{capitalize(c.name)}
-					</button>
-				))}
-			</section>
+		<div className='verify-schematic'>
 			<section className='schematic-container'>{schematicArray}</section>
 			<footer className='schematic-container-footer'>
 				{loaderState === LoaderState.LOADING ? (
@@ -275,5 +156,3 @@ const Schematic = () => {
 		</div>
 	);
 };
-
-export default Schematic;

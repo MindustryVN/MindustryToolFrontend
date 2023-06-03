@@ -2,13 +2,13 @@ import './UploadSchematicPage.css';
 import '../../styles.css';
 
 import SchematicPreview from '../schematic/SchematicPreview';
-import SearchBar from '../common/SearchBar';
-import TagQuery from '../common/TagQuery';
-import Dropbox from '../common/Dropbox';
+import SearchBar from '../../components/common/SearchBar';
+import TagQuery from '../../components/common/TagQuery';
+import Dropbox from '../../components/common/Dropbox';
 import React from 'react';
 
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
-import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../common/Tag';
+import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../../components/common/Tag';
 import { capitalize, getFileExtension } from '../../util/StringUtils';
 import { ChangeEvent, useState } from 'react';
 import { API } from '../../AxiosConfig';
@@ -89,7 +89,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 				return;
 			}
 
-		API.post('schematics', formData, config)
+		API.post('schematicupload', formData, config)
 			.then(() => {
 				setCode('');
 				setFile(undefined);

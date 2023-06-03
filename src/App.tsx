@@ -5,20 +5,22 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import React, { Suspense, useEffect, useState } from 'react';
 
-const Map = React.lazy(() => import('./components/map/MapPage'));
-const Home = React.lazy(() => import('./components/home/HomePage'));
-const User = React.lazy(() => import('./components/user/UserPage'));
-const Logic = React.lazy(() => import('./components/logic/LogicPage'));
-const Schematic = React.lazy(() => import('./components/schematic/SchematicPage'));
-const Login = React.lazy(() => import('./components/login/LoginPage'));
-const Upload = React.lazy(() => import('./components/upload/UploadSchematicPage'));
-const Admin = React.lazy(() => import('./components/admin/AdminPage'));
+const Map = React.lazy(() => import('./routes/map/MapPage'));
+const Home = React.lazy(() => import('./routes/home/HomePage'));
+const User = React.lazy(() => import('./routes/user/UserPage'));
+const Logic = React.lazy(() => import('./routes/logic/LogicPage'));
+const Schematic = React.lazy(() => import('./routes/schematic/SchematicPage'));
+const Login = React.lazy(() => import('./routes/login/LoginPage'));
+const Upload = React.lazy(() => import('./routes/upload/UploadSchematicPage'));
+const Admin = React.lazy(() => import('./routes/admin/AdminPage'));
 
+import PrivateRoute from './components/router/PrivateRoute';
 import NavigationBar from './components/navigation/NavigationBar';
-import PrivateRoute from './components/common/PrivateRoute';
-import OAuth2RedirectHandler from './components/login/OAuth2RedirectHandler';
+import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
+
 import { ACCESS_TOKEN, USER_DATA } from './config/Config';
 import { API } from './AxiosConfig';
+import AdminRoute from './components/router/AdminRoute';
 
 function App() {
 	const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -36,7 +38,6 @@ function App() {
 					.then((result) => setUser(result.data))
 					.catch((error) => console.log(error))
 					.finally(() => setLoading(false));
-					
 			} else setLoading(false);
 		} catch (e) {
 			handleLogOut();
@@ -57,8 +58,6 @@ function App() {
 		localStorage.removeItem(USER_DATA);
 		localStorage.removeItem(ACCESS_TOKEN);
 	}
-
-	if (loading) return <div className='flexbox-center dark-background'>Loading</div>;
 
 	return (
 		<div className='app image-background'>
@@ -88,7 +87,7 @@ function App() {
 						<Route
 							path='/user'
 							element={
-								<PrivateRoute authenticated={authenticated}>
+								<PrivateRoute user={currentUser}>
 									<User user={currentUser} />
 								</PrivateRoute>
 							}
@@ -96,9 +95,9 @@ function App() {
 						<Route
 							path='/admin'
 							element={
-								<PrivateRoute authenticated={authenticated}>
+								<AdminRoute user={currentUser}>
 									<Admin user={currentUser} />
-								</PrivateRoute>
+								</AdminRoute>
 							}
 						/>
 					</Routes>
