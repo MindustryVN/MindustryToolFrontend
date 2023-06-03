@@ -1,14 +1,9 @@
 import './LoginPage.css';
 
 import React from 'react';
-import { DISCORD_AUTH_URL, USER_DATA } from '../../config/Config';
-import { Navigate } from 'react-router-dom';
+import { DISCORD_AUTH_URL } from '../../config/Config';
 
 const LoginPage = () => {
-	const user = localStorage.getItem(USER_DATA);
-
-	if (user) return <Navigate to={{ pathname: '/user' }} />;
-
 	return (
 		<div className='login-page flexbox-center'>
 			<img

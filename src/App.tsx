@@ -19,7 +19,7 @@ import PrivateRoute from './components/router/PrivateRoute';
 import NavigationBar from './components/navigation/NavigationBar';
 import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
 
-import { ACCESS_TOKEN, USER_DATA } from './config/Config';
+import { ACCESS_TOKEN } from './config/Config';
 import { API } from './AxiosConfig';
 import AdminRoute from './components/router/AdminRoute';
 
@@ -28,52 +28,54 @@ function App() {
 	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		try {
-			setLoading(true);
-
-			let accessToken = localStorage.getItem(ACCESS_TOKEN);
-			if (accessToken) {
-				let headers = { Authorization: 'Bearer ' + accessToken };
-				API.get('/users', { headers: headers }) //
-					.then((result) => {
-						if (result.status === 200) setUser(result.data);
-						else localStorage.removeItem(ACCESS_TOKEN);
-					})
-					.catch((error) => console.log(error))
-					.finally(() => setLoading(false));
-			} else setLoading(false);
-		} catch (e) {
-			handleLogOut();
-		}
+		setLoading(true);
+		let accessToken = localStorage.getItem(ACCESS_TOKEN);
+		if (accessToken) {
+			let headers = { Authorization: 'Bearer ' + accessToken };
+			API.get('/users', { headers: headers }) //
+				.then((result) => {
+					if (result.status === 200) setUser(result.data);
+					else localStorage.removeItem(ACCESS_TOKEN);
+				})
+				.catch((error) => {
+					console.log(error);
+					handleLogOut();
+				})
+				.finally(() => setLoading(false));
+		} else setLoading(false);
 	}, []);
 
 	function setUser(user: UserInfo) {
-		if (user) {
-			setCurrentUser(user);
-		} else console.log('Login failed');
+		if (user) setCurrentUser(user);
+		else handleLogOut();
 	}
 
 	function handleLogOut() {
 		setCurrentUser(undefined);
-
-		localStorage.removeItem(USER_DATA);
 		localStorage.removeItem(ACCESS_TOKEN);
 	}
+
+	if (loading)
+		return (
+			<div className='image-background'>
+				<label className='flexbox-center dark-background'>Loading</label>
+			</div>
+		);
 
 	return (
 		<div className='app image-background'>
 			<Router>
 				<img className='mindustry-logo' src='https://cdn.discordapp.com/attachments/1010373926100148356/1106488674935394394/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='Error' hidden></img>
-
-				{currentUser ? (
-					<button className='logout-button dark-background' type='button' onClick={() => handleLogOut()}>
-						Logout
-					</button>
-				) : (
-					<button className='logout-button dark-background' type='button'>
-						<a href='/login'>Login</a>
-					</button>
-				)}
+				{!loading &&
+					(currentUser ? (
+						<button className='logout-button dark-background' type='button' onClick={() => handleLogOut()}>
+							Logout
+						</button>
+					) : (
+						<a className='logout-button dark-background' href='/login'>
+							Login
+						</a>
+					))}
 				<NavigationBar user={currentUser} />
 				<Suspense fallback={<label className='flexbox-center'>Loading</label>}>
 					<Routes>
