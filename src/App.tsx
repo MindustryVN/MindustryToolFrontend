@@ -24,7 +24,6 @@ import { API } from './AxiosConfig';
 import AdminRoute from './components/router/AdminRoute';
 
 function App() {
-	const [authenticated, setAuthenticated] = useState<boolean>(false);
 	const [currentUser, setCurrentUser] = useState<UserInfo>();
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -36,7 +35,10 @@ function App() {
 			if (accessToken) {
 				let headers = { Authorization: 'Bearer ' + accessToken };
 				API.get('/users', { headers: headers }) //
-					.then((result) => setUser(result.data))
+					.then((result) => {
+						if (result.status === 200) setUser(result.data);
+						else localStorage.removeItem(ACCESS_TOKEN);
+					})
 					.catch((error) => console.log(error))
 					.finally(() => setLoading(false));
 			} else setLoading(false);
@@ -47,13 +49,11 @@ function App() {
 
 	function setUser(user: UserInfo) {
 		if (user) {
-			setAuthenticated(true);
 			setCurrentUser(user);
 		} else console.log('Login failed');
 	}
 
 	function handleLogOut() {
-		setAuthenticated(false);
 		setCurrentUser(undefined);
 
 		localStorage.removeItem(USER_DATA);
@@ -65,7 +65,7 @@ function App() {
 			<Router>
 				<img className='mindustry-logo' src='https://cdn.discordapp.com/attachments/1010373926100148356/1106488674935394394/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='Error' hidden></img>
 
-				{authenticated ? (
+				{currentUser ? (
 					<button className='logout-button dark-background' type='button' onClick={() => handleLogOut()}>
 						Logout
 					</button>
@@ -74,7 +74,7 @@ function App() {
 						<a href='/login'>Login</a>
 					</button>
 				)}
-				<NavigationBar authenticated={authenticated} user={currentUser} />
+				<NavigationBar user={currentUser} />
 				<Suspense fallback={<label className='flexbox-center'>Loading</label>}>
 					<Routes>
 						<Route path='/' element={<Home />} />
@@ -84,8 +84,7 @@ function App() {
 						<Route path='/login' element={<Login />} />
 						<Route path='/upload' element={<Upload user={currentUser} />} />
 						<Route path='/schematic' element={<Schematic />} />
-						<Route path='/forum/*' element={<Forum></Forum>}>
-						</Route>
+						<Route path='/forum/*' element={<Forum></Forum>}></Route>
 						<Route
 							path='/user'
 							element={

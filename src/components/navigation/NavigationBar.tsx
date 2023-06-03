@@ -2,7 +2,7 @@ import './NavigationBar.css';
 import '../../styles.css';
 import React, { Component } from 'react';
 
-export default class NavigationBar extends Component<{ authenticated: boolean; user: UserInfo | undefined }> {
+export default class NavigationBar extends Component<{ user: UserInfo | undefined }> {
 	render() {
 		return (
 			<nav className='navigation-bar'>
@@ -32,7 +32,7 @@ export default class NavigationBar extends Component<{ authenticated: boolean; u
 							<a className='nav-link' href='/upload'>
 								Upload
 							</a>
-							{this.props.authenticated && this.props.user && this.props.user.role.includes('ADMIN') && (
+							{this.props.user && this.props.user.role.includes('ADMIN') && (
 								<a className='nav-link' href='/admin'>
 									Admin
 								</a>
