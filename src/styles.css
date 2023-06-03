@@ -99,3 +99,8 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 }
+
+.half-box {
+	height: 50%;
+	width: 50%;
+}

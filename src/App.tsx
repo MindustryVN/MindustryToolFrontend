@@ -13,6 +13,7 @@ const Schematic = React.lazy(() => import('./routes/schematic/SchematicPage'));
 const Login = React.lazy(() => import('./routes/login/LoginPage'));
 const Upload = React.lazy(() => import('./routes/upload/UploadSchematicPage'));
 const Admin = React.lazy(() => import('./routes/admin/AdminPage'));
+const Forum = React.lazy(() => import('./routes/forum/ForumPage'));
 
 import PrivateRoute from './components/router/PrivateRoute';
 import NavigationBar from './components/navigation/NavigationBar';
@@ -83,7 +84,8 @@ function App() {
 						<Route path='/login' element={<Login />} />
 						<Route path='/upload' element={<Upload user={currentUser} />} />
 						<Route path='/schematic' element={<Schematic />} />
-						<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
+						<Route path='/forum/*' element={<Forum></Forum>}>
+						</Route>
 						<Route
 							path='/user'
 							element={
@@ -100,6 +102,7 @@ function App() {
 								</AdminRoute>
 							}
 						/>
+						<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 					</Routes>
 				</Suspense>
 			</Router>

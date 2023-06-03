@@ -12,13 +12,18 @@ body,
 }
 
 * {
-	font-family: 'Monomaniac One', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	font-family: 'MindustryFont', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	font-weight: 100;
-
 	color: white;
+
+	font-weight: 500;
+	font-display: block;
+}
+
+a {
+	color: rgb(50, 200, 200);
 }
 
 :root {
@@ -43,4 +48,9 @@ div {
 
 input[type='file'] {
 	color: transparent;
+}
+
+@font-face {
+	font-family: 'MindustryFont';
+	src: url('/assets/fonts/MonomaniacOne-Regular.ttf') format('truetype');
 }

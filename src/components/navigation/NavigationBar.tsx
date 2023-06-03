@@ -17,6 +17,9 @@ export default class NavigationBar extends Component<{ authenticated: boolean; u
 							<a className='nav-link' href='/user'>
 								User
 							</a>
+							<a className='nav-link' href='/forum'>
+								Forum
+							</a>
 							<a className='nav-link' href='/schematic'>
 								Schematic
 							</a>
