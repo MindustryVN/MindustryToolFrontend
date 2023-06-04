@@ -1,35 +1,34 @@
 .upload {
 	position: relative;
-	width: 100%;
-	min-height: 100%;
 
-	height: 100%;
 	width: 100%;
+	height: 100%;
+
+	overflow: hidden auto;
 }
 
 .upload-model {
 	flex-direction: row;
-	margin: auto;
 
-	border-radius: 5px;
-	border: 2px solid var(--light-transparent-background);
+margin: 2rem;
 }
 
 .preview-container {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	
+	border-radius: 5px;
+	border: 2px solid var(--light-transparent-background);
 
 	gap: 0.5rem;
 
-	width: 80vw;
-	width: 80dvw;
+	width: 70vw;
+	width: 70dvw;
 
-	box-sizing: border-box;
 	justify-content: space-around;
 
 	padding: 2rem;
-	overflow: hidden scroll;
 }
 
 .upload-code-area {

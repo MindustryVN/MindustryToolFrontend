@@ -130,7 +130,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 	tagValue = tagValue == null ? [] : tagValue;
 
 	return (
-		<div className='upload flexbox-center image-background'>
+		<div className='upload'>
 			<div className='upload-model flexbox-center'>
 				<div className='preview-container dark-background flexbox-center'>
 					<div className='preview-image-container'>
