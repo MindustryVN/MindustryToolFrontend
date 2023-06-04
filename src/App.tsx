@@ -24,6 +24,7 @@ import { API } from './AxiosConfig';
 import AdminRoute from './components/router/AdminRoute';
 
 function App() {
+	const [authenticated, setAuthenticated] = useState(false);
 	const [currentUser, setCurrentUser] = useState<UserInfo>();
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -34,7 +35,7 @@ function App() {
 			let headers = { Authorization: 'Bearer ' + accessToken };
 			API.get('/users', { headers: headers }) //
 				.then((result) => {
-					if (result.status === 200) setUser(result.data);
+					if (result.status === 200) handleLogin(result.data);
 					else localStorage.removeItem(ACCESS_TOKEN);
 				})
 				.catch((error) => {
@@ -45,22 +46,17 @@ function App() {
 		} else setLoading(false);
 	}, []);
 
-	function setUser(user: UserInfo) {
-		if (user) setCurrentUser(user);
-		else handleLogOut();
+	function handleLogin(user: UserInfo) {
+		if (user) {
+			setCurrentUser(user);
+			setAuthenticated(true);
+		} else handleLogOut();
 	}
 
 	function handleLogOut() {
 		setCurrentUser(undefined);
 		localStorage.removeItem(ACCESS_TOKEN);
 	}
-
-	if (loading)
-		return (
-			<div className='image-background'>
-				<label className='flexbox-center dark-background'>Loading</label>
-			</div>
-		);
 
 	return (
 		<div className='app image-background'>
@@ -90,7 +86,7 @@ function App() {
 						<Route
 							path='/user'
 							element={
-								<PrivateRoute user={currentUser}>
+								<PrivateRoute loading={loading} user={currentUser}>
 									<User user={currentUser} />
 								</PrivateRoute>
 							}
@@ -98,7 +94,7 @@ function App() {
 						<Route
 							path='/admin'
 							element={
-								<AdminRoute user={currentUser}>
+								<AdminRoute loading={loading} user={currentUser}>
 									<Admin user={currentUser} />
 								</AdminRoute>
 							}
