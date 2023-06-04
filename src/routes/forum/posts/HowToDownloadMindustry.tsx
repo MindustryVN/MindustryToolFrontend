@@ -13,11 +13,11 @@ const HowToDownloadMindustry = () => {
 				</li>
 				<li>
 					<p>Kéo xuống dưới và ấn vào nút "Download Now"</p>
-					<img className='half-box' src='/assets/images/forum/download-now.jpg' alt='download now'></img>
+					<img className='forum-image' src='/assets/images/forum/download-now.jpg' alt='download now'></img>
 				</li>
 				<li>
 					<p>Ấn vào "No thanks, just take me to the download"</p>
-					<img className='half-box' src='/assets/images/forum/no-thank.jpg' alt='download'></img>
+					<img className='forum-image' src='/assets/images/forum/no-thank.jpg' alt='download'></img>
 				</li>
 				<li>
 					<p>Chọn phiên bản cần tải và tải thôi</p>

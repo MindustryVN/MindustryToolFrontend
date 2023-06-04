@@ -20,11 +20,11 @@ import NavigationBar from './components/navigation/NavigationBar';
 import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
 
 import { ACCESS_TOKEN } from './config/Config';
-import { API } from './AxiosConfig';
+import { API, AxiosConfig } from './AxiosConfig';
 import AdminRoute from './components/router/AdminRoute';
+import Loading from './components/common/Loading';
 
 function App() {
-	const [authenticated, setAuthenticated] = useState(false);
 	const [currentUser, setCurrentUser] = useState<UserInfo>();
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -32,8 +32,8 @@ function App() {
 		setLoading(true);
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
 		if (accessToken) {
-			let headers = { Authorization: 'Bearer ' + accessToken };
-			API.get('/users', { headers: headers }) //
+			AxiosConfig.bearer = 'Bearer ' + accessToken;
+			API.get('/users', { headers: { Authorization: AxiosConfig.bearer } }) //
 				.then((result) => {
 					if (result.status === 200) handleLogin(result.data);
 					else localStorage.removeItem(ACCESS_TOKEN);
@@ -49,7 +49,6 @@ function App() {
 	function handleLogin(user: UserInfo) {
 		if (user) {
 			setCurrentUser(user);
-			setAuthenticated(true);
 		} else handleLogOut();
 	}
 
@@ -73,7 +72,7 @@ function App() {
 						</a>
 					))}
 				<NavigationBar user={currentUser} />
-				<Suspense fallback={<label className='flexbox-center'>Loading</label>}>
+				<Suspense fallback={<Loading />}>
 					<Routes>
 						<Route path='/' element={<Home />} />
 						<Route path='/map' element={<Map />} />

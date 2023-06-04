@@ -8,6 +8,8 @@ export default interface SchematicInfo {
 	tags: string[];
 	like: number;
 	dislike: number;
+	height: number;
+	width: number;
 }
 
 export interface ItemRequirement {

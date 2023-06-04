@@ -1,3 +1,4 @@
+import UserName from './UserName';
 import './UserPage.css';
 
 import React, { Component } from 'react';
@@ -6,10 +7,8 @@ export default class UserPage extends Component<{ user: UserInfo | undefined }> 
 	render() {
 		if (this.props.user)
 			return (
-				<div className='user-info flexbox-center'>
-					<div>Id: {this.props.user.id}</div>
-					<div>Name: {this.props.user.name}</div>
-					<img src={this.props.user.imageUrl} alt='user avatar'></img>
+				<div className='flexbox-center'>
+					<UserName user={this.props.user} />
 				</div>
 			);
 	}

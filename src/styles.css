@@ -91,13 +91,19 @@
 .flexbox-row {
 	display: flex;
 	flex-direction: row;
-	flex-wrap: wrap;
 }
 
 .flexbox-column {
 	display: flex;
 	flex-direction: column;
+}
+
+.flex-warp {
 	flex-wrap: wrap;
+}
+
+.flex-nowrap {
+	flex-wrap: nowrap;
 }
 
 .half-box {
@@ -108,6 +114,14 @@
 .full-box {
 	height: 100%;
 	width: 100%;
+}
+
+.forum-image {
+	width: 70vw;
+	width: 70dvw;
+
+	border: 1px solid white;
+	border-radius: 5px;
 }
 
 .loading-spinner {

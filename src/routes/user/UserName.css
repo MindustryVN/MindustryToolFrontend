@@ -1,0 +1,17 @@
+.user-name-card {
+	display: inline;
+	align-items: end;
+	height: 1em;
+}
+
+.user-avatar {
+	height: 1em;
+	width: 1em;
+
+	border: 1px solid #738adb;
+	border-radius: 50%;
+}
+
+.name {
+	text-decoration: none;
+}

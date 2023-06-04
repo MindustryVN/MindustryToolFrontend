@@ -10,11 +10,10 @@ import SchematicInfo from './SchematicInfo';
 import LazyLoadImage from '../../components/common/LazyLoadImage';
 import SearchBar from '../../components/common/SearchBar';
 import TagQuery from '../../components/common/TagQuery';
-import UserName from '../user/UserName';
+import UserName from '../user/LoadUserName';
 import Dropbox from '../../components/common/Dropbox';
 import React from 'react';
 import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
-
 
 const Schematic = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
@@ -54,7 +53,8 @@ const Schematic = () => {
 					let schematics: SchematicInfo[] = result.data;
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
-					if (schematics.length < 10) setLoaderState(LoaderState.NO_MORE);
+
+					if (schematics.length < MAX_ITEM_PER_PAGE ) setLoaderState(LoaderState.NO_MORE);
 					else setLoaderState(LoaderState.MORE);
 
 					setSchematicList([...schematicList]);
@@ -257,7 +257,7 @@ const Schematic = () => {
 			<section className='schematic-container'>{schematicArray}</section>
 			<footer className='schematic-container-footer'>
 				{loaderState === LoaderState.LOADING ? (
-					<div className='loading-spinner'></div>
+					<div className='loading-spinner flexbox-center' />
 				) : (
 					<button className='load-more-button button-normal' onClick={() => loadPage()}>
 						{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}

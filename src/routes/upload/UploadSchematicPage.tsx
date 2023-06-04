@@ -11,13 +11,8 @@ import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config'
 import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../../components/common/Tag';
 import { capitalize, getFileExtension } from '../../util/StringUtils';
 import { ChangeEvent, useState } from 'react';
-import { API } from '../../AxiosConfig';
-
-const config = {
-	headers: {
-		'content-type': 'multipart/form-data'
-	}
-};
+import { API, AxiosConfig } from '../../AxiosConfig';
+import { TagSubmitButton } from '../../components/common/TagSubmitButton';
 
 const Upload = ({ user }: { user: UserInfo | undefined }) => {
 	const [file, setFile] = useState<File>();
@@ -36,33 +31,43 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 
 		const extension: string = getFileExtension(files[0]);
 
-		if (extension === SCHEMATIC_FILE_EXTENSION) {
-			setFile(files[0]);
-			setCode('');
+		if (extension !== SCHEMATIC_FILE_EXTENSION) return;
 
-			const form = new FormData();
-			form.append('file', files[0]);
+		setFile(files[0]);
+		setCode('');
 
-			API.post('schematics/preview', form, config)
-				.then((result) => setPreview(result.data))
-				.catch(() => {});
-		}
+		const form = new FormData();
+		form.append('file', files[0]);
+
+		getPreview(form);
 	}
 
-	function handleCodeChange(event: ChangeEvent<HTMLTextAreaElement>) {
-		if (!event.target) return;
+	function handleCodeChange() {
+		navigator.clipboard.readText().then((text) => {
+			if (!text.startsWith('bXNja')) return;
+			if (text === code) return;
 
-		const str = event.target.value;
-		setCode(str);
-		if (!str.startsWith('bXNja')) {
-			return;
-		}
+			setCode(text);
+			setFile(undefined);
 
-		setFile(undefined);
+			const form = new FormData();
+			form.append('code', text);
 
-		API.get('/schematics/preview', { params: { code: str } })
+			getPreview(form);
+		});
+	}
+
+	function getPreview(form: FormData) {
+		const config = {
+			headers: {
+				Authorization: AxiosConfig.bearer, //
+				'content-type': 'multipart/form-data'
+			}
+		};
+
+		API.post('schematics/preview', form, config)
 			.then((result) => setPreview(result.data))
-			.catch(() => {});
+			.catch((error) => console.log(error));
 	}
 
 	function handleSubmit() {
@@ -76,18 +81,18 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 		formData.append('authorId', authorId);
 		formData.append('tags', `${tags.map((q) => `${q.toString()}`).join()}`);
 
-		if (tag)
-			if (file) {
-				const extension = getFileExtension(file);
-				if (extension === SCHEMATIC_FILE_EXTENSION) {
-					setFile(file);
-					formData.append('file', file);
-				}
-			} else if (code !== undefined && code.length > 8) {
-				formData.append('code', code);
-			} else {
-				return;
+		if (!tag) return;
+
+		if (file && getFileExtension(file) === SCHEMATIC_FILE_EXTENSION) formData.append('file', file);
+		else if (code !== undefined && code.length > 8) formData.append('code', code);
+		else return;
+
+		const config = {
+			headers: {
+				Authorization: AxiosConfig.bearer, //
+				'content-type': 'multipart/form-data'
 			}
+		};
 
 		API.post('schematicupload', formData, config)
 			.then(() => {
@@ -122,19 +127,6 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 		} else alert('Invalid tag ' + tag.category + ': ' + content);
 	}
 
-	const tagSubmitButton = (
-		<button
-			className='button-transparent'
-			title='Add'
-			type='button'
-			onClick={(event) => {
-				handleAddTag();
-				event.stopPropagation();
-			}}>
-			<img src='/assets/icons/check.png' alt='check' />
-		</button>
-	);
-
 	let tagValue = tag.getValues();
 	tagValue = tagValue == null ? [] : tagValue;
 
@@ -147,7 +139,9 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 							{preview ? <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file'></img> : <div className='preview-image'>Upload a file</div>}
 							<input id='ufb' type='file' onChange={(event) => handleFileChange(event)}></input>
 						</label>
-						<textarea className='upload-code-area' placeholder='Code' value={code} onChange={handleCodeChange} />
+						<button className='button-normal' type='button' onClick={() => handleCodeChange()}>
+							Copy from clipboard
+						</button>
 					</div>
 					<div className='upload-description-container flexbox-center'>
 						{preview && (
@@ -182,7 +176,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 								))}
 							</Dropbox>
 							{tag.hasOption() ? (
-								<Dropbox value={'Value: ' + capitalize(content)} submitButton={tagSubmitButton}>
+								<Dropbox value={'Value: ' + capitalize(content)} submitButton={<TagSubmitButton callback={() => handleAddTag()} />}>
 									{tagValue.map((content: { name: string; value: string }, index: number) => (
 										<div key={index} onClick={() => setContent(content.value)}>
 											{capitalize(content.name)}
@@ -190,7 +184,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 									))}
 								</Dropbox>
 							) : (
-								<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
+								<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={<TagSubmitButton callback={() => handleAddTag()} />} />
 							)}
 							<div className='tag-container'>
 								{tags.map((t: TagQuery, index: number) => (
