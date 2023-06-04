@@ -38,10 +38,7 @@ function App() {
 					if (result.status === 200) handleLogin(result.data);
 					else localStorage.removeItem(ACCESS_TOKEN);
 				})
-				.catch((error) => {
-					console.log(error);
-					handleLogOut();
-				})
+				.catch((error) => handleLogOut())
 				.finally(() => setLoading(false));
 		} else setLoading(false);
 	}, []);

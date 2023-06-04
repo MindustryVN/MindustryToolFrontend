@@ -4,7 +4,7 @@ import { PNG_IMAGE_PREFIX } from '../../config/Config';
 import { IHash } from './IHash';
 import path from 'path';
 
-export default class LazyLoadImage extends React.Component<{ className: string; path: string, config? : {} }, { src: string; error: boolean }> {
+export default class LazyLoadImage extends React.Component<{ className: string; path: string; config?: {} }, { src: string; error: boolean }> {
 	static imageMap: IHash = {};
 
 	state = { src: '', error: false };
@@ -18,10 +18,7 @@ export default class LazyLoadImage extends React.Component<{ className: string; 
 					this.setState(() => ({ src: data }));
 					LazyLoadImage.imageMap[this.props.path] = data;
 				})
-				.catch((error) => {
-					this.setState(() => ({ error: true }));
-					console.log(error);
-				});
+				.catch((error) => this.setState(() => ({ error: true })));
 	}
 
 	render() {

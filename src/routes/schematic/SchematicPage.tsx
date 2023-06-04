@@ -54,13 +54,13 @@ const Schematic = () => {
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
 
-					if (schematics.length < MAX_ITEM_PER_PAGE ) setLoaderState(LoaderState.NO_MORE);
+					if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState(LoaderState.NO_MORE);
 					else setLoaderState(LoaderState.MORE);
 
 					setSchematicList([...schematicList]);
 				} else setLoaderState(LoaderState.NO_MORE);
 			})
-			.catch((error) => console.log(error));
+			.catch(() => setLoaderState(LoaderState.MORE));
 	}
 
 	function handleContentInput(event: ChangeEvent<HTMLInputElement>) {

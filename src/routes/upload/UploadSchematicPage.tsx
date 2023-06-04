@@ -65,9 +65,8 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 			}
 		};
 
-		API.post('schematics/preview', form, config)
-			.then((result) => setPreview(result.data))
-			.catch((error) => console.log(error));
+		API.post('schematics/preview', form, config) //
+			.then((result) => setPreview(result.data));
 	}
 
 	function handleSubmit() {

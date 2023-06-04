@@ -48,7 +48,7 @@ export const VerifySchematicPage = () => {
 					setSchematicList([...schematicList]);
 				} else setLoaderState(LoaderState.NO_MORE);
 				})
-				.catch((error) => console.log(error));
+				.catch(() => setLoaderState(LoaderState.MORE));
 		}
 	}
 
@@ -72,7 +72,7 @@ export const VerifySchematicPage = () => {
 					setSchematicList([...schematicList]);
 				} else setLoaderState(LoaderState.NO_MORE);
 			})
-			.catch((error) => console.log(error));
+			.catch(() => setLoaderState(LoaderState.MORE));
 	}
 
 	const schematicArray: ReactElement[] = [];
