@@ -8,6 +8,11 @@
 	outline: none;
 }
 
+.light-border {
+	border-radius: 5px;
+	border: 2px solid var(--light-transparent-background);
+}
+
 .image-background::before {
 	content: '';
 	position: fixed;
@@ -16,7 +21,7 @@
 	background-image: var(--background-image-1);
 	background-size: cover;
 	background-position: center;
-	filter: brightness(50%);
+	filter: brightness(30%);
 	width: 100%;
 	height: 100%;
 }

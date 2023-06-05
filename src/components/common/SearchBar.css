@@ -1,14 +1,13 @@
-.search-bar-container {
+.search-bar {
 	display: flex;
 
 	height: 2.5rem;
-	width: 50%;
 	min-width: 250px;
 	border-radius: 5px;
 	background-color: var(--dark-transparent-background);
 }
 
-.search-bar[type='text'] {
+.input-bar[type='text'] {
 	outline: none;
 	border: none;
 	box-shadow: none;
@@ -20,6 +19,6 @@
 	padding-left: 1rem;
 }
 
-.search-bar::placeholder {
+.input-bar::placeholder {
 	background-color: transparent;
 }

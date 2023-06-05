@@ -8,11 +8,13 @@ import React, { ReactElement } from 'react';
 export default class Tag extends React.Component<{ index: number; name: string; value: string; color: string; removeButton?: ReactElement }> {
 	render() {
 		return (
-			<div className='tag flexbox-center' style={{ backgroundColor: this.props.color }}>
-				<div className='flexbox-center'>
+			<div className='tag' style={{ backgroundColor: this.props.color }}>
+				<span>
 					{capitalize(this.props.name)}: {capitalize(this.props.value)}
-				</div>
+				</span>
+				<span className='remove-button flexbox-center'>
 				{this.props.removeButton}
+				</span>
 			</div>
 		);
 	}

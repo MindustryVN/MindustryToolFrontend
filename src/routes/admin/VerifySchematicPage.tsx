@@ -39,14 +39,14 @@ export const VerifySchematicPage = () => {
 			};
 			API.get(`schematicupload/page/${i}`, config)
 				.then((result) => {
-				if (result.status === 200 && result.data) {
-					let schematics: SchematicInfo[] = result.data;
-					
-					if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState(LoaderState.NO_MORE);
-					else setLoaderState(LoaderState.MORE);
+					if (result.status === 200 && result.data) {
+						let schematics: SchematicInfo[] = result.data;
 
-					setSchematicList([...schematicList]);
-				} else setLoaderState(LoaderState.NO_MORE);
+						if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState(LoaderState.NO_MORE);
+						else setLoaderState(LoaderState.MORE);
+
+						setSchematicList([...schematicList]);
+					} else setLoaderState(LoaderState.NO_MORE);
 				})
 				.catch(() => setLoaderState(LoaderState.MORE));
 		}
@@ -147,7 +147,7 @@ export const VerifySchematicPage = () => {
 			tagValue = tagValue == null ? [] : tagValue;
 
 			return (
-				<div className='schematic-info-container dark-background' onClick={(event) => event.stopPropagation()}>
+				<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
 					<LazyLoadImage className='schematic-info-image' path={`schematicupload/${this.props.schematic.id}/image`} config={config}></LazyLoadImage>
 					<div className='schematic-info-desc-container small-gap'>
 						<span>Name: {capitalize(this.props.schematic.name)}</span>
@@ -156,7 +156,7 @@ export const VerifySchematicPage = () => {
 						</span>
 						{this.props.schematic.description && <span>{this.props.schematic.description}</span>}
 						{this.props.schematic.requirement && (
-							<section className='flexbox-row small-gap'>
+							<section className='requirement-container flexbox-row small-gap'>
 								{this.props.schematic.requirement.map((r, index) => (
 									<span key={index} className='text-center'>
 										<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
@@ -235,7 +235,9 @@ export const VerifySchematicPage = () => {
 			{showSchematicModel === true && currentSchematic !== undefined && (
 				<div className='schematic-info-modal model flexbox-center image-background' onClick={() => setShowSchematicModel(false)}>
 					<div className='flexbox-center'>
-						<SchematicVerifyPanel schematic={currentSchematic} />
+						<div className='schematic-card dark-background'>
+							<SchematicVerifyPanel schematic={currentSchematic} />
+						</div>
 					</div>
 				</div>
 			)}

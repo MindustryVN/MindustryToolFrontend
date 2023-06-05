@@ -4,8 +4,9 @@ import '../../styles.css';
 import { useState, useEffect, ChangeEvent, ReactElement, useRef } from 'react';
 import { capitalize } from '../../util/StringUtils';
 import { API } from '../../AxiosConfig';
-
+import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 import Tag, { CustomTag, TagChoice, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG } from '../../components/common/Tag';
+
 import SchematicInfo from './SchematicInfo';
 import LazyLoadImage from '../../components/common/LazyLoadImage';
 import SearchBar from '../../components/common/SearchBar';
@@ -13,7 +14,6 @@ import TagQuery from '../../components/common/TagQuery';
 import UserName from '../user/LoadUserName';
 import Dropbox from '../../components/common/Dropbox';
 import React from 'react';
-import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 
 const Schematic = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
@@ -97,9 +97,9 @@ const Schematic = () => {
 		const url = window.URL.createObjectURL(blob);
 
 		return (
-			<div className='schematic-info-modal model flexbox-center image-background' onClick={() => setShowSchematicModel(false)}>
-				<div className='flexbox-center'>
-					<div className='schematic-info-container dark-background' onClick={(event) => event.stopPropagation()}>
+			<div className='schematic-info-modal model image-background' onClick={() => setShowSchematicModel(false)}>
+				<div className='schematic-card dark-background'>
+					<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
 						<LazyLoadImage className='schematic-info-image' path={`schematics/${schematic.id}/image`}></LazyLoadImage>
 						<div className='schematic-info-desc-container'>
 							<span>Name: {capitalize(schematic.name)}</span>
@@ -110,7 +110,7 @@ const Schematic = () => {
 							<span>Dislike: {schematic.dislike}</span>
 							{schematic.description && <span>{schematic.description}</span>}
 							{schematic.requirement && (
-								<section className='flexbox-row small-gap'>
+								<section className='requirement-container flexbox-row small-gap'>
 									{schematic.requirement.map((r, index) => (
 										<span key={index} className='text-center'>
 											<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
@@ -120,7 +120,7 @@ const Schematic = () => {
 								</section>
 							)}
 							{tagArray && (
-								<section className='tag-container'>
+								<section className='flexbox-row flex-wrap'>
 									{tagArray.map((t: TagQuery, index: number) => (
 										<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} />
 									))}
@@ -198,7 +198,7 @@ const Schematic = () => {
 	tagValue = tagValue == null ? [] : tagValue;
 
 	return (
-		<div className='schematic'>
+		<div className='schematic '>
 			<section className='search-container'>
 				<Dropbox
 					value={'Tag: ' + capitalize(tag.category)}
@@ -230,22 +230,22 @@ const Schematic = () => {
 				) : (
 					<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={tagSubmitButton} />
 				)}
-				<section className='tag-container'>
-					{tagQuery.map((t: TagQuery, index: number) => (
-						<Tag
-							key={index}
-							index={index}
-							name={t.category}
-							value={t.value}
-							color={t.color}
-							removeButton={
-								<button className='remove-tag-button button-transparent' type='button' onClick={() => handleRemoveTag(index)}>
-									<img src='/assets/icons/quit.png' alt='quit'></img>
-								</button>
-							}
-						/>
-					))}
-				</section>
+			</section>
+			<section className='search-tag-container'>
+				{tagQuery.map((t: TagQuery, index: number) => (
+					<Tag
+						key={index}
+						index={index}
+						name={t.category}
+						value={t.value}
+						color={t.color}
+						removeButton={
+							<button className='remove-tag-button button-transparent' type='button' onClick={() => handleRemoveTag(index)}>
+								<img src='/assets/icons/quit.png' alt='quit'></img>
+							</button>
+						}
+					/>
+				))}
 			</section>
 			<section className='sort-container'>
 				{SCHEMATIC_SORT_CHOICE.map((c: TagChoice, index) => (
