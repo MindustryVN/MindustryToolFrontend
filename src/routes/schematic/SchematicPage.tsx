@@ -5,30 +5,30 @@ import { useState, useEffect, ChangeEvent, ReactElement, useRef } from 'react';
 import { capitalize } from '../../util/StringUtils';
 import { API } from '../../AxiosConfig';
 import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
-import Tag, { CustomTag, TagChoice, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG } from '../../components/common/Tag';
+import Tag, { CustomChoice, CustomTagChoice, SCHEMATIC_SORT_CHOICE, SCHEMATIC_TAG} from '../../components/common/Tag';
 
 import SchematicInfo from './SchematicInfo';
 import LazyLoadImage from '../../components/common/LazyLoadImage';
 import SearchBar from '../../components/common/SearchBar';
-import TagQuery from '../../components/common/TagQuery';
+import UserInfo, { isAdmin } from '../user/UserInfo';
 import UserName from '../user/LoadUserName';
 import Dropbox from '../../components/common/Dropbox';
 import React from 'react';
 
-const Schematic = () => {
+const Schematic = ({ user }: { user: UserInfo | undefined }) => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
 
 	const [schematicList, setSchematicList] = useState<SchematicInfo[][]>([[]]);
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicInfo>();
 
 	const [tag, setTag] = useState(SCHEMATIC_TAG[0]);
-	const [sortQuery, setSortQuery] = useState<TagChoice>(SCHEMATIC_SORT_CHOICE[0]);
+	const [sortQuery, setSortQuery] = useState<CustomChoice>(SCHEMATIC_SORT_CHOICE[0]);
 	const [content, setContent] = useState('');
-	const [tagQuery, setTagQuery] = useState<TagQuery[]>([]);
+	const [tagQuery, setTagQuery] = useState<CustomTagChoice[]>([]);
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
-	const currentQuery = useRef<{ tag: TagQuery[]; sort: TagChoice }>({ tag: [], sort: SCHEMATIC_SORT_CHOICE[0] });
+	const currentQuery = useRef<{ tag: CustomTagChoice[]; sort: CustomChoice }>({ tag: [], sort: SCHEMATIC_SORT_CHOICE[0] });
 
 	useEffect(() => loadPage(), [sortQuery]);
 
@@ -75,25 +75,17 @@ const Schematic = () => {
 	}
 
 	function handleAddTag() {
-		const q = tagQuery.filter((q) => q.category !== tag.category);
-		const v = tag.getValues();
+		const q = tagQuery.filter((q) => q.category !== tag.value);
+		const v = tag.getChoices();
 
-		if (v === null || (v !== null && v.find((c: TagChoice) => c.value === content) !== undefined)) {
-			setTagQuery([...q, new TagQuery(tag.category, tag.color, content)]);
-		} else alert('Invalid tag ' + tag.category + ': ' + content);
+		if (v === null || (v !== null && v.find((c: CustomChoice) => c.value === content) !== undefined)) {
+			setTagQuery([...q, new CustomTagChoice(tag.value, tag.color, content)]);
+		} else alert('Invalid tag ' + tag.name + ': ' + content);
 	}
 
 	function buildSchematicInfo(schematic: SchematicInfo) {
 		const blob = new Blob([schematic.data], { type: 'text/plain' });
-		const tagArray: TagQuery[] = [];
-		for (let t of schematic.tags) {
-			const v = t.split(':');
-			if (v.length !== 2) continue;
-			const r = SCHEMATIC_TAG.find((st: CustomTag) => st.category === v[0]);
-			if (r) {
-				tagArray.push(new TagQuery(v[0], r.color, v[1]));
-			}
-		}
+		const tagArray: CustomTagChoice[] = schematic.tags.map((t) => t.toTagChoice(SCHEMATIC_TAG));
 		const url = window.URL.createObjectURL(blob);
 
 		return (
@@ -121,7 +113,7 @@ const Schematic = () => {
 							)}
 							{tagArray && (
 								<section className='flexbox-row flex-wrap'>
-									{tagArray.map((t: TagQuery, index: number) => (
+									{tagArray.map((t: CustomTagChoice, index: number) => (
 										<Tag key={index} index={index} name={t.category} value={t.value} color={t.color} />
 									))}
 								</section>
@@ -151,9 +143,11 @@ const Schematic = () => {
 									}}>
 									<img src='/assets/icons/copy.png' className='model-icon' alt='check' />
 								</button>
-								<button className='button-transparent'>
-									<img src='/assets/icons/trash-16.png' className='model-icon' alt='check' />
-								</button>
+								{user && (schematic.authorId === user.id || isAdmin(user)) && (
+									<button className='button-transparent'>
+										<img src='/assets/icons/trash-16.png' className='model-icon' alt='check' />
+									</button>
+								)}
 							</section>
 						</div>
 					</div>
@@ -194,27 +188,27 @@ const Schematic = () => {
 		}
 	}
 
-	let tagValue = tag.getValues();
+	let tagValue = tag.getChoices();
 	tagValue = tagValue == null ? [] : tagValue;
 
 	return (
 		<div className='schematic '>
 			<section className='search-container'>
 				<Dropbox
-					value={'Tag: ' + capitalize(tag.category)}
+					value={'Tag: ' + capitalize(tag.name)}
 					submitButton={
 						<button className='button-transparent' title='Search' type='button' onClick={(e) => loadPage()}>
 							<img src='/assets/icons/search.png' alt='search'></img>
 						</button>
 					}>
-					{SCHEMATIC_TAG.filter((t) => !tagQuery.find((q) => q.category === t.category)).map((t, index) => (
+					{SCHEMATIC_TAG.filter((t) => !tagQuery.find((q) => q.category === t.value)).map((t, index) => (
 						<div
 							key={index}
 							onClick={() => {
 								setTag(t);
 								setContent('');
 							}}>
-							{capitalize(t.category)}
+							{capitalize(t.name)}
 						</div>
 					))}
 				</Dropbox>
@@ -232,7 +226,7 @@ const Schematic = () => {
 				)}
 			</section>
 			<section className='search-tag-container'>
-				{tagQuery.map((t: TagQuery, index: number) => (
+				{tagQuery.map((t: CustomTagChoice, index: number) => (
 					<Tag
 						key={index}
 						index={index}
@@ -248,7 +242,7 @@ const Schematic = () => {
 				))}
 			</section>
 			<section className='sort-container'>
-				{SCHEMATIC_SORT_CHOICE.map((c: TagChoice, index) => (
+				{SCHEMATIC_SORT_CHOICE.map((c: CustomChoice, index) => (
 					<button className={'sort-choice ' + (c == sortQuery ? 'button-selected' : 'button-normal')} type='button' key={index} onClick={() => setSortQuery(c)}>
 						{capitalize(c.name)}
 					</button>

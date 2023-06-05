@@ -3,10 +3,12 @@ import '../../styles.css';
 
 import React, { useState } from 'react';
 import { VerifySchematicPage } from './VerifySchematicPage';
+import UserInfo, { isAdmin } from '../user/UserInfo';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
 const Admin = ({ user }: { user: UserInfo | undefined }) => {
+
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	function renderTab(currentTab: string) {
@@ -28,7 +30,7 @@ const Admin = ({ user }: { user: UserInfo | undefined }) => {
 	return (
 		<div className='admin'>
 			<div className='flexbox-center'>
-				<section className='tab-button-container'>
+				<section className='tab-button-container flexbox-center small-gap dark-background light-border small-padding'>
 					{tabs.map((name, index) => (
 						<button className={currentTab === name ? 'button-selected' : 'button-normal'} key={index} type='button' onClick={() => setCurrentTab(name)}>
 							{name}

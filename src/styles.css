@@ -39,6 +39,8 @@
 	border-radius: 5px;
 	outline: none;
 	cursor: pointer;
+
+	padding: 0.2rem;
 }
 
 .button-normal:hover {
@@ -56,6 +58,8 @@
 	border-radius: 5px;
 	outline: none;
 	cursor: pointer;
+
+	padding: 0.2rem;
 }
 
 .small-icon {
@@ -77,6 +81,14 @@
 
 .small-gap {
 	gap: 0.25rem;
+}
+
+.medium-gap{
+	gap: 0.5rem;
+}
+
+.small-padding{
+	padding: 0.25rem;
 }
 
 .model {

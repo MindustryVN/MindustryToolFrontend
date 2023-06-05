@@ -1,3 +1,5 @@
+import { TagData } from "../../components/common/Tag";
+
 export default interface SchematicInfo {
 	id: string;
 	name: string;
@@ -5,7 +7,7 @@ export default interface SchematicInfo {
 	authorId: string;
 	description: string;
 	requirement: ItemRequirement[];
-	tags: string[];
+	tags: TagData[];
 	like: number;
 	dislike: number;
 	height: number;

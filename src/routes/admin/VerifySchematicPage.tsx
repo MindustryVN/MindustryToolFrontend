@@ -2,13 +2,12 @@ import '../../styles.css';
 import './VerifySchematicPage.css';
 
 import React, { ChangeEvent, Component, ReactElement, useEffect, useState } from 'react';
-import Tag, { CustomTag, SCHEMATIC_TAG, TagChoice, UPLOAD_SCHEMATIC_TAG } from '../../components/common/Tag';
+import Tag, { CustomTag, SCHEMATIC_TAG, CustomChoice, UPLOAD_SCHEMATIC_TAG, CustomTagChoice } from '../../components/common/Tag';
 import { API, AxiosConfig } from '../../AxiosConfig';
 import { capitalize } from '../../util/StringUtils';
 import { TagSubmitButton } from '../../components/common/TagSubmitButton';
 import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 
-import TagQuery from '../../components/common/TagQuery';
 import UserName from '../user/LoadUserName';
 import SchematicInfo from '../schematic/SchematicInfo';
 import LazyLoadImage from '../../components/common/LazyLoadImage';
@@ -94,8 +93,8 @@ export const VerifySchematicPage = () => {
 		}
 	}
 
-	class SchematicVerifyPanel extends Component<{ schematic: SchematicInfo }, { tags: TagQuery[]; content: string; tag: CustomTag }> {
-		state = { tags: getTagArray(this.props.schematic), content: '', tag: UPLOAD_SCHEMATIC_TAG[0] };
+	class SchematicVerifyPanel extends Component<{ schematic: SchematicInfo }, { tags: CustomTagChoice[]; content: string; tag: CustomTag }> {
+		state = { tags: this.props.schematic.tags.map((t) => t.toTagChoice(SCHEMATIC_TAG)), content: '', tag: UPLOAD_SCHEMATIC_TAG[0] };
 
 		handleContentInput(event: ChangeEvent<HTMLInputElement>) {
 			if (event) {
@@ -134,16 +133,16 @@ export const VerifySchematicPage = () => {
 		}
 
 		handleAddTag() {
-			const q = this.state.tags.filter((q) => q.category !== this.state.tag.category);
-			const v = this.state.tag.getValues();
+			const q = this.state.tags.filter((q) => q.category !== this.state.tag.value);
+			const v = this.state.tag.getChoices();
 
-			if (v === null || (v !== null && v.find((c: TagChoice) => c.value === this.state.content) !== undefined)) {
-				this.setState({ tags: [...q, new TagQuery(this.state.tag.category, this.state.tag.color, this.state.content)] });
-			} else alert('Invalid tag ' + this.state.tag.category + ': ' + this.state.content);
+			if (v === null || (v !== null && v.find((c: CustomChoice) => c.value === this.state.content) !== undefined)) {
+				this.setState({ tags: [...q, new CustomTagChoice(this.state.tag.value, this.state.tag.color, this.state.content)] });
+			} else alert('Invalid tag ' + this.state.tag.value + ': ' + this.state.content);
 		}
 
 		render() {
-			let tagValue = this.state.tag.getValues();
+			let tagValue = this.state.tag.getChoices();
 			tagValue = tagValue == null ? [] : tagValue;
 
 			return (
@@ -167,14 +166,14 @@ export const VerifySchematicPage = () => {
 						)}
 
 						<div className='flexbox-column flex-wrap small-gap'>
-							<Dropbox value={'Tag: ' + capitalize(this.state.tag.category)}>
-								{UPLOAD_SCHEMATIC_TAG.filter((t) => !this.state.tags.find((q) => q.category === t.category)).map((t, index) => (
+							<Dropbox value={'Tag: ' + capitalize(this.state.tag.value)}>
+								{UPLOAD_SCHEMATIC_TAG.filter((t) => !this.state.tags.find((q) => q.category === t.value)).map((t, index) => (
 									<section
 										key={index}
 										onClick={() => {
 											this.setState({ tag: t, content: '' });
 										}}>
-										{capitalize(t.category)}
+										{capitalize(t.name)}
 									</section>
 								))}
 							</Dropbox>
@@ -190,7 +189,7 @@ export const VerifySchematicPage = () => {
 								<SearchBar placeholder='Search' value={this.state.content} onChange={this.handleContentInput} submitButton={<TagSubmitButton callback={() => this.handleAddTag()} />} />
 							)}
 							<div className='tag-container'>
-								{this.state.tags.map((t: TagQuery, index: number) => (
+								{this.state.tags.map((t: CustomTagChoice, index: number) => (
 									<Tag
 										key={index}
 										index={index}
@@ -244,18 +243,3 @@ export const VerifySchematicPage = () => {
 		</div>
 	);
 };
-
-// TS suck
-
-function getTagArray(schematic: SchematicInfo) {
-	const tagArray: TagQuery[] = [];
-	for (let t of schematic.tags) {
-		const v = t.split(':');
-		if (v.length !== 2) continue;
-		const r = SCHEMATIC_TAG.find((st: CustomTag) => st.category === v[0]);
-		if (r) {
-			tagArray.push(new TagQuery(v[0], r.color, v[1]));
-		}
-	}
-	return tagArray;
-}

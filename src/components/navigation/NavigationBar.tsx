@@ -1,6 +1,7 @@
 import './NavigationBar.css';
 import '../../styles.css';
 import React, { Component } from 'react';
+import UserInfo from '../../routes/user/UserInfo';
 
 export default class NavigationBar extends Component<{ user: UserInfo | undefined }> {
 	render() {

@@ -2,7 +2,6 @@ import './App.css';
 import './styles.css';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 import React, { Suspense, useEffect, useState } from 'react';
 
 const Map = React.lazy(() => import('./routes/map/MapPage'));
@@ -15,18 +14,24 @@ const Upload = React.lazy(() => import('./routes/upload/UploadSchematicPage'));
 const Admin = React.lazy(() => import('./routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('./routes/forum/ForumPage'));
 
+import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
 import PrivateRoute from './components/router/PrivateRoute';
 import NavigationBar from './components/navigation/NavigationBar';
-import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
+import AdminRoute from './components/router/AdminRoute';
+import Loading from './components/common/Loading';
+import UserInfo from './routes/user/UserInfo';
 
 import { ACCESS_TOKEN } from './config/Config';
 import { API, AxiosConfig } from './AxiosConfig';
-import AdminRoute from './components/router/AdminRoute';
-import Loading from './components/common/Loading';
 
 function App() {
 	const [currentUser, setCurrentUser] = useState<UserInfo>();
 	const [loading, setLoading] = useState<boolean>(true);
+
+	const start = Date.now();
+	API
+		.get('https://mindustry-tool-backend.onrender.com/api/v1/ping') //
+		.then(() => console.log(`Ping: ${Date.now() - start}ms`));
 
 	useEffect(() => {
 		setLoading(true);
@@ -77,7 +82,7 @@ function App() {
 						<Route path='/logic' element={<Logic />} />
 						<Route path='/login' element={<Login />} />
 						<Route path='/upload' element={<Upload user={currentUser} />} />
-						<Route path='/schematic' element={<Schematic />} />
+						<Route path='/schematic' element={<Schematic user={currentUser} />} />
 						<Route path='/forum/*' element={<Forum></Forum>}></Route>
 						<Route
 							path='/user'

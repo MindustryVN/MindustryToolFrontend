@@ -3,16 +3,18 @@ import '../../styles.css';
 
 import SchematicPreview from '../schematic/SchematicPreview';
 import SearchBar from '../../components/common/SearchBar';
-import TagQuery from '../../components/common/TagQuery';
+import UserInfo from '../user/UserInfo';
 import Dropbox from '../../components/common/Dropbox';
 import React from 'react';
 
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
-import Tag, { TagChoice, UPLOAD_SCHEMATIC_TAG } from '../../components/common/Tag';
+import Tag, { CustomChoice, CustomTagChoice, UPLOAD_SCHEMATIC_TAG } from '../../components/common/Tag';
 import { capitalize, getFileExtension } from '../../util/StringUtils';
 import { ChangeEvent, useState } from 'react';
 import { API, AxiosConfig } from '../../AxiosConfig';
 import { TagSubmitButton } from '../../components/common/TagSubmitButton';
+
+const tabs = ['File', 'Code'];
 
 const Upload = ({ user }: { user: UserInfo | undefined }) => {
 	const [file, setFile] = useState<File>();
@@ -21,7 +23,9 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 
 	const [tag, setTag] = useState(UPLOAD_SCHEMATIC_TAG[0]);
 	const [content, setContent] = useState('');
-	const [tags, setTags] = useState<TagQuery[]>([]);
+	const [tags, setTags] = useState<CustomTagChoice[]>([]);
+
+	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		if (!event.target) return;
@@ -78,6 +82,8 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 		const formData = new FormData();
 		const authorId = user ? user.id : 'community';
 		formData.append('authorId', authorId);
+
+		//#TODO Ugly
 		formData.append('tags', `${tags.map((q) => `${q.toString()}`).join()}`);
 
 		if (!tag) return;
@@ -118,31 +124,62 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 	}
 
 	function handleAddTag() {
-		const q = tags.filter((q) => q.category !== tag.category);
-		const v = tag.getValues();
+		const q = tags.filter((q) => q.category !== tag.value);
+		const v = tag.getChoices();
 
-		if (v === null || (v !== null && v.find((c: TagChoice) => c.value === content) !== undefined)) {
-			setTags([...q, new TagQuery(tag.category, tag.color, content)]);
-		} else alert('Invalid tag ' + tag.category + ': ' + content);
+		if (v === null || (v !== null && v.find((c: CustomChoice) => c.value === content) !== undefined)) {
+			setTags([...q, new CustomTagChoice(tag.value, tag.color, content)]);
+		} else alert('Invalid tag ' + tag.name + ': ' + content);
 	}
 
-	let tagValue = tag.getValues();
+	let tagValue = tag.getChoices();
 	tagValue = tagValue == null ? [] : tagValue;
+
+	function renderTab(currentTab: string) {
+		switch (currentTab) {
+			case tabs[0]:
+				return (
+					<div>
+						<label className='button-normal' htmlFor='ufb'>
+							Upload a file
+						</label>
+						<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
+					</div>
+				);
+
+			case tabs[1]:
+				return (
+					<div>
+						<label className='button-normal' htmlFor='ub'>
+							Copy from clipboard
+						</label>
+						<button id='ufb' className='button-normal' type='button' onClick={() => handleCodeChange()}></button>
+					</div>
+				);
+
+			default:
+				return <>No tab</>;
+		}
+	}
 
 	return (
 		<div className='upload'>
-			<div className='upload-model flexbox-center'>
-				<div className='preview-container dark-background flexbox-center'>
-					<div className='preview-image-container'>
-						<label htmlFor='ufb'>
-							{preview ? <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file'></img> : <div className='preview-image'>Upload a file</div>}
-							<input id='ufb' type='file' onChange={(event) => handleFileChange(event)}></input>
-						</label>
-						<button className='button-normal' type='button' onClick={() => handleCodeChange()}>
-							Copy from clipboard
-						</button>
+			<div className='upload-model'>
+				<div className='preview-container dark-background'>
+					<div className='upload-button flexbox-column medium-gap'>
+						<div className='flexbox-center'>
+							<section className='flexbox-center small-gap dark-background light-border small-padding'>
+								{tabs.map((name, index) => (
+									<button className={currentTab === name ? 'button-selected' : 'button-normal'} key={index} type='button' onClick={() => setCurrentTab(name)}>
+										{name}
+									</button>
+								))}
+							</section>
+						</div>
+						<div className='flexbox-center'>{renderTab(currentTab)}</div>
 					</div>
-					<div className='upload-description-container flexbox-center'>
+					<div className='preview-image-container'>{preview && <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file' />}</div>
+					<div className='upload-description-container'>
 						{preview && (
 							<div>
 								{<span>Author: {user ? user.name : 'community'}</span>}
@@ -162,15 +199,15 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 							</div>
 						)}
 						<div className='upload-search-container'>
-							<Dropbox value={'Tag: ' + capitalize(tag.category)}>
-								{UPLOAD_SCHEMATIC_TAG.filter((t) => !tags.find((q) => q.category === t.category)).map((t, index) => (
+							<Dropbox value={'Tag: ' + capitalize(tag.name)}>
+								{UPLOAD_SCHEMATIC_TAG.filter((t) => !tags.find((q) => q.category === t.name)).map((t, index) => (
 									<div
 										key={index}
 										onClick={() => {
 											setTag(t);
 											setContent('');
 										}}>
-										{capitalize(t.category)}
+										{capitalize(t.name)}
 									</div>
 								))}
 							</Dropbox>
@@ -186,7 +223,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 								<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={<TagSubmitButton callback={() => handleAddTag()} />} />
 							)}
 							<div className='tag-container'>
-								{tags.map((t: TagQuery, index: number) => (
+								{tags.map((t: CustomTagChoice, index: number) => (
 									<Tag
 										key={index}
 										index={index}
