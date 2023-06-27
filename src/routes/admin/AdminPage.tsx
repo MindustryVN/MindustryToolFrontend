@@ -3,7 +3,7 @@ import '../../styles.css';
 
 import React, { useState } from 'react';
 import { VerifySchematicPage } from './VerifySchematicPage';
-import UserInfo, { isAdmin } from '../user/UserInfo';
+import UserInfo from '../user/UserInfo';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
