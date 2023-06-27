@@ -33,7 +33,7 @@ export default class NavigationBar extends Component<{ user: UserInfo | undefine
 							<a className='nav-link' href='/upload'>
 								Upload
 							</a>
-							{this.props.user && this.props.user.role.includes('ADMIN') && (
+							{UserInfo.isAdmin(this.props.user) && (
 								<a className='nav-link' href='/admin'>
 									Admin
 								</a>

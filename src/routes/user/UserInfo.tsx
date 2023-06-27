@@ -12,9 +12,12 @@ export default class UserInfo {
 		this.imageUrl = imageUrl;
 		this.role = role;
 	}
-}
 
-export function isAdmin(user: UserInfo | undefined): boolean {
-	if (!user) return false;
-	return user.role.includes('ADMIN');
+	static isUser(user: UserInfo | undefined) {
+		return user && user.role.includes('USER');
+	}
+
+	static isAdmin(user: UserInfo | undefined) {
+		return user && user.role.includes('ADMIN');
+	}
 }

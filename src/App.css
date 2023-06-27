@@ -8,3 +8,8 @@
 	top: 0;
 	right: 0;
 }
+
+.web-version{
+	position: fixed;
+	bottom: 0;
+}

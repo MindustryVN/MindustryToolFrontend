@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { API } from '../../AxiosConfig';
+import { API } from '../../API';
 import UserName from './UserName';
+import UserInfo from './UserInfo';
 
 export default class LoadUserName extends Component<{ userId: string }, { loading: boolean; user: UserInfo | null }> {
 	state: Readonly<{ loading: boolean; user: UserInfo | null }> = {
@@ -11,7 +12,7 @@ export default class LoadUserName extends Component<{ userId: string }, { loadin
 	componentDidMount(): void {
 		if (this.props.userId === 'community') this.setState({ loading: false });
 		else
-			API.get(`/users/${this.props.userId}`)
+			API.REQUEST.get(`/users/${this.props.userId}`)
 				.then((result) => this.setState({ user: result.data })) //
 				.finally(() => this.setState({ loading: false }));
 	}

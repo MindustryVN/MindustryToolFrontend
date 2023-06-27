@@ -83,11 +83,11 @@
 	gap: 0.25rem;
 }
 
-.medium-gap{
+.medium-gap {
 	gap: 0.5rem;
 }
 
-.small-padding{
+.small-padding {
 	padding: 0.25rem;
 }
 
@@ -121,6 +121,12 @@
 
 .flex-nowrap {
 	flex-wrap: nowrap;
+}
+
+.grid-row {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
 }
 
 .half-box {

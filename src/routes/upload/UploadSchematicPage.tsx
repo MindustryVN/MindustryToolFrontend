@@ -2,17 +2,16 @@ import './UploadSchematicPage.css';
 import '../../styles.css';
 
 import SchematicPreview from '../schematic/SchematicPreview';
-import SearchBar from '../../components/common/SearchBar';
 import UserInfo from '../user/UserInfo';
 import Dropbox from '../../components/common/Dropbox';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
-import Tag, { CustomChoice, CustomTagChoice, UPLOAD_SCHEMATIC_TAG } from '../../components/common/Tag';
-import { capitalize, getFileExtension } from '../../util/StringUtils';
+import { getFileExtension } from '../../util/StringUtils';
 import { ChangeEvent, useState } from 'react';
-import { API, AxiosConfig } from '../../AxiosConfig';
-import { TagSubmitButton } from '../../components/common/TagSubmitButton';
+import { Trans } from 'react-i18next';
+import Tag, { CustomTag, TagChoice } from '../../components/common/Tag';
+import { API } from '../../API';
 
 const tabs = ['File', 'Code'];
 
@@ -21,11 +20,27 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 	const [code, setCode] = useState<string>('');
 	const [preview, setPreview] = useState<SchematicPreview>();
 
-	const [tag, setTag] = useState(UPLOAD_SCHEMATIC_TAG[0]);
-	const [content, setContent] = useState('');
-	const [tags, setTags] = useState<CustomTagChoice[]>([]);
+	const [tag, setTag] = useState<string>('');
+
+	const [tags, setTags] = useState<TagChoice[]>([]);
 
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
+
+	const [schematicUploadTag, setSchematicUploadTag] = useState<Array<TagChoice>>([]);
+
+	useEffect(() => getSchematicUploadTag(), []);
+
+	function getSchematicUploadTag() {
+		API.REQUEST.get('tag/schematic-upload-tag') //
+			.then((result) => {
+				let customTagList: Array<CustomTag> = result.data;
+				let tagChoiceList: Array<TagChoice> = [];
+				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
+
+				temp.forEach((t) => t.forEach((r) => tagChoiceList.push(r)));
+				setSchematicUploadTag(tagChoiceList);
+			});
+	}
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		if (!event.target) return;
@@ -41,6 +56,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 		setCode('');
 
 		const form = new FormData();
+		form.delete('code');
 		form.append('file', files[0]);
 
 		getPreview(form);
@@ -55,6 +71,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 			setFile(undefined);
 
 			const form = new FormData();
+			form.delete('file');
 			form.append('code', text);
 
 			getPreview(form);
@@ -62,14 +79,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 	}
 
 	function getPreview(form: FormData) {
-		const config = {
-			headers: {
-				Authorization: AxiosConfig.bearer, //
-				'content-type': 'multipart/form-data'
-			}
-		};
-
-		API.post('schematics/preview', form, config) //
+		API.REQUEST.post('schematic/preview', form) //
 			.then((result) => setPreview(result.data));
 	}
 
@@ -78,28 +88,17 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 			alert('No tags provided');
 			return;
 		}
-
 		const formData = new FormData();
-		const authorId = user ? user.id : 'community';
-		formData.append('authorId', authorId);
+		const tagString = `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
 
-		//#TODO Ugly
-		formData.append('tags', `${tags.map((q) => `${q.toString()}`).join()}`);
+		formData.append('tags', tagString);
 
-		if (!tag) return;
 
 		if (file && getFileExtension(file) === SCHEMATIC_FILE_EXTENSION) formData.append('file', file);
 		else if (code !== undefined && code.length > 8) formData.append('code', code);
 		else return;
 
-		const config = {
-			headers: {
-				Authorization: AxiosConfig.bearer, //
-				'content-type': 'multipart/form-data'
-			}
-		};
-
-		API.post('schematicupload', formData, config)
+		API.REQUEST.post('schematic-upload', formData)
 			.then(() => {
 				setCode('');
 				setFile(undefined);
@@ -112,28 +111,17 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 			});
 	}
 
-	function handleContentInput(event: ChangeEvent<HTMLInputElement>) {
-		if (event) {
-			const input = event.target.value;
-			setContent(input.trim());
-		}
-	}
-
 	function handleRemoveTag(index: number) {
 		setTags([...tags.filter((_, i) => i !== index)]);
 	}
 
-	function handleAddTag() {
-		const q = tags.filter((q) => q.category !== tag.value);
-		const v = tag.getChoices();
+	function handleAddTag(tag: TagChoice) {
+		if (!tag) return;
 
-		if (v === null || (v !== null && v.find((c: CustomChoice) => c.value === content) !== undefined)) {
-			setTags([...q, new CustomTagChoice(tag.value, tag.color, content)]);
-		} else alert('Invalid tag ' + tag.name + ': ' + content);
+		tags.filter((q) => q.name !== tag.name);
+		setTags([...tags, tag]);
+		setTag('');
 	}
-
-	let tagValue = tag.getChoices();
-	tagValue = tagValue == null ? [] : tagValue;
 
 	function renderTab(currentTab: string) {
 		switch (currentTab) {
@@ -168,7 +156,7 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 				<div className='preview-container dark-background'>
 					<div className='upload-button flexbox-column medium-gap'>
 						<div className='flexbox-center'>
-							<section className='flexbox-center small-gap dark-background light-border small-padding'>
+							<section className='grid-row small-gap dark-background light-border small-padding'>
 								{tabs.map((name, index) => (
 									<button className={currentTab === name ? 'button-selected' : 'button-normal'} key={index} type='button' onClick={() => setCurrentTab(name)}>
 										{name}
@@ -177,14 +165,13 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 							</section>
 						</div>
 						<div className='flexbox-center'>{renderTab(currentTab)}</div>
+						<div className='preview-image-container'>{preview && <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file' />}</div>
 					</div>
-					<div className='preview-image-container'>{preview && <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file' />}</div>
 					<div className='upload-description-container'>
 						{preview && (
-							<div>
-								{<span>Author: {user ? user.name : 'community'}</span>}
-								<br />
-								<span>Name: {preview.name}</span>
+							<div className='flexbox-column text-center'>
+								{<div>Author: {user ? user.name : 'community'}</div>}
+								<div>Name: {preview.name}</div>
 								{preview.description && <p> {preview.description}</p>}
 								{preview.requirement && (
 									<section className='text-center small-gap'>
@@ -199,37 +186,22 @@ const Upload = ({ user }: { user: UserInfo | undefined }) => {
 							</div>
 						)}
 						<div className='upload-search-container'>
-							<Dropbox value={'Tag: ' + capitalize(tag.name)}>
-								{UPLOAD_SCHEMATIC_TAG.filter((t) => !tags.find((q) => q.category === t.name)).map((t, index) => (
-									<div
-										key={index}
-										onClick={() => {
-											setTag(t);
-											setContent('');
-										}}>
-										{capitalize(t.name)}
-									</div>
-								))}
-							</Dropbox>
-							{tag.hasOption() ? (
-								<Dropbox value={'Value: ' + capitalize(content)} submitButton={<TagSubmitButton callback={() => handleAddTag()} />}>
-									{tagValue.map((content: { name: string; value: string }, index: number) => (
-										<div key={index} onClick={() => setContent(content.value)}>
-											{capitalize(content.name)}
+							<Dropbox value={tag} onChange={(event) => setTag(event.target.value)}>
+								{schematicUploadTag
+									.filter((t) => t.name.includes(tag) || t.value.includes(tag))
+									.map((t, index) => (
+										<div key={index} onClick={() => handleAddTag(t)}>
+											<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
 										</div>
 									))}
-								</Dropbox>
-							) : (
-								<SearchBar placeholder='Search' value={content} onChange={handleContentInput} submitButton={<TagSubmitButton callback={() => handleAddTag()} />} />
-							)}
+							</Dropbox>
+
 							<div className='tag-container'>
-								{tags.map((t: CustomTagChoice, index: number) => (
+								{tags.map((t: TagChoice, index: number) => (
 									<Tag
 										key={index}
 										index={index}
-										name={t.category}
-										value={t.value}
-										color={t.color}
+										tag={t}
 										removeButton={
 											<div className='remove-tag-button button-transparent' onClick={() => handleRemoveTag(index)}>
 												<img src='/assets/icons/quit.png' alt='quit'></img>

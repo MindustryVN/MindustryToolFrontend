@@ -20,17 +20,19 @@
 }
 
 .dropbox-text {
-	font-family: 'Monomaniac One', sans-serif;
-	font-weight: 100;
+	outline: none;
+	border: none;
+	box-shadow: none;
+	background-color: transparent;
 
-	display: flex;
-	align-items: center;
-
-	width: 100%;
 	height: 100%;
+	width: 100%;
 
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 1rem;
+}
+
+.dropbox-text ::placeholder {
+	background-color: transparent;
 }
 
 .dropbox-popup {
@@ -50,6 +52,9 @@
 	position: absolute;
 	display: block;
 	width: 100%;
+
+	max-height: 50vh;
+	max-height: 50dvh;
 
 	border-radius: 5px;
 	padding-bottom: 0.25rem;

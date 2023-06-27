@@ -1,3 +1,4 @@
+import UserInfo from './UserInfo';
 import UserName from './UserName';
 import './UserPage.css';
 

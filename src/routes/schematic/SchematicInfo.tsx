@@ -1,4 +1,4 @@
-import { TagData } from "../../components/common/Tag";
+import { TagChoice } from "../../components/common/Tag";
 
 export default interface SchematicInfo {
 	id: string;
@@ -6,8 +6,8 @@ export default interface SchematicInfo {
 	data: string;
 	authorId: string;
 	description: string;
-	requirement: ItemRequirement[];
-	tags: TagData[];
+	requirement: Array<ItemRequirement>;
+	tags: Array<string>;
 	like: number;
 	dislike: number;
 	height: number;

@@ -21,24 +21,23 @@ import AdminRoute from './components/router/AdminRoute';
 import Loading from './components/common/Loading';
 import UserInfo from './routes/user/UserInfo';
 
-import { ACCESS_TOKEN } from './config/Config';
-import { API, AxiosConfig } from './AxiosConfig';
+import { ACCESS_TOKEN, WEB_VERSION } from './config/Config';
+import { API } from './API';
 
 function App() {
 	const [currentUser, setCurrentUser] = useState<UserInfo>();
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const start = Date.now();
-	API
-		.get('https://mindustry-tool-backend.onrender.com/api/v1/ping') //
+	API.REQUEST.get('https://mindustry-tool-backend.onrender.com/api/v1/ping') //
 		.then(() => console.log(`Ping: ${Date.now() - start}ms`));
 
 	useEffect(() => {
 		setLoading(true);
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
 		if (accessToken) {
-			AxiosConfig.bearer = 'Bearer ' + accessToken;
-			API.get('/users', { headers: { Authorization: AxiosConfig.bearer } }) //
+			API.setBearerToken(accessToken);
+			API.REQUEST.get('/users') //
 				.then((result) => {
 					if (result.status === 200) handleLogin(result.data);
 					else localStorage.removeItem(ACCESS_TOKEN);
@@ -103,9 +102,13 @@ function App() {
 						<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 					</Routes>
 				</Suspense>
+				<footer className='web-version'>{WEB_VERSION}</footer>
 			</Router>
 		</div>
 	);
 }
 
 export default App;
+function setBearerToken(accessToken: string) {
+	throw new Error('Function not implemented.');
+}

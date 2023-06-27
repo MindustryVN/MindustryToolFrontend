@@ -2,8 +2,6 @@ import '../../styles.css';
 import './VerifySchematicPage.css';
 
 import React, { ChangeEvent, Component, ReactElement, useEffect, useState } from 'react';
-import Tag, { CustomTag, SCHEMATIC_TAG, CustomChoice, UPLOAD_SCHEMATIC_TAG, CustomTagChoice } from '../../components/common/Tag';
-import { API, AxiosConfig } from '../../AxiosConfig';
 import { capitalize } from '../../util/StringUtils';
 import { TagSubmitButton } from '../../components/common/TagSubmitButton';
 import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
@@ -13,10 +11,10 @@ import SchematicInfo from '../schematic/SchematicInfo';
 import LazyLoadImage from '../../components/common/LazyLoadImage';
 import Dropbox from '../../components/common/Dropbox';
 import SearchBar from '../../components/common/SearchBar';
-
-const config = {
-	headers: { Authorization: AxiosConfig.bearer }
-};
+import { API } from '../../API';
+import Tag, { CustomTag, TagChoice } from '../../components/common/Tag';
+import { Trans } from 'react-i18next';
+import Loading from '../../components/common/Loading';
 
 export const VerifySchematicPage = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
@@ -26,17 +24,30 @@ export const VerifySchematicPage = () => {
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
-	useEffect(() => loadPage(), []);
+	useEffect(() => {
+		getSchematicUploadTag();
+		loadPage();
+	}, []);
+
+	const [schematicUploadTag, setSchematicUploadTag] = useState<Array<TagChoice>>([]);
+	function getSchematicUploadTag() {
+		API.REQUEST.get('tag/schematic-upload-tag') //
+			.then((result) => {
+				let customTagList: Array<CustomTag> = result.data;
+				let tagChoiceList: Array<TagChoice> = [];
+				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
+
+				temp.forEach((t) => t.forEach((r) => tagChoiceList.push(r)));
+				setSchematicUploadTag(tagChoiceList);
+			});
+	}
 
 	function loadToPage(page: number) {
 		setSchematicList([[]]);
 		setLoaderState(LoaderState.LOADING);
 
 		for (let i = 0; i < page; i++) {
-			const config = {
-				headers: { Authorization: AxiosConfig.bearer }
-			};
-			API.get(`schematicupload/page/${i}`, config)
+			API.REQUEST.get(`schematic-upload/page/${i}`)
 				.then((result) => {
 					if (result.status === 200 && result.data) {
 						let schematics: SchematicInfo[] = result.data;
@@ -52,13 +63,10 @@ export const VerifySchematicPage = () => {
 	}
 
 	function loadPage() {
-		setLoaderState(LoaderState.LOADING);
-		const config = {
-			headers: { Authorization: AxiosConfig.bearer }
-		};
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
-		API.get(`schematicupload/page/${schematicList.length + (newPage ? 0 : -1)}`, config)
+
+		API.REQUEST.get(`schematic-upload/page/${schematicList.length + (newPage ? 0 : -1)}`)
 			.then((result) => {
 				if (result.status === 200 && result.data) {
 					let schematics: SchematicInfo[] = result.data;
@@ -86,68 +94,53 @@ export const VerifySchematicPage = () => {
 						setCurrentSchematic(schematic);
 						setShowSchematicModel(true);
 					}}>
-					<LazyLoadImage className='schematic-image' path={`schematicupload/${schematic.id}/image`} config={config}></LazyLoadImage>
+					<LazyLoadImage className='schematic-image' path={`schematic-upload/${schematic.id}/image`}></LazyLoadImage>
 					<div className='schematic-preview-description flexbox-center'>{capitalize(schematic.name)}</div>
 				</div>
 			);
 		}
 	}
 
-	class SchematicVerifyPanel extends Component<{ schematic: SchematicInfo }, { tags: CustomTagChoice[]; content: string; tag: CustomTag }> {
-		state = { tags: this.props.schematic.tags.map((t) => t.toTagChoice(SCHEMATIC_TAG)), content: '', tag: UPLOAD_SCHEMATIC_TAG[0] };
-
-		handleContentInput(event: ChangeEvent<HTMLInputElement>) {
-			if (event) {
-				const input = event.target.value;
-				this.setState({ content: input.trim() });
-			}
-		}
+	class SchematicVerifyPanel extends Component<{ schematic: SchematicInfo }, { tags: TagChoice[]; tag: string }> {
+		state = { tags: TagChoice.parseArray(this.props.schematic.tags, schematicUploadTag), tag: '' };
 
 		handleRemoveTag(index: number) {
 			this.setState({ tags: [...this.state.tags.filter((_, i) => i !== index)] });
 		}
 
 		deleteSchematic(id: string) {
-			API.delete(`schematicupload/${id}`, config) //
-				.finally(() => loadToPage(schematicList.length));
 			setShowSchematicModel(false);
+			API.REQUEST.delete(`schematic-upload/${id}`) //
+				.finally(() => loadToPage(schematicList.length));
 		}
 
 		verifySchematic(schematic: SchematicInfo) {
 			let form = new FormData();
+			const tagString = `${this.state.tags.map((t) => `${t.name}:${t.value}`).join()}`;
 
 			form.append('id', schematic.id);
 			form.append('authorId', schematic.authorId);
 			form.append('data', schematic.data);
-			form.append('tags', `${this.state.tags.map((q) => `${q.toString()}`).join()}`);
 
-			const config = {
-				headers: { Authorization: AxiosConfig.bearer, 'content-type': 'multipart/form-data' }
-			};
+			form.append('tags', tagString);
 
-			API.post('schematics', form, config) //
+			API.REQUEST.post('schematic', form) //
 				.finally(() => {
 					loadToPage(schematicList.length);
 					setShowSchematicModel(false);
 				});
 		}
 
-		handleAddTag() {
-			const q = this.state.tags.filter((q) => q.category !== this.state.tag.value);
-			const v = this.state.tag.getChoices();
-
-			if (v === null || (v !== null && v.find((c: CustomChoice) => c.value === this.state.content) !== undefined)) {
-				this.setState({ tags: [...q, new CustomTagChoice(this.state.tag.value, this.state.tag.color, this.state.content)] });
-			} else alert('Invalid tag ' + this.state.tag.value + ': ' + this.state.content);
+		handleAddTag(tag: TagChoice) {
+			if (!tag) return;
+			this.state.tags.filter((q) => q.name !== tag.name);
+			this.setState((prev) => ({ tags: [...prev.tags, tag], tag: '' }));
 		}
 
 		render() {
-			let tagValue = this.state.tag.getChoices();
-			tagValue = tagValue == null ? [] : tagValue;
-
 			return (
 				<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
-					<LazyLoadImage className='schematic-info-image' path={`schematicupload/${this.props.schematic.id}/image`} config={config}></LazyLoadImage>
+					<LazyLoadImage className='schematic-info-image' path={`schematic-upload/${this.props.schematic.id}/image`}></LazyLoadImage>
 					<div className='schematic-info-desc-container small-gap'>
 						<span>Name: {capitalize(this.props.schematic.name)}</span>
 						<span>
@@ -166,36 +159,21 @@ export const VerifySchematicPage = () => {
 						)}
 
 						<div className='flexbox-column flex-wrap small-gap'>
-							<Dropbox value={'Tag: ' + capitalize(this.state.tag.value)}>
-								{UPLOAD_SCHEMATIC_TAG.filter((t) => !this.state.tags.find((q) => q.category === t.value)).map((t, index) => (
-									<section
-										key={index}
-										onClick={() => {
-											this.setState({ tag: t, content: '' });
-										}}>
-										{capitalize(t.name)}
-									</section>
-								))}
-							</Dropbox>
-							{this.state.tag.hasOption() ? (
-								<Dropbox value={'Value: ' + capitalize(this.state.content)} submitButton={<TagSubmitButton callback={() => this.handleAddTag()} />}>
-									{tagValue.map((content: { name: string; value: string }, index: number) => (
-										<div key={index} onClick={() => this.setState({ content: content.value })}>
-											{capitalize(content.name)}
+							<Dropbox value={this.state.tag} onChange={(event) => this.setState({ tag: event.target.value })}>
+								{schematicUploadTag
+									.filter((t) => t.name.includes(this.state.tag) || t.value.includes(this.state.tag))
+									.map((t, index) => (
+										<div key={index} onClick={() => this.handleAddTag(t)}>
+											<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
 										</div>
 									))}
-								</Dropbox>
-							) : (
-								<SearchBar placeholder='Search' value={this.state.content} onChange={this.handleContentInput} submitButton={<TagSubmitButton callback={() => this.handleAddTag()} />} />
-							)}
+							</Dropbox>
 							<div className='tag-container'>
-								{this.state.tags.map((t: CustomTagChoice, index: number) => (
+								{this.state.tags.map((t: TagChoice, index: number) => (
 									<Tag
 										key={index}
 										index={index}
-										name={t.category}
-										value={t.value}
-										color={t.color}
+										tag={t}
 										removeButton={
 											<div className='remove-tag-button button-transparent' onClick={() => this.handleRemoveTag(index)}>
 												<img src='/assets/icons/quit.png' alt='quit'></img>

@@ -9,16 +9,17 @@
 	align-items: center;
 }
 
-.upload-button{
+.upload-button {
 	min-width: 20vw;
 	min-width: 20dvw;
-
 }
 
 .preview-container {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+
+	justify-content: center;
 
 	border-radius: 5px;
 	border: 2px solid var(--light-transparent-background);

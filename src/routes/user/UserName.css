@@ -1,9 +1,26 @@
 .user-name-card {
-	display: inline;
-	align-items: end;
-	height: 1em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+	gap: 0.25rem;
+	height: 1rem;
+
+	padding-bottom: 0.2rem;
+	border-bottom: 3px solid lightblue;
 }
 
+.user-name-card > * {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.avatar {
+	height: 1rem;
+	border-radius: 50%;
+}
 
 .name {
 	text-decoration: none;
