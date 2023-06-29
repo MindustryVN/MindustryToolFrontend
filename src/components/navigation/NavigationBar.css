@@ -4,6 +4,12 @@
 	z-index: 999;
 }
 
+.icon {
+	background-color: transparent;
+	outline: none;
+	border: none;
+}
+
 .icon .popup {
 	position: fixed;
 	overflow: hidden scroll;
@@ -15,6 +21,8 @@
 	height: 100%;
 	visibility: hidden;
 	border-radius: 5px;
+
+	background-color: var(--black);
 }
 
 .icon:hover {
@@ -24,6 +32,17 @@
 .icon:hover .popup {
 	visibility: visible;
 	max-width: 300px;
+
+	animation: popup 0.1s linear;
+}
+
+@keyframes popup {
+	0% {
+		transform: translateX(-100px);
+	}
+	100% {
+		transform: translateX(0);
+	}
 }
 
 .icon:hover .popup::before {
@@ -39,22 +58,25 @@
 	display: flex;
 	flex-direction: column;
 	flex-wrap: nowrap;
+
+	gap: 0.5rem;
 }
 
 .nav-link {
-	margin: 3px;
-	padding: 5px;
-
+	display: flex;
+	justify-content: flex-start;
+	
 	font-size: 18px;
 	text-decoration: none;
+	padding: 0.2rem;
 
-	color: white;
+	color: var(--white);
 	background-color: transparent;
 
 	font-weight: bold;
 }
 
 .nav-link:hover {
-	color: black;
-	background-color: white;
+	color: var(--black);
+	background-color: var(--yellow);
 }

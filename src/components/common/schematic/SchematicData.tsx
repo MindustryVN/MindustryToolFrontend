@@ -1,6 +1,6 @@
-import { TagChoice } from "../../components/common/Tag";
+import { TagChoice } from '../tag/Tag';
 
-export default interface SchematicInfo {
+export default interface SchematicData {
 	id: string;
 	name: string;
 	data: string;

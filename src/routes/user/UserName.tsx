@@ -1,10 +1,12 @@
-import UserInfo from './UserInfo';
+import UserData from '../../components/common/user/UserData';
 import './UserName.css';
 
 import React, { Component } from 'react';
 
-export default class UserName extends Component<{ user: UserInfo }> {
+export default class UserName extends Component<{ user: UserData }> {
 	render() {
+		if (this.props.user.id === 'community') return <span>Community</span>;
+
 		return (
 			<span className='user-name-card'>
 				<img className='avatar' src={this.props.user.imageUrl} alt='avatar'></img>

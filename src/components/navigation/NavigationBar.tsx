@@ -1,17 +1,17 @@
 import './NavigationBar.css';
 import '../../styles.css';
 import React, { Component } from 'react';
-import UserInfo from '../../routes/user/UserInfo';
+import UserData from '../common/user/UserData';
 
-export default class NavigationBar extends Component<{ user: UserInfo | undefined }> {
+export default class NavigationBar extends Component<{ user: UserData | undefined }> {
 	render() {
 		return (
 			<nav className='navigation-bar'>
-				<div className='icon'>
+				<button className='icon' type='button'>
 					<img className='menu-icon medium-icon' src='/assets/icons/dots.png' alt='check' />
-					<div className='popup dark-background'>
+					<section className='popup '>
 						<img src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt=''></img>
-						<div className='nav-link-container'>
+						<section className='nav-link-container'>
 							<a className='nav-link' href='/home'>
 								Home
 							</a>
@@ -33,14 +33,14 @@ export default class NavigationBar extends Component<{ user: UserInfo | undefine
 							<a className='nav-link' href='/upload'>
 								Upload
 							</a>
-							{UserInfo.isAdmin(this.props.user) && (
+							{UserData.isAdmin(this.props.user) && (
 								<a className='nav-link' href='/admin'>
 									Admin
 								</a>
 							)}
-						</div>
-					</div>
-				</div>
+						</section>
+					</section>
+				</button>
 			</nav>
 		);
 	}

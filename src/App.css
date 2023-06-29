@@ -1,15 +1,11 @@
 .app {
 	width: 100%;
 	height: 100%;
+
+	background-color: var(--black);
 }
 
-.logout-button {
-	position: fixed;
-	top: 0;
-	right: 0;
-}
-
-.web-version{
+.web-version {
 	position: fixed;
 	bottom: 0;
 }

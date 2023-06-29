@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { API } from '../../API';
 import UserName from './UserName';
-import UserInfo from './UserInfo';
+import UserData from '../../components/common/user/UserData';
 
-export default class LoadUserName extends Component<{ userId: string }, { loading: boolean; user: UserInfo | null }> {
-	state: Readonly<{ loading: boolean; user: UserInfo | null }> = {
+export default class LoadUserName extends Component<{ userId: string }, { loading: boolean; user: UserData | null }> {
+	state: Readonly<{ loading: boolean; user: UserData | null }> = {
 		loading: true,
 		user: null
 	};

@@ -1,18 +1,18 @@
+import '../../../styles.css';
+
 import './Tag.css';
-import '../../styles.css';
 
 import React, { ReactElement } from 'react';
 import { Trans } from 'react-i18next';
-import { API } from '../../API';
 
-export default class Tag extends React.Component<{ index: number; tag: TagChoice; removeButton?: ReactElement }> {
+export default class Tag extends React.Component<{ tag: TagChoice; removeButton?: ReactElement }> {
 	render() {
 		return (
-			<div className='tag' style={{ backgroundColor: this.props.tag.color }}>
-				<span>
+			<div className='tag flexbox-row flex-nowrap small-padding center' style={{ backgroundColor: this.props.tag.color }}>
+				<div className='flexbox-column text-center'>
 					<Trans i18nKey={this.props.tag.name} />: <Trans i18nKey={this.props.tag.value} />
-				</span>
-				<span className='remove-button flexbox-center'>{this.props.removeButton}</span>
+				</div>
+				{this.props.removeButton}
 			</div>
 		);
 	}

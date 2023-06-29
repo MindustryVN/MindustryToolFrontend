@@ -1,7 +1,7 @@
 import React from 'react';
-import { API } from '../../API';
-import { PNG_IMAGE_PREFIX } from '../../config/Config';
-import { IHash } from './IHash';
+import { API } from '../../../API';
+import { PNG_IMAGE_PREFIX } from '../../../config/Config';
+import { IHash } from '../IHash';
 
 export default class LazyLoadImage extends React.Component<{ className: string; path: string }, { src: string; error: boolean }> {
 	static imageMap: IHash = {};

@@ -1,6 +1,5 @@
 .user-name-card {
 	display: flex;
-	justify-content: center;
 	align-items: center;
 	text-align: center;
 
@@ -8,7 +7,6 @@
 	height: 1rem;
 
 	padding-bottom: 0.2rem;
-	border-bottom: 3px solid lightblue;
 }
 
 .user-name-card > * {
