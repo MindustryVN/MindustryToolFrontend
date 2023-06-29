@@ -1,0 +1,18 @@
+.dropbox-element {
+	outline: none;
+	border: none;
+
+	background-color: transparent;
+
+	display: flex;
+	justify-content: flex-start;
+}
+
+.dropbox-element:is(:active, :hover) {
+	color: var(--black);
+	background-color: var(--yellow);
+}
+
+.dropbox-element:is(:active, :hover) > * {
+	color: var(--black);
+}

@@ -4,7 +4,7 @@
 	height: 2.5rem;
 	min-width: 250px;
 	border-radius: 5px;
-	background-color: var(--dark-transparent-background);
+	background-color: var(--black);
 }
 
 .input-bar[type='text'] {

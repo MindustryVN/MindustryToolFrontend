@@ -7,15 +7,13 @@ const Loading = () => {
 	const [message, setMessage] = useState<string>('loading');
 
 	useEffect(() => {
-	
 		setTimeout(() => setMessage('loading.wait12'), 5000);
-	
 	}, []);
 
 	return (
-		<div className='flexbox-center dark-background'>
+		<span className='flexbox-center '>
 			<Trans i18nKey={message} />
-		</div>
+		</span>
 	);
 };
 

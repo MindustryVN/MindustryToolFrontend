@@ -1,26 +1,24 @@
 import '../../styles.css';
 import './VerifySchematicPage.css';
 
-import React, { ChangeEvent, Component, ReactElement, useEffect, useState } from 'react';
+import React, { Component, ReactElement, useEffect, useState } from 'react';
+import Tag, { CustomTag, TagChoice } from '../../components/common/tag/Tag';
 import { capitalize } from '../../util/StringUtils';
-import { TagSubmitButton } from '../../components/common/TagSubmitButton';
+import { TagRemoveButton } from '../../components/common/button/TagRemoveButton';
 import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
+import { API } from '../../API';
+import { Trans } from 'react-i18next';
 
 import UserName from '../user/LoadUserName';
-import SchematicInfo from '../schematic/SchematicInfo';
-import LazyLoadImage from '../../components/common/LazyLoadImage';
-import Dropbox from '../../components/common/Dropbox';
-import SearchBar from '../../components/common/SearchBar';
-import { API } from '../../API';
-import Tag, { CustomTag, TagChoice } from '../../components/common/Tag';
-import { Trans } from 'react-i18next';
-import Loading from '../../components/common/Loading';
+import SchematicData from '../../components/common/schematic/SchematicData';
+import LazyLoadImage from '../../components/common/img/LazyLoadImage';
+import Dropbox from '../../components/common/dropbox/Dropbox';
 
 export const VerifySchematicPage = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
 
-	const [schematicList, setSchematicList] = useState<SchematicInfo[][]>([[]]);
-	const [currentSchematic, setCurrentSchematic] = useState<SchematicInfo>();
+	const [schematicList, setSchematicList] = useState<SchematicData[][]>([[]]);
+	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
@@ -50,7 +48,7 @@ export const VerifySchematicPage = () => {
 			API.REQUEST.get(`schematic-upload/page/${i}`)
 				.then((result) => {
 					if (result.status === 200 && result.data) {
-						let schematics: SchematicInfo[] = result.data;
+						let schematics: SchematicData[] = result.data;
 
 						if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState(LoaderState.NO_MORE);
 						else setLoaderState(LoaderState.MORE);
@@ -69,7 +67,7 @@ export const VerifySchematicPage = () => {
 		API.REQUEST.get(`schematic-upload/page/${schematicList.length + (newPage ? 0 : -1)}`)
 			.then((result) => {
 				if (result.status === 200 && result.data) {
-					let schematics: SchematicInfo[] = result.data;
+					let schematics: SchematicData[] = result.data;
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
 
@@ -101,8 +99,11 @@ export const VerifySchematicPage = () => {
 		}
 	}
 
-	class SchematicVerifyPanel extends Component<{ schematic: SchematicInfo }, { tags: TagChoice[]; tag: string }> {
-		state = { tags: TagChoice.parseArray(this.props.schematic.tags, schematicUploadTag), tag: '' };
+	class SchematicVerifyPanel extends Component<{ schematic: SchematicData }, { tags: TagChoice[]; tag: string }> {
+		state = {
+			tags: TagChoice.parseArray(this.props.schematic.tags, schematicUploadTag),
+			tag: ''
+		};
 
 		handleRemoveTag(index: number) {
 			this.setState({ tags: [...this.state.tags.filter((_, i) => i !== index)] });
@@ -114,7 +115,7 @@ export const VerifySchematicPage = () => {
 				.finally(() => loadToPage(schematicList.length));
 		}
 
-		verifySchematic(schematic: SchematicInfo) {
+		verifySchematic(schematic: SchematicData) {
 			let form = new FormData();
 			const tagString = `${this.state.tags.map((t) => `${t.name}:${t.value}`).join()}`;
 
@@ -140,7 +141,7 @@ export const VerifySchematicPage = () => {
 		render() {
 			return (
 				<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
-					<LazyLoadImage className='schematic-info-image' path={`schematic-upload/${this.props.schematic.id}/image`}></LazyLoadImage>
+					<LazyLoadImage className='schematic-info-image' path={`schematic-upload/${this.props.schematic.id}/image`} />
 					<div className='schematic-info-desc-container small-gap'>
 						<span>Name: {capitalize(this.props.schematic.name)}</span>
 						<span>
@@ -158,36 +159,30 @@ export const VerifySchematicPage = () => {
 							</section>
 						)}
 
-						<div className='flexbox-column flex-wrap small-gap'>
-							<Dropbox value={this.state.tag} onChange={(event) => this.setState({ tag: event.target.value })}>
-								{schematicUploadTag
-									.filter((t) => t.name.includes(this.state.tag) || t.value.includes(this.state.tag))
-									.map((t, index) => (
-										<div key={index} onClick={() => this.handleAddTag(t)}>
-											<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
-										</div>
-									))}
-							</Dropbox>
+						<div className='flexbox-column small-gap'>
+							<Dropbox
+								placeholder='Add tags'
+								value={this.state.tag}
+								items={schematicUploadTag.filter((t) => (t.name.includes(this.state.tag) || t.value.includes(this.state.tag)) && !this.state.tags.includes(t))}
+								onChange={(event) => this.setState({ tag: event.target.value })}
+								onChoose={(item) => this.handleAddTag(item)}
+								converter={(t, index) => (
+									<span key={index}>
+										<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
+									</span>
+								)}
+							/>
 							<div className='tag-container'>
 								{this.state.tags.map((t: TagChoice, index: number) => (
-									<Tag
-										key={index}
-										index={index}
-										tag={t}
-										removeButton={
-											<div className='remove-tag-button button-transparent' onClick={() => this.handleRemoveTag(index)}>
-												<img src='/assets/icons/quit.png' alt='quit'></img>
-											</div>
-										}
-									/>
+									<Tag key={index} tag={t} removeButton={<TagRemoveButton callback={() => this.handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>
 						<section className='flexbox-center flex-nowrap small-gap'>
-							<button type='button' className='button-normal' onClick={() => this.verifySchematic(this.props.schematic)}>
+							<button type='button' className='button' onClick={() => this.verifySchematic(this.props.schematic)}>
 								Verify
 							</button>
-							<button type='button' className='button-normal' onClick={() => this.deleteSchematic(this.props.schematic.id)}>
+							<button type='button' className='button' onClick={() => this.deleteSchematic(this.props.schematic.id)}>
 								Reject
 							</button>
 						</section>
@@ -204,7 +199,7 @@ export const VerifySchematicPage = () => {
 				{loaderState === LoaderState.LOADING ? (
 					<div className='flexbox-center loading-spinner'></div>
 				) : (
-					<button className='load-more-button button-normal' onClick={() => loadPage()}>
+					<button className='load-more-button button' onClick={() => loadPage()}>
 						{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 					</button>
 				)}
@@ -212,7 +207,7 @@ export const VerifySchematicPage = () => {
 			{showSchematicModel === true && currentSchematic !== undefined && (
 				<div className='schematic-info-modal model flexbox-center image-background' onClick={() => setShowSchematicModel(false)}>
 					<div className='flexbox-center'>
-						<div className='schematic-card dark-background'>
+						<div className='schematic-card '>
 							<SchematicVerifyPanel schematic={currentSchematic} />
 						</div>
 					</div>

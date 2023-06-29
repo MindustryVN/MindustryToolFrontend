@@ -1,4 +1,4 @@
-import { ItemRequirement } from './SchematicInfo';
+import { ItemRequirement } from './SchematicData';
 
 export default interface SchematicPreview {
 	name: string;

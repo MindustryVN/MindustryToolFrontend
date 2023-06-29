@@ -3,11 +3,11 @@ import '../../styles.css';
 
 import React, { useState } from 'react';
 import { VerifySchematicPage } from './VerifySchematicPage';
-import UserInfo from '../user/UserInfo';
+import UserData from '../../components/common/user/UserData';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
-const Admin = ({ user }: { user: UserInfo | undefined }) => {
+const Admin = ({ user }: { user: UserData | undefined }) => {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	function renderTab(currentTab: string) {
@@ -27,18 +27,18 @@ const Admin = ({ user }: { user: UserInfo | undefined }) => {
 	}
 
 	return (
-		<div className='admin'>
+		<main className='admin'>
 			<div className='flexbox-center'>
-				<section className='tab-button-container grid-row small-gap dark-background light-border small-padding'>
+				<section className='tab-button-container grid-row small-gap  light-border small-padding'>
 					{tabs.map((name, index) => (
-						<button className={currentTab === name ? 'button-selected' : 'button-normal'} key={index} type='button' onClick={() => setCurrentTab(name)}>
+						<button className={currentTab === name ? 'button-active' : 'button'} key={index} type='button' onClick={() => setCurrentTab(name)}>
 							{name}
 						</button>
 					))}
 				</section>
 			</div>
-			<div className='flexbox-center'>{renderTab(currentTab)}</div>
-		</div>
+			<section className='flexbox-center'>{renderTab(currentTab)}</section>
+		</main>
 	);
 };
 

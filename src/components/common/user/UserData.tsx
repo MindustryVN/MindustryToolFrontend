@@ -1,4 +1,4 @@
-export default class UserInfo {
+export default class UserData {
 	id: string;
 	name: string;
 	email: string;
@@ -13,11 +13,11 @@ export default class UserInfo {
 		this.role = role;
 	}
 
-	static isUser(user: UserInfo | undefined) {
+	static isUser(user: UserData | undefined) {
 		return user && user.role.includes('USER');
 	}
 
-	static isAdmin(user: UserInfo | undefined) {
+	static isAdmin(user: UserData | undefined) {
 		return user && user.role.includes('ADMIN');
 	}
 }
