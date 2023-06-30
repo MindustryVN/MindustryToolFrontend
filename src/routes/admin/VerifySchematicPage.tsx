@@ -90,7 +90,8 @@ export const VerifySchematicPage = () => {
 		for (let i = 0; i < schematicList[p].length; i++) {
 			let schematic = schematicList[p][i];
 
-			const blob = new Blob([schematic.data], { type: 'text/plain' });
+			const blob = new Blob([Buffer.from(schematic.data, 'base64')], { type: 'text/plain' });
+
 			const url = window.URL.createObjectURL(blob);
 
 			schematicArray.push(
