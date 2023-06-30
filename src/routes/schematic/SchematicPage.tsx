@@ -103,7 +103,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 
 		return (
 			<main className='schematic-info'>
-				<section className='flexbox-row medium-gap'>
+				<section className='flexbox-row medium-gap flex-wrap'>
 					<LazyLoadImage className='schematic-info-image' path={`schematic/${schematic.id}/image`}></LazyLoadImage>
 					<section className='schematic-info-desc small-gap'>
 						<span>Name: {capitalize(schematic.name)}</span>
