@@ -12,7 +12,7 @@ const UserPage = () => {
 	if (user)
 		return (
 			<div className='flexbox-center'>
-				<UserName user={user} />
+				<UserName displayUser={user} />
 			</div>
 		);
 

@@ -95,7 +95,7 @@ export const VerifySchematicPage = () => {
 			const url = window.URL.createObjectURL(blob);
 
 			schematicArray.push(
-				<section className='schematic-preview'>
+				<section key={p * schematicList.length + i} className='schematic-preview'>
 					<button
 						className='schematic-image-wrapper'
 						type='button'
@@ -200,13 +200,13 @@ export const VerifySchematicPage = () => {
 									</span>
 								)}
 							/>
-							<div className='tag-container'>
+							<div className='tag-container small-gap'>
 								{this.state.tags.map((t: TagChoice, index: number) => (
 									<Tag key={index} tag={t} removeButton={<TagRemoveButton onClick={() => this.handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>
-						<section className='flexbox-center flex-nowrap small-gap'>
+						<section className='flexbox small-gap flex-wrap center'>
 							<a className='button  small-padding' href={url} download={`${this.props.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/upload.png' alt='download' />
 							</a>
@@ -249,7 +249,7 @@ export const VerifySchematicPage = () => {
 				{loaderState === LoaderState.LOADING ? (
 					<LoadingSpinner />
 				) : (
-					<section className='grid-row'>
+					<section className='grid-row small-gap'>
 						<button className='button' onClick={() => loadPage()}>
 							{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 						</button>

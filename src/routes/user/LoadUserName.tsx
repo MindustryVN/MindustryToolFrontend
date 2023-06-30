@@ -20,7 +20,7 @@ export default class LoadUserName extends Component<{ userId: string }, { loadin
 	render() {
 		if (this.props.userId === 'community') return <span>Community</span>;
 		if (this.state.loading) return <span>Loading...</span>;
-		if (this.state.user) return <UserName user={this.state.user} />;
+		if (this.state.user) return <UserName displayUser={this.state.user} />;
 		return <span>User not found</span>;
 	}
 }
