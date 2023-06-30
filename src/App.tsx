@@ -24,6 +24,7 @@ import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
 
 import { API } from './API';
 import { ACCESS_TOKEN, WEB_VERSION } from './config/Config';
+import UserDisplay from './routes/user/UserDisplay';
 
 const GlobalContext = React.createContext<{ user: UserData | undefined; loading: boolean }>({ user: undefined, loading: true });
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -74,6 +75,7 @@ function App() {
 			<GlobalContext.Provider value={{ user: currentUser, loading: loading }}>
 				<Router>
 					<img className='mindustry-logo' src='https://cdn.discordapp.com/attachments/1010373926100148356/1106488674935394394/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='Error' hidden></img>
+					<UserDisplay />
 					<NavigationBar />
 					<Suspense fallback={<Loading />}>
 						<Routes>
@@ -86,8 +88,8 @@ function App() {
 							<Route path='/schematic' element={<Schematic user={currentUser} />} />
 							<Route path='/schematic/:id' element={<SchematicPreview />} />
 							<Route path='/forum/*' element={<Forum></Forum>}></Route>
-							<Route path='/user' element={<PrivateRoute element={<User  />}></PrivateRoute>} />
-							<Route path='/admin' element={<AdminRoute element={<Admin  />}></AdminRoute>} />
+							<Route path='/user' element={<PrivateRoute element={<User />}></PrivateRoute>} />
+							<Route path='/admin' element={<AdminRoute element={<Admin />}></AdminRoute>} />
 							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 						</Routes>
 					</Suspense>

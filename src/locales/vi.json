@@ -4,10 +4,17 @@
         "category": {
             "": "",
             "name": "Tên",
-            "author": "Tác giả"
+            "author": "Tác giả",
+            "size" : "Kích thước"
         },
         "value": {
-            "": ""
+            "": "",
+            "micro": "Siêu nhỏ",
+            "small": "Nhỏ",
+            "medium": "Trung bình",
+            "big": "Lớn",
+            "huge": "Rất lớn"
         }
     }
 }
+

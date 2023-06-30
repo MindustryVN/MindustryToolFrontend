@@ -101,15 +101,14 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 		const blob = new Blob([Buffer.from(schematic.data, 'base64')], { type: 'text/plain' });
 		const url = window.URL.createObjectURL(blob);
 
+
 		return (
 			<main className='schematic-info'>
 				<section className='flexbox-row medium-gap flex-wrap'>
 					<LazyLoadImage className='schematic-info-image' path={`schematic/${schematic.id}/image`}></LazyLoadImage>
-					<section className='schematic-info-desc small-gap'>
-						<span>Name: {capitalize(schematic.name)}</span>
-						<div className='flexbox-row flex-nowrap'>
-							Author: <UserName userId={schematic.authorId} />
-						</div>
+					<section className='flexbox-column small-gap'>
+						<span>{capitalize(schematic.name)}</span>
+							<UserName userId={schematic.authorId} />
 						<span>
 							<StarIcon /> {schematic.like}
 							<TrashCanIcon /> {schematic.dislike}
@@ -230,7 +229,6 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 			);
 		}
 	}
-	console.log(schematicArray);
 
 	if (showSchematicModel === true && currentSchematic !== undefined) return buildSchematicData(currentSchematic);
 
@@ -252,7 +250,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 						converter={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
-				<section className='tag-container flexbox small-gap flex-wrap center'>
+				<section className='flexbox small-gap flex-wrap center'>
 					{tagQuery.map((t: TagChoice, index: number) => (
 						<Tag key={index} tag={t} removeButton={<TagRemoveButton onClick={() => handleRemoveTag(index)} />} />
 					))}
@@ -270,7 +268,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 				{loaderState === LoaderState.LOADING ? (
 					<LoadingSpinner />
 				) : (
-					<section className='grid-row'>
+					<section className='grid-row small-gap'>
 						<button className='button' type='button' onClick={() => loadPage()}>
 							{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 						</button>
