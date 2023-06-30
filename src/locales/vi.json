@@ -1,5 +1,13 @@
 {
-    "loading": "Đang tải",
-    "tag": "Nhãn",
-    "author": "Tác giả"
+    "loading": "Đang tải, vui lòng đợi 1-2 phút.",
+    "tag": {
+        "category": {
+            "": "",
+            "name": "Tên",
+            "author": "Tác giả"
+        },
+        "value": {
+            "": ""
+        }
+    }
 }

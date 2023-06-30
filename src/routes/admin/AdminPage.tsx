@@ -3,11 +3,13 @@ import '../../styles.css';
 
 import React, { useState } from 'react';
 import { VerifySchematicPage } from './VerifySchematicPage';
-import UserData from '../../components/common/user/UserData';
+import { useGlobalContext } from '../../App';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
-const Admin = ({ user }: { user: UserData | undefined }) => {
+const Admin = () => {
+	const { user } = useGlobalContext();
+
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	function renderTab(currentTab: string) {

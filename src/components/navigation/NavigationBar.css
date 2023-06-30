@@ -17,6 +17,7 @@
 	display: block;
 	padding: 10px;
 	top: 0;
+	left: 0;
 	max-width: 0;
 	height: 100%;
 	visibility: hidden;
@@ -33,7 +34,7 @@
 	visibility: visible;
 	max-width: 300px;
 
-	animation: popup 0.1s linear;
+	animation: popup 0.2s linear;
 }
 
 @keyframes popup {
@@ -65,7 +66,7 @@
 .nav-link {
 	display: flex;
 	justify-content: flex-start;
-	
+
 	font-size: 18px;
 	text-decoration: none;
 	padding: 0.2rem;

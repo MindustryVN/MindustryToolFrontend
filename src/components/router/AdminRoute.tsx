@@ -1,12 +1,14 @@
-import React, { Component, ReactNode } from 'react';
-import Loading from '../common/Loading';
+import React, { ReactElement } from 'react';
+import Loading from '../common/loader/Loading';
 import UserData from '../common/user/UserData';
 import { Navigate } from 'react-router-dom';
+import { useGlobalContext } from '../../App';
 
-export default class Admin extends Component<{ children: ReactNode; loading: boolean; user: UserData | undefined }> {
-	render() {
-		if (this.props.loading) return <Loading />;
-		if (UserData.isAdmin(this.props.user)) return this.props.children;
-		return <Navigate to='/login' />;
-	}
-}
+const AdminRoute = ({ element }: { element: ReactElement }) => {
+	const { loading, user } = useGlobalContext();
+	if (loading) return <Loading />;
+	if (UserData.isAdmin(user)) return element;
+	return <Navigate to='/login' />;
+};
+
+export default AdminRoute;

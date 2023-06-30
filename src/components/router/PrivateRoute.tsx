@@ -1,13 +1,15 @@
-import React, { Component, ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
-import Loading from '../common/Loading';
+import Loading from '../common/loader/Loading';
 import UserData from '../common/user/UserData';
+import { useGlobalContext } from '../../App';
 
-export default class PrivateRoute extends Component<{ children: ReactNode; loading: boolean; user: UserData | undefined }> {
-	render() {
-		if (this.props.loading) return <Loading />;
+const PrivateRoute = ({ element }: { element: ReactElement }) => {
+	const { loading, user } = useGlobalContext();
 
-		if (UserData.isUser(this.props.user)) return this.props.children;
-		return <Navigate to='/login' />;
-	}
-}
+	if (loading) return <Loading />;
+	if (UserData.isUser(user)) return element;
+	return <Navigate to='/login' />;
+};
+
+export default PrivateRoute;

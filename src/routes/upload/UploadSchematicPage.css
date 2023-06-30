@@ -53,10 +53,7 @@
 }
 
 .preview-image {
-	aspect-ratio: 1;
-
-	max-width: 512px;
-	max-width: 512px;
+	max-width: min(512px, 100vw);
 
 	min-width: var(--preview-image-min-size);
 	min-height: var(--preview-image-min-size);
@@ -71,7 +68,6 @@
 	justify-content: center;
 }
 
-
 .upload-search-container {
 	display: grid;
 	justify-content: center;
@@ -82,7 +78,7 @@
 	gap: 0.25rem;
 }
 
-.upload-search-container > *{
+.upload-search-container > * {
 	width: 100%;
 }
 

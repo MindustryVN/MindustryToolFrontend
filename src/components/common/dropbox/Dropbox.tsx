@@ -5,7 +5,16 @@ import React, { ChangeEventHandler, ReactNode } from 'react';
 import DropboxElement from './DropboxElement';
 
 export default class Dropbox extends React.Component<
-	{ placeholder?: string; value: string; items : any[], converter : (items : any, index : number) => ReactNode | ReactNode[], onChoose: (item: any) => void; onChange?: ChangeEventHandler<HTMLInputElement>; insideChildren?: ReactNode | ReactNode[]; children?: ReactNode[] }, //
+	{
+		placeholder?: string;
+		value: string;
+		items: any[];
+		children?: ReactNode;
+		insideChildren?: ReactNode;
+		converter: (items: any, index: number) => ReactNode;
+		onChoose: (item: any) => void;
+		onChange?: ChangeEventHandler<HTMLInputElement>;
+	}, //
 	{ showDropbox: boolean }
 > {
 	constructor(props: any) {
@@ -17,7 +26,7 @@ export default class Dropbox extends React.Component<
 
 	render() {
 		return (
-			<section className='dropbox small-padding'>
+			<section className='dropbox'>
 				<section className='dropbox-input small-gap'>
 					<input
 						className='dropbox-text'
@@ -36,7 +45,7 @@ export default class Dropbox extends React.Component<
 				</section>
 				<section className='dropbox-popup'>
 					{this.state.showDropbox && (
-						<section className={'dropbox-element-container'}>
+						<section className='dropbox-element-container'>
 							{this.props.items ? (
 								this.props.items.map((node, index) => (
 									<DropboxElement

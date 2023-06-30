@@ -23,4 +23,4 @@ export enum LoaderState {
 	NO_MORE
 }
 
-export const MAX_ITEM_PER_PAGE = 10;
+export const MAX_ITEM_PER_PAGE = 20;

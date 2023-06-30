@@ -19,11 +19,21 @@ body,
 	color: white;
 
 	font-weight: 800;
-}
 
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
 
 a {
 	color: rgb(50, 200, 200);
+}
+
+*::-webkit-scrollbar {
+	display: none;
 }
 
 :root {
@@ -33,20 +43,6 @@ a {
 	--yellow: #ffcb74;
 
 	--preview-image-min-size: 192px;
-	--background-image-1: url('/assets/images/background/light_theme.png');
-}
-
-*::-webkit-scrollbar {
-	display: none;
-}
-
-div {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
 
 input[type='file'] {

@@ -3,16 +3,19 @@ import './VerifySchematicPage.css';
 
 import React, { Component, ReactElement, useEffect, useState } from 'react';
 import Tag, { CustomTag, TagChoice } from '../../components/common/tag/Tag';
-import { capitalize } from '../../util/StringUtils';
-import { TagRemoveButton } from '../../components/common/button/TagRemoveButton';
-import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
+
 import { API } from '../../API';
 import { Trans } from 'react-i18next';
+import { capitalize } from '../../util/StringUtils';
+import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 
+import TagRemoveButton from '../../components/common/button/TagRemoveButton';
 import UserName from '../user/LoadUserName';
 import SchematicData from '../../components/common/schematic/SchematicData';
 import LazyLoadImage from '../../components/common/img/LazyLoadImage';
 import Dropbox from '../../components/common/dropbox/Dropbox';
+import LoadingSpinner from '../../components/common/loader/LoadingSpinner';
+import ScrollToTopButton from '../../components/common/button/ScrollToTopButton';
 
 export const VerifySchematicPage = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
@@ -61,6 +64,8 @@ export const VerifySchematicPage = () => {
 	}
 
 	function loadPage() {
+		setLoaderState(LoaderState.LOADING);
+
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
 
@@ -84,17 +89,36 @@ export const VerifySchematicPage = () => {
 	for (let p = 0; p < schematicList.length; p++) {
 		for (let i = 0; i < schematicList[p].length; i++) {
 			let schematic = schematicList[p][i];
+
+			const blob = new Blob([schematic.data], { type: 'text/plain' });
+			const url = window.URL.createObjectURL(blob);
+
 			schematicArray.push(
-				<div
-					key={p * MAX_ITEM_PER_PAGE + i}
-					className='schematic-preview'
-					onClick={() => {
-						setCurrentSchematic(schematic);
-						setShowSchematicModel(true);
-					}}>
-					<LazyLoadImage className='schematic-image' path={`schematic-upload/${schematic.id}/image`}></LazyLoadImage>
+				<section className='schematic-preview'>
+					<button
+						className='schematic-image-wrapper'
+						type='button'
+						onClick={() => {
+							setCurrentSchematic(schematic);
+							setShowSchematicModel(true);
+						}}>
+						<LazyLoadImage className='schematic-image' path={`schematic-upload/${schematic.id}/image`}></LazyLoadImage>
+					</button>
 					<div className='schematic-preview-description flexbox-center'>{capitalize(schematic.name)}</div>
-				</div>
+
+					<section className='schematic-info-button-container grid-row small-gap small-padding'>
+						<a className='button  small-padding' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+							<img src='/assets/icons/upload.png' alt='download' />
+						</a>
+						<button
+							className='button small-padding'
+							onClick={() => {
+								navigator.clipboard.writeText(schematic.data).then(() => alert('Copied'));
+							}}>
+							<img src='/assets/icons/copy.png' alt='copy' />
+						</button>
+					</section>
+				</section>
 			);
 		}
 	}
@@ -139,6 +163,9 @@ export const VerifySchematicPage = () => {
 		}
 
 		render() {
+			const blob = new Blob([this.props.schematic.data], { type: 'text/plain' });
+			const url = window.URL.createObjectURL(blob);
+
 			return (
 				<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
 					<LazyLoadImage className='schematic-info-image' path={`schematic-upload/${this.props.schematic.id}/image`} />
@@ -174,11 +201,22 @@ export const VerifySchematicPage = () => {
 							/>
 							<div className='tag-container'>
 								{this.state.tags.map((t: TagChoice, index: number) => (
-									<Tag key={index} tag={t} removeButton={<TagRemoveButton callback={() => this.handleRemoveTag(index)} />} />
+									<Tag key={index} tag={t} removeButton={<TagRemoveButton onClick={() => this.handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>
 						<section className='flexbox-center flex-nowrap small-gap'>
+							<a className='button  small-padding' href={url} download={`${this.props.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+								<img src='/assets/icons/upload.png' alt='download' />
+							</a>
+							<button
+								className='button  small-padding'
+								onClick={() => {
+									navigator.clipboard.writeText(this.props.schematic.data).then(() => alert('Copied'));
+								}}>
+								<img src='/assets/icons/copy.png' alt='copy' />
+							</button>
+
 							<button type='button' className='button' onClick={() => this.verifySchematic(this.props.schematic)}>
 								Verify
 							</button>
@@ -192,27 +230,32 @@ export const VerifySchematicPage = () => {
 		}
 	}
 
+	if (showSchematicModel === true && currentSchematic !== undefined)
+		return (
+			<div className='schematic-info-modal model flexbox-center image-background' onClick={() => setShowSchematicModel(false)}>
+				<div className='flexbox-center'>
+					<div className='schematic-card '>
+						<SchematicVerifyPanel schematic={currentSchematic} />
+					</div>
+				</div>
+			</div>
+		);
+
 	return (
 		<div className='verify-schematic'>
 			<section className='schematic-container'>{schematicArray}</section>
 			<footer className='schematic-container-footer'>
 				{loaderState === LoaderState.LOADING ? (
-					<div className='flexbox-center loading-spinner'></div>
+					<LoadingSpinner />
 				) : (
-					<button className='load-more-button button' onClick={() => loadPage()}>
-						{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
-					</button>
+					<section className='grid-row'>
+						<button className='button' onClick={() => loadPage()}>
+							{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
+						</button>
+						<ScrollToTopButton />
+					</section>
 				)}
 			</footer>
-			{showSchematicModel === true && currentSchematic !== undefined && (
-				<div className='schematic-info-modal model flexbox-center image-background' onClick={() => setShowSchematicModel(false)}>
-					<div className='flexbox-center'>
-						<div className='schematic-card '>
-							<SchematicVerifyPanel schematic={currentSchematic} />
-						</div>
-					</div>
-				</div>
-			)}
 		</div>
 	);
 };

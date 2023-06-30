@@ -5,6 +5,7 @@ import SchematicPreview from '../../components/common/schematic/SchematicPreview
 import UserData from '../../components/common/user/UserData';
 import Dropbox from '../../components/common/dropbox/Dropbox';
 import React, { useEffect } from 'react';
+import TagRemoveButton from '../../components/common/button/TagRemoveButton';
 
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
 import { getFileExtension } from '../../util/StringUtils';
@@ -12,7 +13,6 @@ import { ChangeEvent, useState } from 'react';
 import { Trans } from 'react-i18next';
 import Tag, { CustomTag, TagChoice } from '../../components/common/tag/Tag';
 import { API } from '../../API';
-import { TagRemoveButton } from '../../components/common/button/TagRemoveButton';
 
 const tabs = ['File', 'Code'];
 
@@ -201,7 +201,7 @@ const Upload = ({ user }: { user: UserData | undefined }) => {
 
 							<div className='flexbox-row flex-wrap medium-gap'>
 								{tags.map((t: TagChoice, index: number) => (
-									<Tag key={index} tag={t} removeButton={<TagRemoveButton callback={() => handleRemoveTag(index)} />} />
+									<Tag key={index} tag={t} removeButton={<TagRemoveButton onClick={() => handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>
