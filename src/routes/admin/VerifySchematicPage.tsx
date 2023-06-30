@@ -164,7 +164,7 @@ export const VerifySchematicPage = () => {
 		}
 
 		render() {
-			const blob = new Blob([this.props.schematic.data], { type: 'text/plain' });
+			const blob = new Blob([Buffer.from(this.props.schematic.data, 'base64')], { type: 'text/plain' });
 			const url = window.URL.createObjectURL(blob);
 
 			return (
