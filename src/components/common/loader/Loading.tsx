@@ -1,5 +1,5 @@
 import { Trans } from 'react-i18next';
-import '../../styles.css';
+import '../../../styles.css';
 
 import React, { useEffect, useState } from 'react';
 

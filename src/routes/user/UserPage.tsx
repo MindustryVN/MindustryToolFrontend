@@ -1,16 +1,22 @@
-import UserData from '../../components/common/user/UserData';
-import UserName from './UserName';
 import './UserPage.css';
 
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class UserPage extends Component<{ user: UserData | undefined }> {
-	render() {
-		if (this.props.user)
-			return (
-				<div className='flexbox-center'>
-					<UserName user={this.props.user} />
-				</div>
-			);
-	}
-}
+import { useGlobalContext } from '../../App';
+import UserName from './UserName';
+import { Navigate } from 'react-router-dom';
+
+const UserPage = () => {
+	const { user } = useGlobalContext();
+
+	if (user)
+		return (
+			<div className='flexbox-center'>
+				<UserName user={user} />
+			</div>
+		);
+
+	return <Navigate to='/login' />;
+};
+
+export default UserPage;

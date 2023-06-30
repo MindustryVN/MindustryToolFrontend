@@ -1,5 +1,14 @@
 {
     "loading": "Đang tải",
-    "tag": "Nhãn",
-    "author": "Tác giả"
+    "tag": {
+        "category": {
+            "": "",
+            "name": "Tên",
+            "author": "Tác giả"
+            
+        },
+        "value": {
+            "": ""
+        }
+    }
 }

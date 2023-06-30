@@ -58,6 +58,17 @@
 	background-color: var(--black);
 }
 
+.schematic-image-wrapper {
+	width: var(--preview-image-min-size);
+	height: var(--preview-image-min-size);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background-color: var(--black);
+}
+
 .schematic-image {
 	width: var(--preview-image-min-size);
 	height: var(--preview-image-min-size);
@@ -120,8 +131,7 @@
 	min-width: var(--preview-image-min-size);
 	min-height: var(--preview-image-min-size);
 
-	max-width: 512px;
-	max-width: 512px;
+	max-width: min(512px, 100vw);
 }
 
 .schematic-info-desc-container {
@@ -140,11 +150,5 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 
-	max-width: 512px;
-	max-width: 512px;
-}
-
-.load-more-button {
-	padding: 5px;
-	border-radius: 5px;
+	max-width: min(512px, 100vw);
 }

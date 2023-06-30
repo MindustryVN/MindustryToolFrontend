@@ -10,7 +10,7 @@ export default class Tag extends React.Component<{ tag: TagChoice; removeButton?
 		return (
 			<div className='tag flexbox-row flex-nowrap small-padding center' style={{ backgroundColor: this.props.tag.color }}>
 				<div className='flexbox-column text-center'>
-					<Trans i18nKey={this.props.tag.name} />: <Trans i18nKey={this.props.tag.value} />
+					<Trans i18nKey={`tag.category.${this.props.tag.name}`} />: <Trans i18nKey={`tag.value.${this.props.tag.value}`} />
 				</div>
 				{this.props.removeButton}
 			</div>
