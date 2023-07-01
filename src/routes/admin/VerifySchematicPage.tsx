@@ -109,7 +109,7 @@ export const VerifySchematicPage = () => {
 
 					<section className='schematic-info-button-container grid-row small-gap small-padding'>
 						<a className='button  small-padding' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
-							<img src='/assets/icons/upload.png' alt='download' />
+							<img src='/assets/icons/download.png' alt='download' />
 						</a>
 						<button
 							className='button small-padding'
@@ -208,20 +208,16 @@ export const VerifySchematicPage = () => {
 						</div>
 						<section className='flexbox small-gap flex-wrap center'>
 							<a className='button  small-padding' href={url} download={`${this.props.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
-								<img src='/assets/icons/upload.png' alt='download' />
+								<img src='/assets/icons/download.png' alt='download' />
 							</a>
-							<button
-								className='button  small-padding'
-								onClick={() => {
-									navigator.clipboard.writeText(this.props.schematic.data).then(() => alert('Copied'));
-								}}>
+							<button className='button  small-padding' type='button' onClick={() => navigator.clipboard.writeText(this.props.schematic.data).then(() => alert('Copied'))}>
 								<img src='/assets/icons/copy.png' alt='copy' />
 							</button>
 
-							<button type='button' className='button' onClick={() => this.verifySchematic(this.props.schematic)}>
+							<button className='button' type='button' onClick={() => this.verifySchematic(this.props.schematic)}>
 								Verify
 							</button>
-							<button type='button' className='button' onClick={() => this.deleteSchematic(this.props.schematic.id)}>
+							<button className='button' type='button' onClick={() => this.deleteSchematic(this.props.schematic.id)}>
 								Reject
 							</button>
 						</section>

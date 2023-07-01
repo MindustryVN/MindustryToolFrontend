@@ -101,14 +101,13 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 		const blob = new Blob([Buffer.from(schematic.data, 'base64')], { type: 'text/plain' });
 		const url = window.URL.createObjectURL(blob);
 
-
 		return (
 			<main className='schematic-info'>
 				<section className='flexbox-row medium-gap flex-wrap'>
 					<LazyLoadImage className='schematic-info-image' path={`schematic/${schematic.id}/image`}></LazyLoadImage>
 					<section className='flexbox-column small-gap'>
 						<span>{capitalize(schematic.name)}</span>
-							<UserName userId={schematic.authorId} />
+						<UserName userId={schematic.authorId} />
 						<span>
 							<StarIcon /> {schematic.like}
 							<TrashCanIcon /> {schematic.dislike}
@@ -136,6 +135,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 				<section className='schematic-info-button-container grid-row small-gap'>
 					<button
 						className='button small-padding'
+						type='button'
 						onClick={() => {
 							if (currentSchematic) currentSchematic.like += 1;
 						}}>
@@ -143,16 +143,18 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 					</button>
 					<button
 						className='button small-padding'
+						type='button'
 						onClick={() => {
 							if (currentSchematic) currentSchematic.dislike += 1;
 						}}>
 						<img src='/assets/icons/play-2.png' style={{ rotate: '90deg' }} alt='dislike' />
 					</button>
 					<a className='button small-padding center' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
-						<img src='/assets/icons/upload.png' alt='download' />
+						<img src='/assets/icons/download.png' alt='download' />
 					</a>
 					<button
 						className='button small-padding'
+						type='button'
 						onClick={() => {
 							navigator.clipboard.writeText(schematic.data).then(() => alert('Copied'));
 						}}>
@@ -197,6 +199,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 					<section className='schematic-info-button-container grid-row small-gap small-padding'>
 						<button
 							className='button small-padding'
+							type='button'
 							onClick={() => {
 								if (currentSchematic) currentSchematic.like += 1;
 							}}>
@@ -204,23 +207,20 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 						</button>
 						<button
 							className='button small-padding'
+							type='button'
 							onClick={() => {
 								if (currentSchematic) currentSchematic.dislike += 1;
 							}}>
 							<img src='/assets/icons/play-2.png' style={{ rotate: '90deg' }} alt='dislike' />
 						</button>
-						<a className='button  small-padding' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
-							<img src='/assets/icons/upload.png' alt='download' />
+						<a className='button small-padding' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+							<img src='/assets/icons/download.png' alt='download' />
 						</a>
-						<button
-							className='button  small-padding'
-							onClick={() => {
-								navigator.clipboard.writeText(schematic.data).then(() => alert('Copied'));
-							}}>
+						<button className='button small-padding' type='button' onClick={() => navigator.clipboard.writeText(schematic.data).then(() => alert('Copied'))}>
 							<img src='/assets/icons/copy.png' alt='copy' />
 						</button>
 						{user && (schematic.authorId === user.id || UserData.isAdmin(user)) && (
-							<button className='button  small-padding'>
+							<button className='button  small-padding' type='button'>
 								<img src='/assets/icons/trash-16.png' alt='delete' />
 							</button>
 						)}
