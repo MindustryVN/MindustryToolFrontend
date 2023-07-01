@@ -14,17 +14,17 @@ import { ACCESS_TOKEN, WEB_VERSION } from './config/Config';
 import UserDisplay from './routes/user/UserDisplay';
 import { TagChoice } from './components/common/tag/Tag';
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyACF4nOPEHnjPESSj_Ds3G-M90qrLLSL08",
-  authDomain: "mindustrytool.firebaseapp.com",
-  projectId: "mindustrytool",
-  storageBucket: "mindustrytool.appspot.com",
-  messagingSenderId: "733073499252",
-  appId: "1:733073499252:web:48d86079f479e5fcaa1d21",
-  measurementId: "G-CGKXS6096G"
+	apiKey: 'AIzaSyACF4nOPEHnjPESSj_Ds3G-M90qrLLSL08',
+	authDomain: 'mindustrytool.firebaseapp.com',
+	projectId: 'mindustrytool',
+	storageBucket: 'mindustrytool.appspot.com',
+	messagingSenderId: '733073499252',
+	appId: '1:733073499252:web:48d86079f479e5fcaa1d21',
+	measurementId: 'G-CGKXS6096G'
 };
 
 const app = initializeApp(firebaseConfig);
