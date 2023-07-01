@@ -15,8 +15,12 @@
 
 	border: 2px solid var(--white);
 	border-radius: 1rem;
-	
+
 	background-color: var(--black);
+}
+
+.admin {
+	background-color: lime;
 }
 
 .user-name-card > * {
@@ -29,7 +33,7 @@
 	height: 2rem;
 	width: 2rem;
 	border-radius: 50%;
-	}
+}
 
 .name {
 	text-decoration: none;
