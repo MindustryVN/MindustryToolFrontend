@@ -17,19 +17,6 @@ export default class Tag extends React.Component<{ tag: TagChoice; removeButton?
 			</div>
 		);
 	}
-
-	static SCHEMATIC_SEARCH_TAG : TagChoice[] = [];
-
-	static {
-		API.REQUEST.get('tag/schematic-upload-tag') //
-			.then((result) => {
-				let customTagList: Array<CustomTag> = result.data;
-				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
-
-				temp.forEach((t) => t.forEach((r) => Tag.SCHEMATIC_SEARCH_TAG.push(r)));
-				
-			});
-	}
 }
 
 export interface CustomTag {
@@ -65,6 +52,18 @@ export class TagChoice {
 			if (r) arr.push(r);
 		}
 		return arr;
+	}
+
+	static SCHEMATIC_UPLOAD_TAG: TagChoice[] = [];
+	static SCHEMATIC_SEARCH_TAG: TagChoice[] = [];
+
+	static getTag(tag: string, result: TagChoice[]) {
+		API.REQUEST.get(`tag/${tag}`) //
+			.then((r) => {
+				let customTagList: Array<CustomTag> = r.data;
+				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
+				temp.forEach((t) => t.forEach((r) => result.push(r)));
+			});
 	}
 }
 

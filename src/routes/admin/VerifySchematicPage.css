@@ -36,10 +36,6 @@
 	padding: 0.2rem;
 }
 
-.selected {
-	color: black;
-	background-color: var(--white);
-}
 
 .schematic-container {
 	display: grid;
@@ -139,10 +135,6 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 	gap: 5px;
-}
-
-.requirement-container {
-	flex-wrap: wrap;
 }
 
 .tag-container {

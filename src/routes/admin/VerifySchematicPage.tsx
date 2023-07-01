@@ -25,23 +25,7 @@ export const VerifySchematicPage = () => {
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
-	useEffect(() => {
-		getSchematicUploadTag();
-		loadPage();
-	}, []);
-
-	const [schematicUploadTag, setSchematicUploadTag] = useState<Array<TagChoice>>([]);
-	function getSchematicUploadTag() {
-		API.REQUEST.get('tag/schematic-upload-tag') //
-			.then((result) => {
-				let customTagList: Array<CustomTag> = result.data;
-				let tagChoiceList: Array<TagChoice> = [];
-				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
-
-				temp.forEach((t) => t.forEach((r) => tagChoiceList.push(r)));
-				setSchematicUploadTag(tagChoiceList);
-			});
-	}
+	useEffect(() => loadPage(), []);
 
 	function loadToPage(page: number) {
 		setSchematicList([[]]);
@@ -125,7 +109,7 @@ export const VerifySchematicPage = () => {
 
 	class SchematicVerifyPanel extends Component<{ schematic: SchematicData }, { tags: TagChoice[]; tag: string }> {
 		state = {
-			tags: TagChoice.parseArray(this.props.schematic.tags, schematicUploadTag),
+			tags: TagChoice.parseArray(this.props.schematic.tags, TagChoice.SCHEMATIC_UPLOAD_TAG),
 			tag: ''
 		};
 
@@ -176,7 +160,7 @@ export const VerifySchematicPage = () => {
 						</span>
 						{this.props.schematic.description && <span>{this.props.schematic.description}</span>}
 						{this.props.schematic.requirement && (
-							<section className='requirement-container flexbox-row small-gap'>
+							<section className=' flexbox-row small-gap flex-wrap'>
 								{this.props.schematic.requirement.map((r, index) => (
 									<span key={index} className='text-center'>
 										<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
@@ -190,7 +174,7 @@ export const VerifySchematicPage = () => {
 							<Dropbox
 								placeholder='Add tags'
 								value={this.state.tag}
-								items={schematicUploadTag.filter((t) => (t.name.includes(this.state.tag) || t.value.includes(this.state.tag)) && !this.state.tags.includes(t))}
+								items={TagChoice.SCHEMATIC_UPLOAD_TAG.filter((t) => (t.name.includes(this.state.tag) || t.value.includes(this.state.tag)) && !this.state.tags.includes(t))}
 								onChange={(event) => this.setState({ tag: event.target.value })}
 								onChoose={(item) => this.handleAddTag(item)}
 								converter={(t, index) => (

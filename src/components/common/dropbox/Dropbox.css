@@ -55,11 +55,7 @@
 	background-color: var(--black);
 	overflow: hidden auto;
 
-	border: 1px solid var(--gray);
+	border: 1px solid var(--white);
 	border-radius: 5px;
 }
 
-.separator {
-	height: 0px;
-	border: 1px solid var(--gray);
-}

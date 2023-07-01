@@ -3,6 +3,16 @@ import './styles.css';
 
 import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Loading from './components/common/loader/Loading';
+import UserData from './components/common/user/UserData';
+import NavigationPanel from './components/navigation/NavigationPanel';
+import AdminRoute from './components/router/AdminRoute';
+import PrivateRoute from './components/router/PrivateRoute';
+import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
+import { API } from './API';
+import { ACCESS_TOKEN, WEB_VERSION } from './config/Config';
+import UserDisplay from './routes/user/UserDisplay';
+import { TagChoice } from './components/common/tag/Tag';
 
 const Map = React.lazy(() => import('./routes/map/MapPage'));
 const Home = React.lazy(() => import('./routes/home/HomePage'));
@@ -14,17 +24,6 @@ const Upload = React.lazy(() => import('./routes/upload/UploadSchematicPage'));
 const Admin = React.lazy(() => import('./routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('./routes/forum/ForumPage'));
 const SchematicPreview = React.lazy(() => import('./routes/schematic/SchematicPreviewPage'));
-
-import Loading from './components/common/loader/Loading';
-import UserData from './components/common/user/UserData';
-import NavigationBar from './components/navigation/NavigationBar';
-import AdminRoute from './components/router/AdminRoute';
-import PrivateRoute from './components/router/PrivateRoute';
-import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
-
-import { API } from './API';
-import { ACCESS_TOKEN, WEB_VERSION } from './config/Config';
-import UserDisplay from './routes/user/UserDisplay';
 
 type Context = {
 	user: UserData | undefined;
@@ -42,6 +41,9 @@ function App() {
 	useEffect(() => {
 		ping();
 		getUserData();
+
+		TagChoice.getTag('schematic-upload-tag', TagChoice.SCHEMATIC_UPLOAD_TAG);
+		TagChoice.getTag('schematic-search-tag', TagChoice.SCHEMATIC_SEARCH_TAG);
 	}, []);
 
 	function ping() {
@@ -78,8 +80,10 @@ function App() {
 			<GlobalContext.Provider value={{ user: currentUser, loading: loading, handleLogout: handleLogOut }}>
 				<Router>
 					<img className='mindustry-logo' src='https://cdn.discordapp.com/attachments/1010373926100148356/1106488674935394394/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='Error' hidden></img>
-					<UserDisplay />
-					<NavigationBar />
+					<section className='navigation-bar'>
+						<NavigationPanel />
+						<UserDisplay />
+					</section>
 					<Suspense fallback={<Loading />}>
 						<Routes>
 							<Route path='/' element={<Home />} />
@@ -87,12 +91,12 @@ function App() {
 							<Route path='/home' element={<Home />} />
 							<Route path='/logic' element={<Logic />} />
 							<Route path='/login' element={<Login />} />
-							<Route path='/upload' element={<Upload user={currentUser} />} />
-							<Route path='/schematic' element={<Schematic user={currentUser} />} />
-							<Route path='/schematic/:id' element={<SchematicPreview />} />
+							<Route path='/upload' element={<Upload />} />
+							<Route path='/schematic' element={<Schematic />} />
 							<Route path='/forum/*' element={<Forum></Forum>}></Route>
-							<Route path='/user' element={<PrivateRoute element={<User />}></PrivateRoute>} />
-							<Route path='/admin' element={<AdminRoute element={<Admin />}></AdminRoute>} />
+							<Route path='/schematic/:id' element={<SchematicPreview />} />
+							<Route path='/user' element={<PrivateRoute element={<User />} />} />
+							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
 							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 						</Routes>
 					</Suspense>

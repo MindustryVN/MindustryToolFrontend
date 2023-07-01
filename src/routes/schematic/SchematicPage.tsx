@@ -10,15 +10,16 @@ import Dropbox from '../../components/common/dropbox/Dropbox';
 import LazyLoadImage from '../../components/common/img/LazyLoadImage';
 import LoadingSpinner from '../../components/common/loader/LoadingSpinner';
 import SchematicData from '../../components/common/schematic/SchematicData';
-import Tag, { CustomTag, SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../components/common/tag/Tag';
+import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../components/common/tag/Tag';
 import TagPick from '../../components/common/tag/TagPick';
 import UserData from '../../components/common/user/UserData';
 import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 import { capitalize } from '../../util/StringUtils';
 import UserName from '../user/LoadUserName';
+import { useGlobalContext } from '../../App';
 
-const Schematic = ({ user }: { user: UserData | undefined }) => {
-	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
+const Schematic = () => {
+	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.MORE);
 
 	const [schematicList, setSchematicList] = useState<SchematicData[][]>([[]]);
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
@@ -32,36 +33,23 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 
 	const currentQuery = useRef<{ tag: TagChoice[]; sort: SortChoice }>({ tag: [], sort: SCHEMATIC_SORT_CHOICE[0] });
 
-	const [schematicSearchTag, setSchematicSearchTag] = useState<Array<TagChoice>>([]);
-
 	const controller = new AbortController();
 
-	useEffect(() => {
-		getSchematicSearchTag();
-		loadPage();
-	}, [sortQuery]);
+	const { user } = useGlobalContext();
 
-	function getSchematicSearchTag() {
-		API.REQUEST.get('tag/schematic-search-tag') //
-			.then((result) => {
-				let customTagList: Array<CustomTag> = result.data;
-				let tagChoiceList: Array<TagChoice> = [];
-				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
-
-				temp.forEach((t) => tagChoiceList.push(...t));
-				setSchematicSearchTag(tagChoiceList);
-			});
-	}
+	useEffect(() => loadPage(), [sortQuery]);
 
 	function loadPage() {
+		if (loaderState === LoaderState.LOADING) {
+			controller.abort();
+		}
+
 		setLoaderState(LoaderState.LOADING);
 
 		if (tagQuery !== currentQuery.current.tag || sortQuery !== currentQuery.current.sort) {
 			setSchematicList([[]]);
 			currentQuery.current = { tag: tagQuery, sort: sortQuery };
 		}
-
-		controller.abort();
 
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
@@ -74,6 +62,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 			signal: controller.signal
 		})
 			.then((result) => {
+				console.log(result.cached);
 				let schematics: SchematicData[] = result.data;
 				if (schematics.length) {
 					if (newPage) schematicList.push(schematics);
@@ -105,10 +94,10 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 		const url = window.URL.createObjectURL(blob);
 
 		return (
-			<main className='schematic-info'>
+			<main className='schematic-info small-gap'>
 				<section className='flexbox-row medium-gap flex-wrap'>
 					<LazyLoadImage className='schematic-info-image' path={`schematic/${schematic.id}/image`}></LazyLoadImage>
-					<section className='flexbox-column small-gap'>
+					<section className='flexbox-column small-gap flex-wrap'>
 						<span>{capitalize(schematic.name)}</span>
 						<UserName userId={schematic.authorId} />
 						<span>
@@ -117,7 +106,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 						</span>
 						{schematic.description && <span>{capitalize(schematic.description)}</span>}
 						{schematic.requirement && (
-							<section className='requirement-container flexbox-row medium-gap'>
+							<section className=' flexbox-row flex-wrap medium-gap'>
 								{schematic.requirement.map((r, index) => (
 									<span key={index} className='text-center'>
 										<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
@@ -128,7 +117,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 						)}
 						{schematic.tags && (
 							<section className='flexbox-row flex-wrap small-gap'>
-								{TagChoice.parseArray(schematic.tags, schematicSearchTag).map((t: TagChoice, index: number) => (
+								{TagChoice.parseArray(schematic.tags, TagChoice.SCHEMATIC_SEARCH_TAG).map((t: TagChoice, index: number) => (
 									<Tag key={index} tag={t} />
 								))}
 							</section>
@@ -242,7 +231,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 					<Dropbox
 						placeholder='Search with tags'
 						value={tag}
-						items={schematicSearchTag.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tagQuery.includes(t))}
+						items={TagChoice.SCHEMATIC_SEARCH_TAG.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						insideChildren={
