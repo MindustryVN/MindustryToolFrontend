@@ -38,8 +38,8 @@ a {
 
 :root {
 	--black: #111111;
-	--gray: #2f2f2f;
-	--white: #f6f6f6;
+	--gray: #3f3f3f;
+	--white: #d0d0d0;
 	--yellow: #ffcb74;
 
 	--preview-image-min-size: 192px;
@@ -47,4 +47,8 @@ a {
 
 input[type='file'] {
 	color: transparent;
+}
+
+footer{
+	min-height: 2rem;
 }

@@ -9,7 +9,7 @@
 
 	justify-content: center;
 
-	border: 1px solid var(--white);
+	border: 2px solid var(--white);
 }
 
 .dropbox-input {
@@ -55,11 +55,6 @@
 	background-color: var(--black);
 	overflow: hidden auto;
 
-	border: 1px solid var(--gray);
+	border: 2px solid var(--white);
 	border-radius: 5px;
-}
-
-.separator {
-	height: 0px;
-	border: 1px solid var(--gray);
 }

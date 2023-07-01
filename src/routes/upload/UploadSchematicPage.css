@@ -68,19 +68,6 @@
 	justify-content: center;
 }
 
-.upload-search-container {
-	display: grid;
-	justify-content: center;
-	align-items: center;
-
-	width: 500px;
-
-	gap: 0.25rem;
-}
-
-.upload-search-container > * {
-	width: 100%;
-}
 
 #ufb {
 	display: none;

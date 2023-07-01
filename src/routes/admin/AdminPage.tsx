@@ -3,12 +3,10 @@ import '../../styles.css';
 
 import React, { useState } from 'react';
 import { VerifySchematicPage } from './VerifySchematicPage';
-import { useGlobalContext } from '../../App';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
 const Admin = () => {
-	const { user } = useGlobalContext();
 
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 

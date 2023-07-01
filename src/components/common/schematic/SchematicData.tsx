@@ -1,5 +1,3 @@
-import { TagChoice } from '../tag/Tag';
-
 export default interface SchematicData {
 	id: string;
 	name: string;
@@ -10,8 +8,7 @@ export default interface SchematicData {
 	tags: Array<string>;
 	like: number;
 	dislike: number;
-	height: number;
-	width: number;
+	verifyAdmin: string;
 }
 
 export interface ItemRequirement {

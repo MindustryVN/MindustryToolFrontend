@@ -1,20 +1,21 @@
 .user-name-card {
 	display: flex;
 	align-items: center;
-	text-align: center;
 
 	gap: 0.25rem;
-	height: 1.5rem;
+	height: 2rem;
+	min-width: 5rem;
 
 	padding: 0.25rem 0.25rem 0.25rem 0;
+	box-sizing: border-box;
 
 	overflow: hidden;
 
 	width: fit-content;
 
-	border: 2px solid var(--gray);
+	border: 2px solid var(--white);
 	border-radius: 1rem;
-
+	
 	background-color: var(--black);
 }
 
@@ -28,7 +29,7 @@
 	height: 2rem;
 	width: 2rem;
 	border-radius: 50%;
-}
+	}
 
 .name {
 	text-decoration: none;

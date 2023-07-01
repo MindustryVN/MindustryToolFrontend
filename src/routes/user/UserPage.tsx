@@ -7,12 +7,14 @@ import UserName from './UserName';
 import { Navigate } from 'react-router-dom';
 
 const UserPage = () => {
-	const { user } = useGlobalContext();
+	const { user, handleLogout } = useGlobalContext();
 
 	if (user)
 		return (
 			<div className='flexbox-center'>
-				<UserName displayUser={user} />
+				<button className='button small-padding' type='button' onClick={() => handleLogout()}>
+					Logout
+				</button>
 			</div>
 		);
 

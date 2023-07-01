@@ -2,21 +2,21 @@ import './UploadSchematicPage.css';
 import '../../styles.css';
 
 import SchematicPreview from '../../components/common/schematic/SchematicPreview';
-import UserData from '../../components/common/user/UserData';
 import Dropbox from '../../components/common/dropbox/Dropbox';
-import React, { useEffect } from 'react';
+import React from 'react';
 import TagRemoveButton from '../../components/common/button/TagRemoveButton';
 
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
 import { getFileExtension } from '../../util/StringUtils';
 import { ChangeEvent, useState } from 'react';
 import { Trans } from 'react-i18next';
-import Tag, { CustomTag, TagChoice } from '../../components/common/tag/Tag';
+import Tag, { TagChoice } from '../../components/common/tag/Tag';
 import { API } from '../../API';
+import { useGlobalContext } from '../../App';
 
 const tabs = ['File', 'Code'];
 
-const Upload = ({ user }: { user: UserData | undefined }) => {
+const Upload = () => {
 	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
 	const [preview, setPreview] = useState<SchematicPreview>();
@@ -27,21 +27,7 @@ const Upload = ({ user }: { user: UserData | undefined }) => {
 
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
-	const [schematicUploadTag, setSchematicUploadTag] = useState<Array<TagChoice>>([]);
-
-	useEffect(() => getSchematicUploadTag(), []);
-
-	function getSchematicUploadTag() {
-		API.REQUEST.get('tag/schematic-upload-tag') //
-			.then((result) => {
-				let customTagList: Array<CustomTag> = result.data;
-				let tagChoiceList: Array<TagChoice> = [];
-				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
-
-				temp.forEach((t) => t.forEach((r) => tagChoiceList.push(r)));
-				setSchematicUploadTag(tagChoiceList);
-			});
-	}
+	const { user } = useGlobalContext();
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		if (!event.target) return;
@@ -64,19 +50,21 @@ const Upload = ({ user }: { user: UserData | undefined }) => {
 	}
 
 	function handleCodeChange() {
-		navigator.clipboard.readText().then((text) => {
-			if (!text.startsWith('bXNja')) return;
-			if (text === code) return;
+		navigator.clipboard
+			.readText() //
+			.then((text) => {
+				if (!text.startsWith('bXNja')) return;
+				if (text === code) return;
 
-			setCode(text);
-			setFile(undefined);
+				setCode(text);
+				setFile(undefined);
 
-			const form = new FormData();
-			form.delete('file');
-			form.append('code', text);
+				const form = new FormData();
+				form.delete('file');
+				form.append('code', text);
 
-			getPreview(form);
-		});
+				getPreview(form);
+			});
 	}
 
 	function getPreview(form: FormData) {
@@ -189,7 +177,7 @@ const Upload = ({ user }: { user: UserData | undefined }) => {
 							<Dropbox
 								placeholder='Add tags'
 								value={tag}
-								items={schematicUploadTag.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tags.includes(t))}
+								items={TagChoice.SCHEMATIC_UPLOAD_TAG.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tags.includes(t))}
 								onChange={(event) => setTag(event.target.value)}
 								onChoose={(item) => handleAddTag(item)}
 								converter={(t, index) => (

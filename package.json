@@ -3,11 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
-    "@mui/material": "^5.12.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -18,12 +13,11 @@
     "async-each": "^1.0.6",
     "axios": "^1.4.0",
     "babel-register": "^6.26.0",
-    "bootstrap": "^5.2.3",
+    "firebase": "^9.23.0",
     "i18next": "^22.5.0",
     "i18next-http-backend": "^2.2.1",
     "parse5": "^7.1.2",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.4",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.3.1",
@@ -58,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-static-block": "^7.21.0",
     "hint": "^7.1.8"
   }
 }

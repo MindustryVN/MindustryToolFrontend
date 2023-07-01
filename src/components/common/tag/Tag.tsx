@@ -1,3 +1,4 @@
+import { API } from '../../../API';
 import '../../../styles.css';
 
 import './Tag.css';
@@ -51,6 +52,18 @@ export class TagChoice {
 			if (r) arr.push(r);
 		}
 		return arr;
+	}
+
+	static SCHEMATIC_UPLOAD_TAG: TagChoice[] = [];
+	static SCHEMATIC_SEARCH_TAG: TagChoice[] = [];
+
+	static getTag(tag: string, result: TagChoice[]) {
+		API.REQUEST.get(`tag/${tag}`) //
+			.then((r) => {
+				let customTagList: Array<CustomTag> = r.data;
+				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
+				temp.forEach((t) => t.forEach((r) => result.push(r)));
+			});
 	}
 }
 

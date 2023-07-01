@@ -12,7 +12,7 @@ export default class LoadUserName extends Component<{ userId: string }, { loadin
 	componentDidMount(): void {
 		if (this.props.userId === 'community') this.setState({ loading: false });
 		else
-			API.REQUEST.get(`/users/${this.props.userId}`)
+			API.REQUEST.get(`/user/${this.props.userId}`)
 				.then((result) => this.setState({ user: result.data })) //
 				.finally(() => this.setState({ loading: false }));
 	}

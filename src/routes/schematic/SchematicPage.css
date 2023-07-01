@@ -118,10 +118,6 @@
 	max-width: min(512px, 100vw);
 }
 
-.requirement-container {
-	flex-wrap: wrap;
-}
-
 .search-button {
 	background-color: var(--black);
 	color: white;
