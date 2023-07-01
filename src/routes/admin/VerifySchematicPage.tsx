@@ -2,7 +2,7 @@ import '../../styles.css';
 import './VerifySchematicPage.css';
 
 import React, { Component, ReactElement, useEffect, useState } from 'react';
-import Tag, { CustomTag, TagChoice } from '../../components/common/tag/Tag';
+import Tag, { TagChoice } from '../../components/common/tag/Tag';
 
 import { API } from '../../API';
 import { Trans } from 'react-i18next';
@@ -222,7 +222,7 @@ export const VerifySchematicPage = () => {
 		);
 
 	return (
-		<div className='verify-schematic'>
+		<div id='verify-schematic' className='verify-schematic'>
 			<section className='schematic-container'>{schematicArray}</section>
 			<footer className='schematic-container-footer'>
 				{loaderState === LoaderState.LOADING ? (
@@ -232,10 +232,11 @@ export const VerifySchematicPage = () => {
 						<button className='button' onClick={() => loadPage()}>
 							{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 						</button>
-						<ScrollToTopButton />
+						<ScrollToTopButton container='verify-schematic' />
 					</section>
 				)}
 			</footer>
+			+
 		</div>
 	);
 };

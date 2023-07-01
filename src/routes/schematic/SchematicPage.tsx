@@ -62,7 +62,6 @@ const Schematic = () => {
 			signal: controller.signal
 		})
 			.then((result) => {
-				console.log(result.cached);
 				let schematics: SchematicData[] = result.data;
 				if (schematics.length) {
 					if (newPage) schematicList.push(schematics);
@@ -225,7 +224,7 @@ const Schematic = () => {
 	if (showSchematicModel === true && currentSchematic !== undefined) return buildSchematicData(currentSchematic);
 
 	return (
-		<div className='schematic'>
+		<div id='schematic' className='schematic'>
 			<header className='flexbox-column medium-gap'>
 				<section className='search-container'>
 					<Dropbox
@@ -264,7 +263,7 @@ const Schematic = () => {
 						<button className='button' type='button' onClick={() => loadPage()}>
 							{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 						</button>
-						<ScrollToTopButton />
+						<ScrollToTopButton container='schematic' />
 					</section>
 				)}
 			</footer>

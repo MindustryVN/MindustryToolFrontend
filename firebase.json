@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "build",
+    "site": "mindustrytool",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -21,12 +22,9 @@
           {
             "key": "Referrer-Policy",
             "value": "no-referrer"
-          },
-          {
-            "key": "Feature-Policy",
-            "value": "microphone 'self'"
           }
-        ]
+        ],
+        "directive":"immutable"
       }
     ],
     "rewrites": [

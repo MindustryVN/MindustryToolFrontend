@@ -118,7 +118,6 @@
 	max-width: min(512px, 100vw);
 }
 
-
 .search-button {
 	background-color: var(--black);
 	color: white;

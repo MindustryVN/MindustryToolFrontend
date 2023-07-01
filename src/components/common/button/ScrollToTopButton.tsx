@@ -1,10 +1,12 @@
 import '../../../styles.css';
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 
-export default class ScrollToTopButton extends Component {
+export default class ScrollToTopButton extends Component<{ container: string }> {
 	scrollToTop() {
-		window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+		let container = document.getElementById(this.props.container);
+		if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
+		else throw new Error(`Container element is not found in ${this}`);
 	}
 
 	render() {
