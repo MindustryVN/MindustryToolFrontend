@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "mindustrytool",
-    "public": "public",
+    "public": "build",
     "ignore": [
       "**/node_modules/**"
     ],
