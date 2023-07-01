@@ -56,10 +56,7 @@ function App() {
 		if (accessToken) {
 			API.setBearerToken(accessToken);
 			API.REQUEST.get('/users') //
-				.then((result) => {
-					if (result.status === 200) handleLogin(result.data);
-					else localStorage.removeItem(ACCESS_TOKEN);
-				})
+				.then((result) => handleLogin(result.data))
 				.catch(() => handleLogOut())
 				.finally(() => setLoading(false));
 		} else setLoading(false);

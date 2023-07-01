@@ -50,9 +50,8 @@ export const VerifySchematicPage = () => {
 		for (let i = 0; i < page; i++) {
 			API.REQUEST.get(`schematic-upload/page/${i}`)
 				.then((result) => {
-					if (result.status === 200 && result.data) {
-						let schematics: SchematicData[] = result.data;
-
+					let schematics: SchematicData[] = result.data;
+					if (schematics.length) {
 						if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState(LoaderState.NO_MORE);
 						else setLoaderState(LoaderState.MORE);
 
@@ -71,8 +70,8 @@ export const VerifySchematicPage = () => {
 
 		API.REQUEST.get(`schematic-upload/page/${schematicList.length + (newPage ? 0 : -1)}`)
 			.then((result) => {
-				if (result.status === 200 && result.data) {
-					let schematics: SchematicData[] = result.data;
+				let schematics: SchematicData[] = result.data;
+				if (schematics.length) {
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
 

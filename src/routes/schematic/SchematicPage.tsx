@@ -4,18 +4,17 @@ import './SchematicPage.css';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { API } from '../../API';
 import { StarIcon, TrashCanIcon } from '../../components/Icon';
-import Tag, { CustomTag, SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../components/common/tag/Tag';
-import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
-import { capitalize } from '../../util/StringUtils';
-
 import ScrollToTopButton from '../../components/common/button/ScrollToTopButton';
 import TagRemoveButton from '../../components/common/button/TagRemoveButton';
 import Dropbox from '../../components/common/dropbox/Dropbox';
 import LazyLoadImage from '../../components/common/img/LazyLoadImage';
 import LoadingSpinner from '../../components/common/loader/LoadingSpinner';
 import SchematicData from '../../components/common/schematic/SchematicData';
+import Tag, { CustomTag, SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../components/common/tag/Tag';
 import TagPick from '../../components/common/tag/TagPick';
 import UserData from '../../components/common/user/UserData';
+import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
+import { capitalize } from '../../util/StringUtils';
 import UserName from '../user/LoadUserName';
 
 const Schematic = ({ user }: { user: UserData | undefined }) => {
@@ -35,6 +34,8 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 
 	const [schematicSearchTag, setSchematicSearchTag] = useState<Array<TagChoice>>([]);
 
+	const controller = new AbortController();
+
 	useEffect(() => {
 		getSchematicSearchTag();
 		loadPage();
@@ -47,7 +48,7 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 				let tagChoiceList: Array<TagChoice> = [];
 				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
 
-				temp.forEach((t) => t.forEach((r) => tagChoiceList.push(r)));
+				temp.forEach((t) => tagChoiceList.push(...t));
 				setSchematicSearchTag(tagChoiceList);
 			});
 	}
@@ -60,6 +61,8 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 			currentQuery.current = { tag: tagQuery, sort: sortQuery };
 		}
 
+		controller.abort();
+
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
 
@@ -67,12 +70,12 @@ const Schematic = ({ user }: { user: UserData | undefined }) => {
 			params: {
 				tags: `${tagQuery.map((t) => `${t.name}:${t.value}`).join()}`, //
 				sort: sortQuery.value
-			}
+			},
+			signal: controller.signal
 		})
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
-
-				if (result.status === 200 && schematics.length > 0) {
+				if (schematics.length) {
 					if (newPage) schematicList.push(schematics);
 					else schematicList[lastIndex] = schematics;
 
