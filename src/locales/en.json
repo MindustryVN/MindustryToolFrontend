@@ -1,5 +1,8 @@
 {
-    "loading": "Loading",
+    "loading": {
+        "short": "Loading",
+        "long": "Please wait 1-2 minutes"
+    },
     "tags": {
         "categories": {
             "author": "Author",

@@ -1,25 +1,24 @@
-import './UploadSchematicPage.css';
 import '../../styles.css';
+import './UploadSchematicPage.css';
 
-import SchematicPreview from '../../components/common/schematic/SchematicPreview';
-import Dropbox from '../../components/common/dropbox/Dropbox';
-import React from 'react';
-import TagRemoveButton from '../../components/common/button/TagRemoveButton';
-
-import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
-import { getFileExtension } from '../../util/StringUtils';
-import { ChangeEvent, useState } from 'react';
-import { Trans } from 'react-i18next';
-import Tag, { TagChoice } from '../../components/common/tag/Tag';
+import React, { ChangeEvent, useState } from 'react';
 import { API } from '../../API';
 import { useGlobalContext } from '../../App';
+import { QUIT_ICON } from '../../components/common/Icon';
+import ClearIconButton from '../../components/common/button/ClearIconButton';
+import Dropbox from '../../components/common/dropbox/Dropbox';
+import SchematicPreviewData from '../../components/common/schematic/SchematicUploadPreview';
+import Tag, { TagChoice } from '../../components/common/tag/Tag';
+import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
+import i18n from '../../util/I18N';
+import { getFileExtension } from '../../util/StringUtils';
 
 const tabs = ['File', 'Code'];
 
 const Upload = () => {
 	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
-	const [preview, setPreview] = useState<SchematicPreview>();
+	const [preview, setPreview] = useState<SchematicPreviewData>();
 
 	const [tag, setTag] = useState<string>('');
 
@@ -53,8 +52,10 @@ const Upload = () => {
 		navigator.clipboard
 			.readText() //
 			.then((text) => {
-				if (!text.startsWith('bXNja')) return;
-				if (text === code) return;
+				if (!text.startsWith('bXNja')) {
+					alert('Not schematic code');
+					return;
+				}
 
 				setCode(text);
 				setFile(undefined);
@@ -68,7 +69,7 @@ const Upload = () => {
 	}
 
 	function getPreview(form: FormData) {
-		API.REQUEST.post('schematic/preview', form) //
+		API.REQUEST.post('schematic-upload/preview', form) //
 			.then((result) => setPreview(result.data));
 	}
 
@@ -126,7 +127,7 @@ const Upload = () => {
 			case tabs[1]:
 				return (
 					<div>
-						<label className='button' htmlFor='ub'>
+						<label className='button' htmlFor='ufb'>
 							Copy from clipboard
 						</label>
 						<button id='ufb' className='button' type='button' onClick={() => handleCodeChange()}></button>
@@ -142,8 +143,8 @@ const Upload = () => {
 		<div className='upload'>
 			<div className='upload-model'>
 				<div className='preview-container '>
-					<div className='upload-button flexbox-column medium-gap'>
-						<div className='flexbox-center'>
+					<div className='upload-button flex-column medium-gap'>
+						<div className='flex-center'>
 							<section className='grid-row small-gap  light-border small-padding'>
 								{tabs.map((name, index) => (
 									<button className={currentTab === name ? 'button-active' : 'button'} key={index} type='button' onClick={() => setCurrentTab(name)}>
@@ -152,12 +153,12 @@ const Upload = () => {
 								))}
 							</section>
 						</div>
-						<div className='flexbox-center'>{renderTab(currentTab)}</div>
+						<div className='flex-center'>{renderTab(currentTab)}</div>
 						<div className='preview-image-container'>{preview && <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file' />}</div>
 					</div>
 					<div className='upload-description-container'>
 						{preview && (
-							<div className='flexbox-column text-center'>
+							<div className='flex-column text-center'>
 								{<div>Author: {user ? user.name : 'community'}</div>}
 								<div>Name: {preview.name}</div>
 								{preview.description && <p> {preview.description}</p>}
@@ -180,20 +181,16 @@ const Upload = () => {
 								items={TagChoice.SCHEMATIC_UPLOAD_TAG.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tags.includes(t))}
 								onChange={(event) => setTag(event.target.value)}
 								onChoose={(item) => handleAddTag(item)}
-								converter={(t, index) => (
-									<span key={index}>
-										<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
-									</span>
-								)}
+								converter={(t, index) => <span key={index} children={`${i18n.t(t.name)}:${i18n.t(t.value)}`} />}
 							/>
 
-							<div className='flexbox-row flex-wrap medium-gap'>
+							<div className='flex-row flex-wrap medium-gap'>
 								{tags.map((t: TagChoice, index: number) => (
-									<Tag key={index} tag={t} removeButton={<TagRemoveButton onClick={() => handleRemoveTag(index)} />} />
+									<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>
-						<section className='flexbox-center'>
+						<section className='flex-center'>
 							<button className='button' type='button' onClick={() => handleSubmit()}>
 								Upload
 							</button>

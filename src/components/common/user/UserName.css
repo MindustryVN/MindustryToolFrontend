@@ -20,7 +20,8 @@
 }
 
 .admin {
-	background-color: lime;
+	color: lime;
+	text-transform: uppercase;
 }
 
 .user-name-card > * {
@@ -37,4 +38,5 @@
 
 .name {
 	text-decoration: none;
+	text-transform: capitalize;
 }

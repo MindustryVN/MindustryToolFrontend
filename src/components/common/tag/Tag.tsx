@@ -6,17 +6,20 @@ import './Tag.css';
 import React, { ReactElement } from 'react';
 import { Trans } from 'react-i18next';
 
-export default class Tag extends React.Component<{ tag: TagChoice; removeButton?: ReactElement }> {
-	render() {
-		return (
-			<div className='tag flexbox-row flex-nowrap small-padding center' style={{ backgroundColor: this.props.tag.color }}>
-				<div className='flexbox-column text-center'>
-					<Trans i18nKey={`tag.category.${this.props.tag.name}`} />: <Trans i18nKey={`tag.value.${this.props.tag.value}`} />
-				</div>
-				{this.props.removeButton}
+interface TagParam {
+	tag: TagChoice;
+	removeButton?: ReactElement;
+}
+
+export default function Tag(param: TagParam) {
+	return (
+		<div className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: param.tag.color }}>
+			<div className='flex-column text-center'>
+				<Trans i18nKey={`tag.category.${param.tag.name}`} />: <Trans i18nKey={`tag.value.${param.tag.value}`} />
 			</div>
-		);
-	}
+			{param.removeButton}
+		</div>
+	);
 }
 
 export interface CustomTag {

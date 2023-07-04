@@ -7,15 +7,15 @@ import Tag, { TagChoice } from '../../components/common/tag/Tag';
 import { API } from '../../API';
 import { Trans } from 'react-i18next';
 import { capitalize } from '../../util/StringUtils';
-import { LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
+import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 
-import TagRemoveButton from '../../components/common/button/TagRemoveButton';
-import UserName from '../user/LoadUserName';
+import UserName from '../../components/common/user/LoadUserName';
 import SchematicData from '../../components/common/schematic/SchematicData';
-import LazyLoadImage from '../../components/common/img/LazyLoadImage';
 import Dropbox from '../../components/common/dropbox/Dropbox';
 import LoadingSpinner from '../../components/common/loader/LoadingSpinner';
 import ScrollToTopButton from '../../components/common/button/ScrollToTopButton';
+import ClearIconButton from '../../components/common/button/ClearIconButton';
+import { QUIT_ICON } from '../../components/common/Icon';
 
 export const VerifySchematicPage = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
@@ -86,9 +86,9 @@ export const VerifySchematicPage = () => {
 							setCurrentSchematic(schematic);
 							setShowSchematicModel(true);
 						}}>
-						<LazyLoadImage className='schematic-image' path={`schematic-upload/${schematic.id}/image`}></LazyLoadImage>
+						<img className='schematic-image' src={`${API_BASE_URL}schematic-upload/${schematic.id}/image`}/>
 					</button>
-					<div className='schematic-preview-description flexbox-center'>{capitalize(schematic.name)}</div>
+					<div className='schematic-preview-description flex-center'>{capitalize(schematic.name)}</div>
 
 					<section className='schematic-info-button-container grid-row small-gap small-padding'>
 						<a className='button  small-padding' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
@@ -107,25 +107,27 @@ export const VerifySchematicPage = () => {
 		}
 	}
 
-	class SchematicVerifyPanel extends Component<{ schematic: SchematicData }, { tags: TagChoice[]; tag: string }> {
-		state = {
-			tags: TagChoice.parseArray(this.props.schematic.tags, TagChoice.SCHEMATIC_UPLOAD_TAG),
-			tag: ''
-		};
+	interface SchematicVerifyPanelParam {
+		schematic: SchematicData;
+	}
 
-		handleRemoveTag(index: number) {
-			this.setState({ tags: [...this.state.tags.filter((_, i) => i !== index)] });
+	function SchematicVerifyPanel(param: SchematicVerifyPanelParam) {
+		const [tags, setTags] = useState(TagChoice.parseArray(param.schematic.tags, TagChoice.SCHEMATIC_UPLOAD_TAG));
+		const [tag, setTag] = useState('');
+
+		function handleRemoveTag(index: number) {
+			setTags([...tags.filter((_, i) => i !== index)]);
 		}
 
-		deleteSchematic(id: string) {
+		function deleteSchematic(id: string) {
 			setShowSchematicModel(false);
 			API.REQUEST.delete(`schematic-upload/${id}`) //
 				.finally(() => loadToPage(schematicList.length));
 		}
 
-		verifySchematic(schematic: SchematicData) {
+		function verifySchematic(schematic: SchematicData) {
 			let form = new FormData();
-			const tagString = `${this.state.tags.map((t) => `${t.name}:${t.value}`).join()}`;
+			const tagString = `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
 
 			form.append('id', schematic.id);
 			form.append('authorId', schematic.authorId);
@@ -140,80 +142,78 @@ export const VerifySchematicPage = () => {
 				});
 		}
 
-		handleAddTag(tag: TagChoice) {
+		function handleAddTag(tag: TagChoice) {
 			if (!tag) return;
-			this.state.tags.filter((q) => q.name !== tag.name);
-			this.setState((prev) => ({ tags: [...prev.tags, tag], tag: '' }));
+			tags.filter((q) => q.name !== tag.name);
+			setTags((prev) => [...prev, tag]);
+			setTag('');
 		}
+		const blob = new Blob([Buffer.from(param.schematic.data, 'base64')], { type: 'text/plain' });
+		const url = window.URL.createObjectURL(blob);
 
-		render() {
-			const blob = new Blob([Buffer.from(this.props.schematic.data, 'base64')], { type: 'text/plain' });
-			const url = window.URL.createObjectURL(blob);
-
-			return (
-				<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
-					<LazyLoadImage className='schematic-info-image' path={`schematic-upload/${this.props.schematic.id}/image`} />
-					<div className='schematic-info-desc-container small-gap'>
-						<span>Name: {capitalize(this.props.schematic.name)}</span>
-						<span>
-							Author: <UserName userId={this.props.schematic.authorId} />
-						</span>
-						{this.props.schematic.description && <span>{this.props.schematic.description}</span>}
-						{this.props.schematic.requirement && (
-							<section className=' flexbox-row small-gap flex-wrap'>
-								{this.props.schematic.requirement.map((r, index) => (
-									<span key={index} className='text-center'>
-										<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
-										<span> {r.amount} </span>
-									</span>
-								))}
-							</section>
-						)}
-
-						<div className='flexbox-column small-gap'>
-							<Dropbox
-								placeholder='Add tags'
-								value={this.state.tag}
-								items={TagChoice.SCHEMATIC_UPLOAD_TAG.filter((t) => (t.name.includes(this.state.tag) || t.value.includes(this.state.tag)) && !this.state.tags.includes(t))}
-								onChange={(event) => this.setState({ tag: event.target.value })}
-								onChoose={(item) => this.handleAddTag(item)}
-								converter={(t, index) => (
-									<span key={index}>
-										<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
-									</span>
-								)}
-							/>
-							<div className='tag-container small-gap'>
-								{this.state.tags.map((t: TagChoice, index: number) => (
-									<Tag key={index} tag={t} removeButton={<TagRemoveButton onClick={() => this.handleRemoveTag(index)} />} />
-								))}
-							</div>
-						</div>
-						<section className='flexbox small-gap flex-wrap center'>
-							<a className='button  small-padding' href={url} download={`${this.props.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
-								<img src='/assets/icons/download.png' alt='download' />
-							</a>
-							<button className='button  small-padding' type='button' onClick={() => navigator.clipboard.writeText(this.props.schematic.data).then(() => alert('Copied'))}>
-								<img src='/assets/icons/copy.png' alt='copy' />
-							</button>
-
-							<button className='button' type='button' onClick={() => this.verifySchematic(this.props.schematic)}>
-								Verify
-							</button>
-							<button className='button' type='button' onClick={() => this.deleteSchematic(this.props.schematic.id)}>
-								Reject
-							</button>
+		return (
+			<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
+				<img className='schematic-info-image' src={`${API_BASE_URL}schematic-upload/${param.schematic.id}/image`} />
+				<div className='schematic-info-desc-container small-gap'>
+					<span>Name: {capitalize(param.schematic.name)}</span>
+					<span>
+						Author: <UserName userId={param.schematic.authorId} />
+					</span>
+					{param.schematic.description && <span>{param.schematic.description}</span>}
+					{param.schematic.requirement && (
+						<section className=' flex-row small-gap flex-wrap'>
+							{param.schematic.requirement.map((r, index) => (
+								<span key={index} className='text-center'>
+									<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+									<span> {r.amount} </span>
+								</span>
+							))}
 						</section>
+					)}
+
+					<div className='flex-column small-gap'>
+						<Dropbox
+							placeholder='Add tags'
+							value={tag}
+							items={TagChoice.SCHEMATIC_UPLOAD_TAG.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tags.includes(t))}
+							onChange={(event) => setTag(event.target.value)}
+							onChoose={(item) => handleAddTag(item)}
+							converter={(t, index) => (
+								<span key={index}>
+									<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
+								</span>
+							)}
+						/>
+						<div className='tag-container small-gap'>
+							{tags.map((t: TagChoice, index: number) => (
+								<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
+							))}
+						</div>
 					</div>
+					<section className='flexbox small-gap flex-wrap center'>
+						<a className='button  small-padding' href={url} download={`${param.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+							<img src='/assets/icons/download.png' alt='download' />
+						</a>
+						<button className='button  small-padding' type='button' onClick={() => navigator.clipboard.writeText(param.schematic.data).then(() => alert('Copied'))}>
+							<img src='/assets/icons/copy.png' alt='copy' />
+						</button>
+
+						<button className='button' type='button' onClick={() => verifySchematic(param.schematic)}>
+							Verify
+						</button>
+						<button className='button' type='button' onClick={() => deleteSchematic(param.schematic.id)}>
+							Reject
+						</button>
+					</section>
 				</div>
-			);
-		}
+			</div>
+		);
 	}
 
 	if (showSchematicModel === true && currentSchematic !== undefined)
 		return (
-			<div className='schematic-info-modal model flexbox-center image-background' onClick={() => setShowSchematicModel(false)}>
-				<div className='flexbox-center'>
+			<div className='schematic-info-modal model flex-center image-background' onClick={() => setShowSchematicModel(false)}>
+				<div className='flex-center'>
 					<div className='schematic-card '>
 						<SchematicVerifyPanel schematic={currentSchematic} />
 					</div>
@@ -232,7 +232,7 @@ export const VerifySchematicPage = () => {
 						<button className='button' onClick={() => loadPage()}>
 							{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 						</button>
-						<ScrollToTopButton container='verify-schematic' />
+						<ScrollToTopButton containerId='verify-schematic' />
 					</section>
 				)}
 			</footer>

@@ -4,7 +4,7 @@ import React from 'react';
 
 const HowToDownloadMindustry = () => {
 	return (
-		<div className='flexbox-column'>
+		<div className='flex-column'>
 			<h3>Cách để tải mindustry free</h3>
 			<ul>
 				<li>

@@ -7,7 +7,6 @@ import { VerifySchematicPage } from './VerifySchematicPage';
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
 const Admin = () => {
-
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	function renderTab(currentTab: string) {
@@ -28,7 +27,7 @@ const Admin = () => {
 
 	return (
 		<main className='admin'>
-			<div className='flexbox-center'>
+			<div className='flex-center'>
 				<section className='tab-button-container grid-row small-gap  light-border small-padding'>
 					{tabs.map((name, index) => (
 						<button className={currentTab === name ? 'button-active' : 'button'} key={index} type='button' onClick={() => setCurrentTab(name)}>
@@ -37,7 +36,7 @@ const Admin = () => {
 					))}
 				</section>
 			</div>
-			<section className='flexbox-center'>{renderTab(currentTab)}</section>
+			<section className='flex-center'>{renderTab(currentTab)}</section>
 		</main>
 	);
 };

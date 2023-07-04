@@ -14,7 +14,7 @@ export const PNG_IMAGE_PREFIX = 'data:image/png;base64,';
 
 export const DISCORD_AUTH_URL = API_BASE_URL + 'oauth2/authorize/discord?redirect_uri=' + OAUTH2_REDIRECT_URL;
 
-export const WEB_VERSION = 'Beta 0.1.2';
+export const WEB_VERSION = 'Beta 0.1.3';
 
 export enum LoaderState {
 	LOADING,

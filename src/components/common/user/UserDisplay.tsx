@@ -1,10 +1,10 @@
+import '../../../styles.css';
+import './UserDisplay.css';
+
 import React from 'react';
-import { useGlobalContext } from '../../App';
+import { useGlobalContext } from '../../../App';
 import UserName from './UserName';
 import { useNavigate } from 'react-router-dom';
-
-import '../../styles.css';
-import './UserDisplay.css';
 
 const UserDisplay = () => {
 	const { user } = useGlobalContext();

@@ -3,7 +3,6 @@ import './UserPage.css';
 import React from 'react';
 
 import { useGlobalContext } from '../../App';
-import UserName from './UserName';
 import { Navigate } from 'react-router-dom';
 
 const UserPage = () => {
@@ -11,7 +10,7 @@ const UserPage = () => {
 
 	if (user)
 		return (
-			<div className='flexbox-center'>
+			<div className='flex-center'>
 				<button className='button small-padding' type='button' onClick={() => handleLogout()}>
 					Logout
 				</button>

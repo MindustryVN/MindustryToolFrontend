@@ -4,11 +4,17 @@ import Loading from '../common/loader/Loading';
 import UserData from '../common/user/UserData';
 import { useGlobalContext } from '../../App';
 
-const PrivateRoute = ({ element }: { element: ReactElement }) => {
+interface PrivateRouteParam {
+	element: ReactElement;
+}
+
+const PrivateRoute = (param: PrivateRouteParam) => {
 	const { loading, user } = useGlobalContext();
 
 	if (loading) return <Loading />;
-	if (UserData.isUser(user)) return element;
+
+	if (UserData.isUser(user)) return param.element;
+	
 	return <Navigate to='/login' />;
 };
 
