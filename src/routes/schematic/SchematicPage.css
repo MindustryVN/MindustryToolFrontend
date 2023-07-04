@@ -60,39 +60,6 @@
 	margin: 10px;
 }
 
-.schematic-preview {
-	width: var(--preview-image-min-size);
-	border-radius: 5px;
-	overflow: hidden;
-	border: 2px solid var(--white);
-	background-color: var(--black);
-}
-
-.schematic-image-wrapper {
-	width: var(--preview-image-min-size);
-	height: var(--preview-image-min-size);
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	background-color: var(--black);
-}
-
-.schematic-image {
-	width: var(--preview-image-min-size);
-	height: var(--preview-image-min-size);
-
-	border-bottom: 2px solid var(--white);
-}
-
-.schematic-preview-description {
-	font-weight: 600;
-	font-size: small;
-
-	height: 2rem;
-}
-
 .schematic-info {
 	overflow: hidden auto;
 

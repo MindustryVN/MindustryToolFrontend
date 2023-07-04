@@ -5,14 +5,14 @@ import '../../../styles.css';
 import './Loading.css';
 
 const Loading = () => {
-	const [message, setMessage] = useState<string>('loading');
+	const [message, setMessage] = useState<string>('loading.short');
 
 	useEffect(() => {
-		setTimeout(() => setMessage('loading.wait12'), 5000);
+		setTimeout(() => setMessage('loading.long'), 5000);
 	}, []);
 
 	return (
-		<span className='flexbox-center loading'>
+		<span className='flex-center loading'>
 			<Trans i18nKey={message} />
 		</span>
 	);

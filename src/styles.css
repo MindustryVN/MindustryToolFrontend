@@ -1,21 +1,17 @@
-.no-border {
-	border: none;
-	outline: none;
-}
-
 .button {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
 	color: white;
-	border-radius: 5px;
+	background-color: var(--black);
+	
 	outline: none;
 	cursor: pointer;
-
+	
 	padding: 0.2rem;
-
-	background-color: var(--black);
+	
+	border-radius: 5px;
 	border: 2px solid var(--gray);
 }
 
@@ -25,33 +21,20 @@
 	justify-content: center;
 	align-items: center;
 
-	background-color: var(--yellow);
 	color: var(--black);
+	background-color: var(--yellow);
 
-	border-radius: 5px;
 	outline: none;
 	cursor: pointer;
-
+	
 	padding: 0.2rem;
-
+	
+	border-radius: 5px;
 	border: 2px solid var(--gray);
 }
 
-.small-icon {
-	height: 1rem;
-	width: 1rem;
-}
-
-.medium-icon {
-	height: 2rem;
-	width: 2rem;
-}
-
 .text-center {
-	display: flex;
 	text-align: center;
-	align-items: center;
-	justify-content: center;
 }
 
 .small-gap {
@@ -62,19 +45,23 @@
 	gap: 0.5rem;
 }
 
+.big-gap {
+	gap: 1rem;
+}
+
 .small-padding {
 	padding: 0.25rem;
 }
 
-.model {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	left: 0;
-	top: 0;
+.medium-padding {
+	padding: 0.5rem;
 }
 
-.flexbox-center {
+.big-padding {
+	padding: 1rem;
+}
+
+.flex-center {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -86,12 +73,12 @@
 	align-items: center;
 }
 
-.flexbox-row {
+.flex-row {
 	display: flex;
 	flex-direction: row;
 }
 
-.flexbox-column {
+.flex-column {
 	display: flex;
 	flex-direction: column;
 }
@@ -110,14 +97,40 @@
 	grid-auto-columns: 1fr;
 }
 
-.half-box {
-	height: 50%;
-	width: 50%;
+.w100p {
+	width: 100%;
 }
 
-.full-box {
+.h100p {
 	height: 100%;
-	width: 100%;
+}
+
+.w100v {
+	width: 100vw;
+}
+
+.h100v {
+	height: 100vh;
+}
+
+.w1rem {
+	width: 1rem;
+}
+
+.w2rem {
+	width: 2rem;
+}
+
+.h1rem {
+	height: 1rem;
+}
+
+.h2rem {
+	height: 2rem;
+}
+
+.border-box {
+	box-sizing: border-box;
 }
 
 .forum-image {
@@ -128,7 +141,10 @@
 	border-radius: 5px;
 }
 
-.small-icon {
-	height: 1rem;
-	width: 1rem;
+.pos-fixed {
+	position: fixed;
+}
+
+.pos-absolute {
+	position: absolute;
 }

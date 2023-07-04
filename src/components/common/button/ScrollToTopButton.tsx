@@ -1,19 +1,23 @@
 import '../../../styles.css';
 
-import React, { Component } from 'react';
+import React from 'react';
+import IconButton from './IconButton';
 
-export default class ScrollToTopButton extends Component<{ container: string }> {
-	scrollToTop() {
-		let container = document.getElementById(this.props.container);
+interface ScrollToTopButtonParam {
+	//id of the container
+	containerId: string;
+}
+
+export default function ScrollToTopButton(param: ScrollToTopButtonParam) {
+	function scrollToTop() {
+		let container = document.getElementById(param.containerId);
 		if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
-		else throw new Error(`Container element is not found in ${this}`);
+		else throw new Error(`Container element is not found with id ${param}`);
 	}
 
-	render() {
-		return (
-			<button className='button' type='button' onClick={() => this.scrollToTop()}>
-				Scroll to top
-			</button>
-		);
-	}
+	return (
+		<button className='button' type='button' onClick={() => scrollToTop()}>
+			Scroll to top
+		</button>
+	);
 }
