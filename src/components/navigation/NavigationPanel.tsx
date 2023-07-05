@@ -1,13 +1,13 @@
 import './NavigationPanel.css';
 import '../../styles.css';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import UserData from '../user/UserData';
-import { useGlobalContext } from '../../App';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../provider/UserProvider';
 
 export default function NavigationPanel() {
-	const { user } = useGlobalContext();
+	const { user } = useContext(UserContext);
 
 	return (
 		<nav className='navigation-panel'>

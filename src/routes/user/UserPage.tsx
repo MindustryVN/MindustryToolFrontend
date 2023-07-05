@@ -1,12 +1,12 @@
 import './UserPage.css';
 
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { useGlobalContext } from '../../App';
 import { Navigate } from 'react-router-dom';
+import { UserContext } from '../../components/provider/UserProvider';
 
 export default function UserPage() {
-	const { user, handleLogout } = useGlobalContext();
+	const { user, handleLogout } = useContext(UserContext);
 
 	if (user)
 		return (

@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-static-block": "^7.21.0",
+    "@types/uuid": "^9.0.2",
     "hint": "^7.1.8"
   }
 }

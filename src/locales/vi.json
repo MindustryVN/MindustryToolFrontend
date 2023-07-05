@@ -1,4 +1,5 @@
 {
+    "copied": "Đã sao chép",
     "loading": {
         "short": "Đang tải",
         "long": "Đang tải, vui lòng đợi 1-2 phút."
@@ -18,5 +19,10 @@
             "big": "Lớn",
             "huge": "Rất lớn"
         }
+    },
+    "upload":{
+        "invalid-schematic-file" : "File bản thiết kế không hợp lệ, file phải có đuôi .msch",
+        "no-tag":"Thêm ít nhất một nhãn(Tag) để đăng",
+        "no-data" :"Vui lòng thêm dữ liệu bản thiết kế"
     }
 }

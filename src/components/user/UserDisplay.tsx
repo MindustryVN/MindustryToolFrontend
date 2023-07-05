@@ -1,13 +1,13 @@
 import '../../styles.css';
 import './UserDisplay.css';
 
-import React from 'react';
-import { useGlobalContext } from '../../App';
+import React, { useContext } from 'react';
 import UserName from './UserName';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../provider/UserProvider';
 
 export default function UserDisplay() {
-	const { user } = useGlobalContext();
+	const { user } = useContext(UserContext);
 
 	const navigate = useNavigate();
 

@@ -1,12 +1,11 @@
 import '../../styles.css';
 import './VerifySchematicPage.css';
 
-import React, { Component, ReactElement, useEffect, useState } from 'react';
+import React, { Component, ReactElement, useContext, useEffect, useState } from 'react';
 import Tag, { TagChoice } from '../../components/tag/Tag';
 
 import { API } from '../../API';
 import { Trans } from 'react-i18next';
-import { capitalize } from '../../util/StringUtils';
 import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 
 import UserName from '../../components/user/LoadUserName';
@@ -19,6 +18,8 @@ import { COPY_ICON, QUIT_ICON } from '../../components/common/Icon';
 import { Utils } from '../../util/Utils';
 import SchematicPreview from '../../components/schematic/SchematicPreview';
 import IconButton from '../../components/button/IconButton';
+import { AlertContext } from '../../components/provider/AlertProvider';
+import i18n from '../../util/I18N';
 
 export const VerifySchematicPage = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
@@ -27,6 +28,8 @@ export const VerifySchematicPage = () => {
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
+
+	const { useAlert } = useContext(AlertContext);
 
 	useEffect(() => loadPage(), []);
 
@@ -79,13 +82,16 @@ export const VerifySchematicPage = () => {
 		const [tags, setTags] = useState(TagChoice.parseArray(props.schematic.tags, TagChoice.SCHEMATIC_UPLOAD_TAG));
 		const [tag, setTag] = useState('');
 
+		const { useAlert } = useContext(AlertContext);
+
 		function handleRemoveTag(index: number) {
 			setTags([...tags.filter((_, i) => i !== index)]);
 		}
 
-		function deleteSchematic(id: string) {
+		function deleteSchematic(schematic: SchematicData) {
 			setShowSchematicModel(false);
-			API.REQUEST.delete(`schematic-upload/${id}`) //
+			API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
+				.then(() => useAlert(i18n.t('deleted'), 5, 'info'))
 				.finally(() => loadToPage(schematicList.length));
 		}
 
@@ -100,6 +106,7 @@ export const VerifySchematicPage = () => {
 			form.append('tags', tagString);
 
 			API.REQUEST.post('schematic', form) //
+				.then(() => useAlert(i18n.t('verified'), 5, 'info'))
 				.finally(() => {
 					loadToPage(schematicList.length);
 					setShowSchematicModel(false);
@@ -112,18 +119,16 @@ export const VerifySchematicPage = () => {
 			setTags((prev) => [...prev, tag]);
 			setTag('');
 		}
-		const blob = new Blob([Buffer.from(props.schematic.data, 'base64')], { type: 'text/plain' });
-		const url = window.URL.createObjectURL(blob);
 
 		return (
 			<div className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
 				<img className='schematic-info-image' src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} alt='schematic' />
 				<div className='flex-column small-gap'>
-					<span>{capitalize(props.schematic.name)}</span>
+					<span className='capitalize'>{props.schematic.name}</span>
 					<span>
 						<UserName userId={props.schematic.authorId} />
 					</span>
-					{props.schematic.description && <span>{props.schematic.description}</span>}
+					{props.schematic.description && <span className='capitalize'>{props.schematic.description}</span>}
 					{props.schematic.requirement && (
 						<section className=' flex-row small-gap flex-wrap'>
 							{props.schematic.requirement.map((r, index) => (
@@ -155,17 +160,14 @@ export const VerifySchematicPage = () => {
 						</div>
 					</div>
 					<section className='grid-row small-gap'>
-						<a className='button  small-padding' href={url} download={`${props.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+						<a className='button small-padding' href={Utils.getDownloadUrl(props.schematic.data)} download={`${props.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 							<img src='/assets/icons/download.png' alt='download' />
 						</a>
-						<button className='button  small-padding' type='button' onClick={() => navigator.clipboard.writeText(props.schematic.data).then(() => alert('Copied'))}>
-							<img src='/assets/icons/copy.png' alt='copy' />
-						</button>
-
+						<IconButton icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(props.schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))} />
 						<button className='button' type='button' onClick={() => verifySchematic(props.schematic)}>
 							Verify
 						</button>
-						<button className='button' type='button' onClick={() => deleteSchematic(props.schematic.id)}>
+						<button className='button' type='button' onClick={() => deleteSchematic(props.schematic)}>
 							Reject
 						</button>
 						<button className='button' type='button' onClick={() => setShowSchematicModel(false)}>
@@ -201,7 +203,7 @@ export const VerifySchematicPage = () => {
 							setShowSchematicModel(true);
 						}}
 						buttons={[
-							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data)} />, //
+							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))} />, //
 							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/download.png' alt='download' />
 							</a>
