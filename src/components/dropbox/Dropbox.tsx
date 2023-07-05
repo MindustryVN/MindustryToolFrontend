@@ -1,10 +1,10 @@
 import './Dropbox.css';
-import '../../../styles.css';
+import '../../styles.css';
 
 import React, { ChangeEventHandler, ReactNode, useState } from 'react';
 import DropboxElement from './DropboxElement';
 
-interface DropboxParam<ItemType> {
+interface DropboxProps<ItemType> {
 	placeholder?: string;
 	value: string;
 	items: ItemType[];
@@ -15,7 +15,7 @@ interface DropboxParam<ItemType> {
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-export default function Dropbox<ItemType>(param: DropboxParam<ItemType>) {
+export default function Dropbox<ItemType>(props: DropboxProps<ItemType>) {
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
@@ -25,29 +25,29 @@ export default function Dropbox<ItemType>(param: DropboxParam<ItemType>) {
 					className='dropbox-text'
 					title='Choose tag'
 					type='text'
-					value={param.value}
-					placeholder={param.placeholder}
+					value={props.value}
+					placeholder={props.placeholder}
 					onChange={(event) => {
-						if (param.onChange) param.onChange(event);
+						if (props.onChange) props.onChange(event);
 						setShowDropbox(true);
 					}}
 					onClick={() => setShowDropbox((prev) => !prev)}
 					onFocus={() => () => setShowDropbox((prev) => !prev)}
 				/>
-				{param.insideChildren}
+				{props.insideChildren}
 			</section>
 			<section className='dropbox-popup'>
 				{showDropbox && (
 					<section className='dropbox-element-container'>
-						{param.items ? (
-							param.items.map((node, index) => (
+						{props.items ? (
+							props.items.map((node, index) => (
 								<DropboxElement
 									key={index}
 									onClick={() => {
 										setShowDropbox(false);
-										param.onChoose(node);
+										props.onChoose(node);
 									}}
-									children={param.converter(node, index)}
+									children={props.converter(node, index)}
 								/>
 							))
 						) : (

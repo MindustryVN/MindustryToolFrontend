@@ -1,12 +1,12 @@
-import '../../../styles.css';
+import '../../styles.css';
 import './UserDisplay.css';
 
 import React from 'react';
-import { useGlobalContext } from '../../../App';
+import { useGlobalContext } from '../../App';
 import UserName from './UserName';
 import { useNavigate } from 'react-router-dom';
 
-const UserDisplay = () => {
+export default function UserDisplay() {
 	const { user } = useGlobalContext();
 
 	const navigate = useNavigate();
@@ -22,6 +22,4 @@ const UserDisplay = () => {
 	}
 
 	return <div className='user-display'>{buildUserDisplay()}</div>;
-};
-
-export default UserDisplay;
+}

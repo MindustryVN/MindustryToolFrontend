@@ -2,7 +2,7 @@ import '../../../styles.css';
 
 import React from 'react';
 
-const HowToDownloadMindustry = () => {
+export default function HowToDownloadMindustry() {
 	return (
 		<div className='flex-column'>
 			<h3>Cách để tải mindustry free</h3>
@@ -25,6 +25,4 @@ const HowToDownloadMindustry = () => {
 			</ul>
 		</div>
 	);
-};
-
-export default HowToDownloadMindustry;
+}

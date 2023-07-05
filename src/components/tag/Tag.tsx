@@ -1,23 +1,23 @@
-import { API } from '../../../API';
-import '../../../styles.css';
+import { API } from '../../API';
+import '../../styles.css';
 
 import './Tag.css';
 
 import React, { ReactElement } from 'react';
 import { Trans } from 'react-i18next';
 
-interface TagParam {
+interface TagProps {
 	tag: TagChoice;
 	removeButton?: ReactElement;
 }
 
-export default function Tag(param: TagParam) {
+export default function Tag(props: TagProps) {
 	return (
-		<div className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: param.tag.color }}>
+		<div className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: props.tag.color }}>
 			<div className='flex-column text-center'>
-				<Trans i18nKey={`tag.category.${param.tag.name}`} />: <Trans i18nKey={`tag.value.${param.tag.value}`} />
+				<Trans i18nKey={`tag.category.${props.tag.name}`} />: <Trans i18nKey={`tag.value.${props.tag.value}`} />
 			</div>
-			{param.removeButton}
+			{props.removeButton}
 		</div>
 	);
 }

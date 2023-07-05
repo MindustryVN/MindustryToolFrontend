@@ -1,12 +1,7 @@
-import React from "react";
+import React from 'react';
 
 import './LogicPage.css';
 
-const Logic = () => {
-	return (
-		<div className="logic">
-		</div>
-	);
-};
-
-export default Logic;
+export default function Logic() {
+	return <div className='logic'></div>;
+}

@@ -3,7 +3,7 @@ import React from 'react';
 import '../../styles.css';
 import './HomePage.css';
 
-const Home = () => {
+export default function Home() {
 	return (
 		<div className='home'>
 			<span className='content'>
@@ -69,6 +69,4 @@ const Home = () => {
 			</span>
 		</div>
 	);
-};
-
-export default Home;
+}

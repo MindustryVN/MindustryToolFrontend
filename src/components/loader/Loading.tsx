@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import '../../../styles.css';
+import '../../styles.css';
 import './Loading.css';
 
-const Loading = () => {
+export default function Loading(){
 	const [message, setMessage] = useState<string>('loading.short');
 
 	useEffect(() => {
@@ -17,5 +17,3 @@ const Loading = () => {
 		</span>
 	);
 };
-
-export default Loading;

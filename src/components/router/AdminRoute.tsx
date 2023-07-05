@@ -1,19 +1,19 @@
 import React, { ReactElement } from 'react';
-import Loading from '../common/loader/Loading';
-import UserData from '../common/user/UserData';
+import Loading from '../loader/Loading';
+import UserData from '../user/UserData';
 import { Navigate } from 'react-router-dom';
 import { useGlobalContext } from '../../App';
 
-interface AdminRouteParam {
+interface AdminRouteProps {
 	element: ReactElement;
 }
 
-const AdminRoute = (param: AdminRouteParam) => {
+const AdminRoute = (props: AdminRouteProps) => {
 	const { loading, user } = useGlobalContext();
 
 	if (loading) return <Loading />;
-	
-	if (UserData.isAdmin(user)) return param.element;
+
+	if (UserData.isAdmin(user)) return props.element;
 
 	return <Navigate to='/login' />;
 };

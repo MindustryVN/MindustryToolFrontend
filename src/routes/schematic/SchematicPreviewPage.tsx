@@ -3,6 +3,6 @@ import { useParams } from 'react-router-dom';
 
 export default function SchematicPreviewPage() {
 	const { id } = useParams();
-    
+
 	return <div>{id}</div>;
 }

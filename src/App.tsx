@@ -3,16 +3,16 @@ import './styles.css';
 
 import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import Loading from './components/common/loader/Loading';
-import UserData from './components/common/user/UserData';
+import Loading from './components/loader/Loading';
+import UserData from './components/user/UserData';
 import NavigationPanel from './components/navigation/NavigationPanel';
 import AdminRoute from './components/router/AdminRoute';
 import PrivateRoute from './components/router/PrivateRoute';
 import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
 import { API } from './API';
 import { ACCESS_TOKEN, WEB_VERSION } from './config/Config';
-import UserDisplay from './components/common/user/UserDisplay';
-import { TagChoice } from './components/common/tag/Tag';
+import UserDisplay from './components/user/UserDisplay';
+import { TagChoice } from './components/tag/Tag';
 
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';

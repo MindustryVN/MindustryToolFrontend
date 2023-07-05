@@ -6,7 +6,7 @@ import React from 'react';
 
 const HowToDownloadMindustry = React.lazy(() => import('./posts/HowToDownloadMindustry'));
 
-const ForumPage = () => {
+export default function ForumPage ()  {
 	return (
 		<div className='forum'>
 			<Routes>
@@ -15,5 +15,3 @@ const ForumPage = () => {
 		</div>
 	);
 };
-
-export default ForumPage;
