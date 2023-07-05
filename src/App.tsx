@@ -10,13 +10,12 @@ import UserDisplay from './components/user/UserDisplay';
 import UserProvider from './components/provider/UserProvider';
 import TagProvider from './components/provider/TagProvider';
 
-import React, { Suspense, useContext, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { API } from './API';
 import { WEB_VERSION } from './config/Config';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import AlertProvider, { AlertContext } from './components/provider/AlertProvider';
+import AlertProvider from './components/provider/AlertProvider';
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyACF4nOPEHnjPESSj_Ds3G-M90qrLLSL08',
@@ -43,16 +42,6 @@ const Forum = React.lazy(() => import('./routes/forum/ForumPage'));
 const SchematicPreview = React.lazy(() => import('./routes/schematic/SchematicPreviewPage'));
 
 export default function App() {
-	useEffect(() => ping(), []);
-
-	const { useAlert } = useContext(AlertContext);
-
-	function ping() {
-		const start = Date.now();
-		API.REQUEST.get('ping') //
-			.then(() => useAlert(`Ping: ${Date.now() - start}ms`, 5, 'info'));
-	}
-
 	return (
 		<main className='app'>
 			<UserProvider>

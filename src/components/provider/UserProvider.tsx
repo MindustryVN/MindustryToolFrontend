@@ -23,6 +23,8 @@ export default function UserProvider(props: UserProviderProps) {
 	const [user, setUser] = useState<UserData>();
 	const [loading, setLoading] = useState<boolean>(true);
 
+	
+
     useEffect(() => getUserData(), [])
 
 	function getUserData() {

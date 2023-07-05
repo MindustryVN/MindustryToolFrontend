@@ -90,7 +90,7 @@ export default function Upload() {
 			return;
 		}
 		const formData = new FormData();
-		const tagString = `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
+		const tagString = TagChoice.toString(tags);
 
 		formData.append('tags', tagString);
 
