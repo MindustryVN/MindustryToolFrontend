@@ -1,4 +1,5 @@
-import { useGlobalContext } from '../../../App';
+import { Link } from 'react-router-dom';
+import { useGlobalContext } from '../../App';
 import UserData from './UserData';
 import './UserName.css';
 
@@ -14,15 +15,15 @@ export const UserName = ({ displayUser }: { displayUser: UserData }) => {
 	function buildUserLink() {
 		if (user && displayUser.id === user.id)
 			return (
-				<a className='name' href={`/user`}>
+				<Link className='name' to={`/user`}>
 					{displayUser.name}
-				</a>
+				</Link>
 			);
 		else
 			return (
-				<a className='name' href={`/user/${displayUser.id}`}>
+				<Link className='name' to={`/user/${displayUser.id}`}>
 					{displayUser.name}
-				</a>
+				</Link>
 			);
 	}
 

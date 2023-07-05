@@ -5,17 +5,17 @@ import React, { ChangeEvent, useState } from 'react';
 import { API } from '../../API';
 import { useGlobalContext } from '../../App';
 import { QUIT_ICON } from '../../components/common/Icon';
-import ClearIconButton from '../../components/common/button/ClearIconButton';
-import Dropbox from '../../components/common/dropbox/Dropbox';
-import SchematicPreviewData from '../../components/common/schematic/SchematicUploadPreview';
-import Tag, { TagChoice } from '../../components/common/tag/Tag';
+import ClearIconButton from '../../components/button/ClearIconButton';
+import Dropbox from '../../components/dropbox/Dropbox';
+import SchematicPreviewData from '../../components/schematic/SchematicUploadPreview';
+import Tag, { TagChoice } from '../../components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
 import i18n from '../../util/I18N';
 import { getFileExtension } from '../../util/StringUtils';
 
 const tabs = ['File', 'Code'];
 
-const Upload = () => {
+export default function Upload() {
 	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
 	const [preview, setPreview] = useState<SchematicPreviewData>();
@@ -200,6 +200,4 @@ const Upload = () => {
 			</div>
 		</div>
 	);
-};
-
-export default Upload;
+}

@@ -5,7 +5,7 @@ import React from 'react';
 import { useGlobalContext } from '../../App';
 import { Navigate } from 'react-router-dom';
 
-const UserPage = () => {
+export default function UserPage() {
 	const { user, handleLogout } = useGlobalContext();
 
 	if (user)
@@ -18,6 +18,4 @@ const UserPage = () => {
 		);
 
 	return <Navigate to='/login' />;
-};
-
-export default UserPage;
+}

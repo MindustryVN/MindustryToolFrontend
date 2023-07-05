@@ -3,7 +3,7 @@ import './LoginPage.css';
 import React from 'react';
 import { DISCORD_AUTH_URL } from '../../config/Config';
 
-const LoginPage = () => {
+export default function LoginPage() {
 	return (
 		<div className='login-page flex-center'>
 			<img
@@ -13,6 +13,4 @@ const LoginPage = () => {
 			<a href={DISCORD_AUTH_URL}>Login with discord</a>
 		</div>
 	);
-};
-
-export default LoginPage;
+}

@@ -1,13 +1,7 @@
-import React from "react";
-
+import React from 'react';
 
 import './MapPage.css';
 
-const Map = () => {
-	return (
-		<div className="map">
-		</div>
-	);
-};
-
-export default Map;
+export default function Map() {
+	return <div className='map'></div>;
+}

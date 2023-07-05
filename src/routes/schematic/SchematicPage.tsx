@@ -3,24 +3,24 @@ import './SchematicPage.css';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { API } from '../../API';
-import ScrollToTopButton from '../../components/common/button/ScrollToTopButton';
-import Dropbox from '../../components/common/dropbox/Dropbox';
-import LoadingSpinner from '../../components/common/loader/LoadingSpinner';
-import SchematicData from '../../components/common/schematic/SchematicData';
-import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../components/common/tag/Tag';
-import TagPick from '../../components/common/tag/TagPick';
-import UserData from '../../components/common/user/UserData';
+import ScrollToTopButton from '../../components/button/ScrollToTopButton';
+import Dropbox from '../../components/dropbox/Dropbox';
+import LoadingSpinner from '../../components/loader/LoadingSpinner';
+import SchematicData from '../../components/schematic/SchematicData';
+import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../components/tag/Tag';
+import TagPick from '../../components/tag/TagPick';
+import UserData from '../../components/user/UserData';
 import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 import { capitalize } from '../../util/StringUtils';
-import UserName from '../../components/common/user/LoadUserName';
+import UserName from '../../components/user/LoadUserName';
 import { useGlobalContext } from '../../App';
-import IconButton from '../../components/common/button/IconButton';
-import SchematicPreview from '../../components/common/schematic/SchematicPreview';
+import IconButton from '../../components/button/IconButton';
+import SchematicPreview from '../../components/schematic/SchematicPreview';
 import { COPY_ICON, DOWN_VOTE_ICON, QUIT_ICON, UP_VOTE_ICON } from '../../components/common/Icon';
-import ClearIconButton from '../../components/common/button/ClearIconButton';
+import ClearIconButton from '../../components/button/ClearIconButton';
 import { Utils } from '../../util/Utils';
 
-const Schematic = () => {
+export default function Schematic() {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.MORE);
 
 	const [schematicList, setSchematicList] = useState<SchematicData[][]>([[]]);
@@ -98,7 +98,7 @@ const Schematic = () => {
 		return (
 			<main className='schematic-info small-gap'>
 				<section className='flex-row medium-gap flex-wrap'>
-					<img className='schematic-info-image' src={`${API_BASE_URL}schematic/${schematic.id}/image`}/>
+					<img className='schematic-info-image' src={`${API_BASE_URL}schematic/${schematic.id}/image`} />
 					<section className='flex-column small-gap flex-wrap'>
 						<span>{capitalize(schematic.name)}</span>
 						<UserName userId={schematic.authorId} />
@@ -197,6 +197,7 @@ const Schematic = () => {
 					<SchematicPreview
 						key={index}
 						schematic={schematic}
+						imageUrl={`${API_BASE_URL}schematic/${schematic.id}/image`}
 						onClick={() => {
 							setCurrentSchematic(schematic);
 							setShowSchematicModel(true);
@@ -227,6 +228,4 @@ const Schematic = () => {
 			</footer>
 		</div>
 	);
-};
-
-export default Schematic;
+}

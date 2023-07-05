@@ -1,9 +1,7 @@
 .admin {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
+	overflow: hidden auto;
 }
 
-.tab-button-container{
+.tab-button-container {
 	margin-top: 2rem;
 }

@@ -45,10 +45,6 @@
 	justify-content: center;
 }
 
-.sort-choice {
-	padding: 0.2rem;
-}
-
 .schematic-container {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, var(--preview-image-min-size));

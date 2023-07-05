@@ -2,10 +2,11 @@ import './NavigationPanel.css';
 import '../../styles.css';
 
 import React from 'react';
-import UserData from '../common/user/UserData';
+import UserData from '../user/UserData';
 import { useGlobalContext } from '../../App';
+import { Link } from 'react-router-dom';
 
-const NavigationPanel = () => {
+export default function NavigationPanel() {
 	const { user } = useGlobalContext();
 
 	return (
@@ -15,37 +16,35 @@ const NavigationPanel = () => {
 				<section className='popup'>
 					<img src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='' />
 					<section className='nav-link-container'>
-						<a className='nav-link' href='/home'>
+						<Link className='nav-link' to='/home'>
 							Home
-						</a>
-						<a className='nav-link' href='/user'>
+						</Link>
+						<Link className='nav-link' to='/user'>
 							User
-						</a>
-						<a className='nav-link' href='/forum'>
+						</Link>
+						<Link className='nav-link' to='/forum'>
 							Forum
-						</a>
-						<a className='nav-link' href='/schematic'>
+						</Link>
+						<Link className='nav-link' to='/schematic'>
 							Schematic
-						</a>
-						<a className='nav-link' href='/map'>
+						</Link>
+						<Link className='nav-link' to='/map'>
 							Map
-						</a>
-						<a className='nav-link' href='/logic'>
+						</Link>
+						<Link className='nav-link' to='/logic'>
 							Logic
-						</a>
-						<a className='nav-link' href='/upload'>
+						</Link>
+						<Link className='nav-link' to='/upload'>
 							Upload
-						</a>
+						</Link>
 						{UserData.isAdmin(user) && (
-							<a className='nav-link' href='/admin'>
+							<Link className='nav-link' to='/admin'>
 								Admin
-							</a>
+							</Link>
 						)}
 					</section>
 				</section>
 			</button>
 		</nav>
 	);
-};
-
-export default NavigationPanel;
+}
