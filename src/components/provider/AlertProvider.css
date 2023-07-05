@@ -1,6 +1,10 @@
 #alert-container {
 	position: fixed;
 
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+
 	top: 0;
 	right: 0.25rem;
 
@@ -21,7 +25,8 @@
 	flex-wrap: nowrap;
 
 	justify-content: space-between;
-	align-items: center;
+
+	align-items: start;
 
 	min-width: 20vw;
 	max-width: 30vw;
@@ -42,9 +47,13 @@
 
 @keyframes slide-in {
 	0% {
-		transform: translateX(200px);
+		transform: translateX(2000px);
 	}
 	100% {
 		transform: translateX(0);
 	}
+}
+
+a{
+	color: white;
 }

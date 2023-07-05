@@ -1,4 +1,5 @@
 import './UserPage.css';
+import '../../styles.css';
 
 import React, { useContext } from 'react';
 
@@ -8,14 +9,13 @@ import { UserContext } from '../../components/provider/UserProvider';
 export default function UserPage() {
 	const { user, handleLogout } = useContext(UserContext);
 
-	if (user)
-		return (
-			<div className='flex-center'>
-				<button className='button small-padding' type='button' onClick={() => handleLogout()}>
-					Logout
-				</button>
-			</div>
-		);
+	if (!user) return <Navigate to='/login' />;
 
-	return <Navigate to='/login' />;
+	return (
+		<main className='flex-center h100v'>
+			<button className='button small-padding' type='button' onClick={() => handleLogout()}>
+				Logout
+			</button>
+		</main>
+	);
 }

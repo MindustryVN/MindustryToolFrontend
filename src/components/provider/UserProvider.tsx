@@ -23,8 +23,6 @@ export default function UserProvider(props: UserProviderProps) {
 	const [user, setUser] = useState<UserData>();
 	const [loading, setLoading] = useState<boolean>(true);
 
-	
-
     useEffect(() => getUserData(), [])
 
 	function getUserData() {
@@ -42,6 +40,7 @@ export default function UserProvider(props: UserProviderProps) {
 	function handleLogin(user: UserData) {
 		if (user) {
 			setUser(user);
+
 		} else handleLogOut();
 	}
 

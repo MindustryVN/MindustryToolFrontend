@@ -1,7 +1,7 @@
 import '../../styles.css';
 import './UploadSchematicPage.css';
 
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { API } from '../../API';
 import { QUIT_ICON } from '../../components/common/Icon';
 import ClearIconButton from '../../components/button/ClearIconButton';
@@ -13,22 +13,41 @@ import i18n from '../../util/I18N';
 import { getFileExtension } from '../../util/StringUtils';
 import { UserContext } from '../../components/provider/UserProvider';
 import { AlertContext } from '../../components/provider/AlertProvider';
-
-const tabs = ['File', 'Code'];
+import { Trans } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export default function Upload() {
+	const tabs = ['File', 'Code'];
+
 	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
+
 	const [preview, setPreview] = useState<SchematicPreviewData>();
 
 	const [tag, setTag] = useState<string>('');
-
 	const [tags, setTags] = useState<TagChoice[]>([]);
 
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	const { user } = useContext(UserContext);
 	const { useAlert } = useContext(AlertContext);
+
+	useEffect(() => checkUser(), []);
+
+	function checkUser() {
+		if (user) return;
+
+		useAlert(
+			<span>
+				{i18n.t('upload.login')}
+				<Link className='small-padding' to='/login'>
+					Login
+				</Link>
+			</span>,
+			20,
+			'warning'
+		);
+	}
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
