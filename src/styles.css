@@ -5,12 +5,12 @@
 
 	color: white;
 	background-color: var(--black);
-	
+
 	outline: none;
 	cursor: pointer;
-	
+
 	padding: 0.2rem;
-	
+
 	border-radius: 5px;
 	border: 2px solid var(--gray);
 }
@@ -26,9 +26,9 @@
 
 	outline: none;
 	cursor: pointer;
-	
+
 	padding: 0.2rem;
-	
+
 	border-radius: 5px;
 	border: 2px solid var(--gray);
 }
@@ -147,4 +147,8 @@
 
 .pos-absolute {
 	position: absolute;
+}
+
+.capitalize {
+	text-transform: capitalize;
 }

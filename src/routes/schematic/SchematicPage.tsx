@@ -1,7 +1,7 @@
 import '../../styles.css';
 import './SchematicPage.css';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { API } from '../../API';
 import ScrollToTopButton from '../../components/button/ScrollToTopButton';
 import Dropbox from '../../components/dropbox/Dropbox';
@@ -11,14 +11,15 @@ import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../compone
 import TagPick from '../../components/tag/TagPick';
 import UserData from '../../components/user/UserData';
 import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
-import { capitalize } from '../../util/StringUtils';
 import UserName from '../../components/user/LoadUserName';
-import { useGlobalContext } from '../../App';
 import IconButton from '../../components/button/IconButton';
 import SchematicPreview from '../../components/schematic/SchematicPreview';
 import { COPY_ICON, DOWN_VOTE_ICON, QUIT_ICON, UP_VOTE_ICON } from '../../components/common/Icon';
 import ClearIconButton from '../../components/button/ClearIconButton';
 import { Utils } from '../../util/Utils';
+import { UserContext } from '../../components/provider/UserProvider';
+import { AlertContext } from '../../components/provider/AlertProvider';
+import i18n from '../../util/I18N';
 
 export default function Schematic() {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.MORE);
@@ -37,9 +38,11 @@ export default function Schematic() {
 
 	const controller = new AbortController();
 
-	const { user } = useGlobalContext();
+	const { user } = useContext(UserContext);
 
 	useEffect(() => loadPage(), [sortQuery]);
+
+	const { useAlert } = useContext(AlertContext);
 
 	function loadPage() {
 		if (loaderState === LoaderState.LOADING) {
@@ -92,17 +95,14 @@ export default function Schematic() {
 	}
 
 	function buildSchematicData(schematic: SchematicData) {
-		const blob = new Blob([Buffer.from(schematic.data, 'base64')], { type: 'text/plain' });
-		const url = window.URL.createObjectURL(blob);
-
 		return (
 			<main className='schematic-info small-gap'>
 				<section className='flex-row medium-gap flex-wrap'>
 					<img className='schematic-info-image' src={`${API_BASE_URL}schematic/${schematic.id}/image`} />
 					<section className='flex-column small-gap flex-wrap'>
-						<span>{capitalize(schematic.name)}</span>
+						<span className='capitalize'>{schematic.name}</span>
 						<UserName userId={schematic.authorId} />
-						{schematic.description && <span>{capitalize(schematic.description)}</span>}
+						{schematic.description && <span className='capitalize'>{schematic.description}</span>}
 						{schematic.requirement && (
 							<section className=' flex-row flex-wrap medium-gap'>
 								{schematic.requirement.map((r, index) => (
@@ -139,15 +139,10 @@ export default function Schematic() {
 						}}>
 						<img src='/assets/icons/play-2.png' style={{ rotate: '90deg' }} alt='dislike' />
 					</button>
-					<a className='button small-padding center' href={url} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+					<a className='button small-padding center' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 						<img src='/assets/icons/download.png' alt='download' />
 					</a>
-					<button
-						className='button small-padding center'
-						type='button'
-						onClick={() => {
-							navigator.clipboard.writeText(schematic.data).then(() => alert('Copied'));
-						}}>
+					<button className='button small-padding center' type='button' onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))}>
 						<img src='/assets/icons/copy.png' alt='copy' />
 					</button>
 					{user && (schematic.authorId === user.id || UserData.isAdmin(user)) && (
@@ -186,8 +181,8 @@ export default function Schematic() {
 				</section>
 				<section className='sort-container grid-row small-gap center'>
 					{SCHEMATIC_SORT_CHOICE.map((c: SortChoice, index) => (
-						<button className={'sort-choice button ' + (c == sortQuery ? 'button-active' : '')} type='button' key={index} onClick={() => setSortQuery(c)}>
-							{capitalize(c.name)}
+						<button className={'sort-choice capitalize button ' + (c == sortQuery ? 'button-active' : '')} type='button' key={index} onClick={() => setSortQuery(c)}>
+							{c.name}
 						</button>
 					))}
 				</section>
@@ -205,7 +200,7 @@ export default function Schematic() {
 						buttons={[
 							<IconButton key={0} title='up vote' icon={UP_VOTE_ICON} onClick={() => console.log('Liked')} />, //
 							<IconButton key={1} title='down vote' icon={DOWN_VOTE_ICON} onClick={() => console.log('Disliked')} />, //
-							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data)} />, //
+							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))} />, //
 							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/download.png' alt='download' />
 							</a>
@@ -213,7 +208,6 @@ export default function Schematic() {
 					/>
 				))}
 			</section>
-
 			<footer className='flex-center'>
 				{loaderState === LoaderState.LOADING ? (
 					<LoadingSpinner />

@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
-import { useGlobalContext } from '../../App';
 import UserData from './UserData';
 import './UserName.css';
 
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../provider/UserProvider';
 
 export const UserName = ({ displayUser }: { displayUser: UserData }) => {
 	if (!displayUser) return <span>User not found</span>;
 
 	if (displayUser.id === 'community') return <span>Community</span>;
 
-	const { user } = useGlobalContext();
+	const { user } = useContext(UserContext);
 
 	function buildUserLink() {
 		if (user && displayUser.id === user.id)

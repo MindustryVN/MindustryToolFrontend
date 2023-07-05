@@ -1,9 +1,8 @@
 import '../../styles.css';
 import './UploadSchematicPage.css';
 
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
 import { API } from '../../API';
-import { useGlobalContext } from '../../App';
 import { QUIT_ICON } from '../../components/common/Icon';
 import ClearIconButton from '../../components/button/ClearIconButton';
 import Dropbox from '../../components/dropbox/Dropbox';
@@ -12,6 +11,8 @@ import Tag, { TagChoice } from '../../components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
 import i18n from '../../util/I18N';
 import { getFileExtension } from '../../util/StringUtils';
+import { UserContext } from '../../components/provider/UserProvider';
+import { AlertContext } from '../../components/provider/AlertProvider';
 
 const tabs = ['File', 'Code'];
 
@@ -26,17 +27,22 @@ export default function Upload() {
 
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
-	const { user } = useGlobalContext();
+	const { user } = useContext(UserContext);
+	const { useAlert } = useContext(AlertContext);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-		if (!event.target) return;
-
 		const files = event.target.files;
-		if (!files || files.length <= 0) return;
+		if (!files || files.length <= 0) {
+			useAlert(i18n.t('upload.invalid-schematic-file'), 5, 'error');
+			return;
+		}
 
 		const extension: string = getFileExtension(files[0]);
 
-		if (extension !== SCHEMATIC_FILE_EXTENSION) return;
+		if (extension !== SCHEMATIC_FILE_EXTENSION) {
+			useAlert(i18n.t('upload.invalid-schematic-file'), 5, 'error');
+			return;
+		}
 
 		setFile(files[0]);
 		setCode('');
@@ -53,7 +59,7 @@ export default function Upload() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-					alert('Not schematic code');
+					useAlert(i18n.t('upload.not-schematic-code'), 5, 'warning');
 					return;
 				}
 
@@ -74,8 +80,13 @@ export default function Upload() {
 	}
 
 	function handleSubmit() {
+		if (!file && !code) {
+			useAlert(i18n.t('upload.no-data'), 5, 'error');
+			return;
+		}
+
 		if (tags === null || tags.length === 0) {
-			alert('No tags provided');
+			useAlert(i18n.t('upload.no-tag'), 5, 'error');
 			return;
 		}
 		const formData = new FormData();
@@ -93,10 +104,10 @@ export default function Upload() {
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				alert('UPLOAD SUCCESSFULLY');
+				useAlert(i18n.t('upload.upload-success'), 10, 'info');
 			})
 			.catch((error) => {
-				if (error.response && error.response.data) alert(`"UPLOAD FAILED: ${error.response.data.message}`);
+				if (error.response && error.response.data) useAlert(i18n.t('upload.upload-failed') + error.response.data.message, 10, 'error');
 			});
 	}
 

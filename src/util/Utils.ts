@@ -4,8 +4,8 @@ export class Utils {
 		return window.URL.createObjectURL(blob);
 	}
 
-	static copyDataToClipboard(str: string): void {
-		navigator.clipboard.writeText(str).then(() => alert('Copied'));
+	static copyDataToClipboard(str: string) {
+		return navigator.clipboard.writeText(str);
 	}
 
 	static array2dToArray<ArrayType, ResultType>(arr2d: ArrayType[][], func: (item: ArrayType, index?: number) => ResultType): ResultType[] {
