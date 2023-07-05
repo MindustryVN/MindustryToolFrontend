@@ -3,7 +3,8 @@ import ClearIconButton from '../button/ClearIconButton';
 import { QUIT_ICON } from '../common/Icon';
 import './AlertProvider.css';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
+import { API } from '../../API';
 
 type AlertType = 'info' | 'warning' | 'error';
 
@@ -27,6 +28,8 @@ interface AlertProviderProps {
 export default function AlertProvider(props: AlertProviderProps) {
 	const [message, setMessage] = React.useState<AlertProps[]>([]);
 
+	useEffect(() => ping(), []);
+
 	function addMessage(message: string, duration: number, type: AlertType) {
 		let uuid: string = v4();
 		let val: AlertProps = { message: message, duration: duration, uuid: uuid, type: type };
@@ -35,6 +38,12 @@ export default function AlertProvider(props: AlertProviderProps) {
 
 	function removeMessage(id: string) {
 		setMessage((prev) => [...prev.filter((val) => id !== val.uuid)]);
+	}
+
+	function ping() {
+		const start = Date.now();
+		API.REQUEST.get('ping') //
+			.then(() => addMessage(`Ping: ${Date.now() - start}ms`, 5, 'info'));
 	}
 
 	return (

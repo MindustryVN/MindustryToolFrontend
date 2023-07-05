@@ -97,8 +97,8 @@ export const VerifySchematicPage = () => {
 
 		function verifySchematic(schematic: SchematicData) {
 			let form = new FormData();
-			const tagString = `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
-
+			const tagString = TagChoice.toString(tags);
+			
 			form.append('id', schematic.id);
 			form.append('authorId', schematic.authorId);
 			form.append('data', schematic.data);

@@ -57,6 +57,10 @@ export class TagChoice {
 		return arr;
 	}
 
+	static toString(tags : Array<TagChoice>){
+		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
+	}
+
 	static SCHEMATIC_UPLOAD_TAG: TagChoice[] = [];
 	static SCHEMATIC_SEARCH_TAG: TagChoice[] = [];
 
