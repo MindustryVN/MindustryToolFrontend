@@ -26,15 +26,15 @@
 
 	justify-content: space-between;
 
-	align-items: start;
+	align-items: flex-start;
 
 	min-width: 20vw;
 	max-width: 30vw;
-	
+
 	padding: 1rem;
-	
+
 	border: 2px solid var(--gray);
-	
+
 	animation: slide-in 0.5s;
 }
 
@@ -47,13 +47,9 @@
 
 @keyframes slide-in {
 	0% {
-		transform: translateX(2000px);
+		transform: translateX(1000px);
 	}
 	100% {
 		transform: translateX(0);
 	}
-}
-
-a{
-	color: white;
 }

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserData from './UserData';
 import './UserName.css';
 
@@ -12,23 +12,15 @@ export const UserName = ({ displayUser }: { displayUser: UserData }) => {
 
 	const { user } = useContext(UserContext);
 
-	function buildUserLink() {
-		if (user && displayUser.id === user.id)
-			return (
-				<Link className='name' to={`/user`}>
-					{displayUser.name}
-				</Link>
-			);
-		else
-			return (
-				<Link className='name' to={`/user/${displayUser.id}`}>
-					{displayUser.name}
-				</Link>
-			);
+	const navigate = useNavigate();
+
+	function navigateToUserPage() {
+		if (user && displayUser.id === user.id) navigate('/user');
+		else navigate(`/user/${displayUser.id}`);
 	}
 
 	return (
-		<span className='user-name-card'>
+		<button className='user-name-card' onClick={() => navigateToUserPage()}>
 			<img
 				className='avatar'
 				src={displayUser.imageUrl}
@@ -38,8 +30,8 @@ export const UserName = ({ displayUser }: { displayUser: UserData }) => {
 				}
 				alt=''></img>
 			{UserData.isAdmin(displayUser) && <span className='admin'>Admin</span>}
-			{buildUserLink()}
-		</span>
+			{displayUser.name}
+		</button>
 	);
 };
 

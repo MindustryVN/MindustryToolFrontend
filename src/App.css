@@ -18,27 +18,6 @@
 	height: 100%;
 }
 
-.navigation-bar {
-	position: fixed;
-
-	width: 100vw;
-
-	box-sizing: border-box;
-
-	background-color: transparent;
-
-	display: flex;
-
-	flex-direction: row;
-
-	justify-content: space-between;
-	align-items: center;
-
-	padding: 0.1rem 0.25rem;
-
-	z-index: 999;
-}
-
 .web-version {
 	position: fixed;
 	bottom: 0;

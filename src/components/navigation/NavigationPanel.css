@@ -1,5 +1,9 @@
 .navigation-panel {
 	z-index: 999;
+
+	position: fixed;
+	top: 0.25rem;
+	left: 0.25rem;
 }
 
 .icon {

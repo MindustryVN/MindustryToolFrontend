@@ -5,6 +5,7 @@ import React, { useContext } from 'react';
 import UserName from './UserName';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../provider/UserProvider';
+import { Trans } from 'react-i18next';
 
 export default function UserDisplay() {
 	const { user } = useContext(UserContext);
@@ -13,12 +14,11 @@ export default function UserDisplay() {
 
 	function buildUserDisplay() {
 		if (user) return <UserName displayUser={user} />;
-		else
-			return (
-				<button className='button small-padding' type='button' title='Login' onClick={() => navigate('/login')}>
-					Login
-				</button>
-			);
+		return (
+			<button className='user-display button small-padding' type='button' title='Login' onClick={() => navigate('/login')}>
+				<Trans key='login' />
+			</button>
+		);
 	}
 
 	return <div className='user-display'>{buildUserDisplay()}</div>;

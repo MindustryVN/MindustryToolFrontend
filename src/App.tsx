@@ -41,28 +41,25 @@ const SchematicPreview = React.lazy(() => import('./routes/schematic/SchematicPr
 export default function App() {
 	return (
 		<main className='app'>
-			
-				<section className='navigation-bar'>
-					<NavigationPanel />
-					<UserDisplay />
-				</section>
-				<Suspense fallback={<Loading />}>
-					<Routes>
-						<Route path='/' element={<Navigate to='/home' />} />
-						<Route path='/map' element={<Map />} />
-						<Route path='/home' element={<Home />} />
-						<Route path='/logic' element={<Logic />} />
-						<Route path='/login' element={<Login />} />
-						<Route path='/upload' element={<Upload />} />
-						<Route path='/schematic' element={<Schematic />} />
-						<Route path='/schematic/:id' element={<SchematicPreview />} />
-						<Route path='/forum/*' element={<Forum></Forum>}></Route>
-						<Route path='/user' element={<PrivateRoute element={<User />} />} />
-						<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
-						<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
-					</Routes>
-				</Suspense>
-				<footer className='web-version'>{WEB_VERSION}</footer>
+			<NavigationPanel />
+			<UserDisplay />
+			<Suspense fallback={<Loading />}>
+				<Routes>
+					<Route path='/' element={<Navigate to='/home' />} />
+					<Route path='/map' element={<Map />} />
+					<Route path='/home' element={<Home />} />
+					<Route path='/logic' element={<Logic />} />
+					<Route path='/login' element={<Login />} />
+					<Route path='/upload' element={<Upload />} />
+					<Route path='/schematic' element={<Schematic />} />
+					<Route path='/schematic/:id' element={<SchematicPreview />} />
+					<Route path='/forum/*' element={<Forum></Forum>}></Route>
+					<Route path='/user' element={<PrivateRoute element={<User />} />} />
+					<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
+					<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
+				</Routes>
+			</Suspense>
+			<footer className='web-version'>{WEB_VERSION}</footer>
 		</main>
 	);
 }

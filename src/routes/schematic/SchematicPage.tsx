@@ -204,8 +204,8 @@ export default function Schematic() {
 							setShowSchematicModel(true);
 						}}
 						buttons={[
-							<IconButton key={0} title='up vote' icon={UP_VOTE_ICON} onClick={() => console.log('Liked')} />, //
-							<IconButton key={1} title='down vote' icon={DOWN_VOTE_ICON} onClick={() => console.log('Disliked')} />, //
+							<IconButton key={0} title='up vote' icon={UP_VOTE_ICON} onClick={() => useAlert(i18n.t('schematic.liked'), 5, 'info')} />, //
+							<IconButton key={1} title='down vote' icon={DOWN_VOTE_ICON} onClick={() => useAlert(i18n.t('schematic.disliked'), 5, 'info')} />, //
 							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))} />, //
 							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/download.png' alt='download' />
