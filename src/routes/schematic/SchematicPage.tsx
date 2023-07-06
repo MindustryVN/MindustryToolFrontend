@@ -20,6 +20,7 @@ import { Utils } from '../../util/Utils';
 import { UserContext } from '../../components/provider/UserProvider';
 import { AlertContext } from '../../components/provider/AlertProvider';
 import i18n from '../../util/I18N';
+import LoadUserName from '../../components/user/LoadUserName';
 
 export default function Schematic() {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.MORE);
@@ -100,8 +101,8 @@ export default function Schematic() {
 				<section className='flex-row medium-gap flex-wrap'>
 					<img className='schematic-info-image' src={`${API_BASE_URL}schematic/${schematic.id}/image`} />
 					<section className='flex-column small-gap flex-wrap'>
-						<span className='capitalize'>{schematic.name}</span>
-						<UserName userId={schematic.authorId} />
+						Name: <span className='capitalize'>{schematic.name}</span>
+						By: <UserName userId={schematic.authorId} />
 						{schematic.description && <span className='capitalize'>{schematic.description}</span>}
 						{schematic.requirement && (
 							<section className=' flex-row flex-wrap medium-gap'>
@@ -119,6 +120,11 @@ export default function Schematic() {
 									<Tag key={index} tag={t} />
 								))}
 							</section>
+						)}
+						{schematic.verifyAdmin && (
+							<span className='capitalize'>
+								Verified by: <LoadUserName userId={schematic.verifyAdmin} />
+							</span>
 						)}
 					</section>
 				</section>
@@ -146,7 +152,7 @@ export default function Schematic() {
 						<img src='/assets/icons/copy.png' alt='copy' />
 					</button>
 					{user && (schematic.authorId === user.id || UserData.isAdmin(user)) && (
-						<button className='button  small-padding'>
+						<button className='button  small-padding' type='button'>
 							<img src='/assets/icons/trash-16.png' alt='delete' />
 						</button>
 					)}
@@ -198,8 +204,8 @@ export default function Schematic() {
 							setShowSchematicModel(true);
 						}}
 						buttons={[
-							<IconButton key={0} title='up vote' icon={UP_VOTE_ICON} onClick={() => console.log('Liked')} />, //
-							<IconButton key={1} title='down vote' icon={DOWN_VOTE_ICON} onClick={() => console.log('Disliked')} />, //
+							<IconButton key={0} title='up vote' icon={UP_VOTE_ICON} onClick={() => useAlert(i18n.t('schematic.liked'), 5, 'info')} />, //
+							<IconButton key={1} title='down vote' icon={DOWN_VOTE_ICON} onClick={() => useAlert(i18n.t('schematic.disliked'), 5, 'info')} />, //
 							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))} />, //
 							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/download.png' alt='download' />

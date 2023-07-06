@@ -216,7 +216,7 @@ export const VerifySchematicPage = () => {
 					<LoadingSpinner />
 				) : (
 					<section className='grid-row small-gap'>
-						<button className='button' onClick={() => loadPage()}>
+						<button className='button' type='button' onClick={() => loadPage()}>
 							{loaderState === LoaderState.MORE ? 'Load more' : 'No schematic left'}
 						</button>
 						<ScrollToTopButton containerId='admin' />

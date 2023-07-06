@@ -1,7 +1,9 @@
+import './AlertProvider.css';
+import '../../styles.css';
+
 import { v4 } from 'uuid';
 import ClearIconButton from '../button/ClearIconButton';
 import { QUIT_ICON } from '../common/Icon';
-import './AlertProvider.css';
 
 import React, { ReactNode, useEffect } from 'react';
 import { API } from '../../API';
@@ -16,28 +18,28 @@ interface AlertProps {
 }
 
 interface AlertContextProps {
-	useAlert: (message: string, duration: number, type: AlertType) => void;
+	useAlert: (message: ReactNode, duration: number, type: AlertType) => void;
 }
 
-export const AlertContext = React.createContext<AlertContextProps>({ useAlert: (message: string, duration: number, type: AlertType) => {} });
+export const AlertContext = React.createContext<AlertContextProps>({ useAlert: (message: ReactNode, duration: number, type: AlertType) => {} });
 
 interface AlertProviderProps {
 	children: ReactNode;
 }
 
 export default function AlertProvider(props: AlertProviderProps) {
-	const [message, setMessage] = React.useState<AlertProps[]>([]);
+	const [messages, setMessages] = React.useState<AlertProps[]>([]);
 
 	useEffect(() => ping(), []);
 
-	function addMessage(message: string, duration: number, type: AlertType) {
+	function addMessage(message: ReactNode, duration: number, type: AlertType) {
 		let uuid: string = v4();
 		let val: AlertProps = { message: message, duration: duration, uuid: uuid, type: type };
-		setMessage((prev) => [val, ...prev]);
+		setMessages([val, ...messages]);
 	}
 
 	function removeMessage(id: string) {
-		setMessage((prev) => [...prev.filter((val) => id !== val.uuid)]);
+		setMessages((prev) => [...prev.filter((val) => id !== val.uuid)]);
 	}
 
 	function ping() {
@@ -49,8 +51,8 @@ export default function AlertProvider(props: AlertProviderProps) {
 	return (
 		<AlertContext.Provider value={{ useAlert: addMessage }}>
 			<section id='alert-container' className='flex-column small-gap'>
-				{message.map((val, index) => (
-					<AlertMessage key={index} message={val.message} duration={val.duration} type={val.type} onTimeOut={() => removeMessage(val.uuid)} />
+				{messages.map((val) => (
+					<AlertMessage key={val.uuid} message={val.message} duration={val.duration} type={val.type} onTimeOut={() => removeMessage(val.uuid)} />
 				))}
 			</section>
 			{props.children}

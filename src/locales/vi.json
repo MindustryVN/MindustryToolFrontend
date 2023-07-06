@@ -20,9 +20,10 @@
             "huge": "Rất lớn"
         }
     },
-    "upload":{
-        "invalid-schematic-file" : "File bản thiết kế không hợp lệ, file phải có đuôi .msch",
-        "no-tag":"Thêm ít nhất một nhãn(Tag) để đăng",
-        "no-data" :"Vui lòng thêm dữ liệu bản thiết kế"
+    "upload": {
+        "invalid-schematic-file": "File bản thiết kế không hợp lệ, file phải có đuôi .msch",
+        "no-tag": "Thêm ít nhất một nhãn(Tag) để đăng",
+        "no-data": "Vui lòng thêm dữ liệu bản thiết kế",
+        "login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập"
     }
 }

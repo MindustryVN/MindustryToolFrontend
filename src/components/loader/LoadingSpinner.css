@@ -1,6 +1,8 @@
 .loading-spinner {
 	width: 10px;
-	height: 10px; 
+	height: 10px;
+
+	position: relative;
 }
 
 .loading-spinner::before {
