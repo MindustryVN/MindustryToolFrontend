@@ -7,14 +7,14 @@ import { QUIT_ICON } from '../../components/common/Icon';
 import ClearIconButton from '../../components/button/ClearIconButton';
 import Dropbox from '../../components/dropbox/Dropbox';
 import SchematicPreviewData from '../../components/schematic/SchematicUploadPreview';
-import Tag, { TagChoice } from '../../components/tag/Tag';
+import Tag, { TagChoiceLocal } from '../../components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
 import i18n from '../../util/I18N';
 import { getFileExtension } from '../../util/StringUtils';
 import { UserContext } from '../../components/provider/UserProvider';
 import { AlertContext } from '../../components/provider/AlertProvider';
-import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import TagPick from '../../components/tag/TagPick';
 
 export default function Upload() {
 	const tabs = ['File', 'Code'];
@@ -25,7 +25,7 @@ export default function Upload() {
 	const [preview, setPreview] = useState<SchematicPreviewData>();
 
 	const [tag, setTag] = useState<string>('');
-	const [tags, setTags] = useState<TagChoice[]>([]);
+	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
 
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
@@ -95,7 +95,8 @@ export default function Upload() {
 
 	function getPreview(form: FormData) {
 		API.REQUEST.post('schematic-upload/preview', form) //
-			.then((result) => setPreview(result.data));
+			.then((result) => setPreview(result.data)) //
+			.catch((error) => useAlert(i18n.t(`upload.invalid-schematic`) + JSON.stringify(error), 10, 'error'));
 	}
 
 	function handleSubmit() {
@@ -109,7 +110,7 @@ export default function Upload() {
 			return;
 		}
 		const formData = new FormData();
-		const tagString = TagChoice.toString(tags);
+		const tagString = TagChoiceLocal.toString(tags);
 
 		formData.append('tags', tagString);
 
@@ -134,7 +135,7 @@ export default function Upload() {
 		setTags([...tags.filter((_, i) => i !== index)]);
 	}
 
-	function handleAddTag(tag: TagChoice) {
+	function handleAddTag(tag: TagChoiceLocal) {
 		if (!tag) return;
 
 		tags.filter((q) => q.name !== tag.name);
@@ -157,10 +158,9 @@ export default function Upload() {
 			case tabs[1]:
 				return (
 					<div>
-						<label className='button' htmlFor='ufb'>
+						<button className='button' type='button' onClick={() => handleCodeChange()}>
 							Copy from clipboard
-						</label>
-						<button id='ufb' className='button' type='button' onClick={() => handleCodeChange()}></button>
+						</button>
 					</div>
 				);
 
@@ -171,7 +171,7 @@ export default function Upload() {
 
 	return (
 		<div className='upload'>
-			<div className='upload-model'>
+			<div className='upload'>
 				<div className='preview-container '>
 					<div className='upload-button flex-column medium-gap'>
 						<div className='flex-center'>
@@ -208,14 +208,14 @@ export default function Upload() {
 							<Dropbox
 								placeholder='Add tags'
 								value={tag}
-								items={TagChoice.SCHEMATIC_UPLOAD_TAG.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tags.includes(t))}
+								items={TagChoiceLocal.SCHEMATIC_UPLOAD_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 								onChange={(event) => setTag(event.target.value)}
 								onChoose={(item) => handleAddTag(item)}
-								converter={(t, index) => <span key={index} children={`${i18n.t(t.name)}:${i18n.t(t.value)}`} />}
+								converter={(t, index) => <TagPick key={index} tag={t} />}
 							/>
 
 							<div className='flex-row flex-wrap medium-gap'>
-								{tags.map((t: TagChoice, index: number) => (
+								{tags.map((t: TagChoiceLocal, index: number) => (
 									<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
 								))}
 							</div>

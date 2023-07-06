@@ -1,7 +1,7 @@
-import '../../styles.css'
+import '../../styles.css';
 
 import React, { ReactNode, useEffect } from 'react';
-import { TagChoice } from '../tag/Tag';
+import { TagChoiceLocal } from '../tag/Tag';
 
 interface TagProviderProps {
 	children: ReactNode;
@@ -9,8 +9,8 @@ interface TagProviderProps {
 
 export default function TagProvider(props: TagProviderProps) {
 	useEffect(() => {
-		TagChoice.getTag('schematic-upload-tag', TagChoice.SCHEMATIC_UPLOAD_TAG);
-		TagChoice.getTag('schematic-search-tag', TagChoice.SCHEMATIC_SEARCH_TAG);
+		TagChoiceLocal.getTag('schematic-upload-tag', TagChoiceLocal.SCHEMATIC_UPLOAD_TAG);
+		TagChoiceLocal.getTag('schematic-search-tag', TagChoiceLocal.SCHEMATIC_SEARCH_TAG);
 	}, []);
 
 	return <section className='h100p w100p'>{props.children}</section>;

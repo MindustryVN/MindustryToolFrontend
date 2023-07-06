@@ -1,38 +1,34 @@
-import { useNavigate } from 'react-router-dom';
-import UserData from './UserData';
 import './UserName.css';
 
-import React, { useContext } from 'react';
-import { UserContext } from '../provider/UserProvider';
+import { useNavigate } from 'react-router-dom';
+import UserData from './UserData';
+import React from 'react';
 
-export const UserName = ({ displayUser }: { displayUser: UserData }) => {
-	if (!displayUser) return <span>User not found</span>;
+interface UserNameProps {
+	displayUser: UserData;
+}
 
-	if (displayUser.id === 'community') return <span>Community</span>;
+export function UserName(props: UserNameProps) {
+	if (!props.displayUser) return <span>User not found</span>;
 
-	const { user } = useContext(UserContext);
+	if (props.displayUser.id === 'community') return <span>Community</span>;
 
 	const navigate = useNavigate();
 
-	function navigateToUserPage() {
-		if (user && displayUser.id === user.id) navigate('/user');
-		else navigate(`/user/${displayUser.id}`);
-	}
-
 	return (
-		<button className='user-name-card' onClick={() => navigateToUserPage()}>
+		<button className='user-name-card' type='button' onClick={() => navigate(`/user/${props.displayUser.id}`)}>
 			<img
 				className='avatar'
-				src={displayUser.imageUrl}
+				src={props.displayUser.imageUrl}
 				onError={(event) =>
 					// @ts-ignore
 					(event.target.src = 'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a69f118df70ad7828d4_icon_clyde_blurple_RGB.svg')
 				}
 				alt=''></img>
-			{UserData.isAdmin(displayUser) && <span className='admin'>Admin</span>}
-			{displayUser.name}
+			{UserData.isAdmin(props.displayUser) && <span className='admin'>Admin</span>}
+			<span className='capitalize'>{props.displayUser.name}</span>
 		</button>
 	);
-};
+}
 
 export default UserName;

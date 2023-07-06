@@ -7,7 +7,7 @@ import ScrollToTopButton from '../../components/button/ScrollToTopButton';
 import Dropbox from '../../components/dropbox/Dropbox';
 import LoadingSpinner from '../../components/loader/LoadingSpinner';
 import SchematicData from '../../components/schematic/SchematicData';
-import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoice } from '../../components/tag/Tag';
+import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal } from '../../components/tag/Tag';
 import TagPick from '../../components/tag/TagPick';
 import UserData from '../../components/user/UserData';
 import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
@@ -31,11 +31,11 @@ export default function Schematic() {
 	const [tag, setTag] = useState<string>('');
 
 	const [sortQuery, setSortQuery] = useState<SortChoice>(SCHEMATIC_SORT_CHOICE[0]);
-	const [tagQuery, setTagQuery] = useState<TagChoice[]>([]);
+	const [tagQuery, setTagQuery] = useState<TagChoiceLocal[]>([]);
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
-	const currentQuery = useRef<{ tag: TagChoice[]; sort: SortChoice }>({ tag: [], sort: SCHEMATIC_SORT_CHOICE[0] });
+	const currentQuery = useRef<{ tag: TagChoiceLocal[]; sort: SortChoice }>({ tag: [], sort: SCHEMATIC_SORT_CHOICE[0] });
 
 	const controller = new AbortController();
 
@@ -87,7 +87,7 @@ export default function Schematic() {
 		setTagQuery([...tagQuery.filter((_, i) => i !== index)]);
 	}
 
-	function handleAddTag(tag: TagChoice) {
+	function handleAddTag(tag: TagChoiceLocal) {
 		if (!tag) return;
 
 		tagQuery.filter((q) => q.name !== tag.name);
@@ -116,7 +116,7 @@ export default function Schematic() {
 						)}
 						{schematic.tags && (
 							<section className='flex-row flex-wrap small-gap'>
-								{TagChoice.parseArray(schematic.tags, TagChoice.SCHEMATIC_SEARCH_TAG).map((t: TagChoice, index: number) => (
+								{TagChoiceLocal.parseArray(schematic.tags, TagChoiceLocal.SCHEMATIC_SEARCH_TAG).map((t: TagChoiceLocal, index: number) => (
 									<Tag key={index} tag={t} />
 								))}
 							</section>
@@ -130,7 +130,7 @@ export default function Schematic() {
 				</section>
 				<section className='schematic-info-button-container grid-row small-gap'>
 					<button
-						className='button small-padding'
+						className='button'
 						type='button'
 						onClick={() => {
 							if (currentSchematic) currentSchematic.like += 1;
@@ -138,21 +138,21 @@ export default function Schematic() {
 						<img src='/assets/icons/play-2.png' style={{ rotate: '-90deg' }} alt='like' />
 					</button>
 					<button
-						className='button small-padding'
+						className='button'
 						type='button'
 						onClick={() => {
 							if (currentSchematic) currentSchematic.dislike += 1;
 						}}>
 						<img src='/assets/icons/play-2.png' style={{ rotate: '90deg' }} alt='dislike' />
 					</button>
-					<a className='button small-padding center' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+					<a className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
 						<img src='/assets/icons/download.png' alt='download' />
 					</a>
-					<button className='button small-padding center' type='button' onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))}>
+					<button className='button' type='button' onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => useAlert(i18n.t('copied'), 10, 'info'))}>
 						<img src='/assets/icons/copy.png' alt='copy' />
 					</button>
 					{user && (schematic.authorId === user.id || UserData.isAdmin(user)) && (
-						<button className='button  small-padding' type='button'>
+						<button className='button' type='button'>
 							<img src='/assets/icons/trash-16.png' alt='delete' />
 						</button>
 					)}
@@ -167,13 +167,13 @@ export default function Schematic() {
 	if (showSchematicModel === true && currentSchematic !== undefined) return buildSchematicData(currentSchematic);
 
 	return (
-		<div id='schematic' className='schematic'>
+		<main id='schematic' className='schematic'>
 			<header className='flex-column medium-gap'>
 				<section className='search-container'>
 					<Dropbox
 						placeholder='Search with tags'
 						value={tag}
-						items={TagChoice.SCHEMATIC_SEARCH_TAG.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tagQuery.includes(t))}
+						items={TagChoiceLocal.SCHEMATIC_SEARCH_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadPage()} />}
@@ -181,7 +181,7 @@ export default function Schematic() {
 					/>
 				</section>
 				<section className='flexbox small-gap flex-wrap center'>
-					{tagQuery.map((t: TagChoice, index: number) => (
+					{tagQuery.map((t: TagChoiceLocal, index: number) => (
 						<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
 					))}
 				</section>
@@ -226,6 +226,6 @@ export default function Schematic() {
 					</section>
 				)}
 			</footer>
-		</div>
+		</main>
 	);
 }

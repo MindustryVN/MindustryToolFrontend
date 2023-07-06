@@ -1,0 +1,16 @@
+.user-card {
+    padding: 5rem;
+}
+
+.info-card{
+    display: grid;   
+}
+
+.avatar-image {
+	border: 2px solid var(--white);
+}
+
+.username{
+    font-size: 2rem;
+}
+
