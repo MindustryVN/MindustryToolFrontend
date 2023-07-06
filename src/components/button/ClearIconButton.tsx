@@ -5,7 +5,7 @@ import React from 'react';
 
 interface ClearIconButtonProps {
 	icon: string;
-	title?: string;
+	title: string;
 	onClick: () => void;
 }
 

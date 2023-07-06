@@ -1,11 +1,10 @@
 import '../../styles.css';
 import './VerifySchematicPage.css';
 
-import React, { Component, ReactElement, useContext, useEffect, useState } from 'react';
-import Tag, { TagChoice } from '../../components/tag/Tag';
+import React, { useContext, useEffect, useState } from 'react';
+import Tag, { TagChoiceLocal } from '../../components/tag/Tag';
 
 import { API } from '../../API';
-import { Trans } from 'react-i18next';
 import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
 
 import UserName from '../../components/user/LoadUserName';
@@ -20,6 +19,7 @@ import SchematicPreview from '../../components/schematic/SchematicPreview';
 import IconButton from '../../components/button/IconButton';
 import { AlertContext } from '../../components/provider/AlertProvider';
 import i18n from '../../util/I18N';
+import TagPick from '../../components/tag/TagPick';
 
 export const VerifySchematicPage = () => {
 	const [loaderState, setLoaderState] = useState<LoaderState>(LoaderState.LOADING);
@@ -79,7 +79,7 @@ export const VerifySchematicPage = () => {
 	}
 
 	function SchematicVerifyPanel(props: SchematicVerifyPanelProps) {
-		const [tags, setTags] = useState(TagChoice.parseArray(props.schematic.tags, TagChoice.SCHEMATIC_UPLOAD_TAG));
+		const [tags, setTags] = useState(TagChoiceLocal.parseArray(props.schematic.tags, TagChoiceLocal.SCHEMATIC_UPLOAD_TAG));
 		const [tag, setTag] = useState('');
 
 		const { useAlert } = useContext(AlertContext);
@@ -97,8 +97,8 @@ export const VerifySchematicPage = () => {
 
 		function verifySchematic(schematic: SchematicData) {
 			let form = new FormData();
-			const tagString = TagChoice.toString(tags);
-			
+			const tagString = TagChoiceLocal.toString(tags);
+
 			form.append('id', schematic.id);
 			form.append('authorId', schematic.authorId);
 			form.append('data', schematic.data);
@@ -113,7 +113,7 @@ export const VerifySchematicPage = () => {
 				});
 		}
 
-		function handleAddTag(tag: TagChoice) {
+		function handleAddTag(tag: TagChoiceLocal) {
 			if (!tag) return;
 			tags.filter((q) => q.name !== tag.name);
 			setTags((prev) => [...prev, tag]);
@@ -144,17 +144,13 @@ export const VerifySchematicPage = () => {
 						<Dropbox
 							placeholder='Add tags'
 							value={tag}
-							items={TagChoice.SCHEMATIC_UPLOAD_TAG.filter((t) => (t.name.includes(tag) || t.value.includes(tag)) && !tags.includes(t))}
+							items={TagChoiceLocal.SCHEMATIC_UPLOAD_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 							onChange={(event) => setTag(event.target.value)}
 							onChoose={(item) => handleAddTag(item)}
-							converter={(t, index) => (
-								<span key={index}>
-									<Trans i18nKey={t.name} /> : <Trans i18nKey={t.value} />
-								</span>
-							)}
+							converter={(t, index) => <TagPick key={index} tag={t} />}
 						/>
 						<div className='flex-row flex-wrap small-gap'>
-							{tags.map((t: TagChoice, index: number) => (
+							{tags.map((t: TagChoiceLocal, index: number) => (
 								<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
 							))}
 						</div>

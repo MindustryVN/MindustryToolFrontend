@@ -1,5 +1,6 @@
 import { API } from '../../API';
 import '../../styles.css';
+import i18n from '../../util/I18N';
 
 import './Tag.css';
 
@@ -7,18 +8,18 @@ import React, { ReactElement } from 'react';
 import { Trans } from 'react-i18next';
 
 interface TagProps {
-	tag: TagChoice;
+	tag: TagChoiceLocal;
 	removeButton?: ReactElement;
 }
 
 export default function Tag(props: TagProps) {
 	return (
-		<div className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: props.tag.color }}>
-			<div className='flex-column text-center'>
-				<Trans i18nKey={`tag.category.${props.tag.name}`} />: <Trans i18nKey={`tag.value.${props.tag.value}`} />
-			</div>
+		<span className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: props.tag.color }}>
+			<span className='flex-column text-center'>
+				{props.tag.displayName} : {props.tag.displayValue}
+			</span>
 			{props.removeButton}
-		</div>
+		</span>
 	);
 }
 
@@ -27,28 +28,46 @@ export interface CustomTag {
 	value: Array<string>;
 	color: string;
 }
-export class TagChoice {
+
+export class TagChoiceLocal {
 	name: string;
+	displayName: string;
 	value: string;
+	displayValue: string;
 	color: string;
 
-	constructor(name: string, value: string, color: string) {
+	constructor(name: string, displayName: string, value: string, displayValue: string, color: string) {
 		this.name = name;
+		this.displayName = displayName;
 		this.value = value;
+		this.displayValue = displayValue;
 		this.color = color;
 	}
 
-	static parse(value: string, source: Array<TagChoice>) {
+	static SCHEMATIC_UPLOAD_TAG: TagChoiceLocal[] = [];
+	static SCHEMATIC_SEARCH_TAG: TagChoiceLocal[] = [];
+
+	static getTag(tag: string, result: TagChoiceLocal[]) {
+		API.REQUEST.get(`tag/${tag}`) //
+			.then((r) => {
+				result.length = 0;
+				let customTagList: Array<CustomTag> = r.data;
+				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoiceLocal(customTag.name, i18n.t(`tag.category.${customTag.name}`), v, i18n.t(`tag.value.${v}`), customTag.color)));
+				temp.forEach((t) => t.forEach((m) => result.push(m)));
+			});
+	}
+
+	static parse(value: string, source: Array<TagChoiceLocal>) {
 		let str = value.split(':');
 		if (str.length != 2) return undefined;
 
 		let r = source.find((t) => t.name === str[0] && t.value === str[1]);
 		if (!r) return undefined;
 
-		return new TagChoice(r.name, str[1], r.color);
+		return r;
 	}
 
-	static parseArray(value: Array<string>, source: Array<TagChoice>) {
+	static parseArray(value: Array<string>, source: Array<TagChoiceLocal>) {
 		let arr = [];
 		for (let i in value) {
 			var r = this.parse(value[i], source);
@@ -57,20 +76,8 @@ export class TagChoice {
 		return arr;
 	}
 
-	static toString(tags : Array<TagChoice>){
+	static toString(tags: Array<TagChoiceLocal>) {
 		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
-	}
-
-	static SCHEMATIC_UPLOAD_TAG: TagChoice[] = [];
-	static SCHEMATIC_SEARCH_TAG: TagChoice[] = [];
-
-	static getTag(tag: string, result: TagChoice[]) {
-		API.REQUEST.get(`tag/${tag}`) //
-			.then((r) => {
-				let customTagList: Array<CustomTag> = r.data;
-				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoice(customTag.name, v, customTag.color)));
-				temp.forEach((t) => t.forEach((r) => result.push(r)));
-			});
 	}
 }
 

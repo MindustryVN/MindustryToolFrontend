@@ -23,9 +23,9 @@ export default function Dropbox<ItemType>(props: DropboxProps<ItemType>) {
 			<section className='dropbox-input small-gap'>
 				<input
 					className='dropbox-text'
-					title='Choose tag'
 					type='text'
 					value={props.value}
+					title={props.placeholder}
 					placeholder={props.placeholder}
 					onChange={(event) => {
 						if (props.onChange) props.onChange(event);

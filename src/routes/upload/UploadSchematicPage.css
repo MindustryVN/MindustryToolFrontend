@@ -39,6 +39,8 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 	gap: 1rem;
+
+	width: 50vw;
 }
 
 .preview-image-container {
@@ -64,7 +66,6 @@
 	align-items: center;
 	justify-content: center;
 }
-
 
 #ufb {
 	display: none;

@@ -42,3 +42,7 @@
 	text-decoration: none;
 	text-transform: capitalize;
 }
+
+.capitalize {
+	text-transform: capitalize;
+}

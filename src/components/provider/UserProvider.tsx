@@ -30,7 +30,7 @@ export default function UserProvider(props: UserProviderProps) {
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
 		if (accessToken) {
 			API.setBearerToken(accessToken);
-			API.REQUEST.get('/user') //
+			API.REQUEST.get('/user/me') //
 				.then((result) => handleLogin(result.data))
 				.catch(() => handleLogOut())
 				.finally(() => setLoading(false));

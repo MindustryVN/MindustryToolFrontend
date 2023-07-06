@@ -29,36 +29,44 @@ const analytics = getAnalytics(app);
 
 const Map = React.lazy(() => import('./routes/map/MapPage'));
 const Home = React.lazy(() => import('./routes/home/HomePage'));
-const User = React.lazy(() => import('./routes/user/UserPage'));
+const Me = React.lazy(() => import('./routes/me/MePage'));
 const Logic = React.lazy(() => import('./routes/logic/LogicPage'));
 const Schematic = React.lazy(() => import('./routes/schematic/SchematicPage'));
 const Login = React.lazy(() => import('./routes/login/LoginPage'));
 const Upload = React.lazy(() => import('./routes/upload/UploadSchematicPage'));
 const Admin = React.lazy(() => import('./routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('./routes/forum/ForumPage'));
+const Info = React.lazy(() => import('./routes/info/Info'));
+const User = React.lazy(() => import('./routes/user/UserPage'));
 const SchematicPreview = React.lazy(() => import('./routes/schematic/SchematicPreviewPage'));
 
 export default function App() {
 	return (
 		<main className='app'>
-			<NavigationPanel />
-			<UserDisplay />
-			<Suspense fallback={<Loading />}>
-				<Routes>
-					<Route path='/' element={<Navigate to='/home' />} />
-					<Route path='/map' element={<Map />} />
-					<Route path='/home' element={<Home />} />
-					<Route path='/logic' element={<Logic />} />
-					<Route path='/login' element={<Login />} />
-					<Route path='/upload' element={<Upload />} />
-					<Route path='/schematic' element={<Schematic />} />
-					<Route path='/schematic/:id' element={<SchematicPreview />} />
-					<Route path='/forum/*' element={<Forum></Forum>}></Route>
-					<Route path='/user' element={<PrivateRoute element={<User />} />} />
-					<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
-					<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
-				</Routes>
-			</Suspense>
+			<section className='navigation-bar'>
+				<NavigationPanel />
+				<UserDisplay />
+			</section>
+			<section className='main'>
+				<Suspense fallback={<Loading />}>
+					<Routes>
+						<Route path='/' element={<Navigate to='/home' />} />
+						<Route path='/map' element={<Map />} />
+						<Route path='/home' element={<Home />} />
+						<Route path='/logic' element={<Logic />} />
+						<Route path='/login' element={<Login />} />
+						<Route path='/upload' element={<Upload />} />
+						<Route path='/schematic' element={<Schematic />} />
+						<Route path='/schematic/:schematicId' element={<SchematicPreview />} />
+						<Route path='/forum/*' element={<Forum></Forum>}></Route>
+						<Route path='/user' element={<PrivateRoute element={<Me />} />} />
+						<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
+						<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
+						<Route path='/info' element={<Info />} />
+						<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
+					</Routes>
+				</Suspense>
+			</section>
 			<footer className='web-version'>{WEB_VERSION}</footer>
 		</main>
 	);

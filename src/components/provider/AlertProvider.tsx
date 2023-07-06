@@ -89,7 +89,7 @@ function AlertMessage(props: AlertMessageProps) {
 	return (
 		<section className='alert-message' style={{ backgroundColor: color }}>
 			{props.message}
-			<ClearIconButton icon={QUIT_ICON} onClick={() => props.onTimeOut()} />
+			<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => props.onTimeOut()} />
 		</section>
 	);
 }
