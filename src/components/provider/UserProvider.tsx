@@ -23,26 +23,17 @@ export default function UserProvider(props: UserProviderProps) {
 	const [user, setUser] = useState<UserData>();
 	const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => getUserData(), [])
-
-	function getUserData() {
+	useEffect(() => {
 		setLoading(true);
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
 		if (accessToken) {
 			API.setBearerToken(accessToken);
 			API.REQUEST.get('/user/me') //
-				.then((result) => handleLogin(result.data))
-				.catch(() => handleLogOut())
+				.then((result) => setUser(result.data))
+				.catch(() => console.log('Login failed'))
 				.finally(() => setLoading(false));
 		} else setLoading(false);
-	}
-
-	function handleLogin(user: UserData) {
-		if (user) {
-			setUser(user);
-
-		} else handleLogOut();
-	}
+	}, []);
 
 	function handleLogOut() {
 		setUser(undefined);

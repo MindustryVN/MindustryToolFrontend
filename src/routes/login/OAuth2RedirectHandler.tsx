@@ -4,8 +4,8 @@ import { ACCESS_TOKEN } from '../../config/Config';
 import { Navigate } from 'react-router-dom';
 
 export default class OAuth2RedirectHandler extends Component {
-	getUrlPropseter(name: string): string {
-		name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+	getUrlParam(name: string): string {
+		name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
 		var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
 
 		var results = regex.exec(window.location.search);
@@ -13,14 +13,15 @@ export default class OAuth2RedirectHandler extends Component {
 	}
 
 	render() {
-		const token = this.getUrlPropseter('token');
+		const token = this.getUrlParam('token');
 
 		if (token) {
 			localStorage.setItem(ACCESS_TOKEN, token);
 			return <Navigate to={{ pathname: '/home' }} />;
-		} else {
-			// const error = this.getUrlPropseter('error');
-			return <Navigate to={{ pathname: '/login' }} />;
 		}
+
+		const error = this.getUrlParam('error');
+		console.log(error);
+		return <Navigate to={{ pathname: '/login' }} />;
 	}
 }

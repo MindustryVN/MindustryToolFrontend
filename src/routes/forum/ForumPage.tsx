@@ -8,10 +8,10 @@ const HowToDownloadMindustry = React.lazy(() => import('./posts/HowToDownloadMin
 
 export default function ForumPage ()  {
 	return (
-		<div className='forum'>
+		<main className='forum'>
 			<Routes>
 				<Route path='/how-to-download-mindustry' Component={HowToDownloadMindustry} />
 			</Routes>
-		</div>
+		</main>
 	);
 };

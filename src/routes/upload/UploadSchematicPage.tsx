@@ -1,7 +1,7 @@
 import '../../styles.css';
 import './UploadSchematicPage.css';
 
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from '../../API';
 import { QUIT_ICON } from '../../components/common/Icon';
 import ClearIconButton from '../../components/button/ClearIconButton';
@@ -12,7 +12,7 @@ import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config'
 import i18n from '../../util/I18N';
 import { getFileExtension } from '../../util/StringUtils';
 import { UserContext } from '../../components/provider/UserProvider';
-import { AlertContext } from '../../components/provider/AlertProvider';
+import { PopupMessageContext } from '../../components/provider/PopupMessageProvider';
 import { Link } from 'react-router-dom';
 import TagPick from '../../components/tag/TagPick';
 
@@ -30,36 +30,37 @@ export default function Upload() {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	const { user } = useContext(UserContext);
-	const { useAlert } = useContext(AlertContext);
 
-	useEffect(() => checkUser(), []);
+	const popup = useRef(useContext(PopupMessageContext));
 
-	function checkUser() {
+	useEffect(() => {
 		if (user) return;
 
-		useAlert(
-			<span>
-				{i18n.t('upload.login')}
-				<Link className='small-padding' to='/login'>
-					Login
-				</Link>
-			</span>,
-			20,
-			'warning'
-		);
-	}
+	popup.current.addPopupMessage({
+			message: (
+				<span>
+					{i18n.t('upload.login')}
+					<Link className='small-padding' to='/login'>
+						Login
+					</Link>
+				</span>
+			),
+			duration: 20,
+			type: 'warning'
+		});
+	}, [user]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0) {
-			useAlert(i18n.t('upload.invalid-schematic-file'), 5, 'error');
+		popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-			useAlert(i18n.t('upload.invalid-schematic-file'), 5, 'error');
+		popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
 			return;
 		}
 
@@ -78,7 +79,7 @@ export default function Upload() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-					useAlert(i18n.t('upload.not-schematic-code'), 5, 'warning');
+				popup.current.addPopupMessage({ message: i18n.t('upload.not-schematic-code'), duration: 5, type: 'warning' });
 					return;
 				}
 
@@ -96,17 +97,17 @@ export default function Upload() {
 	function getPreview(form: FormData) {
 		API.REQUEST.post('schematic-upload/preview', form) //
 			.then((result) => setPreview(result.data)) //
-			.catch((error) => useAlert(i18n.t(`upload.invalid-schematic`) + JSON.stringify(error), 10, 'error'));
+			.catch((error) => popup.current.addPopupMessage({ message: i18n.t(`upload.invalid-schematic`) + JSON.stringify(error), duration: 10, type: 'error' }));
 	}
 
 	function handleSubmit() {
 		if (!file && !code) {
-			useAlert(i18n.t('upload.no-data'), 5, 'error');
+		popup.current.addPopupMessage({ message: i18n.t('upload.no-data'), duration: 5, type: 'error' });
 			return;
 		}
 
 		if (tags === null || tags.length === 0) {
-			useAlert(i18n.t('upload.no-tag'), 5, 'error');
+			popup.current.addPopupMessage({ message: i18n.t('upload.no-tag'), duration: 5, type: 'error' });
 			return;
 		}
 		const formData = new FormData();
@@ -124,10 +125,10 @@ export default function Upload() {
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				useAlert(i18n.t('upload.upload-success'), 10, 'info');
+				popup.current.addPopupMessage({ message: i18n.t('upload.upload-success'), duration: 10, type: 'info' });
 			})
 			.catch((error) => {
-				if (error.response && error.response.data) useAlert(i18n.t('upload.upload-failed') + error.response.data.message, 10, 'error');
+				if (error.response && error.response.data) popup.current.addPopupMessage({ message: i18n.t('upload.upload-fail') + error.response.data.message, duration: 10, type: 'error' });
 			});
 	}
 
@@ -170,7 +171,7 @@ export default function Upload() {
 	}
 
 	return (
-		<div className='upload'>
+		<main className='upload'>
 			<div className='upload'>
 				<div className='preview-container '>
 					<div className='upload-button flex-column medium-gap'>
@@ -228,6 +229,6 @@ export default function Upload() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</main>
 	);
 }

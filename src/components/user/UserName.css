@@ -19,6 +19,8 @@
 	background-color: var(--black);
 
 	cursor: pointer;
+
+	text-decoration: none;
 }
 
 .admin {

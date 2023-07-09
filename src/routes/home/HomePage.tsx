@@ -1,11 +1,11 @@
-import React from 'react';
-
 import '../../styles.css';
 import './HomePage.css';
 
+import React from 'react';
+
 export default function Home() {
 	return (
-		<div className='home'>
+		<main className='home'>
 			<span className='content'>
 				<h2>What are you looking for?</h2>
 				<b>Download the game for free?</b>
@@ -67,6 +67,6 @@ export default function Home() {
 					</li>
 				</ul>
 			</span>
-		</div>
+		</main>
 	);
 }

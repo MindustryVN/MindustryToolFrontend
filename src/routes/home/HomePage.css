@@ -3,6 +3,10 @@
 	height: 100%;
 
 	overflow: hidden auto;
+
+	box-sizing: border-box;
+
+	margin: 2rem;
 }
 
 .content {
@@ -10,8 +14,7 @@
 	align-items: center;
 	justify-items: center;
 
-	padding: 1rem;
-	margin: 3rem;
+	padding: 2rem;
 }
 
 .link-container {

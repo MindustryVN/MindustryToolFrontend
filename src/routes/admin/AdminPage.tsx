@@ -2,7 +2,7 @@ import './AdminPage.css';
 import '../../styles.css';
 
 import React, { useState } from 'react';
-import { VerifySchematicPage } from './VerifySchematicPage';
+import VerifySchematicPage from './VerifySchematicTab';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
@@ -15,10 +15,10 @@ export default function Admin() {
 				return <VerifySchematicPage />;
 
 			case tabs[1]:
-				return <div>{currentTab}</div>;
+				return <>{currentTab}</>;
 
 			case tabs[2]:
-				return <div>{currentTab}</div>;
+				return <>{currentTab}</>;
 
 			default:
 				return <>No tab</>;
@@ -36,7 +36,7 @@ export default function Admin() {
 					))}
 				</section>
 			</div>
-			<section className='flex-center h100p w100p'>{renderTab(currentTab)}</section>
+			{renderTab(currentTab)}
 		</main>
 	);
 }

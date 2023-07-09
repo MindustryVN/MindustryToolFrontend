@@ -4,5 +4,5 @@ import { useParams } from 'react-router-dom';
 export default function SchematicPreviewPage() {
 	const { schematicId } = useParams();
 
-	return <div>{schematicId}</div>;
+	return <main>{schematicId}</main>;
 }

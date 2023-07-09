@@ -1,7 +1,6 @@
 import '../../styles.css';
 
 import React from 'react';
-import { Trans } from 'react-i18next';
 import { TagChoiceLocal } from './Tag';
 
 interface TagPickProps {
