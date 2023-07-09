@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 export class Utils {
 	static getDownloadUrl(data: string): string {
 		const blob = new Blob([Buffer.from(data, 'base64')], { type: 'text/plain' });

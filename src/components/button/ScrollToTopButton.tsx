@@ -1,7 +1,6 @@
 import '../../styles.css';
 
 import React from 'react';
-import IconButton from './IconButton';
 
 interface ScrollToTopButtonProps {
 	//id of the container

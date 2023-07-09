@@ -1,0 +1,35 @@
+.verify-schematic {
+	width: 100%;
+	height: 100%;
+}
+
+.schematic-info-container {
+	padding: 2rem;
+}
+
+.schematic-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, var(--preview-image-min-size));
+	grid-gap: 1rem;
+
+	justify-content: center;
+	align-content: flex-start;
+}
+
+.schematic-info-image {
+	display: block;
+	border-radius: 5px;
+	border: 2px solid var(--white);
+
+	min-width: var(--preview-image-min-size);
+	min-height: var(--preview-image-min-size);
+
+	max-width: min(512px, 100vw);
+}
+
+.schematic-card {
+	width: 100%;
+	height: 100%;
+
+	overflow: hidden auto;
+}

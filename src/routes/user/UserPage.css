@@ -1,16 +1,22 @@
-.user-card {
-    padding: 5rem;
+.user {
+	height: 100%;
+	width: 100%;
 }
 
-.info-card{
-    display: grid;   
+.user-card {
+	padding: 5rem;
+}
+
+.info-card {
+	display: grid;
 }
 
 .avatar-image {
 	border: 2px solid var(--white);
+
+	align-self: flex-start;
 }
 
-.username{
-    font-size: 2rem;
+.username {
+	font-size: 2rem;
 }
-

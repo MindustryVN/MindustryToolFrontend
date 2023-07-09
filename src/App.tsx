@@ -6,26 +6,25 @@ import NavigationPanel from './components/navigation/NavigationPanel';
 import AdminRoute from './components/router/AdminRoute';
 import PrivateRoute from './components/router/PrivateRoute';
 import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
-import UserDisplay from './components/user/UserDisplay';
 
 import React, { Suspense } from 'react';
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { WEB_VERSION } from './config/Config';
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+// import { initializeApp } from 'firebase/app';
+// import { getAnalytics } from 'firebase/analytics';
 
-const firebaseConfig = {
-	apiKey: 'AIzaSyACF4nOPEHnjPESSj_Ds3G-M90qrLLSL08',
-	authDomain: 'mindustrytool.firebaseapp.com',
-	projectId: 'mindustrytool',
-	storageBucket: 'mindustrytool.appspot.com',
-	messagingSenderId: '733073499252',
-	appId: '1:733073499252:web:48d86079f479e5fcaa1d21',
-	measurementId: 'G-CGKXS6096G'
-};
+// const firebaseConfig = {
+// 	apiKey: 'AIzaSyACF4nOPEHnjPESSj_Ds3G-M90qrLLSL08',
+// 	authDomain: 'mindustrytool.firebaseapp.com',
+// 	projectId: 'mindustrytool',
+// 	storageBucket: 'mindustrytool.appspot.com',
+// 	messagingSenderId: '733073499252',
+// 	appId: '1:733073499252:web:48d86079f479e5fcaa1d21',
+// 	measurementId: 'G-CGKXS6096G'
+// };
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 
 const Map = React.lazy(() => import('./routes/map/MapPage'));
 const Home = React.lazy(() => import('./routes/home/HomePage'));
@@ -43,10 +42,7 @@ const SchematicPreview = React.lazy(() => import('./routes/schematic/SchematicPr
 export default function App() {
 	return (
 		<main className='app'>
-			<section className='navigation-bar'>
-				<NavigationPanel />
-				<UserDisplay />
-			</section>
+			<NavigationPanel />
 			<section className='main'>
 				<Suspense fallback={<Loading />}>
 					<Routes>

@@ -3,7 +3,6 @@ import '../../styles.css';
 
 import React, { ReactNode } from 'react';
 import SchematicData from './SchematicData';
-import { API_BASE_URL } from '../../config/Config';
 
 interface SchematicPreviewProps {
 	schematic: SchematicData;
@@ -16,7 +15,7 @@ export default function SchematicPreview(props: SchematicPreviewProps) {
 	return (
 		<section className='schematic-preview'>
 			<button className='schematic-image-wrapper' type='button' onClick={() => props.onClick(props.schematic)}>
-				<img className='schematic-image' src={props.imageUrl} alt='image'/>
+				<img className='schematic-image' src={props.imageUrl} alt='schematic' />
 			</button>
 
 			<span className='schematic-name small-padding flex-center text-center'>{props.schematic.name}</span>

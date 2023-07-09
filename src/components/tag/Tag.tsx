@@ -5,7 +5,6 @@ import i18n from '../../util/I18N';
 import './Tag.css';
 
 import React, { ReactElement } from 'react';
-import { Trans } from 'react-i18next';
 
 interface TagProps {
 	tag: TagChoiceLocal;
@@ -54,12 +53,13 @@ export class TagChoiceLocal {
 				let customTagList: Array<CustomTag> = r.data;
 				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoiceLocal(customTag.name, i18n.t(`tag.category.${customTag.name}`), v, i18n.t(`tag.value.${v}`), customTag.color)));
 				temp.forEach((t) => t.forEach((m) => result.push(m)));
-			});
+			})//
+			.catch(() => console.log(`Failed to load tag: ${tag}`));
 	}
 
 	static parse(value: string, source: Array<TagChoiceLocal>) {
 		let str = value.split(':');
-		if (str.length != 2) return undefined;
+		if (str.length !== 2) return undefined;
 
 		let r = source.find((t) => t.name === str[0] && t.value === str[1]);
 		if (!r) return undefined;
