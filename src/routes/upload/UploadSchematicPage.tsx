@@ -189,12 +189,12 @@ export default function Upload() {
 					</div>
 					<div className='upload-description-container'>
 						{preview && (
-							<div className='flex-column text-center'>
+							<div className='flex-column flex-wrap text-center'>
 								{<div>Author: {user ? user.name : 'community'}</div>}
 								<div>Name: {preview.name}</div>
 								{preview.description && <p> {preview.description}</p>}
 								{preview.requirement && (
-									<section className='text-center small-gap'>
+									<section className='flex-row flex-wrap small-gap'>
 										{preview.requirement.map((r, index) => (
 											<span key={index} className='flex-row center'>
 												<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
