@@ -48,15 +48,41 @@ export default function Schematic() {
 			}
 		})
 			.then((result) => {
-				setSchematicList((prev) => {
-					let schematics: SchematicData[] = result.data;
-					prev[0] = schematics;
-					return [...prev];
-				});
+				let schematics: SchematicData[] = result.data;
+				if (schematics) {
+					setSchematicList((prev) => {
+						prev[0] = schematics;
+						return [...prev];
+					});
+				}
 			})
 			.catch(() => console.log('Error loading schematic page')) //
 			.finally(() => setLoaderState('more'));
 	}, []);
+
+	useEffect(() => {
+		setLoaderState('loading');
+		setSchematicList([[]]);
+		currentQuery.current.sort = sortQuery;
+
+		API.REQUEST.get(`schematic/page/0`, {
+			params: {
+				tags: `${currentQuery.current.tag.map((t) => `${t.name}:${t.value}`).join()}`, //
+				sort: currentQuery.current.sort.value
+			}
+		})
+			.then((result) => {
+				let schematics: SchematicData[] = result.data;
+				if (schematics) {
+					setSchematicList((prev) => {
+						prev[0] = schematics;
+						return [...prev];
+					});
+				}
+			})
+			.catch(() => console.log('Error loading schematic page')) //
+			.finally(() => setLoaderState('more'));
+	}, [sortQuery]);
 
 	function loadPage() {
 		setLoaderState('loading');
@@ -77,7 +103,7 @@ export default function Schematic() {
 		})
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
-				if (schematics.length) {
+				if (schematics) {
 					if (newPage)
 						setSchematicList((prev) => {
 							prev.push(schematics);
@@ -165,7 +191,14 @@ export default function Schematic() {
 						<img src='/assets/icons/copy.png' alt='copy' />
 					</button>
 					{user && (schematic.authorId === user.id || UserData.isAdmin(user)) && (
-						<button className='button' type='button'>
+						<button
+							className='button'
+							type='button'
+							onClick={() => {
+								API.REQUEST.delete(`schematic/${schematic.id}`) //
+									.then(() => addPopupMessage({ message: i18n.t('schematic.delete-success'), duration: 5, type: 'info' }))
+									.catch(() => addPopupMessage({ message: i18n.t('schematic.delete-fail'), duration: 5, type: 'warning' }));
+							}}>
 							<img src='/assets/icons/trash-16.png' alt='delete' />
 						</button>
 					)}
@@ -180,11 +213,11 @@ export default function Schematic() {
 	if (showSchematicModel && currentSchematic) return buildSchematicData(currentSchematic);
 
 	return (
-		<main id='schematic' className='schematic'>
+		<main id='schematic' className='schematic flex-column small-gap'>
 			<header className='flex-column medium-gap'>
 				<section className='search-container'>
 					<Dropbox
-						placeholder='Search with tags'
+						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={TagChoiceLocal.SCHEMATIC_SEARCH_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
@@ -199,17 +232,17 @@ export default function Schematic() {
 					))}
 				</section>
 				<section className='sort-container grid-row small-gap center'>
-					{SCHEMATIC_SORT_CHOICE.map((c: SortChoice, index) => (
-						<button className={'sort-choice capitalize button ' + (c === sortQuery ? 'button-active' : '')} type='button' key={index} onClick={() => setSortQuery(c)}>
+					{SCHEMATIC_SORT_CHOICE.map((c: SortChoice) => (
+						<button className={'sort-choice capitalize button ' + (c === sortQuery ? 'button-active' : '')} type='button' key={c.name} onClick={() => setSortQuery(c)}>
 							{c.name}
 						</button>
 					))}
 				</section>
 			</header>
 			<section className='schematic-container'>
-				{Utils.array2dToArray(schematicList, (schematic, index) => (
+				{Utils.array2dToArray(schematicList, (schematic) => (
 					<SchematicPreview
-						key={index}
+						key={schematic.id}
 						schematic={schematic}
 						imageUrl={`${API_BASE_URL}schematic/${schematic.id}/image`}
 						onClick={() => {

@@ -51,10 +51,10 @@ export class TagChoiceLocal {
 			.then((r) => {
 				result.length = 0;
 				let customTagList: Array<CustomTag> = r.data;
-				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoiceLocal(customTag.name, i18n.t(`tag.category.${customTag.name}`), v, i18n.t(`tag.value.${v}`), customTag.color)));
+				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoiceLocal(customTag.name, i18n.t(`tag.${customTag.name}.name`), v, i18n.t(`tag.${customTag.name}.value.${v}`), customTag.color)));
 				temp.forEach((t) => t.forEach((m) => result.push(m)));
 			})//
-			.catch(() => console.log(`Failed to load tag: ${tag}`));
+			.catch(() => console.log(`Fail to load tag: ${tag}`));
 	}
 
 	static parse(value: string, source: Array<TagChoiceLocal>) {
@@ -91,6 +91,7 @@ export class SortChoice {
 	}
 }
 export const SCHEMATIC_SORT_CHOICE = [
-	new SortChoice('newest', 'time:1'), //
-	new SortChoice('most liked', 'like:1')
+	new SortChoice(i18n.t( 'tag.newest'), 'time:1'), //
+	new SortChoice(i18n.t( 'tag.oldest'), 'time:-1'), //
+	new SortChoice(i18n.t( 'tag.most-liked'), 'like:1')
 ];

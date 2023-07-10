@@ -38,17 +38,16 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 
 	useEffect(() => {
 		const start = Date.now();
-	
+
 		function addMessage(props: PopupMessageProps) {
 			let uuid: string = v4();
 			let val: PopupMessageData = { message: props.message, duration: props.duration, uuid: uuid, type: props.type };
 			setMessages((prev) => [val, ...prev]);
 		}
-	
+
 		API.REQUEST.get('ping') //
-			.then(() => addMessage({ message: `Ping: ${Date.now() - start}ms`, duration: 5, type: 'info' }))//
-			.catch(() => addMessage({message: "message.lost-connection", duration: 5, type: 'info'}));
-		
+			.then(() => addMessage({ message: `Ping: ${Date.now() - start}ms`, duration: 5, type: 'info' })) //
+			.catch(() => addMessage({ message: 'message.lost-connection', duration: 5, type: 'info' }));
 	}, []);
 
 	function addMessage(props: PopupMessageProps) {
@@ -81,9 +80,13 @@ interface PopupMessageNodeProps {
 }
 
 function PopupMessage(props: PopupMessageNodeProps) {
-	setTimeout(() => props.onTimeOut(), props.duration * 1000);
-
 	var color = '';
+
+	useEffect(() => {
+		setTimeout(() => {
+			props.onTimeOut();
+		}, props.duration * 1000);
+	}, [props]);
 
 	switch (props.type) {
 		case 'info':
@@ -100,9 +103,12 @@ function PopupMessage(props: PopupMessageNodeProps) {
 	}
 
 	return (
-		<section className='popup-message' style={{ backgroundColor: color }}>
-			{props.message}
-			<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => props.onTimeOut()} />
+		<section className='popup-message w100p' style={{ backgroundColor: color }}>
+			<section className='popup-message-content flex-row w100p'>
+				{props.message}
+				<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => props.onTimeOut()} />
+			</section>
+			<div className='timer' style={{ animation: `timer ${props.duration}s linear` }} />
 		</section>
 	);
 }

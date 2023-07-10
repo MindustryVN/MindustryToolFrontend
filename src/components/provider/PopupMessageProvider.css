@@ -8,7 +8,7 @@
 	top: 10vh;
 	right: 0.25rem;
 
-	height: 80vh;
+	max-height: 80vh;
 
 	z-index: 999;
 
@@ -19,24 +19,46 @@
 
 .popup-message {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	flex-wrap: nowrap;
 
 	justify-content: space-between;
 
-	align-items: flex-start;
-
 	min-width: 20vw;
 	max-width: 30vw;
-
-	padding: 1rem;
 
 	border: 2px solid var(--gray);
 
 	animation: slide-in 0.5s;
-
-	transition: position 0.5s;
 }
+
+.popup-message-content {
+	justify-content: space-between;
+
+	padding: 1rem;
+}
+
+.timer {
+	height: 0.2rem;
+	width: 100%;
+}
+
+@keyframes timer {
+	0% {
+		background-color: rgb(100, 100, 255);
+		width: 100%;
+	}
+
+	95%{
+		background-color: rgba(100, 100, 255);
+	}
+
+	100% {
+		background-color: rgba(100, 100, 255, 0);
+		width: 0%;
+	}
+}
+
 
 @media screen and (max-width: 768px) {
 	.popup-message {

@@ -30,7 +30,7 @@ export default function UserProvider(props: UserProviderProps) {
 			API.setBearerToken(accessToken);
 			API.REQUEST.get('/user/me') //
 				.then((result) => setUser(result.data))
-				.catch(() => console.log('Login failed'))
+				.catch(() => console.log('Login fail'))
 				.finally(() => setLoading(false));
 		} else setLoading(false);
 	}, []);

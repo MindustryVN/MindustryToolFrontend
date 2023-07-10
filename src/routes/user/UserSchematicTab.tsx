@@ -34,7 +34,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 		API.REQUEST.get(`schematic/user/${props.user.id}/page/0`) //
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
-				if (schematics.length) {
+				if (schematics) {
 					setSchematicList((prev) => {
 						prev[0] = schematics;
 						return [...prev];
@@ -54,7 +54,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 		API.REQUEST.get(`schematic/user/${props.user.id}/page/${schematicList.length + (newPage ? 0 : -1)}`)
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
-				if (schematics.length) {
+				if (schematics) {
 					if (newPage)
 						setSchematicList((prev) => {
 							prev.push(schematics);

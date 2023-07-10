@@ -52,7 +52,7 @@ export default function VerifySchematicTab() {
 			API.REQUEST.get(`schematic-upload/page/${i}`)
 				.then((result) => {
 					let schematics: SchematicData[] = result.data;
-					if (schematics.length) {
+					if (schematics) {
 						if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
 						else setLoaderState('more');
 
@@ -72,7 +72,7 @@ export default function VerifySchematicTab() {
 		API.REQUEST.get(`schematic-upload/page/${schematicList.length + (newPage ? 0 : -1)}`)
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
-				if (schematics.length) {
+				if (schematics) {
 					if (newPage)
 						setSchematicList((prev) => {
 							prev.push(schematics);
