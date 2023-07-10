@@ -53,7 +53,7 @@
 }
 
 .preview-image {
-	max-width: min(256px, 100vw);
+	max-width: min(512px, 80vw);
 
 	min-width: var(--preview-image-min-size);
 	min-height: var(--preview-image-min-size);
@@ -63,7 +63,6 @@
 	border-radius: 2px;
 
 	display: flex;
-	text-align: center;
 	align-items: center;
 	justify-content: center;
 }
