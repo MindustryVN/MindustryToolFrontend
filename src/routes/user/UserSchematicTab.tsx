@@ -35,9 +35,8 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
 				if (schematics) {
-					setSchematicList((prev) => {
-						prev[0] = schematics;
-						return [...prev];
+					setSchematicList(() => {
+						return [schematics];
 					});
 				}
 			})
@@ -51,14 +50,13 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
 
-		API.REQUEST.get(`schematic/user/${props.user.id}/page/${schematicList.length + (newPage ? 0 : -1)}`)
+		API.REQUEST.get(`schematic/user/${props.user.id}/page/${lastIndex + (newPage ? 1 : 0)}`)
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
 				if (schematics) {
 					if (newPage)
 						setSchematicList((prev) => {
-							prev.push(schematics);
-							return [...prev];
+							return [...prev, schematics];
 						});
 					else
 						setSchematicList((prev) => {
@@ -85,7 +83,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 						{schematic.requirement && (
 							<section className=' flex-row flex-wrap medium-gap'>
 								{schematic.requirement.map((r, index) => (
-									<span key={index} className='text-center'>
+									<span key={index} className='flex-row center'>
 										<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 										<span> {r.amount} </span>
 									</span>
@@ -123,7 +121,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 						}}>
 						<img src='/assets/icons/play-2.png' style={{ rotate: '90deg' }} alt='dislike' />
 					</button>
-					<a className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+					<a className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 						<img src='/assets/icons/download.png' alt='download' />
 					</a>
 					<button className='button' type='button' onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))}>
@@ -160,7 +158,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 							<IconButton key={0} title='up vote' icon={UP_VOTE_ICON} onClick={() => addPopupMessage({ message: i18n.t('schematic.liked'), duration: 5, type: 'info' })} />, //
 							<IconButton key={1} title='down vote' icon={DOWN_VOTE_ICON} onClick={() => addPopupMessage({ message: i18n.t('schematic.disliked'), duration: 5, type: 'info' })} />, //
 							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />, //
-							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/download.png' alt='download' />
 							</a>
 						]}
@@ -173,7 +171,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 				) : (
 					<section className='grid-row small-gap'>
 						<button className='button' type='button' onClick={() => loadPage()}>
-							{loaderState === 'more' ? 'Load more' : 'No schematic left'}
+							{i18n.t(loaderState === 'more' ? 'load-more' : 'no-more-schematic')}
 						</button>
 						<ScrollToTopButton containerId='schematic-tab' />
 					</section>

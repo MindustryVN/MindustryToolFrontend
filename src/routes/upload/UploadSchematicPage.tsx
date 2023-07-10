@@ -36,7 +36,7 @@ export default function Upload() {
 	useEffect(() => {
 		if (user) return;
 
-	popup.current.addPopupMessage({
+		popup.current.addPopupMessage({
 			message: (
 				<span>
 					{i18n.t('upload.login')}
@@ -53,14 +53,14 @@ export default function Upload() {
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0) {
-		popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
+			popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-		popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
+			popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
 			return;
 		}
 
@@ -79,7 +79,7 @@ export default function Upload() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-				popup.current.addPopupMessage({ message: i18n.t('upload.not-schematic-code'), duration: 5, type: 'warning' });
+					popup.current.addPopupMessage({ message: i18n.t('upload.not-schematic-code'), duration: 5, type: 'warning' });
 					return;
 				}
 
@@ -102,7 +102,7 @@ export default function Upload() {
 
 	function handleSubmit() {
 		if (!file && !code) {
-		popup.current.addPopupMessage({ message: i18n.t('upload.no-data'), duration: 5, type: 'error' });
+			popup.current.addPopupMessage({ message: i18n.t('upload.no-data'), duration: 5, type: 'error' });
 			return;
 		}
 
@@ -196,7 +196,7 @@ export default function Upload() {
 								{preview.requirement && (
 									<section className='text-center small-gap'>
 										{preview.requirement.map((r, index) => (
-											<span key={index} className='text-center'>
+											<span key={index} className='flex-row center'>
 												<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 												<span> {r.amount} </span>
 											</span>

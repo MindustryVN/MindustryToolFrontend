@@ -41,24 +41,16 @@
 .timer {
 	height: 0.2rem;
 	width: 100%;
+
+	background-color: rgb(100, 100, 255);
 }
 
 @keyframes timer {
-	0% {
-		background-color: rgb(100, 100, 255);
-		width: 100%;
-	}
-
-	95%{
-		background-color: rgba(100, 100, 255);
-	}
 
 	100% {
-		background-color: rgba(100, 100, 255, 0);
-		width: 0%;
+		transform: translateX(-100%);
 	}
 }
-
 
 @media screen and (max-width: 768px) {
 	.popup-message {
@@ -69,7 +61,7 @@
 
 @keyframes slide-in {
 	0% {
-		transform: translateX(1000px);
+		transform: translateX(100%);
 	}
 	100% {
 		transform: translateX(0);

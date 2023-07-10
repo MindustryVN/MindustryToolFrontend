@@ -3,6 +3,9 @@
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "copied": "Đã sao chép",
+    "load-more":"Tải thêm",
+    "no-more-schematic":"Hết bản thiết kế",
+    "scroll-to-top":"Cuộn lên đầu",
     "loading": {
         "short": "Đang tải",
         "long": "Đang tải, vui lòng đợi 1-2 phút."
@@ -69,8 +72,8 @@
         "planet-tech": {
             "name": "Công nghệ",
             "value": {
-                "serpulo": "serpulo",
-                "erekir": "erekir",
+                "serpulo": "Serpulo",
+                "erekir": "Erekir",
                 "any": "Any"
             }
         },
