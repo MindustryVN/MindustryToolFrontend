@@ -36,8 +36,7 @@ export default function VerifySchematicTab() {
 			.then((result) => {
 				setSchematicList((prev) => {
 					let schematics: SchematicData[] = result.data;
-					if (schematics) prev[0] = schematics;
-					return [...prev];
+					return [schematics];
 				});
 			})
 			.catch(() => console.log('Error loading schematic verify page')) //
@@ -52,11 +51,10 @@ export default function VerifySchematicTab() {
 			API.REQUEST.get(`schematic-upload/page/${i}`)
 				.then((result) => {
 					let schematics: SchematicData[] = result.data;
-					if (schematics.length) {
+					if (schematics) {
 						if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
 						else setLoaderState('more');
-
-						setSchematicList((prev) => [...prev]);
+						setSchematicList((prev) => [...prev, schematics]);
 					} else setLoaderState('out');
 				})
 				.catch(() => setLoaderState('more'));
@@ -69,14 +67,13 @@ export default function VerifySchematicTab() {
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
 
-		API.REQUEST.get(`schematic-upload/page/${schematicList.length + (newPage ? 0 : -1)}`)
+		API.REQUEST.get(`schematic-upload/page/${lastIndex + (newPage ? 1 : 0)}`)
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
-				if (schematics.length) {
+				if (schematics) {
 					if (newPage)
 						setSchematicList((prev) => {
-							prev.push(schematics);
-							return [...prev];
+							return [...prev, schematics];
 						});
 					else
 						setSchematicList((prev) => {
@@ -147,10 +144,10 @@ export default function VerifySchematicTab() {
 					</span>
 					{props.schematic.description && <span className='capitalize'>{props.schematic.description}</span>}
 					{props.schematic.requirement && (
-						<section className=' flex-row small-gap flex-wrap'>
+						<section className=' flex-row small-gap flex-wrap center'>
 							{props.schematic.requirement.map((r, index) => (
-								<span key={index} className='text-center'>
-									<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+								<span key={index} className='flex-row center'>
+									<img className='small-icon' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 									<span> {r.amount} </span>
 								</span>
 							))}
@@ -173,7 +170,7 @@ export default function VerifySchematicTab() {
 						</div>
 					</div>
 					<section className='grid-row small-gap'>
-						<a className='button small-padding' href={Utils.getDownloadUrl(props.schematic.data)} download={`${props.schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+						<a className='button small-padding' href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 							<img src='/assets/icons/download.png' alt='download' />
 						</a>
 						<IconButton icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(props.schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />
@@ -217,7 +214,7 @@ export default function VerifySchematicTab() {
 						}}
 						buttons={[
 							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />, //
-							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/download.png' alt='download' />
 							</a>
 						]}
@@ -230,7 +227,7 @@ export default function VerifySchematicTab() {
 				) : (
 					<section className='grid-row small-gap'>
 						<button className='button' type='button' onClick={() => loadPage()}>
-							{loaderState === 'more' ? 'Load more' : 'No schematic left'}
+							{i18n.t(loaderState === 'more' ? 'load-more' : 'no-more-schematic')}
 						</button>
 						<ScrollToTopButton containerId='admin' />
 					</section>

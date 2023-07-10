@@ -37,26 +37,26 @@ export default function Schematic() {
 	const currentQuery = useRef<{ tag: TagChoiceLocal[]; sort: SortChoice }>({ tag: tagQuery, sort: sortQuery });
 
 	const { user } = useContext(UserContext);
-
 	const { addPopupMessage } = useContext(PopupMessageContext);
 
 	useEffect(() => {
+		setLoaderState('loading');
+		setSchematicList([[]]);
+		currentQuery.current = { tag: tagQuery, sort: sortQuery };
+
 		API.REQUEST.get(`schematic/page/0`, {
 			params: {
-				tags: `${currentQuery.current.tag.map((t) => `${t.name}:${t.value}`).join()}`, //
+				tags: TagChoiceLocal.toString(currentQuery.current.tag), //
 				sort: currentQuery.current.sort.value
 			}
 		})
 			.then((result) => {
-				setSchematicList((prev) => {
-					let schematics: SchematicData[] = result.data;
-					prev[0] = schematics;
-					return [...prev];
-				});
+				let schematics: SchematicData[] = result.data;
+				setSchematicList([schematics]);
 			})
 			.catch(() => console.log('Error loading schematic page')) //
 			.finally(() => setLoaderState('more'));
-	}, []);
+	}, [sortQuery, tagQuery]);
 
 	function loadPage() {
 		setLoaderState('loading');
@@ -68,20 +68,19 @@ export default function Schematic() {
 
 		const lastIndex = schematicList.length - 1;
 		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
-
-		API.REQUEST.get(`schematic/page/${schematicList.length + (newPage ? 0 : -1)}`, {
+		API.REQUEST.get(`schematic/page/${lastIndex + (newPage ? 1 : 0)}`, {
 			params: {
-				tags: `${currentQuery.current.tag.map((t) => `${t.name}:${t.value}`).join()}`, //
+				tags: TagChoiceLocal.toString(currentQuery.current.tag), //
 				sort: currentQuery.current.sort.value
 			}
 		})
 			.then((result) => {
 				let schematics: SchematicData[] = result.data;
-				if (schematics.length) {
+
+				if (schematics) {
 					if (newPage)
 						setSchematicList((prev) => {
-							prev.push(schematics);
-							return [...prev];
+							return [...prev, schematics];
 						});
 					else
 						setSchematicList((prev) => {
@@ -120,7 +119,7 @@ export default function Schematic() {
 						{schematic.requirement && (
 							<section className=' flex-row flex-wrap medium-gap'>
 								{schematic.requirement.map((r, index) => (
-									<span key={index} className='text-center'>
+									<span key={index} className='flex-row center'>
 										<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 										<span> {r.amount} </span>
 									</span>
@@ -158,14 +157,21 @@ export default function Schematic() {
 						}}>
 						<img src='/assets/icons/play-2.png' style={{ rotate: '90deg' }} alt='dislike' />
 					</button>
-					<a className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+					<a className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 						<img src='/assets/icons/download.png' alt='download' />
 					</a>
 					<button className='button' type='button' onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))}>
 						<img src='/assets/icons/copy.png' alt='copy' />
 					</button>
 					{user && (schematic.authorId === user.id || UserData.isAdmin(user)) && (
-						<button className='button' type='button'>
+						<button
+							className='button'
+							type='button'
+							onClick={() => {
+								API.REQUEST.delete(`schematic/${schematic.id}`) //
+									.then(() => addPopupMessage({ message: i18n.t('schematic.delete-success'), duration: 5, type: 'info' }))
+									.catch(() => addPopupMessage({ message: i18n.t('schematic.delete-fail'), duration: 5, type: 'warning' }));
+							}}>
 							<img src='/assets/icons/trash-16.png' alt='delete' />
 						</button>
 					)}
@@ -180,11 +186,11 @@ export default function Schematic() {
 	if (showSchematicModel && currentSchematic) return buildSchematicData(currentSchematic);
 
 	return (
-		<main id='schematic' className='schematic'>
+		<main id='schematic' className='schematic flex-column small-gap'>
 			<header className='flex-column medium-gap'>
 				<section className='search-container'>
 					<Dropbox
-						placeholder='Search with tags'
+						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={TagChoiceLocal.SCHEMATIC_SEARCH_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
@@ -199,8 +205,8 @@ export default function Schematic() {
 					))}
 				</section>
 				<section className='sort-container grid-row small-gap center'>
-					{SCHEMATIC_SORT_CHOICE.map((c: SortChoice, index) => (
-						<button className={'sort-choice capitalize button ' + (c === sortQuery ? 'button-active' : '')} type='button' key={index} onClick={() => setSortQuery(c)}>
+					{SCHEMATIC_SORT_CHOICE.map((c: SortChoice) => (
+						<button className={'sort-choice capitalize button ' + (c === sortQuery ? 'button-active' : '')} type='button' key={c.name} onClick={() => setSortQuery(c)}>
 							{c.name}
 						</button>
 					))}
@@ -220,7 +226,7 @@ export default function Schematic() {
 							<IconButton key={0} title='up vote' icon={UP_VOTE_ICON} onClick={() => addPopupMessage({ message: i18n.t('schematic.liked'), duration: 5, type: 'info' })} />, //
 							<IconButton key={1} title='down vote' icon={DOWN_VOTE_ICON} onClick={() => addPopupMessage({ message: i18n.t('schematic.disliked'), duration: 5, type: 'info' })} />, //
 							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />, //
-							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${schematic.name.trim().replaceAll(' ', '_')}.msch`}>
+							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src='/assets/icons/download.png' alt='download' />
 							</a>
 						]}
@@ -233,7 +239,7 @@ export default function Schematic() {
 				) : (
 					<section className='grid-row small-gap'>
 						<button className='button' type='button' onClick={() => loadPage()}>
-							{loaderState === 'more' ? 'Load more' : 'No schematic left'}
+							{i18n.t(loaderState === 'more' ? 'load-more' : 'no-more-schematic')}
 						</button>
 						<ScrollToTopButton containerId='schematic' />
 					</section>

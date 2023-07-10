@@ -8,7 +8,7 @@
 	top: 10vh;
 	right: 0.25rem;
 
-	height: 80vh;
+	max-height: 80vh;
 
 	z-index: 999;
 
@@ -19,23 +19,37 @@
 
 .popup-message {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	flex-wrap: nowrap;
 
 	justify-content: space-between;
 
-	align-items: flex-start;
-
 	min-width: 20vw;
 	max-width: 30vw;
-
-	padding: 1rem;
 
 	border: 2px solid var(--gray);
 
 	animation: slide-in 0.5s;
+}
 
-	transition: position 0.5s;
+.popup-message-content {
+	justify-content: space-between;
+
+	padding: 1rem;
+}
+
+.timer {
+	height: 0.2rem;
+	width: 100%;
+
+	background-color: rgb(100, 100, 255);
+}
+
+@keyframes timer {
+
+	100% {
+		transform: translateX(-100%);
+	}
 }
 
 @media screen and (max-width: 768px) {
@@ -47,7 +61,7 @@
 
 @keyframes slide-in {
 	0% {
-		transform: translateX(1000px);
+		transform: translateX(100%);
 	}
 	100% {
 		transform: translateX(0);

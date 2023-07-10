@@ -61,6 +61,11 @@
 	padding: 1rem;
 }
 
+.small-icon {
+	height: 1.2rem;
+	width: 1.2rem;
+}
+
 .flex-center {
 	display: flex;
 	justify-content: center;

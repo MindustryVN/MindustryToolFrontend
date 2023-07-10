@@ -1,3 +1,4 @@
+import { Trans } from 'react-i18next';
 import '../../styles.css';
 
 import React from 'react';
@@ -16,7 +17,7 @@ export default function ScrollToTopButton(props: ScrollToTopButtonProps) {
 
 	return (
 		<button className='button' type='button' onClick={() => scrollToTop()}>
-			Scroll to top
+			<Trans i18nKey='scroll-to-top' />
 		</button>
 	);
 }
