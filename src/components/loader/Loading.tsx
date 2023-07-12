@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import '../../styles.css';
 import './Loading.css';
 
-export default function Loading(){
+export default function Loading() {
 	const [message, setMessage] = useState<string>('loading.short');
 
 	useEffect(() => {
@@ -12,8 +12,8 @@ export default function Loading(){
 	}, []);
 
 	return (
-		<span className='flex-center loading'>
+		<span className="flex-center loading">
 			<Trans i18nKey={message} />
 		</span>
 	);
-};
+}

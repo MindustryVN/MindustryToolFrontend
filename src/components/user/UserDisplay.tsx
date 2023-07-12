@@ -16,11 +16,11 @@ export default function UserDisplay() {
 		if (user) return <UserName displayUser={user} />;
 
 		return (
-			<button className='user-display button' type='button' title='Login' onClick={() => navigate('/login')}>
-				<Trans i18nKey='login' />
+			<button className="user-display button" type="button" title="Login" onClick={() => navigate('/login')}>
+				<Trans i18nKey="login" />
 			</button>
 		);
 	}
 
-	return <div className='user-display'>{buildUserDisplay()}</div>;
+	return <div className="user-display">{buildUserDisplay()}</div>;
 }

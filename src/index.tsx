@@ -24,5 +24,5 @@ root.render(
 				</TagProvider>
 			</PopupMessageProvider>
 		</Router>
-	</React.StrictMode>
+	</React.StrictMode>,
 );

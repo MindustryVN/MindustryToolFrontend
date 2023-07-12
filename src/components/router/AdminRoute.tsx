@@ -15,7 +15,7 @@ const AdminRoute = (props: AdminRouteProps) => {
 
 	if (UserData.isAdmin(user)) return props.element;
 
-	return <Navigate to='/login' />;
+	return <Navigate to="/login" />;
 };
 
 export default AdminRoute;

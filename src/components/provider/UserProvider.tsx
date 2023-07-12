@@ -12,7 +12,7 @@ interface UserContextProps {
 export const UserContext = React.createContext<UserContextProps>({
 	user: undefined,
 	loading: false,
-	handleLogout: () => {}
+	handleLogout: () => {},
 });
 
 interface UserProviderProps {

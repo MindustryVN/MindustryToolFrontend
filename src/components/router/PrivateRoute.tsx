@@ -15,7 +15,7 @@ const PrivateRoute = (props: PrivateRouteProps) => {
 
 	if (UserData.isUser(user)) return props.element;
 
-	return <Navigate to='/login' />;
+	return <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

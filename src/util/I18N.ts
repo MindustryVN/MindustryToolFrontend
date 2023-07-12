@@ -7,7 +7,7 @@ import en from '../locales/en.json';
 
 const resources = {
 	vi: { translation: vi },
-	en: { translation: en }
+	en: { translation: en },
 };
 
 i18n.use(Backend)
@@ -17,13 +17,11 @@ i18n.use(Backend)
 		fallbackLng: 'vi',
 		debug: true,
 		interpolation: {
-			escapeValue: false
-		}
+			escapeValue: false,
+		},
 	});
 
 export default i18n;
-
-
 
 //  tag.category.position tag.category.position
 //  tag.category.position tag.category.position

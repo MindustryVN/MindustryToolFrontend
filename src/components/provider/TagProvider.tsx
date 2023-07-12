@@ -13,5 +13,5 @@ export default function TagProvider(props: TagProviderProps) {
 		TagChoiceLocal.getTag('schematic-search-tag', TagChoiceLocal.SCHEMATIC_SEARCH_TAG);
 	}, []);
 
-	return <section className='h100p w100p'>{props.children}</section>;
+	return <section className="h100p w100p">{props.children}</section>;
 }

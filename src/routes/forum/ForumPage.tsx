@@ -6,12 +6,12 @@ import React from 'react';
 
 const HowToDownloadMindustry = React.lazy(() => import('./posts/HowToDownloadMindustry'));
 
-export default function ForumPage ()  {
+export default function ForumPage() {
 	return (
-		<main className='forum'>
+		<main className="forum">
 			<Routes>
-				<Route path='/how-to-download-mindustry' Component={HowToDownloadMindustry} />
+				<Route path="/how-to-download-mindustry" Component={HowToDownloadMindustry} />
 			</Routes>
 		</main>
 	);
-};
+}

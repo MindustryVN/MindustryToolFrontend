@@ -9,7 +9,7 @@ interface TagPickProps {
 
 export default function TagPick(props: TagPickProps) {
 	return (
-		<span className='flex-row'>
+		<span className="flex-row">
 			{props.tag.displayName} : {props.tag.displayValue}
 		</span>
 	);

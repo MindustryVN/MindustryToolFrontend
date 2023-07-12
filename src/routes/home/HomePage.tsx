@@ -5,36 +5,36 @@ import React from 'react';
 
 export default function Home() {
 	return (
-		<main className='home'>
-			<span className='content'>
+		<main className="home">
+			<span className="content">
 				<h2>What are you looking for?</h2>
 				<b>Download the game for free?</b>
 				<ul>
 					<li>
-						<a className='link' href='https://anuke.itch.io/mindustry?fbclid=IwAR2HgdkixMrQEDhcj1an_qtWnnq6YmOlm-c8VoyPsNp5bMtu5aWq_ff7K2M' target='_blank' rel='noopener noreferrer'>
+						<a className="link" href="https://anuke.itch.io/mindustry?fbclid=IwAR2HgdkixMrQEDhcj1an_qtWnnq6YmOlm-c8VoyPsNp5bMtu5aWq_ff7K2M" target="_blank" rel="noopener noreferrer">
 							Itch.io
 						</a>
 					</li>
 					<li>
-						<a className='link' href='/forum/how-to-download-mindustry'>
+						<a className="link" href="/forum/how-to-download-mindustry">
 							How to download
 						</a>
 					</li>
 				</ul>
 				<b>Want to play with others mindustry player?</b>
-				<ul className='link-container'>
+				<ul className="link-container">
 					<li>
-						<a className='link' href='https://discord.gg/mindustry' target='_blank' rel='noopener noreferrer'>
+						<a className="link" href="https://discord.gg/mindustry" target="_blank" rel="noopener noreferrer">
 							Mindustry Official Discord Server
 						</a>
 					</li>
 					<li>
-						<a className='link' href='https://discord.gg/DCX5yrRUyp' target='_blank' rel='noopener noreferrer'>
+						<a className="link" href="https://discord.gg/DCX5yrRUyp" target="_blank" rel="noopener noreferrer">
 							Mindustry Discord Server For Vietnamese
 						</a>
 					</li>
 					<li>
-						<a className='link' href='https://www.reddit.com/r/Mindustry' target='_blank' rel='noopener noreferrer'>
+						<a className="link" href="https://www.reddit.com/r/Mindustry" target="_blank" rel="noopener noreferrer">
 							Reddit r/Mindustry
 						</a>
 					</li>
@@ -43,7 +43,7 @@ export default function Home() {
 				<b>Looking for schematic?</b>
 				<ul>
 					<li>
-						<a className='link' href='/schematic'>
+						<a className="link" href="/schematic">
 							Go to schematic page
 						</a>
 					</li>
@@ -52,7 +52,7 @@ export default function Home() {
 				<b>Looking for map?</b>
 				<ul>
 					<li>
-						<a className='link' href='/map'>
+						<a className="link" href="/map">
 							Go to map page
 						</a>
 					</li>
@@ -61,7 +61,7 @@ export default function Home() {
 				<b>Looking for processor logic?</b>
 				<ul>
 					<li>
-						<a className='link' href='/logic'>
+						<a className="link" href="/logic">
 							Go to logic page
 						</a>
 					</li>

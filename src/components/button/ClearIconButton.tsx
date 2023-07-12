@@ -11,7 +11,7 @@ interface ClearIconButtonProps {
 
 export default function ClearIconButton(props: ClearIconButtonProps) {
 	return (
-		<button className='clear-icon-button flex-center small-padding' title={props.title} type='button' onClick={() => props.onClick()}>
+		<button className="clear-icon-button flex-center small-padding" title={props.title} type="button" onClick={() => props.onClick()}>
 			<img src={props.icon} alt={props.title} />
 		</button>
 	);

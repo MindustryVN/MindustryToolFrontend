@@ -16,8 +16,8 @@ export default function ScrollToTopButton(props: ScrollToTopButtonProps) {
 	}
 
 	return (
-		<button className='button' type='button' onClick={() => scrollToTop()}>
-			<Trans i18nKey='scroll-to-top' />
+		<button className="button" type="button" onClick={() => scrollToTop()}>
+			<Trans i18nKey="scroll-to-top" />
 		</button>
 	);
 }

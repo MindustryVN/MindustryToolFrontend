@@ -27,7 +27,9 @@ interface PopupMessageContextProps {
 	addPopupMessage: (props: PopupMessageProps) => void;
 }
 
-export const PopupMessageContext = React.createContext<PopupMessageContextProps>({ addPopupMessage: (props: PopupMessageProps) => {} });
+export const PopupMessageContext = React.createContext<PopupMessageContextProps>({
+	addPopupMessage: (props: PopupMessageProps) => {},
+});
 
 interface PopupMessageProviderProps {
 	children: ReactNode;
@@ -41,18 +43,40 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 
 		function addMessage(props: PopupMessageProps) {
 			let uuid: string = v4();
-			let val: PopupMessageData = { message: props.message, duration: props.duration, uuid: uuid, type: props.type };
+			let val: PopupMessageData = {
+				message: props.message,
+				duration: props.duration,
+				uuid: uuid,
+				type: props.type,
+			};
 			setMessages((prev) => [val, ...prev]);
 		}
 
 		API.REQUEST.get('ping') //
-			.then(() => addMessage({ message: `Ping: ${Date.now() - start}ms`, duration: 5, type: 'info' })) //
-			.catch(() => addMessage({ message: 'message.lost-connection', duration: 5, type: 'info' }));
+			.then(() =>
+				addMessage({
+					message: `Ping: ${Date.now() - start}ms`,
+					duration: 5,
+					type: 'info',
+				}),
+			) //
+			.catch(() =>
+				addMessage({
+					message: 'message.lost-connection',
+					duration: 5,
+					type: 'info',
+				}),
+			);
 	}, []);
 
 	function addMessage(props: PopupMessageProps) {
 		let uuid: string = v4();
-		let val: PopupMessageData = { message: props.message, duration: props.duration, uuid: uuid, type: props.type };
+		let val: PopupMessageData = {
+			message: props.message,
+			duration: props.duration,
+			uuid: uuid,
+			type: props.type,
+		};
 		setMessages([val, ...messages]);
 	}
 
@@ -62,7 +86,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 
 	return (
 		<PopupMessageContext.Provider value={{ addPopupMessage: addMessage }}>
-			<section id='popup-container' className='flex-column small-gap'>
+			<section id="popup-container" className="flex-column small-gap">
 				{messages.map((val) => (
 					<PopupMessage key={val.uuid} message={val.message} duration={val.duration} type={val.type} onTimeOut={() => removeMessage(val.uuid)} />
 				))}
@@ -103,12 +127,12 @@ function PopupMessage(props: PopupMessageNodeProps) {
 	}
 
 	return (
-		<section className='popup-message w100p' style={{ backgroundColor: color }}>
-			<section className='popup-message-content flex-row w100p'>
+		<section className="popup-message w100p" style={{ backgroundColor: color }}>
+			<section className="popup-message-content flex-row w100p">
 				{props.message}
-				<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => props.onTimeOut()} />
+				<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => props.onTimeOut()} />
 			</section>
-			<div className='timer' style={{ animation: `timer ${props.duration}s linear` }} />
+			<div className="timer" style={{ animation: `timer ${props.duration}s linear` }} />
 		</section>
 	);
 }

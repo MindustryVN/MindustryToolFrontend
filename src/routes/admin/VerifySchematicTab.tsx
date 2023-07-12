@@ -103,8 +103,20 @@ export default function VerifySchematicTab() {
 		function deleteSchematic(schematic: SchematicData) {
 			setShowSchematicModel(false);
 			API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
-				.then(() => addPopupMessage({ message: i18n.t('delete-success'), duration: 5, type: 'info' })) //.
-				.catch(() => addPopupMessage({ message: i18n.t('delete-fail'), duration: 5, type: 'error' }))
+				.then(() =>
+					addPopupMessage({
+						message: i18n.t('delete-success'),
+						duration: 5,
+						type: 'info',
+					}),
+				) //.
+				.catch(() =>
+					addPopupMessage({
+						message: i18n.t('delete-fail'),
+						duration: 5,
+						type: 'error',
+					}),
+				)
 				.finally(() => loadToPage(schematicList.length));
 		}
 
@@ -119,8 +131,20 @@ export default function VerifySchematicTab() {
 			form.append('tags', tagString);
 
 			API.REQUEST.post('schematic', form) //
-				.then(() => addPopupMessage({ message: i18n.t('verify-success'), duration: 5, type: 'info' }))
-				.catch(() => addPopupMessage({ message: i18n.t('verify-fail'), duration: 5, type: 'error' }))
+				.then(() =>
+					addPopupMessage({
+						message: i18n.t('verify-success'),
+						duration: 5,
+						type: 'info',
+					}),
+				)
+				.catch(() =>
+					addPopupMessage({
+						message: i18n.t('verify-fail'),
+						duration: 5,
+						type: 'error',
+					}),
+				)
 				.finally(() => {
 					loadToPage(schematicList.length);
 					setShowSchematicModel(false);
@@ -135,52 +159,63 @@ export default function VerifySchematicTab() {
 		}
 
 		return (
-			<main className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
-				<img className='schematic-info-image' src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} alt='schematic' />
-				<div className='flex-column small-gap'>
-					<span className='capitalize'>{props.schematic.name}</span>
+			<main className="schematic-info-container" onClick={(event) => event.stopPropagation()}>
+				<img className="schematic-info-image" src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} alt="schematic" />
+				<div className="flex-column small-gap">
+					<span className="capitalize">{props.schematic.name}</span>
 					<span>
 						<UserName userId={props.schematic.authorId} />
 					</span>
-					{props.schematic.description && <span className='capitalize'>{props.schematic.description}</span>}
+					{props.schematic.description && <span className="capitalize">{props.schematic.description}</span>}
 					{props.schematic.requirement && (
-						<section className=' flex-row small-gap flex-wrap center'>
+						<section className=" flex-row small-gap flex-wrap center">
 							{props.schematic.requirement.map((r, index) => (
-								<span key={index} className='flex-row center'>
-									<img className='small-icon' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+								<span key={index} className="flex-row center">
+									<img className="small-icon" src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 									<span> {r.amount} </span>
 								</span>
 							))}
 						</section>
 					)}
 
-					<div className='flex-column small-gap'>
+					<div className="flex-column small-gap">
 						<Dropbox
-							placeholder='Add tags'
+							placeholder="Add tags"
 							value={tag}
 							items={TagChoiceLocal.SCHEMATIC_UPLOAD_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 							onChange={(event) => setTag(event.target.value)}
 							onChoose={(item) => handleAddTag(item)}
 							converter={(t, index) => <TagPick key={index} tag={t} />}
 						/>
-						<div className='flex-row flex-wrap small-gap'>
+						<div className="flex-row flex-wrap small-gap">
 							{tags.map((t: TagChoiceLocal, index: number) => (
-								<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
+								<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => handleRemoveTag(index)} />} />
 							))}
 						</div>
 					</div>
-					<section className='grid-row small-gap'>
-						<a className='button small-padding' href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}>
-							<img src='/assets/icons/download.png' alt='download' />
+					<section className="grid-row small-gap">
+						<a className="button small-padding" href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+							<img src="/assets/icons/download.png" alt="download" />
 						</a>
-						<IconButton icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(props.schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />
-						<button className='button' type='button' onClick={() => verifySchematic(props.schematic)}>
+						<IconButton
+							icon={COPY_ICON}
+							onClick={() =>
+								Utils.copyDataToClipboard(props.schematic.data).then(() =>
+									addPopupMessage({
+										message: i18n.t('copied'),
+										duration: 10,
+										type: 'info',
+									}),
+								)
+							}
+						/>
+						<button className="button" type="button" onClick={() => verifySchematic(props.schematic)}>
 							Verify
 						</button>
-						<button className='button' type='button' onClick={() => deleteSchematic(props.schematic)}>
+						<button className="button" type="button" onClick={() => deleteSchematic(props.schematic)}>
 							Reject
 						</button>
-						<button className='button' type='button' onClick={() => setShowSchematicModel(false)}>
+						<button className="button" type="button" onClick={() => setShowSchematicModel(false)}>
 							Back
 						</button>
 					</section>
@@ -191,9 +226,9 @@ export default function VerifySchematicTab() {
 
 	if (showSchematicModel && currentSchematic)
 		return (
-			<main className='schematic-info-modal model flex-center image-background' onClick={() => setShowSchematicModel(false)}>
-				<div className='flex-center'>
-					<div className='schematic-card '>
+			<main className="schematic-info-modal model flex-center image-background" onClick={() => setShowSchematicModel(false)}>
+				<div className="flex-center">
+					<div className="schematic-card ">
 						<SchematicVerifyPanel schematic={currentSchematic} />
 					</div>
 				</div>
@@ -201,8 +236,8 @@ export default function VerifySchematicTab() {
 		);
 
 	return (
-		<main className='verify-schematic'>
-			<section className='schematic-container'>
+		<main className="verify-schematic">
+			<section className="schematic-container">
 				{Utils.array2dToArray(schematicList, (schematic, index) => (
 					<SchematicPreview
 						key={index}
@@ -213,23 +248,36 @@ export default function VerifySchematicTab() {
 							setShowSchematicModel(true);
 						}}
 						buttons={[
-							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />, //
-							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
-								<img src='/assets/icons/download.png' alt='download' />
-							</a>
+							<IconButton
+								key={2}
+								title="copy"
+								icon={COPY_ICON}
+								onClick={() =>
+									Utils.copyDataToClipboard(schematic.data).then(() =>
+										addPopupMessage({
+											message: i18n.t('copied'),
+											duration: 10,
+											type: 'info',
+										}),
+									)
+								}
+							/>, //
+							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+								<img src="/assets/icons/download.png" alt="download" />
+							</a>,
 						]}
 					/>
 				))}
 			</section>
-			<footer className='flex-center'>
+			<footer className="flex-center">
 				{loaderState === 'loading' ? (
 					<LoadingSpinner />
 				) : (
-					<section className='grid-row small-gap'>
-						<button className='button' type='button' onClick={() => loadPage()}>
+					<section className="grid-row small-gap">
+						<button className="button" type="button" onClick={() => loadPage()}>
 							{i18n.t(loaderState === 'more' ? 'load-more' : 'no-more-schematic')}
 						</button>
-						<ScrollToTopButton containerId='admin' />
+						<ScrollToTopButton containerId="admin" />
 					</section>
 				)}
 			</footer>
