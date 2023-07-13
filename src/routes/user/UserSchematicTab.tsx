@@ -16,6 +16,7 @@ import UserData from 'src/components/user/UserData';
 import { LoaderState, MAX_ITEM_PER_PAGE, API_BASE_URL } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { Utils } from 'src/util/Utils';
+import useClipboard from 'src/hooks/UseClipboard';
 
 interface UserSchematicTabProps {
 	user: UserData;
@@ -29,6 +30,8 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
 	const { addPopupMessage } = useContext(PopupMessageContext);
+
+	const { copy } = useClipboard();
 
 	useEffect(() => {
 		API.REQUEST.get(`schematic/user/${props.user.id}/page/0`) //
@@ -121,21 +124,10 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 						}}>
 						<img src="/assets/icons/play-2.png" style={{ rotate: '90deg' }} alt="dislike" />
 					</button>
-					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data, 'msch')} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 						<img src="/assets/icons/download.png" alt="download" />
 					</a>
-					<button
-						className="button"
-						type="button"
-						onClick={() =>
-							Utils.copyDataToClipboard(schematic.data).then(() =>
-								addPopupMessage({
-									message: i18n.t('copied'),
-									duration: 5,
-									type: 'info',
-								}),
-							)
-						}>
+					<button className="button" type="button" onClick={() => copy(schematic.data)}>
 						<img src="/assets/icons/copy.png" alt="copy" />
 					</button>
 					{props.user && (schematic.authorId === props.user.id || UserData.isAdmin(props.user)) && (
@@ -190,21 +182,12 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 									})
 								}
 							/>, //
-							<IconButton
-								key={2}
-								title="copy"
-								icon={COPY_ICON}
-								onClick={() =>
-									Utils.copyDataToClipboard(schematic.data).then(() =>
-										addPopupMessage({
-											message: i18n.t('copied'),
-											duration: 5,
-											type: 'info',
-										}),
-									)
-								}
-							/>, //
-							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+							<IconButton key={2} title="copy" icon={COPY_ICON} onClick={() => copy(schematic.data)} />, //
+							<a
+								key={3}
+								className="button small-padding"
+								href={Utils.getDownloadUrl(schematic.data, 'msch')}
+								download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src="/assets/icons/download.png" alt="download" />
 							</a>,
 						]}
