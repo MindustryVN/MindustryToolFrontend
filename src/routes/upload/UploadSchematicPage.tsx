@@ -1,20 +1,20 @@
-import '../../styles.css';
+import 'src/styles.css';
 import './UploadSchematicPage.css';
 
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import { API } from '../../API';
-import { QUIT_ICON } from '../../components/common/Icon';
-import ClearIconButton from '../../components/button/ClearIconButton';
-import Dropbox from '../../components/dropbox/Dropbox';
-import SchematicPreviewData from '../../components/schematic/SchematicUploadPreview';
-import Tag, { TagChoiceLocal } from '../../components/tag/Tag';
-import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
-import i18n from '../../util/I18N';
-import { getFileExtension } from '../../util/StringUtils';
-import { UserContext } from '../../components/provider/UserProvider';
-import { PopupMessageContext } from '../../components/provider/PopupMessageProvider';
+import { API } from 'src/API';
+import { QUIT_ICON } from 'src/components/common/Icon';
+import ClearIconButton from 'src/components/button/ClearIconButton';
+import Dropbox from 'src/components/dropbox/Dropbox';
+import SchematicPreviewData from 'src/components/schematic/SchematicUploadPreview';
+import Tag, { TagChoiceLocal } from 'src/components/tag/Tag';
+import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
+import i18n from 'src/util/I18N';
+import { getFileExtension } from 'src/util/StringUtils';
+import { UserContext } from 'src/components/provider/UserProvider';
+import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import { Link } from 'react-router-dom';
-import TagPick from '../../components/tag/TagPick';
+import TagPick from 'src/components/tag/TagPick';
 
 export default function Upload() {
 	const tabs = ['File', 'Code'];
@@ -40,27 +40,35 @@ export default function Upload() {
 			message: (
 				<span>
 					{i18n.t('upload.login')}
-					<Link className='small-padding' to='/login'>
+					<Link className="small-padding" to="/login">
 						Login
 					</Link>
 				</span>
 			),
 			duration: 20,
-			type: 'warning'
+			type: 'warning',
 		});
 	}, [user]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0) {
-			popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
+			popup.current.addPopupMessage({
+				message: i18n.t('upload.invalid-schematic-file'),
+				duration: 5,
+				type: 'error',
+			});
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-			popup.current.addPopupMessage({ message: i18n.t('upload.invalid-schematic-file'), duration: 5, type: 'error' });
+			popup.current.addPopupMessage({
+				message: i18n.t('upload.invalid-schematic-file'),
+				duration: 5,
+				type: 'error',
+			});
 			return;
 		}
 
@@ -79,7 +87,11 @@ export default function Upload() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-					popup.current.addPopupMessage({ message: i18n.t('upload.not-schematic-code'), duration: 5, type: 'warning' });
+					popup.current.addPopupMessage({
+						message: i18n.t('upload.not-schematic-code'),
+						duration: 5,
+						type: 'warning',
+					});
 					return;
 				}
 
@@ -97,17 +109,31 @@ export default function Upload() {
 	function getPreview(form: FormData) {
 		API.REQUEST.post('schematic-upload/preview', form) //
 			.then((result) => setPreview(result.data)) //
-			.catch((error) => popup.current.addPopupMessage({ message: i18n.t(`upload.invalid-schematic`) + JSON.stringify(error), duration: 10, type: 'error' }));
+			.catch((error) =>
+				popup.current.addPopupMessage({
+					message: i18n.t(`upload.invalid-schematic`) + JSON.stringify(error),
+					duration: 10,
+					type: 'error',
+				}),
+			);
 	}
 
 	function handleSubmit() {
 		if (!file && !code) {
-			popup.current.addPopupMessage({ message: i18n.t('upload.no-data'), duration: 5, type: 'error' });
+			popup.current.addPopupMessage({
+				message: i18n.t('upload.no-data'),
+				duration: 5,
+				type: 'error',
+			});
 			return;
 		}
 
 		if (tags === null || tags.length === 0) {
-			popup.current.addPopupMessage({ message: i18n.t('upload.no-tag'), duration: 5, type: 'error' });
+			popup.current.addPopupMessage({
+				message: i18n.t('upload.no-tag'),
+				duration: 5,
+				type: 'error',
+			});
 			return;
 		}
 		const formData = new FormData();
@@ -125,10 +151,19 @@ export default function Upload() {
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				popup.current.addPopupMessage({ message: i18n.t('upload.upload-success'), duration: 10, type: 'info' });
+				popup.current.addPopupMessage({
+					message: i18n.t('upload.upload-success'),
+					duration: 10,
+					type: 'info',
+				});
 			})
 			.catch((error) => {
-				if (error.response && error.response.data) popup.current.addPopupMessage({ message: i18n.t('upload.upload-fail') + error.response.data.message, duration: 10, type: 'error' });
+				if (error.response && error.response.data)
+					popup.current.addPopupMessage({
+						message: i18n.t('upload.upload-fail') + error.response.data.message,
+						duration: 10,
+						type: 'error',
+					});
 			});
 	}
 
@@ -149,17 +184,17 @@ export default function Upload() {
 			case tabs[0]:
 				return (
 					<div>
-						<label className='button' htmlFor='ufb'>
+						<label className="button" htmlFor="ufb">
 							Upload a file
 						</label>
-						<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
+						<input id="ufb" type="file" onChange={(event) => handleFileChange(event)} />
 					</div>
 				);
 
 			case tabs[1]:
 				return (
 					<div>
-						<button className='button' type='button' onClick={() => handleCodeChange()}>
+						<button className="button" type="button" onClick={() => handleCodeChange()}>
 							Copy from clipboard
 						</button>
 					</div>
@@ -171,33 +206,33 @@ export default function Upload() {
 	}
 
 	return (
-		<main className='upload'>
-			<div className='upload'>
-				<div className='preview-container '>
-					<div className='upload-button flex-column medium-gap'>
-						<div className='flex-center'>
-							<section className='grid-row small-gap  light-border small-padding'>
+		<main className="upload">
+			<div className="upload">
+				<div className="preview-container ">
+					<div className="upload-button flex-column medium-gap">
+						<div className="flex-center">
+							<section className="grid-row small-gap  light-border small-padding">
 								{tabs.map((name, index) => (
-									<button className={currentTab === name ? 'button-active' : 'button'} key={index} type='button' onClick={() => setCurrentTab(name)}>
+									<button className={currentTab === name ? 'button-active' : 'button'} key={index} type="button" onClick={() => setCurrentTab(name)}>
 										{name}
 									</button>
 								))}
 							</section>
 						</div>
-						<div className='flex-center'>{renderTab(currentTab)}</div>
-						<div className='preview-image-container'>{preview && <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file' />}</div>
+						<div className="flex-center">{renderTab(currentTab)}</div>
+						<div className="preview-image-container">{preview && <img className="preview-image" src={PNG_IMAGE_PREFIX + preview.image} alt="Upload a file" />}</div>
 					</div>
-					<div className='upload-description-container'>
+					<div className="upload-description-container">
 						{preview && (
-							<div className='flex-column flex-wrap text-center'>
+							<div className="flex-column flex-wrap text-center">
 								{<div>Author: {user ? user.name : 'community'}</div>}
 								<div>Name: {preview.name}</div>
 								{preview.description && <p> {preview.description}</p>}
 								{preview.requirement && (
-									<section className='flex-row flex-wrap small-gap'>
+									<section className="flex-row flex-wrap small-gap">
 										{preview.requirement.map((r, index) => (
-											<span key={index} className='flex-row center'>
-												<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+											<span key={index} className="flex-row center">
+												<img className="small-icon " src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 												<span> {r.amount} </span>
 											</span>
 										))}
@@ -205,9 +240,9 @@ export default function Upload() {
 								)}
 							</div>
 						)}
-						<div className='upload-search-container'>
+						<div className="upload-search-container">
 							<Dropbox
-								placeholder='Add tags'
+								placeholder="Add tags"
 								value={tag}
 								items={TagChoiceLocal.SCHEMATIC_UPLOAD_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 								onChange={(event) => setTag(event.target.value)}
@@ -215,14 +250,14 @@ export default function Upload() {
 								converter={(t, index) => <TagPick key={index} tag={t} />}
 							/>
 
-							<div className='flex-row flex-wrap medium-gap'>
+							<div className="flex-row flex-wrap medium-gap">
 								{tags.map((t: TagChoiceLocal, index: number) => (
-									<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
+									<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>
-						<section className='flex-center'>
-							<button className='button' type='button' onClick={() => handleSubmit()}>
+						<section className="flex-center">
+							<button className="button" type="button" onClick={() => handleSubmit()}>
 								Upload
 							</button>
 						</section>

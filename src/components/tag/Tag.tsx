@@ -1,6 +1,6 @@
-import { API } from '../../API';
-import '../../styles.css';
-import i18n from '../../util/I18N';
+import { API } from 'src/API';
+import 'src/styles.css';
+import i18n from 'src/util/I18N';
 
 import './Tag.css';
 
@@ -13,8 +13,8 @@ interface TagProps {
 
 export default function Tag(props: TagProps) {
 	return (
-		<span className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: props.tag.color }}>
-			<span className='flex-column text-center'>
+		<span className="tag flex-row flex-nowrap small-padding center" style={{ backgroundColor: props.tag.color }}>
+			<span className="flex-column text-center">
 				{props.tag.displayName} : {props.tag.displayValue}
 			</span>
 			{props.removeButton}
@@ -51,9 +51,11 @@ export class TagChoiceLocal {
 			.then((r) => {
 				result.length = 0;
 				let customTagList: Array<CustomTag> = r.data;
-				let temp = customTagList.map((customTag) => customTag.value.map((v) => new TagChoiceLocal(customTag.name, i18n.t(`tag.${customTag.name}.name`), v, i18n.t(`tag.${customTag.name}.value.${v}`), customTag.color)));
+				let temp = customTagList.map((customTag) =>
+					customTag.value.map((v) => new TagChoiceLocal(customTag.name, i18n.t(`tag.${customTag.name}.name`), v, i18n.t(`tag.${customTag.name}.value.${v}`), customTag.color)),
+				);
 				temp.forEach((t) => t.forEach((m) => result.push(m)));
-			})//
+			}) //
 			.catch(() => console.log(`Fail to load tag: ${tag}`));
 	}
 
@@ -91,7 +93,7 @@ export class SortChoice {
 	}
 }
 export const SCHEMATIC_SORT_CHOICE = [
-	new SortChoice(i18n.t( 'tag.newest'), 'time:1'), //
-	new SortChoice(i18n.t( 'tag.oldest'), 'time:-1'), //
-	new SortChoice(i18n.t( 'tag.most-liked'), 'like:1')
+	new SortChoice(i18n.t('tag.newest'), 'time:1'), //
+	new SortChoice(i18n.t('tag.oldest'), 'time:-1'), //
+	new SortChoice(i18n.t('tag.most-liked'), 'like:1'),
 ];

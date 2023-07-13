@@ -1,28 +1,28 @@
 {
-    "loading": {
-        "short": "Loading",
-        "long": "Please wait 1-2 minutes"
-    },
-    "tags": {
-        "categories": {
-            "author": "Author",
-            "size": "Size",
-            "sizes": {
-                "micro": "micro (4 tiles)",
-                "small": "small (16 tiles)",
-                "medium": "medium (64 tiles)",
-                "big": "big (255 tiles)",
-                "huge": "huge (900 tiles)"
-            },
-            "position": "Position",
-            "positions": {
-                "core": "Core",
-                "ore": "Ore",
-                "liquid": "Liquid",
-                "remote": "Remote",
-                "mass-driver": "Mass driver",
-                "any": "Any"
-            }
-        }
-    }
+	"loading": {
+		"short": "Loading",
+		"long": "Please wait 1-2 minutes"
+	},
+	"tags": {
+		"categories": {
+			"author": "Author",
+			"size": "Size",
+			"sizes": {
+				"micro": "micro (4 tiles)",
+				"small": "small (16 tiles)",
+				"medium": "medium (64 tiles)",
+				"big": "big (255 tiles)",
+				"huge": "huge (900 tiles)"
+			},
+			"position": "Position",
+			"positions": {
+				"core": "Core",
+				"ore": "Ore",
+				"liquid": "Liquid",
+				"remote": "Remote",
+				"mass-driver": "Mass driver",
+				"any": "Any"
+			}
+		}
+	}
 }

@@ -1,4 +1,4 @@
-import '../../styles.css';
+import 'src/styles.css';
 
 import React from 'react';
 import { TagChoiceLocal } from './Tag';
@@ -9,7 +9,7 @@ interface TagPickProps {
 
 export default function TagPick(props: TagPickProps) {
 	return (
-		<span className='flex-row'>
+		<span className="flex-row">
 			{props.tag.displayName} : {props.tag.displayValue}
 		</span>
 	);

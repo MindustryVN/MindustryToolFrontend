@@ -9,7 +9,7 @@ interface DropboxElementProps {
 
 export default function DropboxElement(props: DropboxElementProps) {
 	return (
-		<button className='dropbox-element' type='button' onClick={() => props.onClick()}>
+		<button className="dropbox-element" type="button" onClick={() => props.onClick()}>
 			{props.children}
 		</button>
 	);

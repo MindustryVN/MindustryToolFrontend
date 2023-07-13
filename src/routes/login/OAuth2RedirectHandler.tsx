@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ACCESS_TOKEN } from '../../config/Config';
+import { ACCESS_TOKEN } from 'src/config/Config';
 import { Navigate } from 'react-router-dom';
 
 export default class OAuth2RedirectHandler extends Component {

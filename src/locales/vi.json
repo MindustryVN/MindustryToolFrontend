@@ -1,148 +1,148 @@
 {
-    "search-with-tag": "Tìm với nhãn",
-    "login": "Đăng nhập",
-    "logout": "Đăng xuất",
-    "copied": "Đã sao chép",
-    "load-more":"Tải thêm",
-    "no-more-schematic":"Hết bản thiết kế",
-    "scroll-to-top":"Cuộn lên đầu",
-    "loading": {
-        "short": "Đang tải",
-        "long": "Đang tải, vui lòng đợi 1-2 phút."
-    },
-    "upload": {
-        "invalid-schematic-file": "File bản thiết kế không hợp lệ, file phải có đuôi .msch",
-        "no-tag": "Thêm ít nhất một nhãn(Tag) để đăng",
-        "no-data": "Vui lòng thêm dữ liệu bản thiết kế",
-        "login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập",
-        "invalid-schematic": "Bản thiết kế lỗi: ",
-        "not-schematic-code": "Mã bản thiết kế lỗi"
-    },
-    "navigate": {
-        "close": "Đóng"
-    },
-    "tag": {
-        "newest": "Mới nhất",
-        "oldest": "Cũ nhất",
-        "most-liked": "Được thích nhất",
-        "name": {
-            "name": "Tên",
-            "value": {
-                "": ""
-            }
-        },
-        "author": {
-            "name": "Tác giả",
-            "value": {
-                "": ""
-            }
-        },
-        "size": {
-            "name": "Kích thước",
-            "value": {
-                "": "",
-                "micro": "Siêu nhỏ",
-                "small": "Nhỏ",
-                "medium": "Trung bình",
-                "big": "Lớn",
-                "huge": "Rất lớn"
-            }
-        },
-        "position": {
-            "name": "Vị trí",
-            "value": {
-                "core": "Cạnh căn cứ",
-                "ore": "Trên tài nguyên",
-                "liquid": "Trên chất lỏng",
-                "remote": "Dùng lính để chuyển",
-                "mass-driver": "Máy phóng",
-                "any": "Bất cứ đâu"
-            }
-        },
-        "unit-tier": {
-            "name": "Cấp độ lính",
-            "value": {
-                "tier1": "Cấp 1",
-                "tier2": "Cấp 2",
-                "tier3": "Cấp 3",
-                "tier4": "Cấp 4",
-                "tier5": "Cấp 5"
-            }
-        },
-        "planet-tech": {
-            "name": "Công nghệ",
-            "value": {
-                "serpulo": "Serpulo",
-                "erekir": "Erekir",
-                "any": "Any"
-            }
-        },
-        "item": {
-            "name": "Vật phẩm",
-            "value": {
-                "copper": "Đồng",
-                "lead": "Chì",
-                "coal": "Than",
-                "scrap": "Phế liệu",
-                "graphite": "Than chì",
-                "metaglass": "Thủy tinh",
-                "silicon": "Silicon",
-                "spore": "Bào tử",
-                "titanium": "Titanium",
-                "plastanium": "Nhựa",
-                "pyratite": "Nhiệt thạch",
-                "blast-compound": "Chất nổ",
-                "thorium": "Thorium",
-                "phase-fabric": "Vải lượng tử",
-                "surge-alloy": "Hợp kim",
-                "beryllium": "beryllium",
-                "tungsten": "tungsten",
-                "oxide": "oxide",
-                "carbide": "carbide"
-            }
-        },
-        "liquid": {
-            "name": "Chất lỏng",
-            "value": {
-                "water": "Nước",
-                "slag": "Sỉ nóng chảy",
-                "oil": "Dầu",
-                "cryofluid": "Chất làm lạnh",
-                "neoplasm": "neoplasm",
-                "arkycite": "arkycite",
-                "ozone": "ozone",
-                "hydrogen": "hydrogen",
-                "nitrogen": "nitrogen",
-                "cyanogen": "cyanogen"
-            }
-        },
-        "type": {
-            "name": "Loại",
-            "value": {
-                "unit": "Lính",
-                "logic": "Logic",
-                "resource": "Tài nguyên",
-                "j4f": "J4F",
-                "power": "Năng lượng"
-            }
-        },
-        "game-mode": {
-            "name": "Chế độ",
-            "value": {
-                "campaign": "Chiến dịch",
-                "pvp": "PvP",
-                "attack": "Tấn công",
-                "sandbox": "Sáng tạo (Sandbox)",
-                "hex": "Hex",
-                "tower-defense": "Thủ thành(Tower defense)"
-            }
-        },
-        "verify": {
-            "name": "Duyệt",
-            "value": {
-                "verified": "Đã được duyệt",
-                "unverified": "Không được duyệt"
-            }
-        }
-    }
+	"search-with-tag": "Tìm với nhãn",
+	"login": "Đăng nhập",
+	"logout": "Đăng xuất",
+	"copied": "Đã sao chép",
+	"load-more": "Tải thêm",
+	"no-more-schematic": "Hết bản thiết kế",
+	"scroll-to-top": "Cuộn lên đầu",
+	"loading": {
+		"short": "Đang tải",
+		"long": "Đang tải, vui lòng đợi 1-2 phút."
+	},
+	"upload": {
+		"invalid-schematic-file": "File bản thiết kế không hợp lệ, file phải có đuôi .msch",
+		"no-tag": "Thêm ít nhất một nhãn(Tag) để đăng",
+		"no-data": "Vui lòng thêm dữ liệu bản thiết kế",
+		"login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập",
+		"invalid-schematic": "Bản thiết kế lỗi: ",
+		"not-schematic-code": "Mã bản thiết kế lỗi"
+	},
+	"navigate": {
+		"close": "Đóng"
+	},
+	"tag": {
+		"newest": "Mới nhất",
+		"oldest": "Cũ nhất",
+		"most-liked": "Được thích nhất",
+		"name": {
+			"name": "Tên",
+			"value": {
+				"": ""
+			}
+		},
+		"author": {
+			"name": "Tác giả",
+			"value": {
+				"": ""
+			}
+		},
+		"size": {
+			"name": "Kích thước",
+			"value": {
+				"": "",
+				"micro": "Siêu nhỏ",
+				"small": "Nhỏ",
+				"medium": "Trung bình",
+				"big": "Lớn",
+				"huge": "Rất lớn"
+			}
+		},
+		"position": {
+			"name": "Vị trí",
+			"value": {
+				"core": "Cạnh căn cứ",
+				"ore": "Trên tài nguyên",
+				"liquid": "Trên chất lỏng",
+				"remote": "Dùng lính để chuyển",
+				"mass-driver": "Máy phóng",
+				"any": "Bất cứ đâu"
+			}
+		},
+		"unit-tier": {
+			"name": "Cấp độ lính",
+			"value": {
+				"tier1": "Cấp 1",
+				"tier2": "Cấp 2",
+				"tier3": "Cấp 3",
+				"tier4": "Cấp 4",
+				"tier5": "Cấp 5"
+			}
+		},
+		"planet-tech": {
+			"name": "Công nghệ",
+			"value": {
+				"serpulo": "Serpulo",
+				"erekir": "Erekir",
+				"any": "Any"
+			}
+		},
+		"item": {
+			"name": "Vật phẩm",
+			"value": {
+				"copper": "Đồng",
+				"lead": "Chì",
+				"coal": "Than",
+				"scrap": "Phế liệu",
+				"graphite": "Than chì",
+				"metaglass": "Thủy tinh",
+				"silicon": "Silicon",
+				"spore": "Bào tử",
+				"titanium": "Titanium",
+				"plastanium": "Nhựa",
+				"pyratite": "Nhiệt thạch",
+				"blast-compound": "Chất nổ",
+				"thorium": "Thorium",
+				"phase-fabric": "Vải lượng tử",
+				"surge-alloy": "Hợp kim",
+				"beryllium": "beryllium",
+				"tungsten": "tungsten",
+				"oxide": "oxide",
+				"carbide": "carbide"
+			}
+		},
+		"liquid": {
+			"name": "Chất lỏng",
+			"value": {
+				"water": "Nước",
+				"slag": "Sỉ nóng chảy",
+				"oil": "Dầu",
+				"cryofluid": "Chất làm lạnh",
+				"neoplasm": "neoplasm",
+				"arkycite": "arkycite",
+				"ozone": "ozone",
+				"hydrogen": "hydrogen",
+				"nitrogen": "nitrogen",
+				"cyanogen": "cyanogen"
+			}
+		},
+		"type": {
+			"name": "Loại",
+			"value": {
+				"unit": "Lính",
+				"logic": "Logic",
+				"resource": "Tài nguyên",
+				"j4f": "J4F",
+				"power": "Năng lượng"
+			}
+		},
+		"game-mode": {
+			"name": "Chế độ",
+			"value": {
+				"campaign": "Chiến dịch",
+				"pvp": "PvP",
+				"attack": "Tấn công",
+				"sandbox": "Sáng tạo (Sandbox)",
+				"hex": "Hex",
+				"tower-defense": "Thủ thành(Tower defense)"
+			}
+		},
+		"verify": {
+			"name": "Duyệt",
+			"value": {
+				"verified": "Đã được duyệt",
+				"unverified": "Không được duyệt"
+			}
+		}
+	}
 }

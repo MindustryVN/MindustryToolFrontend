@@ -1,25 +1,24 @@
-import '../../styles.css';
+import 'src/styles.css';
 import './VerifySchematicTab.css';
 
 import React, { useContext, useEffect, useState } from 'react';
-import Tag, { TagChoiceLocal } from '../../components/tag/Tag';
-
-import { API } from '../../API';
-import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
-
-import UserName from '../../components/user/LoadUserName';
-import SchematicData from '../../components/schematic/SchematicData';
-import Dropbox from '../../components/dropbox/Dropbox';
-import LoadingSpinner from '../../components/loader/LoadingSpinner';
-import ScrollToTopButton from '../../components/button/ScrollToTopButton';
-import ClearIconButton from '../../components/button/ClearIconButton';
-import { COPY_ICON, QUIT_ICON } from '../../components/common/Icon';
-import { Utils } from '../../util/Utils';
-import SchematicPreview from '../../components/schematic/SchematicPreview';
-import IconButton from '../../components/button/IconButton';
-import { PopupMessageContext } from '../../components/provider/PopupMessageProvider';
-import i18n from '../../util/I18N';
-import TagPick from '../../components/tag/TagPick';
+import Tag, { TagChoiceLocal } from 'src/components/tag/Tag';
+import { API } from 'src/API';
+import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from 'src/config/Config';
+import UserName from 'src/components/user/LoadUserName';
+import SchematicData from 'src/components/schematic/SchematicData';
+import Dropbox from 'src/components/dropbox/Dropbox';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import ClearIconButton from 'src/components/button/ClearIconButton';
+import { COPY_ICON, QUIT_ICON } from 'src/components/common/Icon';
+import { Utils } from 'src/util/Utils';
+import SchematicPreview from 'src/components/schematic/SchematicPreview';
+import IconButton from 'src/components/button/IconButton';
+import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import i18n from 'src/util/I18N';
+import TagPick from 'src/components/tag/TagPick';
+import useClipboard from 'src/hooks/UseClipboard';
 
 export default function VerifySchematicTab() {
 	const [loaderState, setLoaderState] = useState<LoaderState>('loading');
@@ -29,7 +28,7 @@ export default function VerifySchematicTab() {
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
-	const { addPopupMessage } = useContext(PopupMessageContext);
+	const { copy } = useClipboard();
 
 	useEffect(() => {
 		API.REQUEST.get(`schematic-upload/page/0`) //
@@ -135,52 +134,52 @@ export default function VerifySchematicTab() {
 		}
 
 		return (
-			<main className='schematic-info-container' onClick={(event) => event.stopPropagation()}>
-				<img className='schematic-info-image' src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} alt='schematic' />
-				<div className='flex-column small-gap'>
-					<span className='capitalize'>{props.schematic.name}</span>
+			<main className="schematic-info-container" onClick={(event) => event.stopPropagation()}>
+				<img className="schematic-info-image" src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} alt="schematic" />
+				<div className="flex-column small-gap">
+					<span className="capitalize">{props.schematic.name}</span>
 					<span>
 						<UserName userId={props.schematic.authorId} />
 					</span>
-					{props.schematic.description && <span className='capitalize'>{props.schematic.description}</span>}
+					{props.schematic.description && <span className="capitalize">{props.schematic.description}</span>}
 					{props.schematic.requirement && (
-						<section className=' flex-row small-gap flex-wrap center'>
+						<section className=" flex-row small-gap flex-wrap center">
 							{props.schematic.requirement.map((r, index) => (
-								<span key={index} className='flex-row center'>
-									<img className='small-icon' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+								<span key={index} className="flex-row center">
+									<img className="small-icon" src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 									<span> {r.amount} </span>
 								</span>
 							))}
 						</section>
 					)}
 
-					<div className='flex-column small-gap'>
+					<div className="flex-column small-gap">
 						<Dropbox
-							placeholder='Add tags'
+							placeholder="Add tags"
 							value={tag}
 							items={TagChoiceLocal.SCHEMATIC_UPLOAD_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 							onChange={(event) => setTag(event.target.value)}
 							onChoose={(item) => handleAddTag(item)}
 							converter={(t, index) => <TagPick key={index} tag={t} />}
 						/>
-						<div className='flex-row flex-wrap small-gap'>
+						<div className="flex-row flex-wrap small-gap">
 							{tags.map((t: TagChoiceLocal, index: number) => (
-								<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title='remove' onClick={() => handleRemoveTag(index)} />} />
+								<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => handleRemoveTag(index)} />} />
 							))}
 						</div>
 					</div>
-					<section className='grid-row small-gap'>
-						<a className='button small-padding' href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}>
-							<img src='/assets/icons/download.png' alt='download' />
+					<section className="grid-row small-gap">
+						<a className="button small-padding" href={Utils.getDownloadUrl(props.schematic.data, "msch")} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+							<img src="/assets/icons/download.png" alt="download" />
 						</a>
-						<IconButton icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(props.schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />
-						<button className='button' type='button' onClick={() => verifySchematic(props.schematic)}>
+						<IconButton icon={COPY_ICON} onClick={() => copy(props.schematic.data)} />
+						<button className="button" type="button" onClick={() => verifySchematic(props.schematic)}>
 							Verify
 						</button>
-						<button className='button' type='button' onClick={() => deleteSchematic(props.schematic)}>
+						<button className="button" type="button" onClick={() => deleteSchematic(props.schematic)}>
 							Reject
 						</button>
-						<button className='button' type='button' onClick={() => setShowSchematicModel(false)}>
+						<button className="button" type="button" onClick={() => setShowSchematicModel(false)}>
 							Back
 						</button>
 					</section>
@@ -191,9 +190,9 @@ export default function VerifySchematicTab() {
 
 	if (showSchematicModel && currentSchematic)
 		return (
-			<main className='schematic-info-modal model flex-center image-background' onClick={() => setShowSchematicModel(false)}>
-				<div className='flex-center'>
-					<div className='schematic-card '>
+			<main className="schematic-info-modal model flex-center image-background" onClick={() => setShowSchematicModel(false)}>
+				<div className="flex-center">
+					<div className="schematic-card ">
 						<SchematicVerifyPanel schematic={currentSchematic} />
 					</div>
 				</div>
@@ -201,8 +200,8 @@ export default function VerifySchematicTab() {
 		);
 
 	return (
-		<main className='verify-schematic'>
-			<section className='schematic-container'>
+		<main className="verify-schematic">
+			<section className="schematic-container">
 				{Utils.array2dToArray(schematicList, (schematic, index) => (
 					<SchematicPreview
 						key={index}
@@ -213,23 +212,23 @@ export default function VerifySchematicTab() {
 							setShowSchematicModel(true);
 						}}
 						buttons={[
-							<IconButton key={2} title='copy' icon={COPY_ICON} onClick={() => Utils.copyDataToClipboard(schematic.data).then(() => addPopupMessage({ message: i18n.t('copied'), duration: 10, type: 'info' }))} />, //
-							<a key={3} className='button small-padding' href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
-								<img src='/assets/icons/download.png' alt='download' />
-							</a>
+							<IconButton key={2} title="copy" icon={COPY_ICON} onClick={() => copy(schematic.data)} />, //
+							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data, "msch")} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+								<img src="/assets/icons/download.png" alt="download" />
+							</a>,
 						]}
 					/>
 				))}
 			</section>
-			<footer className='flex-center'>
+			<footer className="flex-center">
 				{loaderState === 'loading' ? (
 					<LoadingSpinner />
 				) : (
-					<section className='grid-row small-gap'>
-						<button className='button' type='button' onClick={() => loadPage()}>
+					<section className="grid-row small-gap">
+						<button className="button" type="button" onClick={() => loadPage()}>
 							{i18n.t(loaderState === 'more' ? 'load-more' : 'no-more-schematic')}
 						</button>
-						<ScrollToTopButton containerId='admin' />
+						<ScrollToTopButton containerId="admin" />
 					</section>
 				)}
 			</footer>

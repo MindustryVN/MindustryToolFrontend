@@ -10,7 +10,18 @@ export default class SchematicData {
 	dislike: number;
 	verifyAdmin: string;
 
-	constructor(id: string, name: string, data: string, authorId: string, description: string, requirement: Array<ItemRequirement>, tags: Array<string>, like: number, dislike: number, verifyAdmin: string) {
+	constructor(
+		id: string,
+		name: string,
+		data: string,
+		authorId: string,
+		description: string,
+		requirement: Array<ItemRequirement>,
+		tags: Array<string>,
+		like: number,
+		dislike: number,
+		verifyAdmin: string,
+	) {
 		this.id = id;
 		this.name = name;
 		this.data = data;

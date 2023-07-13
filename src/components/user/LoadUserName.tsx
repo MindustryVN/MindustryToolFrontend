@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { API } from '../../API';
+import { API } from 'src/API';
 import UserName from './UserName';
 import UserData from './UserData';
 
