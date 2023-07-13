@@ -1,7 +1,7 @@
-import '../../styles.css';
+import 'src/styles.css';
 
 import React, { ReactNode, useEffect } from 'react';
-import { TagChoiceLocal } from '../tag/Tag';
+import { TagChoiceLocal } from 'src/components/tag/Tag';
 
 interface TagProviderProps {
 	children: ReactNode;

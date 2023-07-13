@@ -1,5 +1,5 @@
 import './Dropbox.css';
-import '../../styles.css';
+import 'src/styles.css';
 
 import React, { ChangeEventHandler, ReactNode, useState } from 'react';
 import DropboxElement from './DropboxElement';

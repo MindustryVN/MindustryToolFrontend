@@ -1,25 +1,26 @@
-import '../../styles.css';
+import 'src/styles.css';
 import './SchematicPage.css';
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { API } from '../../API';
-import ScrollToTopButton from '../../components/button/ScrollToTopButton';
-import Dropbox from '../../components/dropbox/Dropbox';
-import LoadingSpinner from '../../components/loader/LoadingSpinner';
-import SchematicData from '../../components/schematic/SchematicData';
-import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal } from '../../components/tag/Tag';
-import TagPick from '../../components/tag/TagPick';
-import UserData from '../../components/user/UserData';
-import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from '../../config/Config';
-import IconButton from '../../components/button/IconButton';
-import SchematicPreview from '../../components/schematic/SchematicPreview';
-import { COPY_ICON, DOWN_VOTE_ICON, QUIT_ICON, UP_VOTE_ICON } from '../../components/common/Icon';
-import ClearIconButton from '../../components/button/ClearIconButton';
-import { Utils } from '../../util/Utils';
-import { UserContext } from '../../components/provider/UserProvider';
-import { PopupMessageContext } from '../../components/provider/PopupMessageProvider';
-import i18n from '../../util/I18N';
-import LoadUserName from '../../components/user/LoadUserName';
+import { API } from 'src/API';
+import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import Dropbox from 'src/components/dropbox/Dropbox';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import SchematicData from 'src/components/schematic/SchematicData';
+import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal } from 'src/components/tag/Tag';
+import TagPick from 'src/components/tag/TagPick';
+import UserData from 'src/components/user/UserData';
+import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from 'src/config/Config';
+import IconButton from 'src/components/button/IconButton';
+import SchematicPreview from 'src/components/schematic/SchematicPreview';
+import { COPY_ICON, DOWN_VOTE_ICON, QUIT_ICON, UP_VOTE_ICON } from 'src/components/common/Icon';
+import ClearIconButton from 'src/components/button/ClearIconButton';
+import { Utils } from 'src/util/Utils';
+import { UserContext } from 'src/components/provider/UserProvider';
+import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import i18n from 'src/util/I18N';
+import LoadUserName from 'src/components/user/LoadUserName';
+import useClipboard from 'src/hooks/UseClipboard';
 
 export default function Schematic() {
 	const [loaderState, setLoaderState] = useState<LoaderState>('loading');
@@ -41,6 +42,8 @@ export default function Schematic() {
 
 	const { user } = useContext(UserContext);
 	const { addPopupMessage } = useContext(PopupMessageContext);
+
+	const { copy } = useClipboard();
 
 	useEffect(() => {
 		setLoaderState('loading');
@@ -160,21 +163,10 @@ export default function Schematic() {
 						}}>
 						<img src="/assets/icons/play-2.png" style={{ rotate: '90deg' }} alt="dislike" />
 					</button>
-					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data, "msch")} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`  }>
 						<img src="/assets/icons/download.png" alt="download" />
 					</a>
-					<button
-						className="button"
-						type="button"
-						onClick={() =>
-							Utils.copyDataToClipboard(schematic.data).then(() =>
-								addPopupMessage({
-									message: i18n.t('copied'),
-									duration: 10,
-									type: 'info',
-								}),
-							)
-						}>
+					<button className="button" type="button" onClick={() => copy(schematic.data)}>
 						<img src="/assets/icons/copy.png" alt="copy" />
 					</button>
 					{user && (schematic.authorId === user.id || UserData.isAdmin(user)) && (
@@ -273,21 +265,12 @@ export default function Schematic() {
 									})
 								}
 							/>, //
-							<IconButton
-								key={2}
-								title="copy"
-								icon={COPY_ICON}
-								onClick={() =>
-									Utils.copyDataToClipboard(schematic.data).then(() =>
-										addPopupMessage({
-											message: i18n.t('copied'),
-											duration: 10,
-											type: 'info',
-										}),
-									)
-								}
-							/>, //
-							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+							<IconButton key={2} title="copy" icon={COPY_ICON} onClick={() => copy(schematic.data)} />, //
+							<a
+								key={3}
+								className="button small-padding"
+								href={Utils.getDownloadUrl(schematic.data, 'msch')}
+								download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src="/assets/icons/download.png" alt="download" />
 							</a>,
 						]}

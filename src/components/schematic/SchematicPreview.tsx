@@ -1,5 +1,5 @@
 import './SchematicPreview.css';
-import '../../styles.css';
+import 'src/styles.css';
 
 import React, { ReactNode } from 'react';
 import SchematicData from './SchematicData';

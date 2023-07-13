@@ -1,5 +1,5 @@
 import './AdminPage.css';
-import '../../styles.css';
+import 'src/styles.css';
 
 import React, { useState } from 'react';
 import VerifySchematicPage from './VerifySchematicTab';

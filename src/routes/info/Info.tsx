@@ -1,7 +1,7 @@
-import '../../styles.css';
+import 'src/styles.css';
 
 import React from 'react';
-import LoadUserName from '../../components/user/LoadUserName';
+import LoadUserName from 'src/components/user/LoadUserName';
 
 export default function Info() {
 	return (

@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import UserData from '../user/UserData';
-import { ACCESS_TOKEN } from '../../config/Config';
-import { API } from '../../API';
+import UserData from 'src/components/user/UserData';
+import { ACCESS_TOKEN } from 'src/config/Config';
+import { API } from 'src/API';
 
 interface UserContextProps {
 	user: UserData | undefined;

@@ -1,6 +1,6 @@
-import { API } from '../../API';
-import '../../styles.css';
-import i18n from '../../util/I18N';
+import { API } from 'src/API';
+import 'src/styles.css';
+import i18n from 'src/util/I18N';
 
 import './Tag.css';
 

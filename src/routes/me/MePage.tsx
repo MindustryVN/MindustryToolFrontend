@@ -1,10 +1,10 @@
 import './MePage.css';
-import '../../styles.css';
+import 'src/styles.css';
 
 import React, { useContext } from 'react';
 
 import { Navigate } from 'react-router-dom';
-import { UserContext } from '../../components/provider/UserProvider';
+import { UserContext } from 'src/components/provider/UserProvider';
 import { Trans } from 'react-i18next';
 
 export default function MePage() {

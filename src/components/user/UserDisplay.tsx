@@ -1,10 +1,10 @@
-import '../../styles.css';
+import 'src/styles.css';
 import './UserDisplay.css';
 
 import React, { useContext } from 'react';
 import UserName from './UserName';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../provider/UserProvider';
+import { UserContext } from 'src/components/provider/UserProvider';
 import { Trans } from 'react-i18next';
 
 export default function UserDisplay() {

@@ -1,7 +1,7 @@
 import './LoginPage.css';
 
 import React from 'react';
-import { DISCORD_AUTH_URL } from '../../config/Config';
+import { DISCORD_AUTH_URL } from 'src/config/Config';
 
 export default function LoginPage() {
 	return (

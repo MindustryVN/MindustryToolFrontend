@@ -1,12 +1,12 @@
 import './PopupMessageProvider.css';
-import '../../styles.css';
+import 'src/styles.css';
 
 import { v4 } from 'uuid';
-import ClearIconButton from '../button/ClearIconButton';
-import { QUIT_ICON } from '../common/Icon';
+import ClearIconButton from 'src/components/button/ClearIconButton';
+import { QUIT_ICON } from 'src/components/common/Icon';
 
 import React, { ReactNode, useEffect } from 'react';
-import { API } from '../../API';
+import { API } from 'src/API';
 
 type PopupMessageType = 'info' | 'warning' | 'error';
 
@@ -132,7 +132,7 @@ function PopupMessage(props: PopupMessageNodeProps) {
 				{props.message}
 				<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => props.onTimeOut()} />
 			</section>
-			<div className="timer" style={{ animation: `timer ${props.duration}s linear` }} />
+			<div className="timer" style={{ animation: `timer ${props.duration}s linear forwards` }} />
 		</section>
 	);
 }

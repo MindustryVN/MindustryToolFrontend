@@ -33,7 +33,10 @@
 }
 
 .popup-message-content {
+	display: flex;
 	justify-content: space-between;
+	align-items: flex-start;
+	box-sizing: border-box;
 
 	padding: 1rem;
 }
@@ -46,7 +49,6 @@
 }
 
 @keyframes timer {
-
 	100% {
 		transform: translateX(-100%);
 	}
@@ -55,7 +57,7 @@
 @media screen and (max-width: 768px) {
 	.popup-message {
 		min-width: 30vw;
-		max-width: 35vw;
+		max-width: 50vw;
 	}
 }
 

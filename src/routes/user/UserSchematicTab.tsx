@@ -1,21 +1,21 @@
-import '../../styles.css';
+import 'src/styles.css';
 import './UserSchematicTab.css';
 
 import React, { useState, useContext, useEffect } from 'react';
-import { API } from '../../API';
-import IconButton from '../../components/button/IconButton';
-import ScrollToTopButton from '../../components/button/ScrollToTopButton';
-import { UP_VOTE_ICON, DOWN_VOTE_ICON, COPY_ICON } from '../../components/common/Icon';
-import LoadingSpinner from '../../components/loader/LoadingSpinner';
-import { PopupMessageContext } from '../../components/provider/PopupMessageProvider';
-import SchematicData from '../../components/schematic/SchematicData';
-import SchematicPreview from '../../components/schematic/SchematicPreview';
-import Tag, { TagChoiceLocal } from '../../components/tag/Tag';
-import LoadUserName from '../../components/user/LoadUserName';
-import UserData from '../../components/user/UserData';
-import { LoaderState, MAX_ITEM_PER_PAGE, API_BASE_URL } from '../../config/Config';
-import i18n from '../../util/I18N';
-import { Utils } from '../../util/Utils';
+import { API } from 'src/API';
+import IconButton from 'src/components/button/IconButton';
+import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import { UP_VOTE_ICON, DOWN_VOTE_ICON, COPY_ICON } from 'src/components/common/Icon';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import SchematicData from 'src/components/schematic/SchematicData';
+import SchematicPreview from 'src/components/schematic/SchematicPreview';
+import Tag, { TagChoiceLocal } from 'src/components/tag/Tag';
+import LoadUserName from 'src/components/user/LoadUserName';
+import UserData from 'src/components/user/UserData';
+import { LoaderState, MAX_ITEM_PER_PAGE, API_BASE_URL } from 'src/config/Config';
+import i18n from 'src/util/I18N';
+import { Utils } from 'src/util/Utils';
 
 interface UserSchematicTabProps {
 	user: UserData;
@@ -131,7 +131,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 							Utils.copyDataToClipboard(schematic.data).then(() =>
 								addPopupMessage({
 									message: i18n.t('copied'),
-									duration: 10,
+									duration: 5,
 									type: 'info',
 								}),
 							)
@@ -198,7 +198,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 									Utils.copyDataToClipboard(schematic.data).then(() =>
 										addPopupMessage({
 											message: i18n.t('copied'),
-											duration: 10,
+											duration: 5,
 											type: 'info',
 										}),
 									)

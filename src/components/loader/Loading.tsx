@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import '../../styles.css';
+import 'src/styles.css';
 import './Loading.css';
 
 export default function Loading() {

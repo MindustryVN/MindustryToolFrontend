@@ -1,5 +1,5 @@
 import { Trans } from 'react-i18next';
-import '../../styles.css';
+import 'src/styles.css';
 
 import React from 'react';
 

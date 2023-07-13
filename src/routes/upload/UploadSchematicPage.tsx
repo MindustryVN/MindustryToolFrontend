@@ -1,20 +1,20 @@
-import '../../styles.css';
+import 'src/styles.css';
 import './UploadSchematicPage.css';
 
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import { API } from '../../API';
-import { QUIT_ICON } from '../../components/common/Icon';
-import ClearIconButton from '../../components/button/ClearIconButton';
-import Dropbox from '../../components/dropbox/Dropbox';
-import SchematicPreviewData from '../../components/schematic/SchematicUploadPreview';
-import Tag, { TagChoiceLocal } from '../../components/tag/Tag';
-import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from '../../config/Config';
-import i18n from '../../util/I18N';
-import { getFileExtension } from '../../util/StringUtils';
-import { UserContext } from '../../components/provider/UserProvider';
-import { PopupMessageContext } from '../../components/provider/PopupMessageProvider';
+import { API } from 'src/API';
+import { QUIT_ICON } from 'src/components/common/Icon';
+import ClearIconButton from 'src/components/button/ClearIconButton';
+import Dropbox from 'src/components/dropbox/Dropbox';
+import SchematicPreviewData from 'src/components/schematic/SchematicUploadPreview';
+import Tag, { TagChoiceLocal } from 'src/components/tag/Tag';
+import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
+import i18n from 'src/util/I18N';
+import { getFileExtension } from 'src/util/StringUtils';
+import { UserContext } from 'src/components/provider/UserProvider';
+import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import { Link } from 'react-router-dom';
-import TagPick from '../../components/tag/TagPick';
+import TagPick from 'src/components/tag/TagPick';
 
 export default function Upload() {
 	const tabs = ['File', 'Code'];

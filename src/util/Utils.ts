@@ -1,14 +1,10 @@
 import { Buffer } from 'buffer';
 export class Utils {
-	static getDownloadUrl(data: string): string {
+	static getDownloadUrl(data: string, extension : string): string {
 		const blob = new Blob([Buffer.from(data, 'base64')], {
-			type: 'text/plain',
+			type: extension,
 		});
 		return window.URL.createObjectURL(blob);
-	}
-
-	static copyDataToClipboard(str: string) {
-		return navigator.clipboard.writeText(str);
 	}
 
 	static array2dToArray<ArrayType, ResultType>(arr2d: ArrayType[][], func: (item: ArrayType, index?: number) => ResultType): ResultType[] {

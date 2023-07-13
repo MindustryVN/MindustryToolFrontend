@@ -1,11 +1,11 @@
 import './App.css';
 import './styles.css';
 
-import Loading from './components/loader/Loading';
-import NavigationPanel from './components/navigation/NavigationPanel';
-import AdminRoute from './components/router/AdminRoute';
-import PrivateRoute from './components/router/PrivateRoute';
-import OAuth2RedirectHandler from './routes/login/OAuth2RedirectHandler';
+import Loading from 'src/components/loader/Loading';
+import NavigationPanel from 'src/components/navigation/NavigationPanel';
+import AdminRoute from 'src/components/router/AdminRoute';
+import PrivateRoute from 'src/components/router/PrivateRoute';
+import OAuth2RedirectHandler from 'src/routes/login/OAuth2RedirectHandler';
 
 import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -26,18 +26,18 @@ import { WEB_VERSION } from './config/Config';
 // const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
-const Map = React.lazy(() => import('./routes/map/MapPage'));
-const Home = React.lazy(() => import('./routes/home/HomePage'));
-const Me = React.lazy(() => import('./routes/me/MePage'));
-const Logic = React.lazy(() => import('./routes/logic/LogicPage'));
-const Schematic = React.lazy(() => import('./routes/schematic/SchematicPage'));
-const Login = React.lazy(() => import('./routes/login/LoginPage'));
-const Upload = React.lazy(() => import('./routes/upload/UploadSchematicPage'));
-const Admin = React.lazy(() => import('./routes/admin/AdminPage'));
-const Forum = React.lazy(() => import('./routes/forum/ForumPage'));
-const Info = React.lazy(() => import('./routes/info/Info'));
-const User = React.lazy(() => import('./routes/user/UserPage'));
-const SchematicPreview = React.lazy(() => import('./routes/schematic/SchematicPreviewPage'));
+const Map = React.lazy(() => import('src/routes/map/MapPage'));
+const Home = React.lazy(() => import('src/routes/home/HomePage'));
+const Me = React.lazy(() => import('src/routes/me/MePage'));
+const Logic = React.lazy(() => import('src/routes/logic/LogicPage'));
+const Schematic = React.lazy(() => import('src/routes/schematic/SchematicPage'));
+const Login = React.lazy(() => import('src/routes/login/LoginPage'));
+const Upload = React.lazy(() => import('src/routes/upload/UploadSchematicPage'));
+const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
+const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
+const Info = React.lazy(() => import('src/routes/info/Info'));
+const User = React.lazy(() => import('src/routes/user/UserPage'));
+const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
 
 export default function App() {
 	return (

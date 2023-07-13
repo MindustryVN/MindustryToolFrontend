@@ -1,12 +1,12 @@
 import './NavigationPanel.css';
-import '../../styles.css';
+import 'src/styles.css';
 
 import React, { useContext, useState } from 'react';
-import UserData from '../user/UserData';
+import UserData from 'src/components/user/UserData';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../provider/UserProvider';
+import { UserContext } from 'src/components/provider/UserProvider';
 import { Trans } from 'react-i18next';
-import UserDisplay from '../user/UserDisplay';
+import UserDisplay from 'src/components/user/UserDisplay';
 
 export default function NavigationPanel() {
 	const { user } = useContext(UserContext);

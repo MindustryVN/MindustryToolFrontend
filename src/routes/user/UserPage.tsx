@@ -1,13 +1,13 @@
-import '../../styles.css';
+import 'src/styles.css';
 import './UserPage.css';
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { API } from '../../API';
-import UserData from '../../components/user/UserData';
-import LoadingSpinner from '../../components/loader/LoadingSpinner';
-import { PopupMessageContext } from '../../components/provider/PopupMessageProvider';
-import i18n from '../../util/I18N';
+import { API } from 'src/API';
+import UserData from 'src/components/user/UserData';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import i18n from 'src/util/I18N';
 import { Trans } from 'react-i18next';
 import UserSchematicTab from './UserSchematicTab';
 
