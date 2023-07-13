@@ -1,7 +1,7 @@
 import 'src/styles.css';
 import './SchematicPage.css';
 
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { API } from 'src/API';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import Dropbox from 'src/components/dropbox/Dropbox';
@@ -10,10 +10,9 @@ import SchematicData from 'src/components/schematic/SchematicData';
 import Tag, { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal } from 'src/components/tag/Tag';
 import TagPick from 'src/components/tag/TagPick';
 import UserData from 'src/components/user/UserData';
-import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from 'src/config/Config';
+import { API_BASE_URL } from 'src/config/Config';
 import IconButton from 'src/components/button/IconButton';
 import SchematicPreview from 'src/components/schematic/SchematicPreview';
-import { COPY_ICON, DOWN_VOTE_ICON, QUIT_ICON, UP_VOTE_ICON } from 'src/components/common/Icon';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import { Utils } from 'src/util/Utils';
 import { UserContext } from 'src/components/provider/UserProvider';
@@ -21,11 +20,9 @@ import { PopupMessageContext } from 'src/components/provider/PopupMessageProvide
 import i18n from 'src/util/I18N';
 import LoadUserName from 'src/components/user/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
+import usePage from 'src/hooks/UsePage';
 
 export default function Schematic() {
-	const [loaderState, setLoaderState] = useState<LoaderState>('loading');
-
-	const [schematicList, setSchematicList] = useState<SchematicData[][]>([[]]);
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
 
 	const [tag, setTag] = useState<string>('');
@@ -40,66 +37,19 @@ export default function Schematic() {
 		sort: sortQuery,
 	});
 
+	const searchConfig = {
+		params: {
+			tags: TagChoiceLocal.toString(currentQuery.current.tag), //
+			sort: currentQuery.current.sort.value,
+		},
+	};
+
+	const { pages, loadPage, loaderState } = usePage<SchematicData>('schematic/page', searchConfig);
+
 	const { user } = useContext(UserContext);
 	const { addPopupMessage } = useContext(PopupMessageContext);
 
 	const { copy } = useClipboard();
-
-	useEffect(() => {
-		setLoaderState('loading');
-		setSchematicList([[]]);
-		currentQuery.current = { tag: tagQuery, sort: sortQuery };
-
-		API.REQUEST.get(`schematic/page/0`, {
-			params: {
-				tags: TagChoiceLocal.toString(currentQuery.current.tag), //
-				sort: currentQuery.current.sort.value,
-			},
-		})
-			.then((result) => {
-				let schematics: SchematicData[] = result.data;
-				setSchematicList([schematics]);
-			})
-			.catch(() => console.log('Error loading schematic page')) //
-			.finally(() => setLoaderState('more'));
-	}, [sortQuery, tagQuery]);
-
-	function loadPage() {
-		setLoaderState('loading');
-
-		if (tagQuery !== currentQuery.current.tag || sortQuery !== currentQuery.current.sort) {
-			setSchematicList([[]]);
-			currentQuery.current = { tag: tagQuery, sort: sortQuery };
-		}
-
-		const lastIndex = schematicList.length - 1;
-		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
-		API.REQUEST.get(`schematic/page/${lastIndex + (newPage ? 1 : 0)}`, {
-			params: {
-				tags: TagChoiceLocal.toString(currentQuery.current.tag), //
-				sort: currentQuery.current.sort.value,
-			},
-		})
-			.then((result) => {
-				let schematics: SchematicData[] = result.data;
-
-				if (schematics) {
-					if (newPage)
-						setSchematicList((prev) => {
-							return [...prev, schematics];
-						});
-					else
-						setSchematicList((prev) => {
-							prev[lastIndex] = schematics;
-							return [...prev];
-						});
-
-					if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-					else setLoaderState('more');
-				} else setLoaderState('more');
-			})
-			.catch(() => setLoaderState('more'));
-	}
 
 	function handleRemoveTag(index: number) {
 		setTagQuery([...tagQuery.filter((_, i) => i !== index)]);
@@ -163,7 +113,7 @@ export default function Schematic() {
 						}}>
 						<img src="/assets/icons/play-2.png" style={{ rotate: '90deg' }} alt="dislike" />
 					</button>
-					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data, "msch")} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`  }>
+					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 						<img src="/assets/icons/download.png" alt="download" />
 					</a>
 					<button className="button" type="button" onClick={() => copy(schematic.data)}>
@@ -219,7 +169,7 @@ export default function Schematic() {
 				</section>
 				<section className="flexbox small-gap flex-wrap center">
 					{tagQuery.map((t: TagChoiceLocal, index: number) => (
-						<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => handleRemoveTag(index)} />} />
+						<Tag key={index} tag={t} removeButton={<ClearIconButton icon="/assets/icons/quit.png" title="remove" onClick={() => handleRemoveTag(index)} />} />
 					))}
 				</section>
 				<section className="sort-container grid-row small-gap center">
@@ -231,7 +181,7 @@ export default function Schematic() {
 				</section>
 			</header>
 			<section className="schematic-container">
-				{Utils.array2dToArray(schematicList, (schematic, index) => (
+				{pages.map((schematic, index) => (
 					<SchematicPreview
 						key={index}
 						schematic={schematic}
@@ -244,7 +194,7 @@ export default function Schematic() {
 							<IconButton
 								key={0}
 								title="up vote"
-								icon={UP_VOTE_ICON}
+								icon="/assets/icons/up-vote.png"
 								onClick={() =>
 									addPopupMessage({
 										message: i18n.t('schematic.liked'),
@@ -256,7 +206,7 @@ export default function Schematic() {
 							<IconButton
 								key={1}
 								title="down vote"
-								icon={DOWN_VOTE_ICON}
+								icon="/assets/icons/down-vote.png"
 								onClick={() =>
 									addPopupMessage({
 										message: i18n.t('schematic.disliked'),
@@ -265,12 +215,8 @@ export default function Schematic() {
 									})
 								}
 							/>, //
-							<IconButton key={2} title="copy" icon={COPY_ICON} onClick={() => copy(schematic.data)} />, //
-							<a
-								key={3}
-								className="button small-padding"
-								href={Utils.getDownloadUrl(schematic.data, 'msch')}
-								download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+							<IconButton key={2} title="copy" icon="/assets/icons/copy.png" onClick={() => copy(schematic.data)} />, //
+							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src="/assets/icons/download.png" alt="download" />
 							</a>,
 						]}

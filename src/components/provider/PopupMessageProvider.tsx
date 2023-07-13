@@ -3,7 +3,6 @@ import 'src/styles.css';
 
 import { v4 } from 'uuid';
 import ClearIconButton from 'src/components/button/ClearIconButton';
-import { QUIT_ICON } from 'src/components/common/Icon';
 
 import React, { ReactNode, useEffect } from 'react';
 import { API } from 'src/API';
@@ -130,7 +129,7 @@ function PopupMessage(props: PopupMessageNodeProps) {
 		<section className="popup-message w100p" style={{ backgroundColor: color }}>
 			<section className="popup-message-content flex-row w100p">
 				{props.message}
-				<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => props.onTimeOut()} />
+				<ClearIconButton icon="/assets/icons/quit.png" title="remove" onClick={() => props.onTimeOut()} />
 			</section>
 			<div className="timer" style={{ animation: `timer ${props.duration}s linear forwards` }} />
 		</section>

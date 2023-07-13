@@ -3,7 +3,6 @@ import './UploadSchematicPage.css';
 
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import { QUIT_ICON } from 'src/components/common/Icon';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import SchematicPreviewData from 'src/components/schematic/SchematicUploadPreview';
@@ -252,7 +251,7 @@ export default function Upload() {
 
 							<div className="flex-row flex-wrap medium-gap">
 								{tags.map((t: TagChoiceLocal, index: number) => (
-									<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => handleRemoveTag(index)} />} />
+									<Tag key={index} tag={t} removeButton={<ClearIconButton icon="/assets/icons/quit.png" title="remove" onClick={() => handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>

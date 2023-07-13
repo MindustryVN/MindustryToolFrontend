@@ -1,17 +1,16 @@
 import 'src/styles.css';
 import './VerifySchematicTab.css';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Tag, { TagChoiceLocal } from 'src/components/tag/Tag';
 import { API } from 'src/API';
-import { API_BASE_URL, LoaderState, MAX_ITEM_PER_PAGE } from 'src/config/Config';
+import { API_BASE_URL } from 'src/config/Config';
 import UserName from 'src/components/user/LoadUserName';
 import SchematicData from 'src/components/schematic/SchematicData';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import ClearIconButton from 'src/components/button/ClearIconButton';
-import { COPY_ICON, QUIT_ICON } from 'src/components/common/Icon';
 import { Utils } from 'src/util/Utils';
 import SchematicPreview from 'src/components/schematic/SchematicPreview';
 import IconButton from 'src/components/button/IconButton';
@@ -19,72 +18,17 @@ import { PopupMessageContext } from 'src/components/provider/PopupMessageProvide
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import useClipboard from 'src/hooks/UseClipboard';
+import usePage from 'src/hooks/UsePage';
 
 export default function VerifySchematicTab() {
-	const [loaderState, setLoaderState] = useState<LoaderState>('loading');
-
-	const [schematicList, setSchematicList] = useState<SchematicData[][]>([[]]);
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
 
 	const { copy } = useClipboard();
 
-	useEffect(() => {
-		API.REQUEST.get(`schematic-upload/page/0`) //
-			.then((result) => {
-				setSchematicList((prev) => {
-					let schematics: SchematicData[] = result.data;
-					return [schematics];
-				});
-			})
-			.catch(() => console.log('Error loading schematic verify page')) //
-			.finally(() => setLoaderState('more'));
-	}, []);
+	const { pages, loadPage, loadToPage, loaderState } = usePage<SchematicData>('schematic-upload/page');
 
-	function loadToPage(page: number) {
-		setSchematicList([[]]);
-		setLoaderState('loading');
-
-		for (let i = 0; i < page; i++) {
-			API.REQUEST.get(`schematic-upload/page/${i}`)
-				.then((result) => {
-					let schematics: SchematicData[] = result.data;
-					if (schematics) {
-						if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-						else setLoaderState('more');
-						setSchematicList((prev) => [...prev, schematics]);
-					} else setLoaderState('out');
-				})
-				.catch(() => setLoaderState('more'));
-		}
-	}
-
-	function loadPage() {
-		setLoaderState('loading');
-
-		const lastIndex = schematicList.length - 1;
-		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
-
-		API.REQUEST.get(`schematic-upload/page/${lastIndex + (newPage ? 1 : 0)}`)
-			.then((result) => {
-				let schematics: SchematicData[] = result.data;
-				if (schematics) {
-					if (newPage)
-						setSchematicList((prev) => {
-							return [...prev, schematics];
-						});
-					else
-						setSchematicList((prev) => {
-							prev[lastIndex] = schematics;
-							return [...prev];
-						});
-					if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-					else setLoaderState('more');
-				} else setLoaderState('out');
-			})
-			.catch(() => setLoaderState('more'));
-	}
 	interface SchematicVerifyPanelProps {
 		schematic: SchematicData;
 	}
@@ -104,7 +48,7 @@ export default function VerifySchematicTab() {
 			API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
 				.then(() => addPopupMessage({ message: i18n.t('delete-success'), duration: 5, type: 'info' })) //.
 				.catch(() => addPopupMessage({ message: i18n.t('delete-fail'), duration: 5, type: 'error' }))
-				.finally(() => loadToPage(schematicList.length));
+				.finally(() => loadToPage(pages.length));
 		}
 
 		function verifySchematic(schematic: SchematicData) {
@@ -121,7 +65,7 @@ export default function VerifySchematicTab() {
 				.then(() => addPopupMessage({ message: i18n.t('verify-success'), duration: 5, type: 'info' }))
 				.catch(() => addPopupMessage({ message: i18n.t('verify-fail'), duration: 5, type: 'error' }))
 				.finally(() => {
-					loadToPage(schematicList.length);
+					loadToPage(pages.length);
 					setShowSchematicModel(false);
 				});
 		}
@@ -164,15 +108,15 @@ export default function VerifySchematicTab() {
 						/>
 						<div className="flex-row flex-wrap small-gap">
 							{tags.map((t: TagChoiceLocal, index: number) => (
-								<Tag key={index} tag={t} removeButton={<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => handleRemoveTag(index)} />} />
+								<Tag key={index} tag={t} removeButton={<ClearIconButton icon="/assets/icons/quit.png" title="remove" onClick={() => handleRemoveTag(index)} />} />
 							))}
 						</div>
 					</div>
 					<section className="grid-row small-gap">
-						<a className="button small-padding" href={Utils.getDownloadUrl(props.schematic.data, "msch")} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+						<a className="button small-padding" href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 							<img src="/assets/icons/download.png" alt="download" />
 						</a>
-						<IconButton icon={COPY_ICON} onClick={() => copy(props.schematic.data)} />
+						<IconButton icon="/assets/icons/copy.png" onClick={() => copy(props.schematic.data)} />
 						<button className="button" type="button" onClick={() => verifySchematic(props.schematic)}>
 							Verify
 						</button>
@@ -202,7 +146,7 @@ export default function VerifySchematicTab() {
 	return (
 		<main className="verify-schematic">
 			<section className="schematic-container">
-				{Utils.array2dToArray(schematicList, (schematic, index) => (
+				{pages.map((schematic, index) => (
 					<SchematicPreview
 						key={index}
 						schematic={schematic} //
@@ -212,8 +156,8 @@ export default function VerifySchematicTab() {
 							setShowSchematicModel(true);
 						}}
 						buttons={[
-							<IconButton key={2} title="copy" icon={COPY_ICON} onClick={() => copy(schematic.data)} />, //
-							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data, "msch")} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+							<IconButton key={2} title="copy" icon="/assets/icons/copy.png" onClick={() => copy(schematic.data)} />, //
+							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src="/assets/icons/download.png" alt="download" />
 							</a>,
 						]}

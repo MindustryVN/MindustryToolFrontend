@@ -1,11 +1,9 @@
 import 'src/styles.css';
 import './UserSchematicTab.css';
 
-import React, { useState, useContext, useEffect } from 'react';
-import { API } from 'src/API';
+import React, { useState, useContext } from 'react';
 import IconButton from 'src/components/button/IconButton';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import { UP_VOTE_ICON, DOWN_VOTE_ICON, COPY_ICON } from 'src/components/common/Icon';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import SchematicData from 'src/components/schematic/SchematicData';
@@ -13,18 +11,17 @@ import SchematicPreview from 'src/components/schematic/SchematicPreview';
 import Tag, { TagChoiceLocal } from 'src/components/tag/Tag';
 import LoadUserName from 'src/components/user/LoadUserName';
 import UserData from 'src/components/user/UserData';
-import { LoaderState, MAX_ITEM_PER_PAGE, API_BASE_URL } from 'src/config/Config';
+import { API_BASE_URL } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { Utils } from 'src/util/Utils';
 import useClipboard from 'src/hooks/UseClipboard';
+import usePage from 'src/hooks/UsePage';
 
 interface UserSchematicTabProps {
 	user: UserData;
 }
 
 export default function UserSchematicTab(props: UserSchematicTabProps) {
-	const [loaderState, setLoaderState] = useState<LoaderState>('loading');
-	const [schematicList, setSchematicList] = useState<SchematicData[][]>([[]]);
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
 
 	const [showSchematicModel, setShowSchematicModel] = useState(false);
@@ -33,46 +30,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 
 	const { copy } = useClipboard();
 
-	useEffect(() => {
-		API.REQUEST.get(`schematic/user/${props.user.id}/page/0`) //
-			.then((result) => {
-				let schematics: SchematicData[] = result.data;
-				if (schematics) {
-					setSchematicList(() => {
-						return [schematics];
-					});
-				}
-			})
-			.catch(() => console.log('Error loading user schematic'))
-			.finally(() => setLoaderState('more'));
-	}, [props.user.id]);
-
-	function loadPage() {
-		setLoaderState('loading');
-
-		const lastIndex = schematicList.length - 1;
-		const newPage = schematicList[lastIndex].length === MAX_ITEM_PER_PAGE;
-
-		API.REQUEST.get(`schematic/user/${props.user.id}/page/${lastIndex + (newPage ? 1 : 0)}`)
-			.then((result) => {
-				let schematics: SchematicData[] = result.data;
-				if (schematics) {
-					if (newPage)
-						setSchematicList((prev) => {
-							return [...prev, schematics];
-						});
-					else
-						setSchematicList((prev) => {
-							prev[lastIndex] = schematics;
-							return [...prev];
-						});
-
-					if (schematics.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-					else setLoaderState('more');
-				} else setLoaderState('out');
-			})
-			.catch(() => setLoaderState('more'));
-	}
+	const { pages, loadPage, loaderState } = usePage<SchematicData>(`schematic/user/${props.user.id}/page`);
 
 	function buildSchematicData(schematic: SchematicData) {
 		return (
@@ -124,7 +82,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 						}}>
 						<img src="/assets/icons/play-2.png" style={{ rotate: '90deg' }} alt="dislike" />
 					</button>
-					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data, 'msch')} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+					<a className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 						<img src="/assets/icons/download.png" alt="download" />
 					</a>
 					<button className="button" type="button" onClick={() => copy(schematic.data)}>
@@ -148,7 +106,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	return (
 		<main id="schematic-tab" className="schematic-tab">
 			<section className="schematic-container">
-				{Utils.array2dToArray(schematicList, (schematic, index) => (
+				{pages.map((schematic, index) => (
 					<SchematicPreview
 						key={index}
 						schematic={schematic}
@@ -158,36 +116,15 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 							setShowSchematicModel(true);
 						}}
 						buttons={[
-							<IconButton
-								key={0}
-								title="up vote"
-								icon={UP_VOTE_ICON}
-								onClick={() =>
-									addPopupMessage({
-										message: i18n.t('schematic.liked'),
-										duration: 5,
-										type: 'info',
-									})
-								}
-							/>, //
+							<IconButton key={0} title="up vote" icon="/assets/icons/up-vote.png" onClick={() => addPopupMessage({ message: i18n.t('schematic.liked'), duration: 5, type: 'info' })} />, //
 							<IconButton
 								key={1}
 								title="down vote"
-								icon={DOWN_VOTE_ICON}
-								onClick={() =>
-									addPopupMessage({
-										message: i18n.t('schematic.disliked'),
-										duration: 5,
-										type: 'info',
-									})
-								}
+								icon="/assets/icons/down-vote.png"
+								onClick={() => addPopupMessage({ message: i18n.t('schematic.disliked'), duration: 5, type: 'info' })}
 							/>, //
-							<IconButton key={2} title="copy" icon={COPY_ICON} onClick={() => copy(schematic.data)} />, //
-							<a
-								key={3}
-								className="button small-padding"
-								href={Utils.getDownloadUrl(schematic.data, 'msch')}
-								download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
+							<IconButton key={2} title="copy" icon="/assets/icons/copy.png" onClick={() => copy(schematic.data)} />, //
+							<a key={3} className="button small-padding" href={Utils.getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}>
 								<img src="/assets/icons/download.png" alt="download" />
 							</a>,
 						]}

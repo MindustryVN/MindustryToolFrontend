@@ -1,9 +1,10 @@
 import 'src/styles.css';
 
 import React from 'react';
+import { Icon } from 'src/components/common/Icon';
 
 interface IconButtonProps {
-	icon: string;
+	icon: Icon;
 	title?: string;
 	onClick: () => void;
 }
