@@ -12,7 +12,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 
 	useEffect(() => {
 		setLoaderState('loading');
-		setPages([]);
+		setPages([[]]);
 		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
 			.then((result) => setPages(() => [result.data]))
 			.catch(() => setLoaderState('error')) //

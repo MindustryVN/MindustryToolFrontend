@@ -61,7 +61,7 @@ export default function Schematic() {
 	function setSearchConfig(sort: SortChoice, tags: TagChoiceLocal[]) {
 		searchConfig.current = {
 			params: {
-				tags: Tags.toString(tagQuery), //
+				tags: Tags.toString(tags), //
 				sort: sort.value,
 			},
 		};

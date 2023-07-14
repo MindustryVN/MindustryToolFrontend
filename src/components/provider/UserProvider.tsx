@@ -1,7 +1,9 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import UserData from 'src/components/user/UserData';
 import { ACCESS_TOKEN } from 'src/config/Config';
 import { API } from 'src/API';
+import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import i18n from 'src/util/I18N';
 
 interface UserContextProps {
 	user: UserData | undefined;
@@ -23,6 +25,8 @@ export default function UserProvider(props: UserProviderProps) {
 	const [user, setUser] = useState<UserData>();
 	const [loading, setLoading] = useState<boolean>(true);
 
+	const ref = useRef(useContext(PopupMessageContext));
+
 	useEffect(() => {
 		setLoading(true);
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
@@ -30,7 +34,7 @@ export default function UserProvider(props: UserProviderProps) {
 			API.setBearerToken(accessToken);
 			API.REQUEST.get('/user/me') //
 				.then((result) => setUser(result.data))
-				.catch(() => console.log('Login fail'))
+				.catch(() => ref.current.addPopupMessage(i18n.t('login-fail'), 5, 'error'))
 				.finally(() => setLoading(false));
 		} else setLoading(false);
 	}, []);
