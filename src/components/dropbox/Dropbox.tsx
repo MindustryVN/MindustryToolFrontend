@@ -10,7 +10,7 @@ interface DropboxProps<ItemType> {
 	items: ItemType[];
 	children?: ReactNode;
 	insideChildren?: ReactNode;
-	converter: (items: ItemType, index: number) => ReactNode;
+	mapper: (items: ItemType, index: number) => ReactNode;
 	onChoose: (item: ItemType) => void;
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
@@ -19,11 +19,11 @@ export default function Dropbox<ItemType>(props: DropboxProps<ItemType>) {
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<section className="dropbox">
-			<section className="dropbox-input small-gap">
+		<section className='dropbox'>
+			<section className='dropbox-input small-gap'>
 				<input
-					className="dropbox-text"
-					type="text"
+					className='dropbox-text'
+					type='text'
 					value={props.value}
 					title={props.placeholder}
 					placeholder={props.placeholder}
@@ -36,9 +36,9 @@ export default function Dropbox<ItemType>(props: DropboxProps<ItemType>) {
 				/>
 				{props.insideChildren}
 			</section>
-			<section className="dropbox-popup">
+			<section className='dropbox-popup'>
 				{showDropbox && (
-					<section className="dropbox-element-container">
+					<section className='dropbox-element-container'>
 						{props.items ? (
 							props.items.map((node, index) => (
 								<DropboxElement
@@ -47,7 +47,7 @@ export default function Dropbox<ItemType>(props: DropboxProps<ItemType>) {
 										setShowDropbox(false);
 										props.onChoose(node);
 									}}
-									children={props.converter(node, index)}
+									children={props.mapper(node, index)}
 								/>
 							))
 						) : (

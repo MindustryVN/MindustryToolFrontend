@@ -46,11 +46,13 @@
 	width: 100%;
 
 	background-color: rgb(100, 100, 255);
+	
+	transform-origin: left center;
 }
 
 @keyframes timer {
 	100% {
-		transform: translateX(-100%);
+		transform: scaleX(0);
 	}
 }
 

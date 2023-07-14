@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext } from 'react';
 import Loading from 'src/components/loader/Loading';
-import UserData from 'src/components/user/UserData';
+import { Users } from 'src/components/user/UserData';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from 'src/components/provider/UserProvider';
 
@@ -13,9 +13,9 @@ const AdminRoute = (props: AdminRouteProps) => {
 
 	if (loading) return <Loading />;
 
-	if (UserData.isAdmin(user)) return props.element;
+	if (Users.isAdmin(user)) return props.element;
 
-	return <Navigate to="/login" />;
+	return <Navigate to='/login' />;
 };
 
 export default AdminRoute;

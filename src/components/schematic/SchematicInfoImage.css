@@ -1,0 +1,10 @@
+.schematic-info-image {
+	display: block;
+	border-radius: 5px;
+	border: 2px solid var(--white);
+
+	min-width: var(--preview-image-min-size);
+	min-height: var(--preview-image-min-size);
+
+	max-width: min(512px, 80vw);
+}

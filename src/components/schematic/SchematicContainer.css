@@ -1,0 +1,8 @@
+.schematic-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, var(--preview-image-min-size));
+	grid-gap: 1rem;
+
+	justify-content: center;
+	align-content: flex-start;
+}

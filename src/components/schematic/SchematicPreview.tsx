@@ -3,6 +3,8 @@ import 'src/styles.css';
 
 import React, { ReactNode } from 'react';
 import SchematicData from './SchematicData';
+import ColorText from 'src/components/common/ColorText';
+import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
 
 interface SchematicPreviewProps {
 	schematic: SchematicData;
@@ -14,12 +16,8 @@ interface SchematicPreviewProps {
 export default function SchematicPreview(props: SchematicPreviewProps) {
 	return (
 		<section className="schematic-preview">
-			<button className="schematic-image-wrapper" type="button" onClick={() => props.onClick(props.schematic)}>
-				<img className="schematic-image" src={props.imageUrl} alt="schematic" />
-			</button>
-
-			<span className="schematic-name small-padding flex-center text-center">{props.schematic.name}</span>
-
+			<SchematicPreviewImage src={props.imageUrl} onClick={() => props.onClick(props.schematic)} />
+			<ColorText className="capitalize small-padding flex-center text-center" text={props.schematic.name} />
 			<section className="grid-row small-gap small-padding">{props.buttons}</section>
 		</section>
 	);

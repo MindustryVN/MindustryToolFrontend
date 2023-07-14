@@ -2,8 +2,10 @@ import 'src/styles.css';
 
 import React from 'react';
 import { Icon } from 'src/components/common/Icon';
+import Button from 'src/components/button/Button';
 
 interface IconButtonProps {
+	className?: string;
 	icon: Icon;
 	title?: string;
 	onClick: () => void;
@@ -11,8 +13,8 @@ interface IconButtonProps {
 
 export default function IconButton(props: IconButtonProps) {
 	return (
-		<button className="button flex-center small-padding" title={props.title} type="button" onClick={() => props.onClick()}>
+		<Button className={props.className} title={props.title} onClick={() => props.onClick()}>
 			<img src={props.icon} alt={props.title} />
-		</button>
+		</Button>
 	);
 }

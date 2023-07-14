@@ -72,10 +72,18 @@
 	align-items: center;
 }
 
-.center {
+.flex-space-between {
 	display: flex;
+	justify-content: space-between;
+}
+
+.center {
 	justify-content: center;
 	align-items: center;
+}
+
+.space-between {
+	justify-content: space-between;
 }
 
 .flex-row {
@@ -156,4 +164,17 @@
 
 .capitalize {
 	text-transform: capitalize;
+}
+
+.background-image::before {
+	content: '';
+	position: fixed;
+	z-index: -1;
+	display: block;
+	background-image: url('/public/assets/images/background/light_theme.png');
+	background-size: cover;
+	background-position: center;
+	filter: brightness(40%);
+	width: 100%;
+	height: 100%;
 }

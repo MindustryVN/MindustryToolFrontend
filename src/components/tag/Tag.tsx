@@ -13,8 +13,8 @@ interface TagProps {
 
 export default function Tag(props: TagProps) {
 	return (
-		<span className="tag flex-row flex-nowrap small-padding center" style={{ backgroundColor: props.tag.color }}>
-			<span className="flex-column text-center">
+		<span className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: props.tag.color }}>
+			<span className='flex-column text-center'>
 				{props.tag.displayName} : {props.tag.displayValue}
 			</span>
 			{props.removeButton}
@@ -28,21 +28,7 @@ export interface CustomTag {
 	color: string;
 }
 
-export class TagChoiceLocal {
-	name: string;
-	displayName: string;
-	value: string;
-	displayValue: string;
-	color: string;
-
-	constructor(name: string, displayName: string, value: string, displayValue: string, color: string) {
-		this.name = name;
-		this.displayName = displayName;
-		this.value = value;
-		this.displayValue = displayValue;
-		this.color = color;
-	}
-
+export class Tags {
 	static SCHEMATIC_UPLOAD_TAG: TagChoiceLocal[] = [];
 	static SCHEMATIC_SEARCH_TAG: TagChoiceLocal[] = [];
 
@@ -83,6 +69,25 @@ export class TagChoiceLocal {
 	}
 }
 
+export class TagChoiceLocal {
+	name: string;
+	displayName: string;
+	value: string;
+	displayValue: string;
+	color: string;
+
+	constructor(name: string, displayName: string, value: string, displayValue: string, color: string) {
+		this.name = name;
+		this.displayName = displayName;
+		this.value = value;
+		this.displayValue = displayValue;
+		this.color = color;
+	}
+
+	toDisplayString() {
+		return `${this.displayName}:${this.displayValue}`;
+	}
+}
 export class SortChoice {
 	name: string;
 	value: string;

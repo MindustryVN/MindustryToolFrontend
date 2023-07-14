@@ -5,7 +5,7 @@ import { LoaderState, MAX_ITEM_PER_PAGE } from 'src/config/Config';
 import { Utils } from 'src/util/Utils';
 
 export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfig<any>) {
-	const [pages, setPages] = useState<T[][]>([[]]);
+	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [loaderState, setLoaderState] = useState<LoaderState>();
 
 	const ref = useRef({ url: url, searchConfig: searchConfig });
@@ -32,9 +32,10 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 						let data: T[] = result.data;
 						if (data) {
 							setPages((prev) => [...prev, data]);
-
-							if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-							else setLoaderState('more');
+							if (data.length < MAX_ITEM_PER_PAGE) {
+								setLoaderState('out');
+								i = page;
+							} else setLoaderState('more');
 						} else setLoaderState('out');
 					})
 					.catch(() => setLoaderState('more'));
@@ -46,13 +47,19 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 
 			const lastIndex = pages.length - 1;
 			const newPage = pages[lastIndex].length === MAX_ITEM_PER_PAGE;
+			const requestPage = newPage ? lastIndex + 1 : lastIndex;
 
-			API.REQUEST.get(`${url}/${lastIndex + (newPage ? 1 : 0)}`, searchConfig)
+			API.REQUEST.get(`${url}/${requestPage}`, searchConfig)
 				.then((result) => {
 					let data: T[] = result.data;
 					if (data) {
 						if (newPage) setPages((prev) => [...prev, data]);
-						else setPages(() => pages.with(lastIndex, data));
+						else
+							setPages((prev) => {
+								prev[lastIndex] = data;
+								return [...prev];
+							});
+
 						if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
 						else setLoaderState('more');
 					} else setLoaderState('out');

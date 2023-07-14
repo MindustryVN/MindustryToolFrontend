@@ -37,11 +37,12 @@ const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
+const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
 const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
 
 export default function App() {
 	return (
-		<main className="app">
+		<main className="app background-image">
 			<NavigationPanel />
 			<section className="main">
 				<Suspense fallback={<Loading />}>
@@ -51,6 +52,7 @@ export default function App() {
 						<Route path="/home" element={<Home />} />
 						<Route path="/logic" element={<Logic />} />
 						<Route path="/login" element={<Login />} />
+						<Route path="/mod" element={<Mod />} />
 						<Route path="/upload" element={<Upload />} />
 						<Route path="/schematic" element={<Schematic />} />
 						<Route path="/schematic/:schematicId" element={<SchematicPreview />} />

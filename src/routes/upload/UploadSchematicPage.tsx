@@ -6,7 +6,7 @@ import { API } from 'src/API';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import SchematicPreviewData from 'src/components/schematic/SchematicUploadPreview';
-import Tag, { TagChoiceLocal } from 'src/components/tag/Tag';
+import Tag, { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { getFileExtension } from 'src/util/StringUtils';
@@ -14,6 +14,7 @@ import { UserContext } from 'src/components/provider/UserProvider';
 import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import { Link } from 'react-router-dom';
 import TagPick from 'src/components/tag/TagPick';
+import ColorText from 'src/components/common/ColorText';
 
 export default function Upload() {
 	const tabs = ['File', 'Code'];
@@ -39,7 +40,7 @@ export default function Upload() {
 			message: (
 				<span>
 					{i18n.t('upload.login')}
-					<Link className="small-padding" to="/login">
+					<Link className='small-padding' to='/login'>
 						Login
 					</Link>
 				</span>
@@ -136,7 +137,7 @@ export default function Upload() {
 			return;
 		}
 		const formData = new FormData();
-		const tagString = TagChoiceLocal.toString(tags);
+		const tagString = Tags.toString(tags);
 
 		formData.append('tags', tagString);
 
@@ -183,17 +184,17 @@ export default function Upload() {
 			case tabs[0]:
 				return (
 					<div>
-						<label className="button" htmlFor="ufb">
+						<label className='button' htmlFor='ufb'>
 							Upload a file
 						</label>
-						<input id="ufb" type="file" onChange={(event) => handleFileChange(event)} />
+						<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
 					</div>
 				);
 
 			case tabs[1]:
 				return (
 					<div>
-						<button className="button" type="button" onClick={() => handleCodeChange()}>
+						<button className='button' type='button' onClick={() => handleCodeChange()}>
 							Copy from clipboard
 						</button>
 					</div>
@@ -205,33 +206,33 @@ export default function Upload() {
 	}
 
 	return (
-		<main className="upload">
-			<div className="upload">
-				<div className="preview-container ">
-					<div className="upload-button flex-column medium-gap">
-						<div className="flex-center">
-							<section className="grid-row small-gap  light-border small-padding">
+		<main className='upload'>
+			<div className='upload'>
+				<div className='preview-container '>
+					<div className='upload-button flex-column medium-gap'>
+						<div className='flex-center'>
+							<section className='grid-row small-gap  light-border small-padding'>
 								{tabs.map((name, index) => (
-									<button className={currentTab === name ? 'button-active' : 'button'} key={index} type="button" onClick={() => setCurrentTab(name)}>
+									<button className={currentTab === name ? 'button-active' : 'button'} key={index} type='button' onClick={() => setCurrentTab(name)}>
 										{name}
 									</button>
 								))}
 							</section>
 						</div>
-						<div className="flex-center">{renderTab(currentTab)}</div>
-						<div className="preview-image-container">{preview && <img className="preview-image" src={PNG_IMAGE_PREFIX + preview.image} alt="Upload a file" />}</div>
+						<div className='flex-center'>{renderTab(currentTab)}</div>
+						<div className='preview-image-container'>{preview && <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file' />}</div>
 					</div>
-					<div className="upload-description-container">
+					<div className='upload-description-container'>
 						{preview && (
-							<div className="flex-column flex-wrap text-center">
+							<div className='flex-column flex-wrap text-center'>
 								{<div>Author: {user ? user.name : 'community'}</div>}
-								<div>Name: {preview.name}</div>
-								{preview.description && <p> {preview.description}</p>}
+								<div>Name: {<ColorText text={preview.name} />}</div>
+								{preview.description && <ColorText text={preview.description} />}
 								{preview.requirement && (
-									<section className="flex-row flex-wrap small-gap">
+									<section className='flex-row flex-wrap small-gap'>
 										{preview.requirement.map((r, index) => (
-											<span key={index} className="flex-row center">
-												<img className="small-icon " src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
+											<span key={index} className='flex-row center'>
+												<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
 												<span> {r.amount} </span>
 											</span>
 										))}
@@ -239,24 +240,24 @@ export default function Upload() {
 								)}
 							</div>
 						)}
-						<div className="upload-search-container">
+						<div className='upload-search-container'>
 							<Dropbox
-								placeholder="Add tags"
+								placeholder='Add tags'
 								value={tag}
-								items={TagChoiceLocal.SCHEMATIC_UPLOAD_TAG.filter((t) => `${t.displayName}:${t.displayValue}`.toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+								items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 								onChange={(event) => setTag(event.target.value)}
 								onChoose={(item) => handleAddTag(item)}
-								converter={(t, index) => <TagPick key={index} tag={t} />}
+								mapper={(t, index) => <TagPick key={index} tag={t} />}
 							/>
 
-							<div className="flex-row flex-wrap medium-gap">
+							<div className='flex-row flex-wrap medium-gap'>
 								{tags.map((t: TagChoiceLocal, index: number) => (
-									<Tag key={index} tag={t} removeButton={<ClearIconButton icon="/assets/icons/quit.png" title="remove" onClick={() => handleRemoveTag(index)} />} />
+									<Tag key={index} tag={t} removeButton={<ClearIconButton icon='/assets/icons/quit.png' title='remove' onClick={() => handleRemoveTag(index)} />} />
 								))}
 							</div>
 						</div>
-						<section className="flex-center">
-							<button className="button" type="button" onClick={() => handleSubmit()}>
+						<section className='flex-center'>
+							<button className='button' type='button' onClick={() => handleSubmit()}>
 								Upload
 							</button>
 						</section>

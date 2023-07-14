@@ -44,28 +44,45 @@
 	justify-content: center;
 }
 
-.schematic-container {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, var(--preview-image-min-size));
-	grid-gap: 1rem;
+.model {
+	position: absolute;
 
-	justify-content: center;
-	align-content: flex-start;
+	top: var(--navbar-height);
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	box-sizing: border-box;
+
+	z-index: 99;
 }
 
 .schematic-info {
 	overflow: hidden auto;
 
-	padding: 5rem;
-
-	height: 100%;
-	width: 100%;
-	
 	box-sizing: border-box;
+
+	padding: 5rem;
 
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+
+	height: 100%;
+	width: 100%;
+}
+
+.model::before {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	display: block;
+	background-image: url('/public/assets/images/background/light_theme.png');
+	background-size: cover;
+	background-position: center;
+	filter: brightness(40%);
+	width: 100%;
+	height: 100%;
 }
 
 .schematic-info-image {
