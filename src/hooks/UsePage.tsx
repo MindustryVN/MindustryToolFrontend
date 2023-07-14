@@ -14,13 +14,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 		setLoaderState('loading');
 		setPages([[]]);
 		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
-			.then((result) =>
-				setPages(() => {
-					let data: T[] = result.data;
-					console.log(searchConfig)
-					return [data];
-				}),
-			)
+			.then((result) => setPages(() => [result.data]))
 			.catch(() => setLoaderState('error')) //
 			.finally(() => setLoaderState('more'));
 	}, [searchConfig]);
