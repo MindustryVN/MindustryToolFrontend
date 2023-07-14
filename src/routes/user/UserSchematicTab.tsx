@@ -112,7 +112,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	}
 
 	return (
-		<main id='schematic-tab' className='schematic flex-column small-gap'>
+		<main id='schematic-tab' className='flex-column small-gap w100p h100p scroll-y'>
 			<SchematicContainer children={pages.map((schematic) => buildSchematicPreview(schematic))} />
 			<footer className='flex-center'>
 				<IfTrueElse
