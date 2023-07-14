@@ -1,6 +1,5 @@
 import React from 'react';
 import ColorText from 'src/components/common/ColorText';
-import SchematicData from 'src/components/schematic/SchematicData';
 
 interface SchematicDescriptionProps {
 	description: string;
