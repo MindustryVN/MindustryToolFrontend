@@ -10,6 +10,8 @@
 	justify-content: center;
 
 	border: 2px solid var(--white);
+
+	width: 100%;
 }
 
 .dropbox-input {
@@ -48,7 +50,6 @@
 	z-index: 999;
 
 	max-height: 50vh;
-	max-height: 50dvh;
 
 	margin-top: 0.5rem;
 

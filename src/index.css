@@ -12,7 +12,19 @@ body,
 }
 
 * {
-	font-family: 'Oswald', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	font-family:
+		'Oswald',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		'Roboto',
+		'Oxygen',
+		'Ubuntu',
+		'Cantarell',
+		'Fira Sans',
+		'Droid Sans',
+		'Helvetica Neue',
+		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
@@ -44,14 +56,20 @@ a {
 
 	--preview-image-min-size: 192px;
 
-	--nav-bar-height: 2.5rem;
+	--navbar-height: 2.5rem;
+
+	--model-z-index: 2;
+	--popup-message-z-index: 3;
+
+	--error-color: #d0342c;
+	--warning-color: #e9d502;
+	--info-color: lightgreen;
 }
 
 input[type='file'] {
-	color: transparent;
+	display: none;
 }
 
 footer {
 	min-height: 2rem;
 }
-

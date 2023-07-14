@@ -10,6 +10,7 @@ import OAuth2RedirectHandler from 'src/routes/login/OAuth2RedirectHandler';
 import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { WEB_VERSION } from './config/Config';
+import ErrorBoundary from 'src/components/common/ErrorBoundery';
 // import { initializeApp } from 'firebase/app';
 // import { getAnalytics } from 'firebase/analytics';
 
@@ -37,33 +38,37 @@ const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
+const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
 const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
 
 export default function App() {
 	return (
-		<main className="app">
-			<NavigationPanel />
-			<section className="main">
-				<Suspense fallback={<Loading />}>
-					<Routes>
-						<Route path="/" element={<Navigate to="/home" />} />
-						<Route path="/map" element={<Map />} />
-						<Route path="/home" element={<Home />} />
-						<Route path="/logic" element={<Logic />} />
-						<Route path="/login" element={<Login />} />
-						<Route path="/upload" element={<Upload />} />
-						<Route path="/schematic" element={<Schematic />} />
-						<Route path="/schematic/:schematicId" element={<SchematicPreview />} />
-						<Route path="/forum/*" element={<Forum />}></Route>
-						<Route path="/user" element={<PrivateRoute element={<Me />} />} />
-						<Route path="/user/:userId" element={<PrivateRoute element={<User />} />} />
-						<Route path="/admin" element={<AdminRoute element={<Admin />} />} />
-						<Route path="/info" element={<Info />} />
-						<Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
-					</Routes>
-				</Suspense>
-			</section>
-			<footer className="web-version">{WEB_VERSION}</footer>
+		<main className='h100p w100p'>
+			<ErrorBoundary>
+				<NavigationPanel />
+				<section className='main background-image-1'>
+					<Suspense fallback={<Loading />}>
+						<Routes>
+							<Route path='/' element={<Navigate to='/home' />} />
+							<Route path='/map' element={<Map />} />
+							<Route path='/home' element={<Home />} />
+							<Route path='/logic' element={<Logic />} />
+							<Route path='/login' element={<Login />} />
+							<Route path='/mod' element={<Mod />} />
+							<Route path='/upload' element={<Upload />} />
+							<Route path='/schematic' element={<Schematic />} />
+							<Route path='/schematic/:schematicId' element={<SchematicPreview />} />
+							<Route path='/forum/*' element={<Forum />}></Route>
+							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
+							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
+							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
+							<Route path='/info' element={<Info />} />
+							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
+						</Routes>
+					</Suspense>
+				</section>
+				<footer className='web-version'>{WEB_VERSION}</footer>
+			</ErrorBoundary>
 		</main>
 	);
 }

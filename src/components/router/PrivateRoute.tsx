@@ -1,8 +1,8 @@
 import React, { ReactElement, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loading from 'src/components/loader/Loading';
-import UserData from 'src/components/user/UserData';
 import { UserContext } from 'src/components/provider/UserProvider';
+import { Users } from 'src/components/user/UserData';
 
 interface PrivateRouteProps {
 	element: ReactElement;
@@ -13,7 +13,7 @@ const PrivateRoute = (props: PrivateRouteProps) => {
 
 	if (loading) return <Loading />;
 
-	if (UserData.isUser(user)) return props.element;
+	if (Users.isUser(user)) return props.element;
 
 	return <Navigate to="/login" />;
 };

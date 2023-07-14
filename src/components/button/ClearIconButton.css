@@ -2,5 +2,7 @@
 	background-color: transparent;
 	outline: none;
 	border: none;
-    cursor: pointer;
+	cursor: pointer;
+
+	padding: 0.2rem;
 }

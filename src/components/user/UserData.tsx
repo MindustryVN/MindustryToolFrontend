@@ -10,7 +10,9 @@ export default class UserData {
 		this.imageUrl = imageUrl;
 		this.role = role;
 	}
+}
 
+export class Users {
 	static isUser(user: UserData | undefined) {
 		return user && user.role.includes('USER');
 	}

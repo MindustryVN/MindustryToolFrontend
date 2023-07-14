@@ -3,7 +3,6 @@ import 'src/styles.css';
 
 import { v4 } from 'uuid';
 import ClearIconButton from 'src/components/button/ClearIconButton';
-import { QUIT_ICON } from 'src/components/common/Icon';
 
 import React, { ReactNode, useEffect } from 'react';
 import { API } from 'src/API';
@@ -24,11 +23,11 @@ interface PopupMessageProps {
 }
 
 interface PopupMessageContextProps {
-	addPopupMessage: (props: PopupMessageProps) => void;
+	addPopupMessage: (message: ReactNode, duration: number, type: PopupMessageType) => void;
 }
 
 export const PopupMessageContext = React.createContext<PopupMessageContextProps>({
-	addPopupMessage: (props: PopupMessageProps) => {},
+	addPopupMessage: (message: ReactNode, duration: number, type: PopupMessageType) => {},
 });
 
 interface PopupMessageProviderProps {
@@ -69,13 +68,13 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 			);
 	}, []);
 
-	function addMessage(props: PopupMessageProps) {
+	function addMessage(message: ReactNode, duration: number, type: PopupMessageType) {
 		let uuid: string = v4();
 		let val: PopupMessageData = {
-			message: props.message,
-			duration: props.duration,
+			message: message,
+			duration: duration,
 			uuid: uuid,
-			type: props.type,
+			type: type,
 		};
 		setMessages([val, ...messages]);
 	}
@@ -86,7 +85,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 
 	return (
 		<PopupMessageContext.Provider value={{ addPopupMessage: addMessage }}>
-			<section id="popup-container" className="flex-column small-gap">
+			<section id='popup-container' className='flex-column small-gap'>
 				{messages.map((val) => (
 					<PopupMessage key={val.uuid} message={val.message} duration={val.duration} type={val.type} onTimeOut={() => removeMessage(val.uuid)} />
 				))}
@@ -104,7 +103,6 @@ interface PopupMessageNodeProps {
 }
 
 function PopupMessage(props: PopupMessageNodeProps) {
-	var color = '';
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -112,27 +110,13 @@ function PopupMessage(props: PopupMessageNodeProps) {
 		}, props.duration * 1000);
 	}, [props]);
 
-	switch (props.type) {
-		case 'info':
-			color = 'lightgreen';
-			break;
-
-		case 'warning':
-			color = '#E9D502';
-			break;
-
-		case 'error':
-			color = '#D0342C';
-			break;
-	}
-
 	return (
-		<section className="popup-message w100p" style={{ backgroundColor: color }}>
-			<section className="popup-message-content flex-row w100p">
+		<section className={'popup-message w100p ' + props.type}>
+			<section className='popup-message-content flex-row w100p'>
 				{props.message}
-				<ClearIconButton icon={QUIT_ICON} title="remove" onClick={() => props.onTimeOut()} />
+				<ClearIconButton icon='/assets/icons/quit.png' title='remove' onClick={() => props.onTimeOut()} />
 			</section>
-			<div className="timer" style={{ animation: `timer ${props.duration}s linear forwards` }} />
+			<div className='timer' style={{ animation: `timer ${props.duration}s linear forwards` }} />
 		</section>
 	);
 }

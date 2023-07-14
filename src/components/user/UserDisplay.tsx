@@ -6,6 +6,7 @@ import UserName from './UserName';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from 'src/components/provider/UserProvider';
 import { Trans } from 'react-i18next';
+import Button from 'src/components/button/Button';
 
 export default function UserDisplay() {
 	const { user } = useContext(UserContext);
@@ -16,9 +17,9 @@ export default function UserDisplay() {
 		if (user) return <UserName displayUser={user} />;
 
 		return (
-			<button className="user-display button" type="button" title="Login" onClick={() => navigate('/login')}>
+			<Button className="user-display button" title="Login" onClick={() => navigate('/login')}>
 				<Trans i18nKey="login" />
-			</button>
+			</Button>
 		);
 	}
 

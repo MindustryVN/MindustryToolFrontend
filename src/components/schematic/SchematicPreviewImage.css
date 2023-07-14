@@ -1,0 +1,17 @@
+.schematic-image-wrapper {
+	width: var(--preview-image-min-size);
+	height: var(--preview-image-min-size);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background-color: var(--black);
+}
+
+.schematic-preview-image {
+	width: var(--preview-image-min-size);
+	height: var(--preview-image-min-size);
+
+	border-bottom: 2px solid var(--white);
+}

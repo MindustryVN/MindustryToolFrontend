@@ -1,3 +1,4 @@
+import Button from 'src/components/button/Button';
 import './DropboxElement.css';
 
 import React, { ReactNode } from 'react';
@@ -9,8 +10,8 @@ interface DropboxElementProps {
 
 export default function DropboxElement(props: DropboxElementProps) {
 	return (
-		<button className="dropbox-element" type="button" onClick={() => props.onClick()}>
+		<Button className="dropbox-element" onClick={() => props.onClick()}>
 			{props.children}
-		</button>
+		</Button>
 	);
 }

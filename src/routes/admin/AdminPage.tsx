@@ -3,6 +3,7 @@ import 'src/styles.css';
 
 import React, { useState } from 'react';
 import VerifySchematicPage from './VerifySchematicTab';
+import Button from 'src/components/button/Button';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report'];
 
@@ -30,9 +31,9 @@ export default function Admin() {
 			<div className="flex-center">
 				<section className="tab-button-container grid-row small-gap small-padding">
 					{tabs.map((name, index) => (
-						<button className={currentTab === name ? 'button-active' : 'button'} key={index} type="button" onClick={() => setCurrentTab(name)}>
+						<Button active={currentTab === name} key={index} onClick={() => setCurrentTab(name)}>
 							{name}
-						</button>
+						</Button>
 					))}
 				</section>
 			</div>

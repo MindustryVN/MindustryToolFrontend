@@ -1,3 +1,5 @@
+import UserData, { Users } from 'src/components/user/UserData';
+
 export default class SchematicData {
 	id: string;
 	name: string;
@@ -32,6 +34,12 @@ export default class SchematicData {
 		this.like = like;
 		this.dislike = dislike;
 		this.verifyAdmin = verifyAdmin;
+	}
+}
+
+export class Schematics {
+	static canDelete(schematic: SchematicData, user: UserData | undefined) {
+		return user && (schematic.authorId === user.id || Users.isAdmin(user));
 	}
 }
 

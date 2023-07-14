@@ -1,8 +1,7 @@
-
 .navigation-bar {
 	position: relative;
 	width: 100vw;
-	height: var(--nav-bar-height);
+	height: var(--navbar-height);
 
 	box-sizing: border-box;
 
