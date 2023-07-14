@@ -12,17 +12,17 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-	<React.StrictMode>
-		<Router>
-			<PopupMessageProvider>
-				<TagProvider>
-					<UserProvider>
-						<I18nextProvider i18n={i18n}>
+	<I18nextProvider i18n={i18n}>
+		<React.StrictMode>
+			<Router>
+				<PopupMessageProvider>
+					<TagProvider>
+						<UserProvider>
 							<App />
-						</I18nextProvider>
-					</UserProvider>
-				</TagProvider>
-			</PopupMessageProvider>
-		</Router>
-	</React.StrictMode>,
+						</UserProvider>
+					</TagProvider>
+				</PopupMessageProvider>
+			</Router>
+		</React.StrictMode>
+	</I18nextProvider>,
 );
