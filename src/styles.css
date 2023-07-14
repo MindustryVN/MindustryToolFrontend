@@ -1,4 +1,6 @@
 .button {
+	position: relative;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -10,6 +12,7 @@
 	cursor: pointer;
 
 	padding: 0.2rem;
+	box-sizing: border-box;
 
 	border-radius: 5px;
 	border: 2px solid var(--gray);
@@ -17,6 +20,8 @@
 
 .button:hover,
 .button-active {
+	position: relative;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -28,6 +33,7 @@
 	cursor: pointer;
 
 	padding: 0.2rem;
+	box-sizing: border-box;
 
 	border-radius: 5px;
 	border: 2px solid var(--gray);
@@ -59,6 +65,10 @@
 
 .big-padding {
 	padding: 1rem;
+}
+
+.massive-padding {
+	padding: 2.5rem;
 }
 
 .small-icon {
@@ -114,8 +124,16 @@
 	width: 100%;
 }
 
+.w150p {
+	width: 150%;
+}
+
 .h100p {
 	height: 100%;
+}
+
+.h150p {
+	height: 150%;
 }
 
 .w100v {
@@ -134,12 +152,44 @@
 	width: 2rem;
 }
 
+.w3rem {
+	width: 3rem;
+}
+
+.w4rem {
+	width: 4rem;
+}
+
+.w5rem {
+	width: 5rem;
+}
+
+.w6rem {
+	width: 6rem;
+}
+
 .h1rem {
 	height: 1rem;
 }
 
 .h2rem {
 	height: 2rem;
+}
+
+.h3rem {
+	height: 3rem;
+}
+
+.h4rem {
+	height: 4rem;
+}
+
+.h5rem {
+	height: 5rem;
+}
+
+.h6rem {
+	height: 6rem;
 }
 
 .border-box {
@@ -154,19 +204,39 @@
 	border-radius: 5px;
 }
 
-.pos-fixed {
+.fixed {
 	position: fixed;
 }
 
-.pos-absolute {
+.absolute {
 	position: absolute;
+}
+
+.relative {
+	position: relative;
 }
 
 .capitalize {
 	text-transform: capitalize;
 }
 
-.background-image::before {
+.scroll-y {
+	overflow-y: auto;
+}
+
+.error {
+	background-color: var(--error-color);
+}
+
+.warning {
+	background-color: var(--warning-color);
+}
+
+.info {
+	background-color: var(--info-color);
+}
+
+.background-image-1::before {
 	content: '';
 	position: fixed;
 	z-index: -1;

@@ -1,9 +1,3 @@
-.schematic {
-	overflow: hidden auto;
-
-	height: 100%;
-	width: 100%;
-}
 
 .search-container {
 	display: flex;
@@ -33,79 +27,10 @@
 	}
 }
 
-.search-container > * {
-	width: 100%;
-}
 
 .sort-container {
 	width: fit-content;
 	margin: auto;
 	gap: 0.25rem;
 	justify-content: center;
-}
-
-.model {
-	position: absolute;
-
-	top: var(--navbar-height);
-	left: 0;
-	right: 0;
-	bottom: 0;
-
-	box-sizing: border-box;
-
-	z-index: 99;
-}
-
-.schematic-info {
-	overflow: hidden auto;
-
-	box-sizing: border-box;
-
-	padding: 5rem;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-
-	height: 100%;
-	width: 100%;
-}
-
-.model::before {
-	content: '';
-	position: absolute;
-	z-index: -1;
-	display: block;
-	background-image: url('/public/assets/images/background/light_theme.png');
-	background-size: cover;
-	background-position: center;
-	filter: brightness(40%);
-	width: 100%;
-	height: 100%;
-}
-
-.schematic-info-image {
-	display: block;
-	border-radius: 5px;
-	border: 2px solid var(--white);
-
-	min-width: var(--preview-image-min-size);
-	min-height: var(--preview-image-min-size);
-
-	max-width: min(512px, 100vw);
-}
-
-.search-button {
-	background-color: var(--black);
-	color: white;
-	border-radius: 5px;
-	outline: none;
-	border: none;
-}
-
-.search-button:hover {
-	background-color: var(--yellow);
-	color: var(--black);
-	padding: 0.2rem;
 }

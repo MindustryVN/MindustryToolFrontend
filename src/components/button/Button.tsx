@@ -12,7 +12,7 @@ interface ButtonProps {
 
 export default function Button(props: ButtonProps) {
 	return (
-		<button className={`${props.active ? 'button-active' : 'button'} flex-center small-padding ${props.className} `} title={props.title} type="button" onClick={() => props.onClick()}>
+		<button className={`${props.active ? 'button-active' : 'button'} flex-center ${props.className ? props.className : ''} `} title={props.title} type="button" onClick={() => props.onClick()}>
 			{props.children}
 		</button>
 	);

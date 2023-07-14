@@ -9,7 +9,7 @@ interface DownloadButtonProps {
 
 export default function DownloadButton(props: DownloadButtonProps) {
 	return (
-		<a className='button small-padding' href={props.href} download={props.download}>
+		<a className='button' href={props.href} download={props.download}>
 			<img src='/assets/icons/download.png' alt='download' />
 		</a>
 	);

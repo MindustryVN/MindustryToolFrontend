@@ -103,7 +103,6 @@ interface PopupMessageNodeProps {
 }
 
 function PopupMessage(props: PopupMessageNodeProps) {
-	var color = '';
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -111,22 +110,8 @@ function PopupMessage(props: PopupMessageNodeProps) {
 		}, props.duration * 1000);
 	}, [props]);
 
-	switch (props.type) {
-		case 'info':
-			color = 'lightgreen';
-			break;
-
-		case 'warning':
-			color = '#E9D502';
-			break;
-
-		case 'error':
-			color = '#D0342C';
-			break;
-	}
-
 	return (
-		<section className='popup-message w100p' style={{ backgroundColor: color }}>
+		<section className={'popup-message w100p ' + props.type}>
 			<section className='popup-message-content flex-row w100p'>
 				{props.message}
 				<ClearIconButton icon='/assets/icons/quit.png' title='remove' onClick={() => props.onTimeOut()} />

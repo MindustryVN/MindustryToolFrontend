@@ -6,7 +6,7 @@ export default function useModel() {
 
 	return {
 		model: (children: ReactNode, className?: string) => {
-			if (open) return <Model className={className}>{children}</Model>;
+			if (open) return <Model className={className ? className : ''}>{children}</Model>;
 			else return <></>;
 		},
 

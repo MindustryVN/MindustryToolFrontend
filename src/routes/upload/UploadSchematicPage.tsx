@@ -1,12 +1,12 @@
-import 'src/styles.css';
 import './UploadSchematicPage.css';
+import 'src/styles.css';
+import 'src/components/schematic/SchematicInfoImage.css';
 
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import ClearIconButton from 'src/components/button/ClearIconButton';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import SchematicPreviewData from 'src/components/schematic/SchematicUploadPreview';
-import Tag, { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { getFileExtension } from 'src/util/StringUtils';
@@ -14,61 +14,51 @@ import { UserContext } from 'src/components/provider/UserProvider';
 import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import { Link } from 'react-router-dom';
 import TagPick from 'src/components/tag/TagPick';
-import ColorText from 'src/components/common/ColorText';
+import { Trans } from 'react-i18next';
+import Button from 'src/components/button/Button';
+import TagEditContainer from 'src/components/tag/TagEditContainer';
+import IfTrue from 'src/components/common/IfTrue';
+import LoadUserName from 'src/components/user/LoadUserName';
+import SchematicDescription from 'src/components/schematic/SchematicDescription';
+import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
+
+const tabs = ['File', 'Code'];
+
+let notLoginMessage = (
+	<span>
+		<Trans i18nKey='upload.login' />
+		<Link className='small-padding' to='/login'>
+			<Trans i18nKey='login' />
+		</Link>
+	</span>
+);
 
 export default function Upload() {
-	const tabs = ['File', 'Code'];
-
+	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
-
 	const [preview, setPreview] = useState<SchematicPreviewData>();
-
 	const [tag, setTag] = useState<string>('');
 	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
 
-	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
-
 	const { user } = useContext(UserContext);
-
 	const popup = useRef(useContext(PopupMessageContext));
 
 	useEffect(() => {
-		if (user) return;
-
-		popup.current.addPopupMessage({
-			message: (
-				<span>
-					{i18n.t('upload.login')}
-					<Link className='small-padding' to='/login'>
-						Login
-					</Link>
-				</span>
-			),
-			duration: 20,
-			type: 'warning',
-		});
+		if (!user) popup.current.addPopupMessage(notLoginMessage, 20, 'warning');
 	}, [user]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0) {
-			popup.current.addPopupMessage({
-				message: i18n.t('upload.invalid-schematic-file'),
-				duration: 5,
-				type: 'error',
-			});
+			popup.current.addPopupMessage(i18n.t('upload.invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-			popup.current.addPopupMessage({
-				message: i18n.t('upload.invalid-schematic-file'),
-				duration: 5,
-				type: 'error',
-			});
+			popup.current.addPopupMessage(i18n.t('upload.invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
@@ -87,11 +77,7 @@ export default function Upload() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-					popup.current.addPopupMessage({
-						message: i18n.t('upload.not-schematic-code'),
-						duration: 5,
-						type: 'warning',
-					});
+					popup.current.addPopupMessage(i18n.t('upload.not-schematic-code'), 5, 'warning');
 					return;
 				}
 
@@ -109,31 +95,17 @@ export default function Upload() {
 	function getPreview(form: FormData) {
 		API.REQUEST.post('schematic-upload/preview', form) //
 			.then((result) => setPreview(result.data)) //
-			.catch((error) =>
-				popup.current.addPopupMessage({
-					message: i18n.t(`upload.invalid-schematic`) + JSON.stringify(error),
-					duration: 10,
-					type: 'error',
-				}),
-			);
+			.catch((error) => popup.current.addPopupMessage(i18n.t(`upload.invalid-schematic`) + JSON.stringify(error), 10, 'error'));
 	}
 
 	function handleSubmit() {
 		if (!file && !code) {
-			popup.current.addPopupMessage({
-				message: i18n.t('upload.no-data'),
-				duration: 5,
-				type: 'error',
-			});
+			popup.current.addPopupMessage(i18n.t('upload.no-data'), 5, 'error');
 			return;
 		}
 
-		if (tags === null || tags.length === 0) {
-			popup.current.addPopupMessage({
-				message: i18n.t('upload.no-tag'),
-				duration: 5,
-				type: 'error',
-			});
+		if (!tags) {
+			popup.current.addPopupMessage(i18n.t('upload.no-tag'), 5, 'error');
 			return;
 		}
 		const formData = new FormData();
@@ -141,9 +113,8 @@ export default function Upload() {
 
 		formData.append('tags', tagString);
 
-		if (file && getFileExtension(file) === SCHEMATIC_FILE_EXTENSION) formData.append('file', file);
-		else if (code !== undefined && code.length > 8) formData.append('code', code);
-		else return;
+		if (file) formData.append('file', file);
+		else formData.append('code', code);
 
 		API.REQUEST.post('schematic-upload', formData)
 			.then(() => {
@@ -151,31 +122,20 @@ export default function Upload() {
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				popup.current.addPopupMessage({
-					message: i18n.t('upload.upload-success'),
-					duration: 10,
-					type: 'info',
-				});
+				popup.current.addPopupMessage(i18n.t('upload.upload-success'), 10, 'info');
 			})
-			.catch((error) => {
-				if (error.response && error.response.data)
-					popup.current.addPopupMessage({
-						message: i18n.t('upload.upload-fail') + error.response.data.message,
-						duration: 10,
-						type: 'error',
-					});
-			});
+			.catch((error) => popup.current.addPopupMessage(i18n.t('upload.upload-fail') + ' ' + i18n.t(`upload.${error.response.data}`), 10, 'error'));
 	}
 
 	function handleRemoveTag(index: number) {
-		setTags([...tags.filter((_, i) => i !== index)]);
+		setTags((prev) => [...prev.filter((_, i) => i !== index)]);
 	}
 
 	function handleAddTag(tag: TagChoiceLocal) {
-		if (!tag) return;
-
-		tags.filter((q) => q.name !== tag.name);
-		setTags([...tags, tag]);
+		setTags((prev) => {
+			let tags = prev.filter((q) => q !== tag);
+			return [...tags, tag];
+		});
 		setTag('');
 	}
 
@@ -183,21 +143,21 @@ export default function Upload() {
 		switch (currentTab) {
 			case tabs[0]:
 				return (
-					<div>
+					<section>
 						<label className='button' htmlFor='ufb'>
-							Upload a file
+							<Trans i18nKey='upload-a-file' />
 						</label>
 						<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
-					</div>
+					</section>
 				);
 
 			case tabs[1]:
 				return (
-					<div>
-						<button className='button' type='button' onClick={() => handleCodeChange()}>
-							Copy from clipboard
-						</button>
-					</div>
+					<section>
+						<Button onClick={() => handleCodeChange()}>
+							<Trans i18nKey='copy-from-clipboard' />
+						</Button>
+					</section>
 				);
 
 			default:
@@ -205,65 +165,62 @@ export default function Upload() {
 		}
 	}
 
-	return (
-		<main className='upload'>
-			<div className='upload'>
-				<div className='preview-container '>
-					<div className='upload-button flex-column medium-gap'>
-						<div className='flex-center'>
-							<section className='grid-row small-gap  light-border small-padding'>
-								{tabs.map((name, index) => (
-									<button className={currentTab === name ? 'button-active' : 'button'} key={index} type='button' onClick={() => setCurrentTab(name)}>
-										{name}
-									</button>
-								))}
-							</section>
-						</div>
-						<div className='flex-center'>{renderTab(currentTab)}</div>
-						<div className='preview-image-container'>{preview && <img className='preview-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Upload a file' />}</div>
-					</div>
-					<div className='upload-description-container'>
-						{preview && (
-							<div className='flex-column flex-wrap text-center'>
-								{<div>Author: {user ? user.name : 'community'}</div>}
-								<div>Name: {<ColorText text={preview.name} />}</div>
-								{preview.description && <ColorText text={preview.description} />}
-								{preview.requirement && (
-									<section className='flex-row flex-wrap small-gap'>
-										{preview.requirement.map((r, index) => (
-											<span key={index} className='flex-row center'>
-												<img className='small-icon ' src={`/assets/images/items/item-${r.name}.png`} alt={r.name} />
-												<span> {r.amount} </span>
-											</span>
-										))}
-									</section>
-								)}
-							</div>
-						)}
-						<div className='upload-search-container'>
-							<Dropbox
-								placeholder='Add tags'
-								value={tag}
-								items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
-								onChange={(event) => setTag(event.target.value)}
-								onChoose={(item) => handleAddTag(item)}
-								mapper={(t, index) => <TagPick key={index} tag={t} />}
-							/>
+	function checkUploadRequirement() {
+		if (!file && !code) return <Trans i18nKey='upload.no-data' />;
+		if (!tags) return <Trans i18nKey='upload.no-tag' />;
 
-							<div className='flex-row flex-wrap medium-gap'>
-								{tags.map((t: TagChoiceLocal, index: number) => (
-									<Tag key={index} tag={t} removeButton={<ClearIconButton icon='/assets/icons/quit.png' title='remove' onClick={() => handleRemoveTag(index)} />} />
-								))}
-							</div>
-						</div>
-						<section className='flex-center'>
-							<button className='button' type='button' onClick={() => handleSubmit()}>
-								Upload
-							</button>
+		return <Trans i18nKey='upload.ok' />;
+	}
+
+	return (
+		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
+			<header className='flex-column medium-gap'>
+				<section className='flex-center'>
+					<section className='grid-row small-gap small-padding'>
+						{tabs.map((name, index) => (
+							<Button key={index} onClick={() => setCurrentTab(name)}>
+								{name}
+							</Button>
+						))}
+					</section>
+				</section>
+				<section className='flex-center'>{renderTab(currentTab)}</section>
+			</header>
+			<IfTrue
+				condition={preview}
+				whenTrue={
+					preview && (
+						<section className='flex-row flex-wrap medium-gap'>
+							<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
+							<section className='flex-column space-between'>
+								<section className='flex-column small-gap flex-wrap'>
+									<h2 className='capitalize'>{preview.name}</h2>
+									<Trans i18nKey='author' /> <LoadUserName userId={user ? user.id : 'community'} />
+									<SchematicDescription description={preview.description} />
+									<SchematicRequirement requirement={preview.requirement} />
+									<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
+								</section>
+							</section>
+							<section className='flex-column flex-nowrap small-gap w100p'>
+								<Dropbox
+									placeholder={i18n.t('add-tag').toString()}
+									value={tag}
+									items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+									onChange={(event) => setTag(event.target.value)}
+									onChoose={(item) => handleAddTag(item)}
+									mapper={(t, index) => <TagPick key={index} tag={t} />}
+								/>
+							</section>
 						</section>
-					</div>
-				</div>
-			</div>
+					)
+				}
+			/>
+			<footer className='flex-column center small-gap medium-padding'>
+				<span children={checkUploadRequirement()} />
+				<Button onClick={() => handleSubmit()}>
+					<Trans i18nKey='upload-schematic' />
+				</Button>
+			</footer>
 		</main>
 	);
 }

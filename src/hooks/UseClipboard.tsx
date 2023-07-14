@@ -8,13 +8,7 @@ export default function useClipboard() {
 
 	return {
 		copy: (data: string) => {
-			navigator.clipboard.writeText(data).then(() =>
-				addPopupMessage({
-					message: i18n.t('copied'),
-					duration: 5,
-					type: 'info',
-				}),
-			);
+			navigator.clipboard.writeText(data).then(() => addPopupMessage(i18n.t('copied'), 5, 'info'));
 		},
 	};
 }

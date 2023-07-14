@@ -12,11 +12,23 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 
 	useEffect(() => {
 		setLoaderState('loading');
-		API.REQUEST.get(`${ref.current.url}/0`, ref.current.searchConfig) //
+		setPages([]);
+		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
 			.then((result) => setPages(() => [result.data]))
-			.catch(() => console.log('Error loading page')) //
+			.catch(() => setLoaderState('error')) //
 			.finally(() => setLoaderState('more'));
-	}, []);
+	}, [searchConfig]);
+
+	function addNewPage(data: T[]) {
+		setPages((prev) => [...prev, data]);
+	}
+
+	function modifyLastPage(data: T[]) {
+		setPages((prev) => {
+			prev[prev.length - 1] = data;
+			return [...prev];
+		});
+	}
 
 	return {
 		pages: Utils.array2dToArray1d(pages),
@@ -31,14 +43,14 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 					.then((result) => {
 						let data: T[] = result.data;
 						if (data) {
-							setPages((prev) => [...prev, data]);
+							addNewPage(data);
 							if (data.length < MAX_ITEM_PER_PAGE) {
-								setLoaderState('out');
 								i = page;
+								setLoaderState('out');
 							} else setLoaderState('more');
 						} else setLoaderState('out');
 					})
-					.catch(() => setLoaderState('more'));
+					.catch(() => setLoaderState('error'));
 			}
 		},
 
@@ -53,18 +65,14 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 				.then((result) => {
 					let data: T[] = result.data;
 					if (data) {
-						if (newPage) setPages((prev) => [...prev, data]);
-						else
-							setPages((prev) => {
-								prev[lastIndex] = data;
-								return [...prev];
-							});
+						if (newPage) addNewPage(data);
+						else modifyLastPage(data);
 
 						if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
 						else setLoaderState('more');
 					} else setLoaderState('out');
 				})
-				.catch(() => setLoaderState('more'));
+				.catch(() => setLoaderState('error'));
 		},
 	};
 }
