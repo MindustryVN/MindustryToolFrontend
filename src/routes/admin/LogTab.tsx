@@ -34,7 +34,6 @@ export default function LogTab() {
 					<LogCard key={log.id} log={log} />
 				))}
 			</section>
-
 			<footer className='flex-center'>
 				<IfTrueElse
 					condition={loaderState === 'loading'}
