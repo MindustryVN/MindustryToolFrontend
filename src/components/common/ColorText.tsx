@@ -17,16 +17,16 @@ export default function ColorText(props: ColorTextProps) {
 
 	let key = 0;
 
-	if (index < 0) return <span className={props.className ? props.className : ''}>{text}</span>;
+	if (index < 0) return <div className={props.className ? props.className : ''}>{text}</div>;
 
 	if (index !== 0) {
-		add(<span key={key}>{text.substring(0, index)}</span>);
+		add(<div key={key}>{text.substring(0, index)}</div>);
 		text = text.substring(index);
 	}
 
 	let arr = text.match(COLOR_REGEX);
 
-	if (!arr) return <span className={props.className ? props.className : ''}>{result}</span>;
+	if (!arr) return <div className={props.className ? props.className : ''}>{result}</div>;
 
 	const s = new Option().style;
 
@@ -41,9 +41,9 @@ export default function ColorText(props: ColorTextProps) {
 
 		if (arr.length < 2) {
 			add(
-				<span key={key} style={{ color: s.color }}>
+				<div key={key} style={{ color: s.color }}>
 					{text.substring(arr[0].length)}
-				</span>,
+				</div>,
 			);
 			break;
 		}
@@ -52,11 +52,11 @@ export default function ColorText(props: ColorTextProps) {
 
 		if (s.color !== '')
 			add(
-				<span key={key} style={{ color: s.color }}>
+				<div key={key} style={{ color: s.color }}>
 					{text.substring(arr[0].length, nextIndex)}
-				</span>,
+				</div>,
 			);
-		else add(<span key={key}>{text.substring(0, nextIndex)}</span>);
+		else add(<div key={key}>{text.substring(0, nextIndex)}</div>);
 
 		text = text.substring(nextIndex);
 		arr.shift();
@@ -67,5 +67,5 @@ export default function ColorText(props: ColorTextProps) {
 		result.push(val);
 	}
 
-	return <span className={props.className ? props.className : ''}>{result}</span>;
+	return <div className={props.className ? props.className : ''}>{result}</div>;
 }

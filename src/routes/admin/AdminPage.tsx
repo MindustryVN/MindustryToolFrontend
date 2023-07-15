@@ -27,7 +27,7 @@ export default function Admin() {
 	}
 
 	return (
-		<main id="admin" className="admin flex-column h100p w100p">
+		<main id="admin" className="flex-column h100p w100p scroll-y">
 			<div className="flex-center">
 				<section className="tab-button-container grid-row small-gap small-padding">
 					{tabs.map((name, index) => (
