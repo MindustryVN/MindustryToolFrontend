@@ -9,7 +9,6 @@ export default class SchematicData {
 	requirement: Array<ItemRequirement>;
 	tags: Array<string>;
 	like: number;
-	dislike: number;
 	verifyAdmin: string;
 
 	constructor(
@@ -21,7 +20,6 @@ export default class SchematicData {
 		requirement: Array<ItemRequirement>,
 		tags: Array<string>,
 		like: number,
-		dislike: number,
 		verifyAdmin: string,
 	) {
 		this.id = id;
@@ -32,7 +30,6 @@ export default class SchematicData {
 		this.requirement = requirement;
 		this.tags = tags;
 		this.like = like;
-		this.dislike = dislike;
 		this.verifyAdmin = verifyAdmin;
 	}
 }

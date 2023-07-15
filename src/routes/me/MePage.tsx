@@ -13,13 +13,13 @@ export default function MePage() {
 	if (!user) return <Navigate to="/login" />;
 
 	return (
-		<main className="flex-center h100v">
-			<section className="user-card">
-				<img className="avatar-image" src={user.imageUrl} alt="avatar"></img>
-				<span className="capitalize">{user.name}</span>
+		<main className='flex-column h100p w100p scroll-y'>
+			<section className='user-card'>
+				<img className='avatar-image' src={user.imageUrl} alt='avatar'></img>
+				<span className='capitalize'>{user.name}</span>
 			</section>
-			<button className="button logout-button" type="button" onClick={() => handleLogout()}>
-				<Trans i18nKey="logout" />
+			<button className='button logout-button' type='button' onClick={() => handleLogout()}>
+				<Trans i18nKey='logout' />
 			</button>
 		</main>
 	);

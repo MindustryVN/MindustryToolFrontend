@@ -13,10 +13,17 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 	useEffect(() => {
 		setLoaderState('loading');
 		setPages([[]]);
+		
 		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
-			.then((result) => setPages(() => [result.data]))
-			.catch(() => setLoaderState('error')) //
-			.finally(() => setLoaderState('more'));
+			.then((result) =>
+				setPages(() => {
+					let data: T[] = result.data;
+					if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
+					else setLoaderState('more');
+					return [data];
+				}),
+			)
+			.catch(() => setLoaderState('error')); //
 	}, [searchConfig]);
 
 	function addNewPage(data: T[]) {
@@ -33,8 +40,9 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 	return {
 		pages: Utils.array2dToArray1d(pages),
 		loaderState: loaderState,
+		reloadPage: function reloadPage() {
+			let page = pages.length;
 
-		loadToPage: function loadToPage(page: number) {
 			setPages([[]]);
 			setLoaderState('loading');
 

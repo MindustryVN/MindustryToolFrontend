@@ -3,6 +3,7 @@ import 'src/styles.css';
 
 import React from 'react';
 import Button from 'src/components/button/Button';
+import i18n from 'src/util/I18N';
 
 interface ScrollToTopButtonProps {
 	//id of the container
@@ -17,8 +18,8 @@ export default function ScrollToTopButton(props: ScrollToTopButtonProps) {
 	}
 
 	return (
-		<Button onClick={() => scrollToTop()}>
-			<Trans i18nKey="scroll-to-top" />
+		<Button title={i18n.t('scroll-to-top').toString()} onClick={() => scrollToTop()}>
+			<Trans i18nKey='scroll-to-top' />
 		</Button>
 	);
 }
