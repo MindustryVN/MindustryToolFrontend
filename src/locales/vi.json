@@ -8,6 +8,8 @@
 	"load-more": "Tải thêm",
 	"no-more-schematic": "Hết bản thiết kế",
 	"scroll-to-top": "Cuộn lên đầu",
+	"author": "Tác giả",
+	"verify-by": "Duyệt bởi",
 	"loading": {
 		"short": "Đang tải",
 		"long": "Đang tải, vui lòng đợi 1-2 phút."

@@ -1,4 +1,4 @@
-.schematic-preview {
+.schematic-preview-card {
 	width: var(--preview-image-min-size);
 	border-radius: 5px;
 	overflow: hidden;

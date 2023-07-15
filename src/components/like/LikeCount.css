@@ -1,0 +1,22 @@
+.count {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	color: white;
+	background-color: var(--black);
+
+	padding: 0.2rem;
+	box-sizing: border-box;
+
+	border-radius: 5px;
+	border: 2px solid var(--gray);
+}
+
+.negative-count {
+	color: var(--error-color);
+}
+
+.positive-count {
+	color: var(--info-color);
+}

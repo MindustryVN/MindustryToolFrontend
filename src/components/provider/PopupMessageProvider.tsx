@@ -63,7 +63,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 				addMessage({
 					message: 'message.lost-connection',
 					duration: 5,
-					type: 'info',
+					type: 'error',
 				}),
 			);
 	}, []);
@@ -103,7 +103,6 @@ interface PopupMessageNodeProps {
 }
 
 function PopupMessage(props: PopupMessageNodeProps) {
-
 	useEffect(() => {
 		setTimeout(() => {
 			props.onTimeOut();

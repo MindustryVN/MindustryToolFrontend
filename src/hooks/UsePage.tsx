@@ -13,10 +13,17 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 	useEffect(() => {
 		setLoaderState('loading');
 		setPages([[]]);
+
 		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
-			.then((result) => setPages(() => [result.data]))
-			.catch(() => setLoaderState('error')) //
-			.finally(() => setLoaderState('more'));
+			.then((result) =>
+				setPages(() => {
+					let data: T[] = result.data;
+					if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
+					else setLoaderState('more');
+					return [data];
+				}),
+			)
+			.catch(() => setLoaderState('error')); //
 	}, [searchConfig]);
 
 	function addNewPage(data: T[]) {
@@ -30,49 +37,53 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 		});
 	}
 
-	return {
-		pages: Utils.array2dToArray1d(pages),
-		loaderState: loaderState,
+	function reloadPage() {
+		let page = pages.length;
 
-		loadToPage: function loadToPage(page: number) {
-			setPages([[]]);
-			setLoaderState('loading');
+		setPages([[]]);
+		setLoaderState('loading');
 
-			for (let i = 0; i < page; i++) {
-				API.REQUEST.get(`${url}/${i}`, searchConfig)
-					.then((result) => {
-						let data: T[] = result.data;
-						if (data) {
-							addNewPage(data);
-							if (data.length < MAX_ITEM_PER_PAGE) {
-								i = page;
-								setLoaderState('out');
-							} else setLoaderState('more');
-						} else setLoaderState('out');
-					})
-					.catch(() => setLoaderState('error'));
-			}
-		},
-
-		loadPage: function loadPage() {
-			setLoaderState('loading');
-
-			const lastIndex = pages.length - 1;
-			const newPage = pages[lastIndex].length === MAX_ITEM_PER_PAGE;
-			const requestPage = newPage ? lastIndex + 1 : lastIndex;
-
-			API.REQUEST.get(`${url}/${requestPage}`, searchConfig)
+		for (let i = 0; i < page; i++) {
+			API.REQUEST.get(`${url}/${i}`, searchConfig)
 				.then((result) => {
 					let data: T[] = result.data;
 					if (data) {
-						if (newPage) addNewPage(data);
-						else modifyLastPage(data);
-
-						if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-						else setLoaderState('more');
+						addNewPage(data);
+						if (data.length < MAX_ITEM_PER_PAGE) {
+							i = page;
+							setLoaderState('out');
+						} else setLoaderState('more');
 					} else setLoaderState('out');
 				})
 				.catch(() => setLoaderState('error'));
-		},
+		}
+	}
+
+	function loadPage() {
+		setLoaderState('loading');
+
+		const lastIndex = pages.length - 1;
+		const newPage = pages[lastIndex].length === MAX_ITEM_PER_PAGE;
+		const requestPage = newPage ? lastIndex + 1 : lastIndex;
+
+		API.REQUEST.get(`${url}/${requestPage}`, searchConfig)
+			.then((result) => {
+				let data: T[] = result.data;
+				if (data) {
+					if (newPage) addNewPage(data);
+					else modifyLastPage(data);
+
+					if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
+					else setLoaderState('more');
+				} else setLoaderState('out');
+			})
+			.catch(() => setLoaderState('error'));
+	}
+
+	return {
+		pages: Utils.array2dToArray1d(pages),
+		loaderState: loaderState,
+		reloadPage: reloadPage,
+		loadPage: loadPage,
 	};
 }
