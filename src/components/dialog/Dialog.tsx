@@ -6,7 +6,6 @@ import React, { ReactNode } from 'react';
 interface DialogProps {
 	children?: ReactNode;
 	className?: string;
-	onClose: () => void;
 }
 
 export default function Dialog(props: DialogProps) {

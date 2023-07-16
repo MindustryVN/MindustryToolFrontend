@@ -25,6 +25,10 @@
 	image-rendering: pixelated;
 }
 
+.icon:is(:focus, :hover) {
+	background-color: var(--yellow);
+}
+
 .popup {
 	position: fixed;
 	overflow: hidden scroll;
@@ -40,7 +44,6 @@
 
 	background-color: var(--black);
 	max-width: 300px;
-	height: 100%;
 
 	box-sizing: border-box;
 
@@ -80,7 +83,7 @@
 	font-weight: bold;
 }
 
-.nav-link:hover {
+.nav-link:is(:hover, :focus) {
 	color: var(--black);
 	background-color: var(--yellow);
 }

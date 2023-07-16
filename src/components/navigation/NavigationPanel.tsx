@@ -17,7 +17,13 @@ export default function NavigationPanel() {
 	return (
 		<nav className='navigation-bar'>
 			<section className='navigation-panel'>
-				<button className='icon flex-center w2rem h2rem' type='button' onClick={() => setShowNavigatePanel((prev) => !prev)} onMouseEnter={() => setShowNavigatePanel(true)}>
+				<button
+					className='icon flex-center w2rem h2rem'
+					type='button'
+					onClick={() => setShowNavigatePanel((prev) => !prev)}
+					onFocus={() => setShowNavigatePanel(true)}
+					onMouseEnter={() => setShowNavigatePanel(true)}
+					>
 					<img className='icon w2rem h2rem' src='/assets/icons/dots.png' alt='menu' />
 				</button>
 
@@ -58,7 +64,7 @@ export default function NavigationPanel() {
 								</Link>
 							)}
 						</section>
-						<Button className='button' onClick={() => setShowNavigatePanel(false)}>
+						<Button onClick={() => setShowNavigatePanel(false)}>
 							<Trans i18nKey='close' />
 						</Button>
 					</section>

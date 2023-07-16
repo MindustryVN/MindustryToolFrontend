@@ -6,7 +6,7 @@
 	border: none;
 }
 
-.dropbox-element:is(:active, :hover) {
+.dropbox-element:is(:active, :hover, :focus) {
 	display: flex;
 	justify-content: flex-start;
 
@@ -14,7 +14,7 @@
 	background-color: var(--yellow);
 }
 
-.dropbox-element:is(:active, :hover) > * {
+.dropbox-element:is(:active, :hover, :focus) > * {
 	display: flex;
 	justify-content: flex-start;
 

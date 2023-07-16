@@ -1,7 +1,11 @@
 .user-card {
-	display: grid;
+	display: block;
 }
 
 .avatar-image {
 	border: 2px solid var(--white);
+}
+
+.username{
+	font-size: 1.5rem;
 }

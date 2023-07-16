@@ -29,10 +29,12 @@ export default function Dropbox<ItemType>(props: DropboxProps<ItemType>) {
 					placeholder={props.placeholder}
 					onChange={(event) => {
 						if (props.onChange) props.onChange(event);
-						setShowDropbox(true);
 					}}
 					onClick={() => setShowDropbox((prev) => !prev)}
 					onFocus={() => () => setShowDropbox((prev) => !prev)}
+					onKeyDown={(event) => {
+						if (event.key === 'Enter') setShowDropbox((prev) => !prev);
+					}}
 				/>
 				{props.insideChildren}
 			</section>

@@ -37,15 +37,15 @@ export default function VerifySchematicTab() {
 	const { addPopup } = usePopup();
 
 	const { pages, loadPage, reloadPage, loaderState } = usePage<SchematicData>('schematic-upload/page');
-	const { model, setOpenModel } = useModel();
+	const { model, setVisibility } = useModel();
 
 	function handleOpenSchematicInfo(schematic: SchematicData) {
 		setCurrentSchematic(schematic);
-		setOpenModel(true);
+		setVisibility(true);
 	}
 
 	function rejectSchematic(schematic: SchematicData) {
-		setOpenModel(false);
+		setVisibility(false);
 		API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //.
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
@@ -66,7 +66,7 @@ export default function VerifySchematicTab() {
 			.then(() => {
 				addPopup(i18n.t('verify-success'), 5, 'info');
 				reloadPage();
-				setOpenModel(false);
+				setVisibility(false);
 			})
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'));
 	}
@@ -111,7 +111,7 @@ export default function VerifySchematicTab() {
 					model(
 						<SchematicInfo
 							schematic={currentSchematic} //
-							handleCloseModel={() => setOpenModel(false)}
+							handleCloseModel={() => setVisibility(false)}
 							handleVerifySchematic={verifySchematic}
 							handleRejectSchematic={rejectSchematic}
 						/>,

@@ -18,6 +18,26 @@
 	border: 2px solid var(--gray);
 }
 
+.button:focus {
+	position: relative;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	color: var(--black);
+	background-color: var(--yellow);
+
+	outline: none;
+	cursor: pointer;
+
+	padding: 0.2rem;
+	box-sizing: border-box;
+
+	border-radius: 5px;
+	border: 2px solid white;
+}
+
 .button:hover,
 .button-active {
 	position: relative;

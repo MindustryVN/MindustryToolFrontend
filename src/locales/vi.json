@@ -1,7 +1,8 @@
 {
 	"back": "Trở lại",
 	"close": "Đóng",
-	"confirm":"Xác nhận",
+	"confirm": "Xác nhận",
+	"cancel": "Hủy",
 	"search-with-tag": "Tìm với nhãn",
 	"login": "Đăng nhập",
 	"logout": "Đăng xuất",
@@ -16,16 +17,14 @@
 		"short": "Đang tải",
 		"long": "Đang tải, vui lòng đợi 1-2 phút."
 	},
-	"upload": {
+	"message": {
 		"invalid-schematic-file": "File bản thiết kế không hợp lệ, file phải có đuôi .msch",
 		"no-tag": "Thêm ít nhất một nhãn(Tag) để đăng",
 		"no-data": "Vui lòng thêm dữ liệu bản thiết kế",
-		"login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập",
+		"recommend-login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập",
 		"invalid-schematic": "Bản thiết kế lỗi: ",
-		"not-schematic-code": "Mã bản thiết kế lỗi"
-	},
-	"navigate": {
-		"close": "Đóng"
+		"not-schematic-code": "Mã bản thiết kế lỗi",
+		"delete-schematic-dialog": "Xóa bản thiết kế?"
 	},
 	"tag": {
 		"newest": "Mới nhất",

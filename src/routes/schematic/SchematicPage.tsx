@@ -22,25 +22,25 @@ import TagEditContainer from 'src/components/tag/TagEditContainer';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import DownloadButton from 'src/components/button/DownloadButton';
+import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import LoadUserName from 'src/components/user/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
 import TagContainer from 'src/components/tag/TagContainer';
 import IconButton from 'src/components/button/IconButton';
 import IfTrueElse from 'src/components/common/IfTrueElse';
+import LikeCount from 'src/components/like/LikeCount';
 import ColorText from 'src/components/common/ColorText';
-import Dropbox from 'src/components/dropbox/Dropbox';
+import usePopup from 'src/hooks/UsePopup';
 import useModel from 'src/hooks/UseModel';
+import Dropbox from 'src/components/dropbox/Dropbox';
 import usePage from 'src/hooks/UsePage';
+import useLike from 'src/hooks/UseLike';
 import TagPick from 'src/components/tag/TagPick';
 import Button from 'src/components/button/Button';
 import IfTrue from 'src/components/common/IfTrue';
-import i18n from 'src/util/I18N';
-import useLike from 'src/hooks/UseLike';
-import LikeCount from 'src/components/like/LikeCount';
-import useDialog from 'src/hooks/UseDialog';
 import Icon from 'src/components/common/Icon';
-import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
-import usePopup from 'src/hooks/UsePopup';
+import i18n from 'src/util/I18N';
+import useDialog from 'src/hooks/UseDialog';
 
 export default function Schematic() {
 	const currentSchematic = useRef<SchematicData>();
@@ -57,7 +57,7 @@ export default function Schematic() {
 	});
 
 	const { pages, loaderState, loadPage, reloadPage } = usePage<SchematicData>('schematic/page', searchConfig.current);
-	const { model, setOpenModel } = useModel();
+	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
 	function setSearchConfig(sort: SortChoice, tags: TagChoiceLocal[]) {
@@ -94,7 +94,7 @@ export default function Schematic() {
 
 	function handleOpenSchematicInfo(schematic: SchematicData) {
 		currentSchematic.current = schematic;
-		setOpenModel(true);
+		setVisibility(true);
 	}
 
 	function buildLoadAndScrollButton() {
@@ -117,7 +117,7 @@ export default function Schematic() {
 			.then(() => {
 				addPopup(i18n.t('schematic.delete-success'), 5, 'info');
 				reloadPage();
-				setOpenModel(false);
+				setVisibility(false);
 			})
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
 	}
@@ -168,7 +168,7 @@ export default function Schematic() {
 					model(
 						<SchematicInfo
 							schematic={currentSchematic.current} //
-							handleCloseModel={() => setOpenModel(false)}
+							handleCloseModel={() => setVisibility(false)}
 							handleDeleteSchematic={handleDeleteSchematic}
 						/>,
 					)
@@ -252,7 +252,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 	const { user } = useContext(UserContext);
 	const { copy } = useClipboard();
 
-	const { dialog, setOpenDialog } = useDialog();
+	const { dialog, setVisibility } = useDialog();
 
 	const likeService = useLike(`${API_BASE_URL}schematic/${props.schematic.id}`, props.schematic.like);
 	props.schematic.like = likeService.likes;
@@ -266,17 +266,19 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 			<IfTrue
 				condition={Schematics.canDelete(props.schematic, user)} //
-				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setOpenDialog(true)} />}
+				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 			/>
 			<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			{dialog(
 				<ConfirmDialog
-					onClose={() => setOpenDialog(false)}
+					onClose={() => setVisibility(false)}
 					onConfirm={() => props.handleDeleteSchematic(props.schematic)}
 					content={
 						<>
 							<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
-							<span>Delete schematic?</span>
+							<span>
+								<Trans i18nKey='message.delete-schematic-dialog' />
+							</span>
 						</>
 					}
 				/>,

@@ -10,17 +10,19 @@ import { Trans } from 'react-i18next';
 export default function MePage() {
 	const { user, handleLogout } = useContext(UserContext);
 
-	if (!user) return <Navigate to="/login" />;
+	if (!user) return <Navigate to='/login' />;
 
 	return (
-		<main className='flex-column h100p w100p scroll-y'>
+		<main className='flex-column h100p scroll-y'>
 			<section className='user-card'>
-				<img className='avatar-image' src={user.imageUrl} alt='avatar'></img>
-				<span className='capitalize'>{user.name}</span>
+				<section className='flex-row small-gap'>
+					<img className='avatar-image' src={user.imageUrl} alt='avatar'></img>
+					<span className='username capitalize'>{user.name}</span>
+				</section>
+				<button className='button logout-button' type='button' onClick={() => handleLogout()}>
+					<Trans i18nKey='logout' />
+				</button>
 			</section>
-			<button className='button logout-button' type='button' onClick={() => handleLogout()}>
-				<Trans i18nKey='logout' />
-			</button>
 		</main>
 	);
 }

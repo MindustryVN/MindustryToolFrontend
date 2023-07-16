@@ -2,6 +2,8 @@
 	z-index: var(--popup-message-z-index);
 	top: 0;
 	left: 0;
+
+	background-color: transparent;
 }
 
 .dialog::before {
@@ -25,4 +27,10 @@
 	background-color: var(--black);
 	border: 2px solid var(--black);
 	border-radius: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+	.dialog-card {
+		min-width: 50vw;
+	}
 }
