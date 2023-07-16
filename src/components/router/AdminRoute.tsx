@@ -13,9 +13,10 @@ const AdminRoute = (props: AdminRouteProps) => {
 
 	if (loading) return <Loading />;
 
-	if (Users.isAdmin(user)) return props.element;
+	if (!user) return <Navigate to='/login' />;
 
-	return <Navigate to='/login' />;
+	if (Users.isAdmin(user)) return props.element;
+	return <Navigate to='/home' />;
 };
 
 export default AdminRoute;

@@ -5,7 +5,6 @@ import React, { useContext, useRef, useState } from 'react';
 import SchematicData, { Schematics } from 'src/components/schematic/SchematicData';
 
 import { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal, Tags } from 'src/components/tag/Tag';
-import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import { API_BASE_URL } from 'src/config/Config';
 import { UserContext } from 'src/components/provider/UserProvider';
 import { Utils } from 'src/util/Utils';
@@ -23,21 +22,25 @@ import TagEditContainer from 'src/components/tag/TagEditContainer';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import DownloadButton from 'src/components/button/DownloadButton';
+import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import LoadUserName from 'src/components/user/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
 import TagContainer from 'src/components/tag/TagContainer';
 import IconButton from 'src/components/button/IconButton';
 import IfTrueElse from 'src/components/common/IfTrueElse';
+import LikeCount from 'src/components/like/LikeCount';
 import ColorText from 'src/components/common/ColorText';
-import Dropbox from 'src/components/dropbox/Dropbox';
+import usePopup from 'src/hooks/UsePopup';
 import useModel from 'src/hooks/UseModel';
+import Dropbox from 'src/components/dropbox/Dropbox';
 import usePage from 'src/hooks/UsePage';
+import useLike from 'src/hooks/UseLike';
 import TagPick from 'src/components/tag/TagPick';
 import Button from 'src/components/button/Button';
 import IfTrue from 'src/components/common/IfTrue';
+import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
-import useLike from 'src/hooks/UseLike';
-import LikeCount from 'src/components/like/LikeCount';
+import useDialog from 'src/hooks/UseDialog';
 
 export default function Schematic() {
 	const currentSchematic = useRef<SchematicData>();
@@ -54,8 +57,8 @@ export default function Schematic() {
 	});
 
 	const { pages, loaderState, loadPage, reloadPage } = usePage<SchematicData>('schematic/page', searchConfig.current);
-	const { model, setOpenModel } = useModel();
-	const { addPopupMessage } = useContext(PopupMessageContext);
+	const { model, setVisibility } = useModel();
+	const { addPopup } = usePopup();
 
 	function setSearchConfig(sort: SortChoice, tags: TagChoiceLocal[]) {
 		searchConfig.current = {
@@ -91,7 +94,7 @@ export default function Schematic() {
 
 	function handleOpenSchematicInfo(schematic: SchematicData) {
 		currentSchematic.current = schematic;
-		setOpenModel(true);
+		setVisibility(true);
 	}
 
 	function buildLoadAndScrollButton() {
@@ -112,11 +115,11 @@ export default function Schematic() {
 	function handleDeleteSchematic(schematic: SchematicData) {
 		API.REQUEST.delete(`schematic/${schematic.id}`) //
 			.then(() => {
-				addPopupMessage(i18n.t('schematic.delete-success'), 5, 'info');
+				addPopup(i18n.t('schematic.delete-success'), 5, 'info');
 				reloadPage();
-				setOpenModel(false);
+				setVisibility(false);
 			})
-			.catch(() => addPopupMessage(i18n.t('schematic.delete-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
 	}
 
 	return (
@@ -165,7 +168,7 @@ export default function Schematic() {
 					model(
 						<SchematicInfo
 							schematic={currentSchematic.current} //
-							handleCloseModel={() => setOpenModel(false)}
+							handleCloseModel={() => setVisibility(false)}
 							handleDeleteSchematic={handleDeleteSchematic}
 						/>,
 					)
@@ -249,26 +252,37 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 	const { user } = useContext(UserContext);
 	const { copy } = useClipboard();
 
+	const { dialog, setVisibility } = useDialog();
+
 	const likeService = useLike(`${API_BASE_URL}schematic/${props.schematic.id}`, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
-	function like() {
-		likeService.like();
-	}
-
-	function dislike() {
-		likeService.dislike();
-	}
-
 	return (
 		<section className='grid-row small-gap'>
-			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => like()} />
+			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
-			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => dislike()} />
+			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
 			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
-			<IfTrue condition={Schematics.canDelete(props.schematic, user)} whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => props.handleDeleteSchematic(props.schematic)} />} />
+			<IfTrue
+				condition={Schematics.canDelete(props.schematic, user)} //
+				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
+			/>
 			<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+			{dialog(
+				<ConfirmDialog
+					onClose={() => setVisibility(false)}
+					onConfirm={() => props.handleDeleteSchematic(props.schematic)}
+					content={
+						<>
+							<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
+							<span>
+								<Trans i18nKey='message.delete-schematic-dialog' />
+							</span>
+						</>
+					}
+				/>,
+			)}
 		</section>
 	);
 }

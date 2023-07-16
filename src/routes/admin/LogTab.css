@@ -2,7 +2,3 @@
 	background-color: rgba(0, 0, 0, 0.5);
 	border: 2px solid var(--gray);
 }
-
-.log {
-	border: 2px solid var(--gray);
-}

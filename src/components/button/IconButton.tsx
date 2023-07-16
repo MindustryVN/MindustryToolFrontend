@@ -1,13 +1,13 @@
 import 'src/styles.css';
 
 import React from 'react';
-import { Icon } from 'src/components/common/Icon';
+import { IconType } from 'src/components/common/Icons';
 import Button from 'src/components/button/Button';
 
 interface IconButtonProps {
 	className?: string;
 	active?: boolean;
-	icon: Icon;
+	icon: IconType;
 	title?: string;
 	onClick: () => void;
 }

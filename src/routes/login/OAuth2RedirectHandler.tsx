@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { ACCESS_TOKEN } from 'src/config/Config';
 import { Navigate } from 'react-router-dom';
-import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import i18n from 'src/util/I18N';
+import usePopup from 'src/hooks/UsePopup';
 
 export default function OAuth2RedirectHandler() {
-	const { addPopupMessage } = useContext(PopupMessageContext);
+	const { addPopup } = usePopup();
 
 	function getUrlParam(name: string): string {
 		name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
@@ -24,6 +24,6 @@ export default function OAuth2RedirectHandler() {
 	}
 
 	const error = getUrlParam('error');
-	addPopupMessage(i18n.t('error') + ' ' + error, 5, 'error');
+	addPopup(i18n.t('error') + ' ' + error, 5, 'error');
 	return <Navigate to={{ pathname: '/login' }} />;
 }

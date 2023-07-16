@@ -1,37 +1,41 @@
 import 'src/styles.css';
 
-import React, { useContext, useRef } from 'react';
-import IconButton from 'src/components/button/IconButton';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
-import SchematicData, { Schematics } from 'src/components/schematic/SchematicData';
-import LoadUserName from 'src/components/user/LoadUserName';
-import UserData from 'src/components/user/UserData';
-import { API_BASE_URL } from 'src/config/Config';
-import i18n from 'src/util/I18N';
-import { Utils } from 'src/util/Utils';
-import useClipboard from 'src/hooks/UseClipboard';
-import usePage from 'src/hooks/UsePage';
-import useModel from 'src/hooks/UseModel';
-import SchematicContainer from 'src/components/schematic/SchematicContainer';
-import DownloadButton from 'src/components/button/DownloadButton';
-import ColorText from 'src/components/common/ColorText';
-import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
 import { API } from 'src/API';
-import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
+import { UserContext } from 'src/components/provider/UserProvider';
+import { Tags } from 'src/components/tag/Tag';
 import { Trans } from 'react-i18next';
-import SchematicDescription from 'src/components/schematic/SchematicDescription';
-import TagContainer from 'src/components/tag/TagContainer';
-import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
+import { API_BASE_URL } from 'src/config/Config';
+import { Utils } from 'src/util/Utils';
+import SchematicData, { Schematics } from 'src/components/schematic/SchematicData';
+import React, { useContext, useRef } from 'react';
+
+import i18n from 'src/util/I18N';
+import Icon from 'src/components/common/Icon';
 import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
-import { UserContext } from 'src/components/provider/UserProvider';
-import IfTrueElse from 'src/components/common/IfTrueElse';
-import { Tags } from 'src/components/tag/Tag';
-import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
+import usePage from 'src/hooks/UsePage';
 import useLike from 'src/hooks/UseLike';
+import useModel from 'src/hooks/UseModel';
+import UserData from 'src/components/user/UserData';
+import usePopup from 'src/hooks/UsePopup';
 import LikeCount from 'src/components/like/LikeCount';
+import ColorText from 'src/components/common/ColorText';
+import IconButton from 'src/components/button/IconButton';
+import IfTrueElse from 'src/components/common/IfTrueElse';
+import LoadUserName from 'src/components/user/LoadUserName';
+import useClipboard from 'src/hooks/UseClipboard';
+import TagContainer from 'src/components/tag/TagContainer';
+import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
+import DownloadButton from 'src/components/button/DownloadButton';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
+import SchematicContainer from 'src/components/schematic/SchematicContainer';
+import SchematicDescription from 'src/components/schematic/SchematicDescription';
+import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
+import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
+import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
+import useDialog from 'src/hooks/UseDialog';
 
 interface UserSchematicTabProps {
 	user: UserData;
@@ -40,24 +44,24 @@ interface UserSchematicTabProps {
 export default function UserSchematicTab(props: UserSchematicTabProps) {
 	const currentSchematic = useRef<SchematicData>();
 
-	const { addPopupMessage } = useContext(PopupMessageContext);
+	const { addPopup } = usePopup();
 
-	const { model, setOpenModel } = useModel();
+	const { model, setVisibility } = useModel();
 	const { pages, loaderState, loadPage, reloadPage } = usePage<SchematicData>(`schematic/user/${props.user.id}/page`);
 
 	function handleDeleteSchematic(schematic: SchematicData) {
 		API.REQUEST.delete(`schematic/${schematic.id}`) //
 			.then(() => {
-				addPopupMessage(i18n.t('schematic.delete-success'), 5, 'info');
+				addPopup(i18n.t('schematic.delete-success'), 5, 'info');
 				reloadPage();
-				setOpenModel(false);
+				setVisibility(false);
 			})
-			.catch(() => addPopupMessage(i18n.t('schematic.delete-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
 	}
 
 	function handleOpenSchematicInfo(schematic: SchematicData) {
 		currentSchematic.current = schematic;
-		setOpenModel(true);
+		setVisibility(true);
 	}
 
 	function buildLoadAndScrollButton() {
@@ -100,7 +104,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 					model(
 						<SchematicInfo
 							schematic={currentSchematic.current} //
-							handleCloseModel={() => setOpenModel(false)}
+							handleCloseModel={() => setVisibility(false)}
 							handleDeleteSchematic={handleDeleteSchematic}
 						/>,
 					)
@@ -183,28 +187,37 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 	const { user } = useContext(UserContext);
 	const { copy } = useClipboard();
 
+	const { dialog, setVisibility } = useDialog();
+
 	const likeService = useLike(`${API_BASE_URL}schematic/${props.schematic.id}`, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
-	console.log(props.schematic);
-
-	function like() {
-		likeService.like();
-	}
-
-	function dislike() {
-		likeService.dislike();
-	}
-
 	return (
 		<section className='grid-row small-gap'>
-			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => like()} />
+			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
-			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => dislike()} />
+			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
 			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
-			<IfTrue condition={Schematics.canDelete(props.schematic, user)} whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => props.handleDeleteSchematic(props.schematic)} />} />
+			<IfTrue
+				condition={Schematics.canDelete(props.schematic, user)} //
+				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
+			/>
 			<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+			{dialog(
+				<ConfirmDialog
+					onClose={() => setVisibility(false)}
+					onConfirm={() => props.handleDeleteSchematic(props.schematic)}
+					content={
+						<>
+							<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
+							<span>
+								<Trans i18nKey='message.delete-schematic-dialog' />
+							</span>
+						</>
+					}
+				/>,
+			)}
 		</section>
 	);
 }

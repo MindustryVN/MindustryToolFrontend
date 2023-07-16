@@ -27,7 +27,7 @@ export default function UserPage() {
 	useEffect(() => {
 		API.REQUEST.get(`user/${userId}`) //
 			.then((result) => setUser(result.data)) //
-			.catch(() => popup.current.addPopupMessage(i18n.t('user.load-fail'), 5, 'error'))
+			.catch(() => popup.current.addPopup(i18n.t('user.load-fail'), 5, 'error'))
 			.finally(() => setLoading(false));
 	}, [userId]);
 

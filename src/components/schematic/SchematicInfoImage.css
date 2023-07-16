@@ -7,4 +7,6 @@
 	min-height: var(--preview-image-min-size);
 
 	max-width: min(512px, 80vw);
+
+	align-self: flex-start;
 }

@@ -10,7 +10,7 @@
 
 	max-height: 80vh;
 
-	z-index: 999;
+	z-index: var(--popup-message-z-index);
 
 	box-sizing: border-box;
 

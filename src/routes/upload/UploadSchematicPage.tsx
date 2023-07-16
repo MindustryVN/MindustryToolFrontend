@@ -26,7 +26,7 @@ const tabs = ['File', 'Code'];
 
 let notLoginMessage = (
 	<span>
-		<Trans i18nKey='upload.login' />
+		<Trans i18nKey='message.recommend-login' />
 		<Link className='small-padding' to='/login'>
 			<Trans i18nKey='login' />
 		</Link>
@@ -41,24 +41,24 @@ export default function Upload() {
 	const [tag, setTag] = useState<string>('');
 	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
 
-	const { user } = useContext(UserContext);
+	const { user, loading } = useContext(UserContext);
 	const popup = useRef(useContext(PopupMessageContext));
 
 	useEffect(() => {
-		if (!user) popup.current.addPopupMessage(notLoginMessage, 20, 'warning');
-	}, [user]);
+		if (!loading && !user) popup.current.addPopup(notLoginMessage, 20, 'warning');
+	}, [user, loading]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0) {
-			popup.current.addPopupMessage(i18n.t('upload.invalid-schematic-file'), 5, 'error');
+			popup.current.addPopup(i18n.t('message.invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-			popup.current.addPopupMessage(i18n.t('upload.invalid-schematic-file'), 5, 'error');
+			popup.current.addPopup(i18n.t('message.invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
@@ -77,7 +77,7 @@ export default function Upload() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-					popup.current.addPopupMessage(i18n.t('upload.not-schematic-code'), 5, 'warning');
+					popup.current.addPopup(i18n.t('message.not-schematic-code'), 5, 'warning');
 					return;
 				}
 
@@ -95,17 +95,17 @@ export default function Upload() {
 	function getPreview(form: FormData) {
 		API.REQUEST.post('schematic-upload/preview', form) //
 			.then((result) => setPreview(result.data)) //
-			.catch((error) => popup.current.addPopupMessage(i18n.t(`upload.invalid-schematic`) + JSON.stringify(error), 10, 'error'));
+			.catch((error) => popup.current.addPopup(i18n.t(`message.invalid-schematic`) + JSON.stringify(error), 10, 'error'));
 	}
 
 	function handleSubmit() {
 		if (!file && !code) {
-			popup.current.addPopupMessage(i18n.t('upload.no-data'), 5, 'error');
+			popup.current.addPopup(i18n.t('message.no-data'), 5, 'error');
 			return;
 		}
 
 		if (!tags) {
-			popup.current.addPopupMessage(i18n.t('upload.no-tag'), 5, 'error');
+			popup.current.addPopup(i18n.t('message.no-tag'), 5, 'error');
 			return;
 		}
 		const formData = new FormData();
@@ -122,9 +122,9 @@ export default function Upload() {
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				popup.current.addPopupMessage(i18n.t('upload.upload-success'), 10, 'info');
+				popup.current.addPopup(i18n.t('message.upload-success'), 10, 'info');
 			})
-			.catch((error) => popup.current.addPopupMessage(i18n.t('upload.upload-fail') + ' ' + i18n.t(`upload.${error.response.data}`), 10, 'error'));
+			.catch((error) => popup.current.addPopup(i18n.t('message.upload-fail') + ' ' + i18n.t(`message.${error.response.data}`), 10, 'error'));
 	}
 
 	function handleRemoveTag(index: number) {
@@ -166,10 +166,10 @@ export default function Upload() {
 	}
 
 	function checkUploadRequirement() {
-		if (!file && !code) return <Trans i18nKey='upload.no-data' />;
-		if (!tags) return <Trans i18nKey='upload.no-tag' />;
+		if (!file && !code) return <Trans i18nKey='message.no-data' />;
+		if (!tags) return <Trans i18nKey='message.no-tag' />;
 
-		return <Trans i18nKey='upload.ok' />;
+		return <Trans i18nKey='message.ok' />;
 	}
 
 	return (
