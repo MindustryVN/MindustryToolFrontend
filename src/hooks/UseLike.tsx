@@ -1,9 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Trans } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { API } from 'src/API';
 import { LikeChange } from 'src/components/like/LikeChange';
 import { UserLike } from 'src/components/like/UserLike';
+import { UserContext } from 'src/components/provider/UserProvider';
 import usePopup from 'src/hooks/UsePopup';
 import i18n from 'src/util/I18N';
+
+const loginMessage = (
+	<>
+		<Trans i18nKey='message.login-before-like' />
+		<Link className='small-padding' to='/login'>
+			<Trans i18nKey='login' />
+		</Link>
+	</>
+);
 
 export default function useLike(url: string, initialLike: number = 0) {
 	const [userLike, setUserLike] = useState<UserLike>({ userId: '', targetId: '', state: 0 });
@@ -14,11 +26,27 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 	const ref = useRef({ url: url, addPopup: addPopup });
 
+	const userContext = useContext(UserContext);
+
+	function isLoggedIn(): boolean {
+		if (userContext.loading) {
+			addPopup(i18n.t('message.logging-in'), 5, 'info');
+			return false;
+		}
+
+		if (!userContext.user) {
+			addPopup(loginMessage, 5, 'info');
+			return false;
+		}
+		return true;
+	}
+
 	useEffect(() => {
-		API.REQUEST.get(`${ref.current.url}/liked`) //
-			.then((result) => setUserLike(result.data))
-			.catch(() => ref.current.addPopup(i18n.t('get-like-fail'), 5, 'warning'));
-	}, []);
+		if (userContext.user && userContext.loading === false)
+			API.REQUEST.get(`${ref.current.url}/liked`) //
+				.then((result) => setUserLike(result.data))
+				.catch(() => ref.current.addPopup(i18n.t('get-like-fail'), 5, 'warning'));
+	}, [userContext]);
 
 	function processLike(data: LikeChange) {
 		if (data.amount === 0) {
@@ -53,6 +81,8 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 		like: () => {
 			if (loading === true) return;
+			if (!isLoggedIn()) return;
+
 			setLoading(true);
 			API.REQUEST.get(`${url}/like`) //
 				.then((result) => processLike(result.data))
@@ -62,6 +92,8 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 		dislike: () => {
 			if (loading === true) return;
+			if (!isLoggedIn()) return;
+
 			setLoading(true);
 			API.REQUEST.get(`${url}/dislike`) //
 				.then((result) => processDislike(result.data))
