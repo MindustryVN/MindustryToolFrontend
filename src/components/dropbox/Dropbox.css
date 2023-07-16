@@ -47,7 +47,7 @@
 
 	width: 100%;
 
-	z-index: 999;
+	z-index: var(--overlay-z-index);
 
 	max-height: 50vh;
 

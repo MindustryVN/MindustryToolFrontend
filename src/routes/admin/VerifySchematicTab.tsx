@@ -1,6 +1,6 @@
 import 'src/styles.css';
 
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
@@ -10,7 +10,6 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import { Utils } from 'src/util/Utils';
 import IconButton from 'src/components/button/IconButton';
-import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import useClipboard from 'src/hooks/UseClipboard';
@@ -30,11 +29,12 @@ import IfTrueElse from 'src/components/common/IfTrueElse';
 import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
 import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
+import usePopup from 'src/hooks/UsePopup';
 
 export default function VerifySchematicTab() {
 	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
 
-	const { addPopupMessage } = useContext(PopupMessageContext);
+	const { addPopup } = usePopup();
 
 	const { pages, loadPage, reloadPage, loaderState } = usePage<SchematicData>('schematic-upload/page');
 	const { model, setOpenModel } = useModel();
@@ -47,8 +47,8 @@ export default function VerifySchematicTab() {
 	function rejectSchematic(schematic: SchematicData) {
 		setOpenModel(false);
 		API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
-			.then(() => addPopupMessage(i18n.t('delete-success'), 5, 'info')) //.
-			.catch(() => addPopupMessage(i18n.t('delete-fail'), 5, 'error'))
+			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //.
+			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => reloadPage());
 	}
 
@@ -64,11 +64,11 @@ export default function VerifySchematicTab() {
 
 		API.REQUEST.post('schematic', form) //
 			.then(() => {
-				addPopupMessage(i18n.t('verify-success'), 5, 'info');
+				addPopup(i18n.t('verify-success'), 5, 'info');
 				reloadPage();
 				setOpenModel(false);
 			})
-			.catch(() => addPopupMessage(i18n.t('verify-fail'), 5, 'error'));
+			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'));
 	}
 
 	function buildLoadAndScrollButton() {

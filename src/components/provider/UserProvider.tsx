@@ -34,7 +34,7 @@ export default function UserProvider(props: UserProviderProps) {
 			API.setBearerToken(accessToken);
 			API.REQUEST.get('/user/me') //
 				.then((result) => setUser(result.data))
-				.catch(() => ref.current.addPopupMessage(i18n.t('login-fail'), 5, 'error'))
+				.catch(() => ref.current.addPopup(i18n.t('login-fail'), 5, 'error'))
 				.finally(() => setLoading(false));
 		} else setLoading(false);
 	}, []);

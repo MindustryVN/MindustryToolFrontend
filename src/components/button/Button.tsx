@@ -14,7 +14,7 @@ export default function Button(props: ButtonProps) {
 	return (
 		<button
 			className={`${props.active ? 'button-active' : 'button'} flex-center ${props.className ? props.className : ''} `}
-			title={props.title ? props.title : ''}
+			title={props.title ? props.title : 'button'}
 			type='button'
 			onClick={() => props.onClick()}>
 			{props.children}

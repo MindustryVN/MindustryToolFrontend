@@ -1,16 +1,22 @@
 import './LogTab.css';
+import 'src/styles.css';
 
 import React from 'react';
 import { Trans } from 'react-i18next';
+import { API } from 'src/API';
+import { LogData } from 'src/components/log/LogData';
+
 import Button from 'src/components/button/Button';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import IfTrueElse from 'src/components/common/IfTrueElse';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import { LogData } from 'src/components/log/LogData';
 import usePage from 'src/hooks/UsePage';
+import usePopup from 'src/hooks/UsePopup';
+import ClearIconButton from 'src/components/button/ClearIconButton';
 
 export default function LogTab() {
-	const { pages, loadPage, loaderState } = usePage<LogData>('log/page');
+	const { pages, loadPage, reloadPage, loaderState } = usePage<LogData>('log/page');
+	const { addPopup } = usePopup();
 
 	function buildLoadAndScrollButton() {
 		return (
@@ -27,11 +33,19 @@ export default function LogTab() {
 		);
 	}
 
+	function handleDeleteLog(id: string) {
+		API.REQUEST.delete(`log/${id}`) //
+			.then(() => {
+				addPopup('delete-success', 5, 'info');
+				reloadPage();
+			})
+			.catch(() => addPopup('delete-fail', 5, 'warning'));
+	}
 	return (
 		<main id='log' className='log flex-column h100p w100p scroll-y'>
 			<section className='flex-column medium-gap'>
 				{pages.map((log) => (
-					<LogCard key={log.id} log={log} />
+					<LogCard key={log.id} log={log} handleDeleteLog={handleDeleteLog} />
 				))}
 			</section>
 			<footer className='flex-center'>
@@ -47,24 +61,35 @@ export default function LogTab() {
 
 interface LogCardProps {
 	log: LogData;
+	handleDeleteLog: (id: string) => void;
 }
 
 function LogCard(props: LogCardProps) {
+	const message: string[] = props.log.message.split('\n');
+	const header = message[0];
+	let detail: string[] = message.slice(1);
+	detail = detail ? detail : ['No content'];
+
 	return (
-		<section className='log-card medium-padding'>
-			<p>ID: {props.log.id}</p>
-			<p>Environment: {props.log.environment}</p>
-			<p>Time: {props.log.time}</p>
+		<details className='log-card relative medium-padding'>
+			<summary>
+				<p>ID: {props.log.id}</p>
+				<p>Environment: {props.log.environment}</p>
+				<p>Time: {props.log.time}</p>
+				<p>Message: {header}</p>
+				<ClearIconButton className='absolute top right ' icon='/assets/icons/quit.png' onClick={() => props.handleDeleteLog(props.log.id)} />
+			</summary>
 			<div>
-				Message:
-				<br />
-				{props.log.message.split('\n').map((t, index) => (
-					<p key={index}>
-						{t}
-						<br />
-					</p>
-				))}
+				Detail:
+				<div className='medium-padding border-box'>
+					{detail.map((t, index) => (
+						<p key={index}>
+							{t}
+							<br />
+						</p>
+					))}
+				</div>
 			</div>
-		</section>
+		</details>
 	);
 }

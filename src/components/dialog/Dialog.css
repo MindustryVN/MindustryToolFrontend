@@ -1,0 +1,28 @@
+.dialog {
+	z-index: var(--popup-message-z-index);
+	top: 0;
+	left: 0;
+}
+
+.dialog::before {
+	position: fixed;
+	content: '';
+	z-index: -1;
+	display: block;
+
+	width: 100%;
+	height: 100%;
+
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+.dialog-card {
+	position: relative;
+	min-width: 20vw;
+
+	overflow: hidden;
+
+	background-color: var(--black);
+	border: 2px solid var(--black);
+	border-radius: 0.5rem;
+}

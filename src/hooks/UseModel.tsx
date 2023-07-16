@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import Model from 'src/components/common/Model';
+import Model from 'src/components/model/Model';
 
 export default function useModel() {
 	const [open, setOpen] = useState(false);

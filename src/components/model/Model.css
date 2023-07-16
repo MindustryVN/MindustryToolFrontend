@@ -9,5 +9,5 @@
 
 	box-sizing: border-box;
 
-	z-index: 99;
+	z-index: var(--model-z-index);
 }

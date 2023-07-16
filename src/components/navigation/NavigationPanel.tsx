@@ -59,7 +59,7 @@ export default function NavigationPanel() {
 							)}
 						</section>
 						<Button className='button' onClick={() => setShowNavigatePanel(false)}>
-							<Trans i18nKey='navigate.close' />
+							<Trans i18nKey='close' />
 						</Button>
 					</section>
 				)}

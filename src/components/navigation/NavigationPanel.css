@@ -46,7 +46,7 @@
 
 	animation: popup 0.2s forwards;
 
-	z-index: 10000;
+	z-index: var(--overlay-z-index);
 }
 
 @keyframes popup {

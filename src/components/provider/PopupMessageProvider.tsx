@@ -23,11 +23,11 @@ interface PopupMessageProps {
 }
 
 interface PopupMessageContextProps {
-	addPopupMessage: (message: ReactNode, duration: number, type: PopupMessageType) => void;
+	addPopup: (message: ReactNode, duration: number, type: PopupMessageType) => void;
 }
 
 export const PopupMessageContext = React.createContext<PopupMessageContextProps>({
-	addPopupMessage: (message: ReactNode, duration: number, type: PopupMessageType) => {},
+	addPopup: (message: ReactNode, duration: number, type: PopupMessageType) => {},
 });
 
 interface PopupMessageProviderProps {
@@ -84,7 +84,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 	}
 
 	return (
-		<PopupMessageContext.Provider value={{ addPopupMessage: addMessage }}>
+		<PopupMessageContext.Provider value={{ addPopup: addMessage }}>
 			<section id='popup-container' className='flex-column small-gap'>
 				{messages.map((val) => (
 					<PopupMessage key={val.uuid} message={val.message} duration={val.duration} type={val.type} onTimeOut={() => removeMessage(val.uuid)} />

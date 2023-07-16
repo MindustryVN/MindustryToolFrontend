@@ -12,6 +12,6 @@
 	position: fixed;
 	bottom: 0;
 	right: 0.25rem;
-	z-index: 999;
+	z-index: var(--top-z-index);
 }
 
