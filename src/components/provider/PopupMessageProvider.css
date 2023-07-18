@@ -29,7 +29,7 @@
 
 	border: 2px solid var(--gray);
 
-	animation: slide-in 0.5s;
+	animation: slide-in 0.5s forwards;
 }
 
 .popup-message-content {
@@ -46,7 +46,7 @@
 	width: 100%;
 
 	background-color: rgb(100, 100, 255);
-	
+
 	transform-origin: left center;
 }
 

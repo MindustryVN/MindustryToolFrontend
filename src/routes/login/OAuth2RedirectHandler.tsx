@@ -23,7 +23,6 @@ export default function OAuth2RedirectHandler() {
 		return <Navigate to={{ pathname: '/home' }} />;
 	}
 
-	const error = getUrlParam('error');
-	addPopup(i18n.t('error') + ' ' + error, 5, 'error');
+	addPopup(i18n.t('login-fail') , 5, 'error');
 	return <Navigate to={{ pathname: '/login' }} />;
 }
