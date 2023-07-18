@@ -61,7 +61,8 @@ a {
 	--overlay-z-index: 2;
 	--model-z-index: 3;
 	--popup-message-z-index: 4;
-	--top-z-index: 5;
+	--navigation-bar-z-index: 5;
+	--top-z-index: 6;
 
 	--error-color: #d0342c;
 	--warning-color: #e9d502;

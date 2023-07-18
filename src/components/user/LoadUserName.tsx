@@ -1,7 +1,10 @@
+import './LoadUserName.css';
+
 import React, { useEffect, useState } from 'react';
 import { API } from 'src/API';
 import UserName from './UserName';
 import UserData from './UserData';
+import { Trans } from 'react-i18next';
 
 interface LoadUserNameProps {
 	userId: string;
@@ -23,5 +26,9 @@ export default function LoadUserName(props: LoadUserNameProps) {
 	if (props.userId === 'community') return <span>Community</span>;
 	if (loading) return <span>Loading...</span>;
 	if (displayUser) return <UserName displayUser={displayUser} />;
-	return <span>User not found</span>;
+	return (
+		<span className='user-not-found'>
+			<Trans i18nKey='user-not-found' />
+		</span>
+	);
 }
