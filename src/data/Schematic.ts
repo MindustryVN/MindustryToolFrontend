@@ -1,6 +1,6 @@
-import UserData, { Users } from 'src/components/user/UserData';
+import UserData, { Users } from 'src/data/User';
 
-export default class SchematicData {
+export default class Schematic {
 	id: string;
 	name: string;
 	data: string;
@@ -11,17 +11,7 @@ export default class SchematicData {
 	like: number;
 	verifyAdmin: string;
 
-	constructor(
-		id: string,
-		name: string,
-		data: string,
-		authorId: string,
-		description: string,
-		requirement: Array<ItemRequirement>,
-		tags: Array<string>,
-		like: number,
-		verifyAdmin: string,
-	) {
+	constructor(id: string, name: string, data: string, authorId: string, description: string, requirement: Array<ItemRequirement>, tags: Array<string>, like: number, verifyAdmin: string) {
 		this.id = id;
 		this.name = name;
 		this.data = data;
@@ -35,7 +25,7 @@ export default class SchematicData {
 }
 
 export class Schematics {
-	static canDelete(schematic: SchematicData, user: UserData | undefined) {
+	static canDelete(schematic: Schematic, user: UserData | undefined) {
 		return user && (schematic.authorId === user.id || Users.isAdmin(user));
 	}
 }

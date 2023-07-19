@@ -3,7 +3,7 @@ import './LoadUserName.css';
 import React, { useEffect, useState } from 'react';
 import { API } from 'src/API';
 import UserName from './UserName';
-import UserData from './UserData';
+import User from '../../data/User';
 import { Trans } from 'react-i18next';
 
 interface LoadUserNameProps {
@@ -12,7 +12,7 @@ interface LoadUserNameProps {
 
 export default function LoadUserName(props: LoadUserNameProps) {
 	const [loading, setLoading] = useState(true);
-	const [displayUser, setDisplayUser] = useState<UserData>();
+	const [displayUser, setDisplayUser] = useState<User>();
 
 	useEffect(() => {
 		if (props.userId === 'community') setLoading(false);

@@ -24,7 +24,8 @@
 		"recommend-login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập",
 		"invalid-schematic": "Bản thiết kế lỗi: ",
 		"not-schematic-code": "Mã bản thiết kế lỗi",
-		"delete-schematic-dialog": "Xóa bản thiết kế?"
+		"delete-schematic-dialog": "Xóa bản thiết kế?",
+		"message.lost-connection" : "Mất kết nối với máy chủ"
 	},
 	"tag": {
 		"newest": "Mới nhất",

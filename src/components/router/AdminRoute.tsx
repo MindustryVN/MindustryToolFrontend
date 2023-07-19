@@ -1,8 +1,8 @@
 import React, { ReactElement, useContext } from 'react';
 import Loading from 'src/components/loader/Loading';
-import { Users } from 'src/components/user/UserData';
+import { Users } from 'src/data/User';
 import { Navigate } from 'react-router-dom';
-import { UserContext } from 'src/components/provider/UserProvider';
+import { UserContext } from 'src/context/UserProvider';
 
 interface AdminRouteProps {
 	element: ReactElement;

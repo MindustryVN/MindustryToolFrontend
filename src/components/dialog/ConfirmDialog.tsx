@@ -6,7 +6,7 @@ import i18n from 'src/util/I18N';
 
 interface ConfirmDialogProps {
 	className?: string;
-	content: ReactNode;
+	children: ReactNode;
 	onClose: () => void;
 	onConfirm: () => void;
 }
@@ -15,7 +15,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
 	return (
 		<Dialog className={props.className}>
 			<section className='flex-column center w100p'>
-				<span className='flex-row w100p medium-padding gray-background border-box'>{props.content}</span>
+				<span className='flex-row w100p medium-padding gray-background border-box'>{props.children}</span>
 				<section className='grid-row big-gap w100p medium-padding border-box black-background'>
 					<Button title={i18n.t('cancel').toString()} onClick={() => props.onClose()}>
 						<Trans i18nKey='cancel' />

@@ -10,8 +10,8 @@ import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { getFileExtension } from 'src/util/StringUtils';
-import { UserContext } from 'src/components/provider/UserProvider';
-import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import { UserContext } from 'src/context/UserProvider';
+import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import { Link } from 'react-router-dom';
 import TagPick from 'src/components/tag/TagPick';
 import { Trans } from 'react-i18next';
@@ -33,7 +33,7 @@ let notLoginMessage = (
 	</span>
 );
 
-export default function Upload() {
+export default function UploadPage() {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
@@ -104,7 +104,7 @@ export default function Upload() {
 			return;
 		}
 
-		if (!tags) {
+		if (!tags || tags.length === 0) {
 			popup.current.addPopup(i18n.t('message.no-tag'), 5, 'error');
 			return;
 		}
@@ -167,7 +167,7 @@ export default function Upload() {
 
 	function checkUploadRequirement() {
 		if (!file && !code) return <Trans i18nKey='message.no-data' />;
-		if (!tags) return <Trans i18nKey='message.no-tag' />;
+		if (!tags || tags.length === 0) return <Trans i18nKey='message.no-tag' />;
 
 		return <Trans i18nKey='message.ok' />;
 	}
@@ -224,3 +224,10 @@ export default function Upload() {
 		</main>
 	);
 }
+
+
+
+
+
+
+

@@ -1,10 +1,11 @@
 import 'src/styles.css';
+import './VerifySchematicTab.css';
 
 import React, { useState } from 'react';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
-import SchematicData from 'src/components/schematic/SchematicData';
+import Schematic from 'src/data/Schematic';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
@@ -30,29 +31,38 @@ import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
 import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
 import usePopup from 'src/hooks/UsePopup';
+import useDialog from 'src/hooks/UseDialog';
+import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
+import ClearIconButton from 'src/components/button/ClearIconButton';
 
 export default function VerifySchematicTab() {
-	const [currentSchematic, setCurrentSchematic] = useState<SchematicData>();
+	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadPage, reloadPage, loaderState } = usePage<SchematicData>('schematic-upload/page');
+	const { pages, loadPage, reloadPage, loaderState } = usePage<Schematic>('schematic-upload/page');
 	const { model, setVisibility } = useModel();
 
-	function handleOpenSchematicInfo(schematic: SchematicData) {
+	function handleOpenSchematicInfo(schematic: Schematic) {
 		setCurrentSchematic(schematic);
 		setVisibility(true);
 	}
 
-	function rejectSchematic(schematic: SchematicData) {
+	function rejectSchematic(schematic: Schematic, reason: string) {
 		setVisibility(false);
 		API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
+			.then(() => {
+				let form = new FormData();
+				form.append('userId', schematic.authorId);
+				form.append('message', reason);
+				return API.REQUEST.post('notification', form);
+			})
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //.
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => reloadPage());
 	}
 
-	function verifySchematic(schematic: SchematicData, tags: TagChoiceLocal[]) {
+	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
 		let form = new FormData();
 		const tagString = Tags.toString(tags);
 
@@ -63,6 +73,12 @@ export default function VerifySchematicTab() {
 		form.append('tags', tagString);
 
 		API.REQUEST.post('schematic', form) //
+			.then(() => {
+				let form = new FormData();
+				form.append('userId', schematic.authorId);
+				form.append('content', i18n.t('post schematic success').toString());
+				return API.REQUEST.post('notification', form);
+			})
 			.then(() => {
 				addPopup(i18n.t('verify-success'), 5, 'info');
 				reloadPage();
@@ -123,8 +139,8 @@ export default function VerifySchematicTab() {
 }
 
 interface SchematicPreviewProps {
-	schematic: SchematicData;
-	handleOpenModel: (schematic: SchematicData) => void;
+	schematic: Schematic;
+	handleOpenModel: (schematic: Schematic) => void;
 }
 
 function SchematicPreview(props: SchematicPreviewProps) {
@@ -146,15 +162,18 @@ function SchematicPreview(props: SchematicPreviewProps) {
 }
 
 interface SchematicInfoProps {
-	schematic: SchematicData;
-	handleVerifySchematic: (schematic: SchematicData, tags: TagChoiceLocal[]) => void;
-	handleRejectSchematic: (schematic: SchematicData) => void;
+	schematic: Schematic;
+	handleVerifySchematic: (schematic: Schematic, tags: TagChoiceLocal[]) => void;
+	handleRejectSchematic: (schematic: Schematic, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
 function SchematicInfo(props: SchematicInfoProps) {
 	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.schematic.tags, Tags.SCHEMATIC_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
+
+	const verifyDialog = useDialog();
+	const rejectDialog = useDialog();
 
 	const { copy } = useClipboard();
 
@@ -196,10 +215,43 @@ function SchematicInfo(props: SchematicInfoProps) {
 					href={Utils.getDownloadUrl(props.schematic.data)} //
 					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
-				<Button children={<Trans i18nKey='verify' />} onClick={() => props.handleVerifySchematic(props.schematic, tags)} />
-				<Button children={<Trans i18nKey='reject' />} onClick={() => props.handleRejectSchematic(props.schematic)} />
+				<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />
+				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
 				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
+			{verifyDialog.dialog(
+				<ConfirmDialog
+					onConfirm={() => props.handleVerifySchematic(props.schematic, tags)} //
+					onClose={() => verifyDialog.setVisibility(false)}>
+					Verify schematic
+				</ConfirmDialog>,
+			)}
+			{rejectDialog.dialog(
+				<section className='relative'>
+					Reject reason:
+					<TypeDialog
+						onSubmit={(reason) => props.handleRejectSchematic(props.schematic, reason)} //
+						onClose={() => rejectDialog.setVisibility(false)}
+					/>
+				</section>,
+			)}
 		</main>
+	);
+}
+
+interface TypeDialogProps {
+	onSubmit: (content: string) => void;
+	onClose: () => void;
+}
+
+function TypeDialog(props: TypeDialogProps) {
+	const [content, setContent] = useState('');
+
+	return (
+		<section>
+			<textarea className='type-dialog' onChange={(event) => setContent(event.target.value)} />
+			<Button onClick={() => props.onSubmit(content)}>Submit</Button>
+			<ClearIconButton className='absolute top right' icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+		</section>
 	);
 }

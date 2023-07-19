@@ -2,12 +2,13 @@ import './NavigationPanel.css';
 import 'src/styles.css';
 
 import React, { useContext, useState } from 'react';
-import { Users } from 'src/components/user/UserData';
+import { Users } from 'src/data/User';
 import { Link } from 'react-router-dom';
-import { UserContext } from 'src/components/provider/UserProvider';
+import { UserContext } from 'src/context/UserProvider';
 import { Trans } from 'react-i18next';
+import ClearButton from 'src/components/button/ClearButton';
 import UserDisplay from 'src/components/user/UserDisplay';
-import Button from 'src/components/button/Button';
+import NotificationTab from 'src/components/navigation/NotificationTab';
 
 export default function NavigationPanel() {
 	const { user } = useContext(UserContext);
@@ -22,8 +23,7 @@ export default function NavigationPanel() {
 					type='button'
 					onClick={() => setShowNavigatePanel((prev) => !prev)}
 					onFocus={() => setShowNavigatePanel(true)}
-					onMouseEnter={() => setShowNavigatePanel(true)}
-					>
+					onMouseEnter={() => setShowNavigatePanel(true)}>
 					<img className='icon w2rem h2rem' src='/assets/icons/dots.png' alt='menu' />
 				</button>
 
@@ -64,13 +64,16 @@ export default function NavigationPanel() {
 								</Link>
 							)}
 						</section>
-						<Button onClick={() => setShowNavigatePanel(false)}>
+						<ClearButton onClick={() => setShowNavigatePanel(false)}>
 							<Trans i18nKey='close' />
-						</Button>
+						</ClearButton>
 					</section>
 				)}
 			</section>
-			<UserDisplay />
+			<section className='flex-row small-gap relative'>
+				<NotificationTab />
+				<UserDisplay />
+			</section>
 		</nav>
 	);
 }

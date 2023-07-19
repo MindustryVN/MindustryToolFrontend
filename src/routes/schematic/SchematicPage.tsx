@@ -2,11 +2,11 @@ import 'src/styles.css';
 import './SchematicPage.css';
 
 import React, { useContext, useRef, useState } from 'react';
-import SchematicData, { Schematics } from 'src/components/schematic/SchematicData';
+import Schematic, { Schematics } from 'src/data/Schematic';
 
 import { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL } from 'src/config/Config';
-import { UserContext } from 'src/components/provider/UserProvider';
+import { UserContext } from 'src/context/UserProvider';
 import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
@@ -42,8 +42,8 @@ import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 
-export default function Schematic() {
-	const currentSchematic = useRef<SchematicData>();
+export default function SchematicPage() {
+	const currentSchematic = useRef<Schematic>();
 	const [tag, setTag] = useState<string>('');
 
 	const [sortQuery, setSortQuery] = useState<SortChoice>(SCHEMATIC_SORT_CHOICE[0]);
@@ -56,7 +56,7 @@ export default function Schematic() {
 		},
 	});
 
-	const { pages, loaderState, loadPage, reloadPage } = usePage<SchematicData>('schematic/page', searchConfig.current);
+	const { pages, loaderState, loadPage, reloadPage } = usePage<Schematic>('schematic/page', searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
@@ -92,7 +92,7 @@ export default function Schematic() {
 		setTag('');
 	}
 
-	function handleOpenSchematicInfo(schematic: SchematicData) {
+	function handleOpenSchematicInfo(schematic: Schematic) {
 		currentSchematic.current = schematic;
 		setVisibility(true);
 	}
@@ -112,7 +112,7 @@ export default function Schematic() {
 		);
 	}
 
-	function handleDeleteSchematic(schematic: SchematicData) {
+	function handleDeleteSchematic(schematic: Schematic) {
 		API.REQUEST.delete(`schematic/${schematic.id}`) //
 			.then(() => {
 				addPopup(i18n.t('schematic.delete-success'), 5, 'info');
@@ -179,8 +179,8 @@ export default function Schematic() {
 }
 
 interface SchematicPreviewProps {
-	schematic: SchematicData;
-	handleOpenModel: (schematic: SchematicData) => void;
+	schematic: Schematic;
+	handleOpenModel: (schematic: Schematic) => void;
 }
 
 function SchematicPreview(props: SchematicPreviewProps) {
@@ -193,7 +193,7 @@ function SchematicPreview(props: SchematicPreviewProps) {
 	);
 }
 interface SchematicPreviewButtonProps {
-	schematic: SchematicData;
+	schematic: Schematic;
 }
 
 function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
@@ -214,9 +214,9 @@ function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
 }
 
 interface SchematicInfoProps {
-	schematic: SchematicData;
+	schematic: Schematic;
 	handleCloseModel: () => void;
-	handleDeleteSchematic: (schematic: SchematicData) => void;
+	handleDeleteSchematic: (schematic: Schematic) => void;
 }
 
 function SchematicInfo(props: SchematicInfoProps) {
@@ -243,9 +243,9 @@ function SchematicInfo(props: SchematicInfoProps) {
 }
 
 interface SchematicInfoButtonProps {
-	schematic: SchematicData;
+	schematic: Schematic;
 	handleCloseModel: () => void;
-	handleDeleteSchematic: (schematic: SchematicData) => void;
+	handleDeleteSchematic: (schematic: Schematic) => void;
 }
 
 function SchematicInfoButton(props: SchematicInfoButtonProps) {
@@ -270,18 +270,12 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			/>
 			<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			{dialog(
-				<ConfirmDialog
-					onClose={() => setVisibility(false)}
-					onConfirm={() => props.handleDeleteSchematic(props.schematic)}
-					content={
-						<>
-							<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
-							<span>
-								<Trans i18nKey='message.delete-schematic-dialog' />
-							</span>
-						</>
-					}
-				/>,
+				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => props.handleDeleteSchematic(props.schematic)}>
+					<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
+					<span>
+						<Trans i18nKey='message.delete-schematic-dialog' />
+					</span>
+				</ConfirmDialog>,
 			)}
 		</section>
 	);

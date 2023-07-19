@@ -1,28 +1,29 @@
 import './index.css';
 
+import { BrowserRouter as Router } from 'react-router-dom';
+import { I18nextProvider } from 'react-i18next';
+
+import App from './App';
+import i18n from './util/I18N';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { I18nextProvider } from 'react-i18next';
-import i18n from './util/I18N';
-import UserProvider from 'src/components/provider/UserProvider';
-import PopupMessageProvider from 'src/components/provider/PopupMessageProvider';
-import TagProvider from 'src/components/provider/TagProvider';
-import { BrowserRouter as Router } from 'react-router-dom';
+import TagProvider from 'src/context/TagProvider';
+import UserProvider from 'src/context/UserProvider';
+import PopupMessageProvider from 'src/context/PopupMessageProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-	<I18nextProvider i18n={i18n}>
-		<React.StrictMode>
+	<React.StrictMode>
+		<I18nextProvider i18n={i18n}>
 			<Router>
 				<PopupMessageProvider>
 					<TagProvider>
 						<UserProvider>
-							<App />
+								<App />
 						</UserProvider>
 					</TagProvider>
 				</PopupMessageProvider>
 			</Router>
-		</React.StrictMode>
-	</I18nextProvider>,
+		</I18nextProvider>
+	</React.StrictMode>,
 );

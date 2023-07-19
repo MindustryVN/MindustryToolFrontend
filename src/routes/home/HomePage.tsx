@@ -3,7 +3,7 @@ import './HomePage.css';
 
 import React from 'react';
 
-export default function Home() {
+export default function HomePage() {
 	return (
 		<main className='home'>
 			<section className='content'>

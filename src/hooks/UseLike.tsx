@@ -2,11 +2,12 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { API } from 'src/API';
-import { LikeChange } from 'src/components/like/LikeChange';
-import { UserLike } from 'src/components/like/UserLike';
-import { UserContext } from 'src/components/provider/UserProvider';
+import { LikeChange } from 'src/data/LikeChange';
+import { UserLike } from 'src/data/UserLike';
+import { UserContext } from 'src/context/UserProvider';
 import usePopup from 'src/hooks/UsePopup';
 import i18n from 'src/util/I18N';
+import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 
 const loginMessage = (
 	<>
@@ -21,6 +22,7 @@ export default function useLike(url: string, initialLike: number = 0) {
 	const [userLike, setUserLike] = useState<UserLike>({ userId: '', targetId: '', state: 0 });
 	const [likes, setLikes] = useState<number>(initialLike);
 	const [loading, setLoading] = useState(false);
+	const PrivateAlert = usePrivateAlert();
 
 	const { addPopup } = usePopup();
 
@@ -84,10 +86,12 @@ export default function useLike(url: string, initialLike: number = 0) {
 			if (!isLoggedIn()) return;
 
 			setLoading(true);
-			API.REQUEST.get(`${url}/like`) //
-				.then((result) => processLike(result.data))
-				.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
-				.finally(() => setLoading(false));
+			PrivateAlert(() =>
+				API.REQUEST.get(`${url}/like`) //
+					.then((result) => processLike(result.data))
+					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
+					.finally(() => setLoading(false)),
+			);
 		},
 
 		dislike: () => {
@@ -95,10 +99,12 @@ export default function useLike(url: string, initialLike: number = 0) {
 			if (!isLoggedIn()) return;
 
 			setLoading(true);
-			API.REQUEST.get(`${url}/dislike`) //
-				.then((result) => processDislike(result.data))
-				.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
-				.finally(() => setLoading(false));
+			PrivateAlert(() =>
+				API.REQUEST.get(`${url}/dislike`) //
+					.then((result) => processDislike(result.data))
+					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
+					.finally(() => setLoading(false)),
+			);
 		},
 	};
 }

@@ -13,7 +13,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 	useEffect(() => {
 		setLoaderState('loading');
 		setPages([[]]);
-		
+
 		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
 			.then((result) =>
 				setPages(() => {
@@ -63,6 +63,8 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 		},
 
 		loadPage: function loadPage() {
+			if (loaderState === 'loading') return;
+
 			setLoaderState('loading');
 
 			const lastIndex = pages.length - 1;

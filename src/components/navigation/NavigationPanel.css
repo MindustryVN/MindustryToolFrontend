@@ -25,10 +25,6 @@
 	image-rendering: pixelated;
 }
 
-.icon:is(:focus, :hover) {
-	background-color: var(--yellow);
-}
-
 .popup {
 	position: fixed;
 	overflow: hidden scroll;

@@ -10,6 +10,6 @@ export default function useModel() {
 			else return <></>;
 		},
 
-		setVisibility: (state: boolean) => setVisibility(state),
+		setVisibility: setVisibility,
 	};
 }

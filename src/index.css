@@ -66,11 +66,18 @@ a {
 
 	--error-color: #d0342c;
 	--warning-color: #e9d502;
-	--info-color: #55ff55;
+	--info-color: #3ac152;
 }
 
 input[type='file'] {
 	display: none;
+}
+
+textarea,
+textarea:is(:focus, :hover) {
+	background-color: transparent;
+	outline: none;
+	border: none;
 }
 
 footer {

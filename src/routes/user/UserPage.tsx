@@ -4,9 +4,9 @@ import './UserPage.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { API } from 'src/API';
-import UserData from 'src/components/user/UserData';
+import User from 'src/data/User';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import { Trans } from 'react-i18next';
 import UserSchematicTab from './UserSchematicTab';
@@ -18,7 +18,7 @@ export default function UserPage() {
 
 	const [loading, setLoading] = React.useState(true);
 
-	const [user, setUser] = React.useState<UserData>();
+	const [user, setUser] = React.useState<User>();
 
 	const popup = useRef(useContext(PopupMessageContext));
 
