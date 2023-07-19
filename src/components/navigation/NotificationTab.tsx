@@ -7,14 +7,13 @@ import useModel from 'src/hooks/UseModel';
 import useNotification from 'src/hooks/UseNotification';
 import Notification from 'src/data/Notification';
 import IfTrueElse from 'src/components/common/IfTrueElse';
-import Loading from 'src/components/loader/Loading';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import { Trans } from 'react-i18next';
 
 export default function NotificationTab() {
 	const { model, setVisibility } = useModel();
 
-	const { pages, loadPage, reloadPage, loaderState } = useNotification();
+	const { pages, loaderState } = useNotification();
 
 	return (
 		<section>
