@@ -4,7 +4,7 @@ import 'src/styles.css';
 import React, { useContext } from 'react';
 
 import { Navigate } from 'react-router-dom';
-import { UserContext } from 'src/components/provider/UserProvider';
+import { UserContext } from 'src/context/UserProvider';
 import { Trans } from 'react-i18next';
 
 export default function MePage() {

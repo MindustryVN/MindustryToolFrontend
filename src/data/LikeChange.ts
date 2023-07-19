@@ -1,4 +1,4 @@
-import { UserLike } from 'src/components/like/UserLike';
+import { UserLike } from 'src/data/UserLike';
 
 export interface LikeChange {
 	amount: number;

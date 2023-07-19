@@ -1,10 +1,12 @@
-export default class UserData {
+import { UserRole } from "src/data/UserRole";
+
+export default class User {
 	id: string;
 	name: string;
 	imageUrl: string;
-	role: string[];
+	role: UserRole[];
 
-	constructor(id: string, name: string, imageUrl: string, role: string[]) {
+	constructor(id: string, name: string, imageUrl: string, role: UserRole[]) {
 		this.id = id;
 		this.name = name;
 		this.imageUrl = imageUrl;
@@ -13,11 +15,11 @@ export default class UserData {
 }
 
 export class Users {
-	static isUser(user: UserData | undefined) {
+	static isUser(user: User | undefined) {
 		return user && user.role.includes('USER');
 	}
 
-	static isAdmin(user: UserData | undefined) {
+	static isAdmin(user: User | undefined) {
 		return user && user.role.includes('ADMIN');
 	}
 }

@@ -6,4 +6,5 @@ export type IconType =
 	| '/assets/icons/dots.png'
 	| '/assets/icons/trash-16.png'
 	| '/assets/icons/info.png'
-	| '/assets/icons/up-vote.png';
+	| '/assets/icons/up-vote.png'
+	| '/assets/icons/chat.png';

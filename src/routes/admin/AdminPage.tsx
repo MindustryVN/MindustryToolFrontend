@@ -8,7 +8,7 @@ import LogTab from 'src/routes/admin/LogTab';
 
 const tabs = ['Verify Schematic', 'Verify Map', 'Report', 'Log'];
 
-export default function Admin() {
+export default function AdminPage() {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	function renderTab(currentTab: string) {

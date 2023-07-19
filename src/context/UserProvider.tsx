@@ -1,12 +1,12 @@
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
-import UserData from 'src/components/user/UserData';
+import User from 'src/data/User';
 import { ACCESS_TOKEN } from 'src/config/Config';
 import { API } from 'src/API';
-import { PopupMessageContext } from 'src/components/provider/PopupMessageProvider';
+import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 
 interface UserContextProps {
-	user: UserData | undefined;
+	user: User | undefined;
 	loading: boolean;
 	handleLogout: () => void;
 }
@@ -22,7 +22,7 @@ interface UserProviderProps {
 }
 
 export default function UserProvider(props: UserProviderProps) {
-	const [user, setUser] = useState<UserData>();
+	const [user, setUser] = useState<User>();
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const ref = useRef(useContext(PopupMessageContext));

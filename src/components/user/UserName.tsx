@@ -1,11 +1,12 @@
 import './UserName.css';
 
 import { Link } from 'react-router-dom';
-import UserData, { Users } from './UserData';
+import User from '../../data/User';
 import React from 'react';
+import UserRoleDisplay from 'src/components/user/UserRoleDisplay';
 
 interface UserNameProps {
-	displayUser: UserData;
+	displayUser: User;
 }
 
 export function UserName(props: UserNameProps) {
@@ -24,7 +25,7 @@ export function UserName(props: UserNameProps) {
 				}
 				alt='avatar'
 			/>
-			{Users.isAdmin(props.displayUser) && <span className='admin'>Admin</span>}
+			<UserRoleDisplay roles={props.displayUser.role} />
 			<span className='capitalize'>{props.displayUser.name}</span>
 		</Link>
 	);

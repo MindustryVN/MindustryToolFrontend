@@ -82,7 +82,5 @@ export default function ColorText(props: ColorTextProps) {
 		return r;
 	}
 
-	console.log(result);
-
 	return <span className={props.className ? props.className : ''}>{result}</span>;
 }

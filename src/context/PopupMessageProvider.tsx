@@ -6,6 +6,8 @@ import ClearIconButton from 'src/components/button/ClearIconButton';
 
 import React, { ReactNode, useEffect } from 'react';
 import { API } from 'src/API';
+import { Trans } from 'react-i18next';
+import { isString } from 'src/util/StringUtils';
 
 type PopupMessageType = 'info' | 'warning' | 'error';
 
@@ -112,7 +114,7 @@ function PopupMessage(props: PopupMessageNodeProps) {
 	return (
 		<section className={'popup-message w100p ' + props.type}>
 			<section className='popup-message-content flex-row w100p'>
-				{props.message}
+				{ isString(props.message, (str) => <Trans i18nKey={str}></Trans>, (x) => x)}
 				<ClearIconButton icon='/assets/icons/quit.png' title='remove' onClick={() => props.onTimeOut()} />
 			</section>
 			<div className='timer' style={{ animation: `timer ${props.duration}s linear forwards` }} />
