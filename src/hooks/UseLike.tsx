@@ -11,7 +11,7 @@ import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 
 const loginMessage = (
 	<>
-		<Trans i18nKey='message.login-before-like' />
+		<Trans i18nKey='login-before-like' />
 		<Link className='small-padding' to='/login'>
 			<Trans i18nKey='login' />
 		</Link>
@@ -32,7 +32,7 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 	function isLoggedIn(): boolean {
 		if (userContext.loading) {
-			addPopup(i18n.t('message.logging-in'), 5, 'info');
+			addPopup(i18n.t('logging-in'), 5, 'info');
 			return false;
 		}
 

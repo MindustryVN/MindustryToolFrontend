@@ -17,4 +17,11 @@ export class API {
 			},
 		});
 	}
+
+	static postNotification(userId: string, message: string) {
+		let form = new FormData();
+		form.append('userId', userId);
+		form.append('message', message);
+		return API.REQUEST.post('notification', form);
+	}
 }

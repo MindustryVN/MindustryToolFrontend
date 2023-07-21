@@ -56,7 +56,7 @@ export default function SchematicPage() {
 		},
 	});
 
-	const { pages, loaderState, loadPage, reloadPage } = usePage<Schematic>('schematic/page', searchConfig.current);
+	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>('schematic/page', searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
@@ -102,7 +102,7 @@ export default function SchematicPage() {
 			<section className='grid-row small-gap'>
 				<Button onClick={() => loadPage()}>
 					<IfTrueElse
-						condition={loaderState === 'more'} //
+						condition={hasMore} //
 						whenTrue={<Trans i18nKey='load-more' />}
 						whenFalse={<Trans i18nKey='no-more-schematic' />}
 					/>
@@ -156,7 +156,7 @@ export default function SchematicPage() {
 			/>
 			<footer className='flex-center'>
 				<IfTrueElse
-					condition={loaderState === 'loading'}
+					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 					whenFalse={buildLoadAndScrollButton()}
 				/>
@@ -225,7 +225,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 			<section className='flex-row medium-gap flex-wrap'>
 				<SchematicInfoImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} />
 				<section className='flex-column small-gap flex-wrap'>
-					<h2 className='capitalize'>{props.schematic.name}</h2>
+					<ColorText className='capitalize h2' text={props.schematic.name}/>
 					<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
 					<SchematicDescription description={props.schematic.description} />
 					<SchematicRequirement requirement={props.schematic.requirement} />
@@ -273,7 +273,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => props.handleDeleteSchematic(props.schematic)}>
 					<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
 					<span>
-						<Trans i18nKey='message.delete-schematic-dialog' />
+						<Trans i18nKey='delete-schematic-dialog' />
 					</span>
 				</ConfirmDialog>,
 			)}

@@ -1,5 +1,5 @@
 import 'src/styles.css';
-import './VerifySchematicTab.css';
+import './VerifySchematicPage.css';
 
 import React, { useState } from 'react';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
@@ -35,12 +35,12 @@ import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
-export default function VerifySchematicTab() {
+export default function VerifySchematicPage() {
 	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadPage, reloadPage, loaderState } = usePage<Schematic>('schematic-upload/page');
+	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Schematic>('schematic-upload/page');
 	const { model, setVisibility } = useModel();
 
 	function handleOpenSchematicInfo(schematic: Schematic) {
@@ -51,12 +51,7 @@ export default function VerifySchematicTab() {
 	function rejectSchematic(schematic: Schematic, reason: string) {
 		setVisibility(false);
 		API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
-			.then(() => {
-				let form = new FormData();
-				form.append('userId', schematic.authorId);
-				form.append('message', reason);
-				return API.REQUEST.post('notification', form);
-			})
+			.then(() => API.postNotification(schematic.authorId, reason))
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //.
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => reloadPage());
@@ -73,12 +68,7 @@ export default function VerifySchematicTab() {
 		form.append('tags', tagString);
 
 		API.REQUEST.post('schematic', form) //
-			.then(() => {
-				let form = new FormData();
-				form.append('userId', schematic.authorId);
-				form.append('content', i18n.t('post schematic success').toString());
-				return API.REQUEST.post('notification', form);
-			})
+			.then(() => API.postNotification(schematic.authorId, "Post schematic success"))
 			.then(() => {
 				addPopup(i18n.t('verify-success'), 5, 'info');
 				reloadPage();
@@ -92,7 +82,7 @@ export default function VerifySchematicTab() {
 			<section className='grid-row small-gap'>
 				<Button onClick={() => loadPage()}>
 					<IfTrueElse
-						condition={loaderState === 'more'} //
+						condition={hasMore} //
 						whenTrue={<Trans i18nKey='load-more' />}
 						whenFalse={<Trans i18nKey='no-more-schematic' />}
 					/>
@@ -115,7 +105,7 @@ export default function VerifySchematicTab() {
 			/>
 			<footer className='flex-center'>
 				<IfTrueElse
-					condition={loaderState === 'loading'}
+					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 					whenFalse={buildLoadAndScrollButton()}
 				/>
@@ -223,12 +213,11 @@ function SchematicInfo(props: SchematicInfoProps) {
 				<ConfirmDialog
 					onConfirm={() => props.handleVerifySchematic(props.schematic, tags)} //
 					onClose={() => verifyDialog.setVisibility(false)}>
-					Verify schematic
+					<Trans i18nKey='verify' />
 				</ConfirmDialog>,
 			)}
 			{rejectDialog.dialog(
-				<section className='relative'>
-					Reject reason:
+				<section>
 					<TypeDialog
 						onSubmit={(reason) => props.handleRejectSchematic(props.schematic, reason)} //
 						onClose={() => rejectDialog.setVisibility(false)}
@@ -248,10 +237,17 @@ function TypeDialog(props: TypeDialogProps) {
 	const [content, setContent] = useState('');
 
 	return (
-		<section>
-			<textarea className='type-dialog' onChange={(event) => setContent(event.target.value)} />
-			<Button onClick={() => props.onSubmit(content)}>Submit</Button>
-			<ClearIconButton className='absolute top right' icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+		<section className='flex-column'>
+			<header className='flex-row space-between small-padding'>
+				<Trans i18nKey='reject-reason' />
+				<ClearIconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+			</header>
+			<textarea className='type-dialog' title='reason' onChange={(event) => setContent(event.target.value)} />
+			<section className='flex-row end w100p small-padding border-box'>
+				<Button onClick={() => props.onSubmit(content)}>
+					<Trans i18nKey='reject' />
+				</Button>
+			</section>
 		</section>
 	);
 }

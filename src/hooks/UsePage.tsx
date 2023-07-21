@@ -1,71 +1,82 @@
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import { LoaderState, MAX_ITEM_PER_PAGE } from 'src/config/Config';
+import { MAX_ITEM_PER_PAGE } from 'src/config/Config';
 import { Utils } from 'src/util/Utils';
 
 export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfig<any>) {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
-	const [loaderState, setLoaderState] = useState<LoaderState>();
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
+	const [hasMore, setHasMore] = useState(false);
 
 	const ref = useRef({ url: url, searchConfig: searchConfig });
 
 	useEffect(() => {
-		setLoaderState('loading');
+		setIsLoading(true);
+		setIsError(false);
 		setPages([[]]);
 
 		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
 			.then((result) =>
 				setPages(() => {
 					let data: T[] = result.data;
-					if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-					else setLoaderState('more');
+					if (data.length < MAX_ITEM_PER_PAGE) setHasMore(false);
+					else setHasMore(true);
 					return [data];
 				}),
 			)
-			.catch(() => setLoaderState('error')); //
+			.catch(() => setIsError(true))
+			.finally(() => setIsLoading(false)); //
 	}, [searchConfig]);
 
-	function addNewPage(data: T[]) {
-		setPages((prev) => [...prev, data]);
-	}
+	function handleSetPage(pageNumber: number, data: T[]) {
+		if (data.length < MAX_ITEM_PER_PAGE) setHasMore(false);
+		else setHasMore(true);
 
-	function modifyLastPage(data: T[]) {
-		setPages((prev) => {
-			prev[prev.length - 1] = data;
-			return [...prev];
-		});
+		if (pages.length <= pageNumber) {
+			setPages((prev) => [...prev, data]);
+		} else {
+			setPages((prev) => {
+				prev[prev.length - 1] = data;
+				return [...prev];
+			});
+		}
 	}
-
 	return {
 		pages: Utils.array2dToArray1d(pages),
-		loaderState: loaderState,
+		isLoading: isLoading,
+		isError: isError,
+		hasMore: hasMore,
+
 		reloadPage: function reloadPage() {
+			if (isLoading) return;
+
 			let page = pages.length;
 
 			setPages([[]]);
-			setLoaderState('loading');
+			setIsLoading(true);
+			setIsError(false);
 
 			for (let i = 0; i < page; i++) {
 				API.REQUEST.get(`${url}/${i}`, searchConfig)
 					.then((result) => {
 						let data: T[] = result.data;
-						if (data) {
-							addNewPage(data);
-							if (data.length < MAX_ITEM_PER_PAGE) {
-								i = page;
-								setLoaderState('out');
-							} else setLoaderState('more');
-						} else setLoaderState('out');
+						handleSetPage(i, data);
+						if (data.length < MAX_ITEM_PER_PAGE) {
+							i = page;
+						}
 					})
-					.catch(() => setLoaderState('error'));
+					.catch(() => setIsError(true))
+					.finally(() => setIsLoading(false)); //
 			}
 		},
 
 		loadPage: function loadPage() {
-			if (loaderState === 'loading') return;
+			if (isLoading) return;
 
-			setLoaderState('loading');
+			setIsLoading(true);
+			setIsError(false);
 
 			const lastIndex = pages.length - 1;
 			const newPage = pages[lastIndex].length === MAX_ITEM_PER_PAGE;
@@ -74,15 +85,10 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 			API.REQUEST.get(`${url}/${requestPage}`, searchConfig)
 				.then((result) => {
 					let data: T[] = result.data;
-					if (data) {
-						if (newPage) addNewPage(data);
-						else modifyLastPage(data);
-
-						if (data.length < MAX_ITEM_PER_PAGE) setLoaderState('out');
-						else setLoaderState('more');
-					} else setLoaderState('out');
+					handleSetPage(requestPage, data);
 				})
-				.catch(() => setLoaderState('error'));
+				.catch(() => setIsError(true))
+				.finally(() => setIsLoading(false)); //
 		},
 	};
 }

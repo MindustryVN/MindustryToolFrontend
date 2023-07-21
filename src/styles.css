@@ -18,10 +18,6 @@
 	border: 2px solid var(--gray);
 }
 
-*:focus {
-	border: 3px solid white;
-}
-
 .button:hover,
 .button-active {
 	position: relative;
@@ -75,6 +71,10 @@
 	padding: 2.5rem;
 }
 
+.small-margin {
+	margin: 0.25rem;
+}
+
 .icon {
 	image-rendering: pixelated;
 }
@@ -93,6 +93,16 @@
 .center {
 	justify-content: center;
 	align-items: center;
+}
+
+.start {
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+
+.end {
+	justify-content: flex-end;
+	align-items: flex-end;
 }
 
 .space-between {
@@ -201,6 +211,14 @@
 
 .h6rem {
 	height: 6rem;
+}
+
+.h1 {
+	font-size: 3rem;
+}
+
+.h2 {
+	font-size: 2rem;
 }
 
 .border-box {

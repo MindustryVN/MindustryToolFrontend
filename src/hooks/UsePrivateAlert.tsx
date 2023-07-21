@@ -5,8 +5,8 @@ export default function usePrivateAlert() {
 	const { addPopup } = usePopup();
 	const { user } = useUser();
 
-	return (request: () => void) => {
-		if (user) request();
-		else addPopup('message.need-login', 5, 'warning');
+	return (request: () => any) => {
+		if (user) return request();
+		else addPopup('need-login', 5, 'warning');
 	};
 }

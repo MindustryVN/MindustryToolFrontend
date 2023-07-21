@@ -48,6 +48,12 @@ a {
 	display: none;
 }
 
+
+*:focus {
+	border: 3px solid white;
+}
+
+
 :root {
 	--black: #111111;
 	--gray: #3f3f3f;

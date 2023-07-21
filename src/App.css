@@ -3,11 +3,6 @@
 	height: calc(100% - var(--navbar-height));
 }
 
-.main > * {
-	padding: 2rem;
-	box-sizing: border-box;
-}
-
 .web-version {
 	position: fixed;
 	bottom: 0;
