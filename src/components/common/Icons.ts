@@ -7,4 +7,5 @@ export type IconType =
 	| '/assets/icons/trash-16.png'
 	| '/assets/icons/info.png'
 	| '/assets/icons/up-vote.png'
+	| '/assets/icons/check.png'
 	| '/assets/icons/chat.png';

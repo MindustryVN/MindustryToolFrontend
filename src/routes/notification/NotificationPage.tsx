@@ -8,6 +8,7 @@ import usePage from 'src/hooks/UsePage';
 import Notification from 'src/data/Notification';
 import useUser from 'src/hooks/UseUser';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import IconButton from 'src/components/button/IconButton';
 
 export default function NotificationTab() {
 	const { pages, isLoading } = usePage<Notification>('notification/page');
@@ -25,13 +26,21 @@ export default function NotificationTab() {
 		);
 
 	return (
-		<main className='h100p w100p scroll-y flex-column small-gap'>
+		<main className='h100p w100p scroll-y flex-column small-padding small-gap'>
 			{pages.map((notification) => (
-				<section className='notification medium-padding border-box' key={notification.id}>
-					<p>{notification.message}</p>
-					<p>
-						<Trans i18nKey='date' /> : {notification.time}
-					</p>
+				<section className='notification flex-row space-between medium-padding border-box' key={notification.id}>
+					<section>
+						<p>
+							<Trans i18nKey='content' /> :{notification.message}
+						</p>
+						<p>
+							<Trans i18nKey='date' /> : {notification.time}
+						</p>
+					</section>
+					<section className='flex-column small-gap center start'>
+						<IconButton icon='/assets/icons/check.png' onClick={() => {}} />
+						<IconButton icon='/assets/icons/trash-16.png' onClick={() => {}} />
+					</section>
 				</section>
 			))}
 		</main>
