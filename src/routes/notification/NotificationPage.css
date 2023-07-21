@@ -1,7 +1,3 @@
-.icon {
-	image-rendering: pixelated;
-}
-
 .notification {
 	background-color: var(--black);
 	border-radius: 5px;

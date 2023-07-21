@@ -21,12 +21,14 @@ import IfTrue from 'src/components/common/IfTrue';
 import LoadUserName from 'src/components/user/LoadUserName';
 import SchematicDescription from 'src/components/schematic/SchematicDescription';
 import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
+import ColorText from 'src/components/common/ColorText';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 
 const tabs = ['File', 'Code'];
 
 let notLoginMessage = (
 	<span>
-		<Trans i18nKey='message.recommend-login' />
+		<Trans i18nKey='recommend-login' />
 		<Link className='small-padding' to='/login'>
 			<Trans i18nKey='login' />
 		</Link>
@@ -41,6 +43,8 @@ export default function UploadPage() {
 	const [tag, setTag] = useState<string>('');
 	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	const { user, loading } = useContext(UserContext);
 	const popup = useRef(useContext(PopupMessageContext));
 
@@ -51,14 +55,14 @@ export default function UploadPage() {
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0) {
-			popup.current.addPopup(i18n.t('message.invalid-schematic-file'), 5, 'error');
+			popup.current.addPopup(i18n.t('invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-			popup.current.addPopup(i18n.t('message.invalid-schematic-file'), 5, 'error');
+			popup.current.addPopup(i18n.t('invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
@@ -77,7 +81,7 @@ export default function UploadPage() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-					popup.current.addPopup(i18n.t('message.not-schematic-code'), 5, 'warning');
+					popup.current.addPopup(i18n.t('not-schematic-code'), 5, 'warning');
 					return;
 				}
 
@@ -93,19 +97,21 @@ export default function UploadPage() {
 	}
 
 	function getPreview(form: FormData) {
+		setIsLoading(true);
 		API.REQUEST.post('schematic-upload/preview', form) //
 			.then((result) => setPreview(result.data)) //
-			.catch((error) => popup.current.addPopup(i18n.t(`message.invalid-schematic`) + JSON.stringify(error), 10, 'error'));
+			.catch((error) => popup.current.addPopup(i18n.t(`message.invalid-schematic`) + JSON.stringify(error), 10, 'error')) //
+			.finally(() => setIsLoading(false));
 	}
 
 	function handleSubmit() {
 		if (!file && !code) {
-			popup.current.addPopup(i18n.t('message.no-data'), 5, 'error');
+			popup.current.addPopup(i18n.t('no-data'), 5, 'error');
 			return;
 		}
 
 		if (!tags || tags.length === 0) {
-			popup.current.addPopup(i18n.t('message.no-tag'), 5, 'error');
+			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
 		const formData = new FormData();
@@ -116,15 +122,18 @@ export default function UploadPage() {
 		if (file) formData.append('file', file);
 		else formData.append('code', code);
 
+		setIsLoading(true);
+
 		API.REQUEST.post('schematic-upload', formData)
 			.then(() => {
 				setCode('');
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				popup.current.addPopup(i18n.t('message.upload-success'), 10, 'info');
+				popup.current.addPopup(i18n.t('upload-success'), 10, 'info');
 			})
-			.catch((error) => popup.current.addPopup(i18n.t('message.upload-fail') + ' ' + i18n.t(`message.${error.response.data}`), 10, 'error'));
+			.catch((error) => popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`message.${error.response.data}`), 10, 'error')) //
+			.finally(() => setIsLoading(false));
 	}
 
 	function handleRemoveTag(index: number) {
@@ -166,11 +175,13 @@ export default function UploadPage() {
 	}
 
 	function checkUploadRequirement() {
-		if (!file && !code) return <Trans i18nKey='message.no-data' />;
-		if (!tags || tags.length === 0) return <Trans i18nKey='message.no-tag' />;
+		if (!file && !code) return <Trans i18nKey='no-data' />;
+		if (!tags || tags.length === 0) return <Trans i18nKey='no-tag' />;
 
-		return <Trans i18nKey='message.ok' />;
+		return <Trans i18nKey='ok' />;
 	}
+
+	if (isLoading) return <LoadingSpinner />;
 
 	return (
 		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
@@ -194,7 +205,7 @@ export default function UploadPage() {
 							<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
 							<section className='flex-column space-between'>
 								<section className='flex-column small-gap flex-wrap'>
-									<h2 className='capitalize'>{preview.name}</h2>
+									<ColorText className='capitalize h2' text={preview.name} />
 									<Trans i18nKey='author' /> <LoadUserName userId={user ? user.id : 'community'} />
 									<SchematicDescription description={preview.description} />
 									<SchematicRequirement requirement={preview.requirement} />
@@ -224,10 +235,3 @@ export default function UploadPage() {
 		</main>
 	);
 }
-
-
-
-
-
-
-

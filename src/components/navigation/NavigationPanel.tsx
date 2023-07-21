@@ -3,17 +3,22 @@ import 'src/styles.css';
 
 import React, { useContext, useState } from 'react';
 import { Users } from 'src/data/User';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from 'src/context/UserProvider';
 import { Trans } from 'react-i18next';
 import ClearButton from 'src/components/button/ClearButton';
 import UserDisplay from 'src/components/user/UserDisplay';
-import NotificationTab from 'src/components/navigation/NotificationTab';
+import ClearIconButton from 'src/components/button/ClearIconButton';
+import usePrivateAlert from 'src/hooks/UsePrivateAlert';
+import DropdownMenu from 'src/components/dropbox/DropdownMenu';
 
 export default function NavigationPanel() {
 	const { user } = useContext(UserContext);
 
 	const [showNavigatePanel, setShowNavigatePanel] = useState(false);
+
+	const navigate = useNavigate();
+	const PrivateAlert = usePrivateAlert();
 
 	return (
 		<nav className='navigation-bar'>
@@ -28,7 +33,7 @@ export default function NavigationPanel() {
 				</button>
 
 				{showNavigatePanel && (
-					<section className='popup' onMouseLeave={() => setShowNavigatePanel(false)}>
+					<section className='popup' onMouseLeave={() => setShowNavigatePanel(true)}>
 						<section className='nav-link-container'>
 							<img src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='' />
 							<Link className='nav-link' to='/home' onClick={() => setShowNavigatePanel(false)}>
@@ -59,9 +64,17 @@ export default function NavigationPanel() {
 								Info
 							</Link>
 							{Users.isAdmin(user) && (
-								<Link className='nav-link' to='/admin' onClick={() => setShowNavigatePanel(false)}>
-									Admin
-								</Link>
+								<DropdownMenu className='nav-link' parent={<span>Admin</span>}>
+									<Link className='nav-link' to='/admin/verify' onClick={() => setShowNavigatePanel(false)}>
+										Verify
+									</Link>
+									<Link className='nav-link' to='/admin/report' onClick={() => setShowNavigatePanel(false)}>
+										Report
+									</Link>
+									<Link className='nav-link' to='/admin/log' onClick={() => setShowNavigatePanel(false)}>
+										Log
+									</Link>
+								</DropdownMenu>
 							)}
 						</section>
 						<ClearButton onClick={() => setShowNavigatePanel(false)}>
@@ -70,8 +83,13 @@ export default function NavigationPanel() {
 					</section>
 				)}
 			</section>
-			<section className='flex-row small-gap relative'>
-				<NotificationTab />
+			<section className='flex-row center big-gap relative '>
+				<ClearIconButton
+					className='bell-icon small-padding'
+					title='notification'
+					icon='/assets/icons/chat.png' //
+					onClick={() => PrivateAlert(() => navigate('/notification'))}
+				/>
 				<UserDisplay />
 			</section>
 		</nav>

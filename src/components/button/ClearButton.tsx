@@ -13,7 +13,7 @@ interface ButtonProps {
 export default function Button(props: ButtonProps) {
 	return (
 		<button
-			className={`clear-button flex-center ${props.className ? props.className : ''} `}
+			className={`clear-button ${props.className ? props.className : ''} `}
 			title={props.title ? props.title : 'button'}
 			type='button'
 			onClick={() => props.onClick()}>

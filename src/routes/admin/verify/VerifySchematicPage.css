@@ -1,6 +1,12 @@
 .type-dialog {
 	height: 50vh;
 	width: 50vw;
+	resize: none;
+	background-color: var(--gray);
+}
+
+.type-dialog:is(:hover, :focus) {
+	background-color: var(--gray);
 }
 
 @media screen and (max-width: 768px) {

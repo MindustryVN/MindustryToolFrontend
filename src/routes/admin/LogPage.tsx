@@ -1,4 +1,4 @@
-import './LogTab.css';
+import './LogPage.css';
 import 'src/styles.css';
 
 import React from 'react';
@@ -14,8 +14,8 @@ import usePage from 'src/hooks/UsePage';
 import usePopup from 'src/hooks/UsePopup';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
-export default function LogTab() {
-	const { pages, loadPage, reloadPage, loaderState } = usePage<LogData>('log/page');
+export default function LogPage() {
+	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>('log/page');
 	const { addPopup } = usePopup();
 
 	function buildLoadAndScrollButton() {
@@ -23,7 +23,7 @@ export default function LogTab() {
 			<section className='grid-row small-gap'>
 				<Button onClick={() => loadPage()}>
 					<IfTrueElse
-						condition={loaderState === 'more'} //
+						condition={hasMore} //
 						whenTrue={<Trans i18nKey='load-more' />}
 						whenFalse={<Trans i18nKey='no-more-log' />}
 					/>
@@ -50,7 +50,7 @@ export default function LogTab() {
 			</section>
 			<footer className='flex-center'>
 				<IfTrueElse
-					condition={loaderState === 'loading'}
+					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 					whenFalse={buildLoadAndScrollButton()}
 				/>

@@ -39,7 +39,10 @@ const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
+const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
+const VerifyPage = React.lazy(() => import('src/routes/admin/verify/VerifyPage'))
+const LogPage = React.lazy(() => import('src/routes/admin/LogPage'))
 
 export default function App() {
 	return (
@@ -58,12 +61,15 @@ export default function App() {
 							<Route path='/upload' element={<Upload />} />
 							<Route path='/schematic' element={<Schematic />} />
 							<Route path='/schematic/:schematicId' element={<SchematicPreview />} />
-							<Route path='/forum/*' element={<Forum />}></Route>
+							<Route path='/forum/*' element={<Forum />} />
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
+							<Route path='/admin/verify' element={<AdminRoute element={<VerifyPage />} />} />
+							<Route path='/admin/log' element={<AdminRoute element={<LogPage />} />} />
 							<Route path='/info' element={<Info />} />
 							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
+							<Route path='/notification' element={<Notification />} />
 						</Routes>
 					</Suspense>
 				</section>
