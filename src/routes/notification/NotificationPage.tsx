@@ -13,6 +13,7 @@ import { API } from 'src/API';
 import usePopup from 'src/hooks/UsePopup';
 import i18n from 'src/util/I18N';
 import IfTrue from 'src/components/common/IfTrue';
+import Markdown from 'src/components/markdown/Markdown';
 
 export default function NotificationTab() {
 	const { pages, isLoading, reloadPage } = usePage<Notification>('notification/page');
@@ -52,14 +53,10 @@ export default function NotificationTab() {
 		<main className='h100p w100p scroll-y flex-column small-padding small-gap'>
 			{pages.map((notification) => (
 				<section className='notification flex-row space-between medium-padding border-box' key={notification.id}>
-					<section>
-						<p>
-							<Trans i18nKey='content' />: {notification.message}
-						</p>
-						<p>
-							<Trans i18nKey='date' />: {new Date(notification.time).toLocaleString('en-GB')}
-						</p>
-					</section>
+					<Markdown>{notification.message}</Markdown>
+					<p>
+						<Trans i18nKey='date' />: {new Date(notification.time).toLocaleString('en-GB')}
+					</p>
 					<section className='flex-column small-gap center start'>
 						<IfTrue condition={notification.isRead === false} whenTrue={<IconButton icon='/assets/icons/check.png' onClick={() => handleMarkAsRead(notification)} />} />
 						<IconButton icon='/assets/icons/trash-16.png' onClick={() => handleDelete(notification)} />
