@@ -1,0 +1,27 @@
+.comment-container {
+	padding-left: 1rem;
+}
+
+.comment {
+	background-color: var(--black);
+}
+
+.load-more-icon {
+	height: 0.5rem;
+	width: 0.5rem;
+
+	border-bottom: 2px solid var(--white);
+}
+
+.comment-input,
+.comment-input:is(:hover, :focus) {
+	background-color: transparent;
+	background-color: var(--black);
+	border: 2px solid var(--gray);
+	outline: none;
+
+	max-height: 100%;
+	width: 100%;
+
+	resize: none;
+}

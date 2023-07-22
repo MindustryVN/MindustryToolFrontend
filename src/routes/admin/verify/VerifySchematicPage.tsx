@@ -58,17 +58,9 @@ export default function VerifySchematicPage() {
 	}
 
 	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
-		let form = new FormData();
 		const tagString = Tags.toString(tags);
-
-		form.append('id', schematic.id);
-		form.append('authorId', schematic.authorId);
-		form.append('data', schematic.data);
-
-		form.append('tags', tagString);
-
-		API.REQUEST.post('schematic', form) //
-			.then(() => API.postNotification(schematic.authorId, "Post schematic success"))
+		API.verifySchematic(schematic, tagString) //
+			.then(() => API.postNotification(schematic.authorId, 'Post schematic success'))
 			.then(() => {
 				addPopup(i18n.t('verify-success'), 5, 'info');
 				reloadPage();

@@ -10,7 +10,7 @@ interface ButtonProps {
 	onClick: () => void;
 }
 
-export default function Button(props: ButtonProps) {
+export default function ClearButton(props: ButtonProps) {
 	return (
 		<button
 			className={`clear-button ${props.className ? props.className : ''} `}

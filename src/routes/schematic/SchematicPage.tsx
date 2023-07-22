@@ -41,6 +41,7 @@ import IfTrue from 'src/components/common/IfTrue';
 import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
+import CommentContainer from 'src/components/comment/CommentContainer';
 
 export default function SchematicPage() {
 	const currentSchematic = useRef<Schematic>();
@@ -238,6 +239,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 				handleCloseModel={props.handleCloseModel} //
 				handleDeleteSchematic={props.handleDeleteSchematic}
 			/>
+			<CommentContainer url={`schematic/${props.schematic.id}/comment`} targetId={props.schematic.id} nesting={0} />
 		</main>
 	);
 }
