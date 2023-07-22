@@ -77,7 +77,12 @@ function LogCard(props: LogCardProps) {
 				<p>Environment: {props.log.environment}</p>
 				<p>Time: {props.log.time}</p>
 				<p>Message: {header}</p>
-				<ClearIconButton className='absolute top right ' icon='/assets/icons/quit.png' onClick={() => props.handleDeleteLog(props.log.id)} />
+				<ClearIconButton
+					className='absolute top right small-margin ' //
+					icon='/assets/icons/trash-16.png'
+					title='delete'
+					onClick={() => props.handleDeleteLog(props.log.id)}
+				/>
 			</summary>
 			<div>
 				Detail:

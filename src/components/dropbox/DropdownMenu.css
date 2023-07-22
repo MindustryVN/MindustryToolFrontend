@@ -1,17 +1,15 @@
-
 .dropdown {
-    font-size: 18px;
-    text-decoration: none;
-    padding: 0.2rem;
-    
-    color: var(--white);
-    background-color: transparent;
-    
-    font-weight: bold;
+	font-size: 18px;
+	text-decoration: none;
+
+	color: var(--white);
+	background-color: transparent;
+
+	font-weight: bold;
 }
 
 .dropdown-icon {
-    position: absolute;
+	position: absolute;
 
 	right: 0;
 	top: 50%;
@@ -23,15 +21,11 @@
 	background-color: var(--yellow);
 }
 .dropdown:is(:hover, :focus) > * {
-    color: var(--black);
+	color: var(--black);
 	background-color: var(--yellow);
 }
 
 .dropdown-container {
-    position: relative;
+	position: relative;
 	width: 100%;
-}
-
-.menu-container {
-    padding-left: 0.5rem;
 }

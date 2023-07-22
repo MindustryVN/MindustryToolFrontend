@@ -6,6 +6,7 @@ import ClearIconButton from 'src/components/button/ClearIconButton';
 
 import React, { ReactNode, useEffect } from 'react';
 import { API } from 'src/API';
+import i18n from 'src/util/I18N';
 
 type PopupMessageType = 'info' | 'warning' | 'error';
 
@@ -51,14 +52,24 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 			setMessages((prev) => [val, ...prev]);
 		}
 
+		const id: NodeJS.Timeout = setTimeout(() => {
+			addMessage({
+				message: i18n.t('high-ping-reason').toString(),
+				duration: 10,
+				type: 'info',
+			});
+			return () => clearTimeout(id);
+		}, 3000);
+
 		API.REQUEST.get('ping') //
-			.then(() =>
+			.then(() => {
 				addMessage({
 					message: `Ping: ${Date.now() - start}ms`,
 					duration: 5,
 					type: 'info',
-				}),
-			) //
+				});
+				clearTimeout(id);
+			}) //
 			.catch(() =>
 				addMessage({
 					message: 'lost-connection',
@@ -104,9 +115,11 @@ interface PopupMessageNodeProps {
 
 function PopupMessage(props: PopupMessageNodeProps) {
 	useEffect(() => {
-		setTimeout(() => {
+		let id: NodeJS.Timeout = setTimeout(() => {
 			props.onTimeOut();
 		}, props.duration * 1000);
+
+		return () => clearTimeout(id);
 	}, [props]);
 
 	return (
