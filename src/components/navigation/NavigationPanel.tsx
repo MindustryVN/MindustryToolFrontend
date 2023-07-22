@@ -1,24 +1,37 @@
 import './NavigationPanel.css';
 import 'src/styles.css';
 
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Users } from 'src/data/User';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from 'src/context/UserProvider';
 import { Trans } from 'react-i18next';
 import ClearButton from 'src/components/button/ClearButton';
 import UserDisplay from 'src/components/user/UserDisplay';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import DropdownMenu from 'src/components/dropbox/DropdownMenu';
+import { API } from 'src/API';
+import useUser from 'src/hooks/UseUser';
+import usePrivate from 'src/hooks/UsePrivate';
+import IfTrue from 'src/components/common/IfTrue';
 
 export default function NavigationPanel() {
-	const { user } = useContext(UserContext);
+	const { user } = useUser();
 
+	const [unreadNotifications, setUnreadNotifications] = useState(0);
 	const [showNavigatePanel, setShowNavigatePanel] = useState(false);
 
 	const navigate = useNavigate();
 	const PrivateAlert = usePrivateAlert();
+	const Private = useRef(usePrivate());
+
+	useEffect(() => {
+		Private.current(() =>
+			API.REQUEST.get('notification/unread') //
+				.then((result) => setUnreadNotifications(result.data))
+				.catch(() => console.log('Fail to get unread notification count')),
+		);
+	}, []);
 
 	return (
 		<nav className='navigation-bar'>
@@ -29,11 +42,11 @@ export default function NavigationPanel() {
 					onClick={() => setShowNavigatePanel((prev) => !prev)}
 					onFocus={() => setShowNavigatePanel(true)}
 					onMouseEnter={() => setShowNavigatePanel(true)}>
-					<img className='icon w2rem h2rem' src='/assets/icons/dots.png' alt='menu' />
+					<img className='icon w2rem h2rem' src='/assets/icons/menu.png' alt='menu' />
 				</button>
 
 				{showNavigatePanel && (
-					<section className='popup' onMouseLeave={() => setShowNavigatePanel(true)}>
+					<section className='popup' onMouseLeave={() => setShowNavigatePanel(false)}>
 						<section className='nav-link-container'>
 							<img src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='' />
 							<Link className='nav-link' to='/home' onClick={() => setShowNavigatePanel(false)}>
@@ -84,12 +97,15 @@ export default function NavigationPanel() {
 				)}
 			</section>
 			<section className='flex-row center big-gap relative '>
-				<ClearIconButton
-					className='bell-icon small-padding'
-					title='notification'
-					icon='/assets/icons/chat.png' //
-					onClick={() => PrivateAlert(() => navigate('/notification'))}
-				/>
+				<section className='relative'>
+					<ClearIconButton
+						className='bell-icon small-padding'
+						title='notification'
+						icon='/assets/icons/chat.png' //
+						onClick={() => PrivateAlert(() => navigate('/notification'))}
+					/>
+					<IfTrue condition={unreadNotifications} whenTrue={<span className='unread-notification-number'>{unreadNotifications <= 100 ? unreadNotifications : '100+'}</span>} />
+				</section>
 				<UserDisplay />
 			</section>
 		</nav>

@@ -42,7 +42,7 @@ const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
 const VerifyPage = React.lazy(() => import('src/routes/admin/verify/VerifyPage'))
-const LogPage = React.lazy(() => import('src/routes/admin/LogPage'))
+const LogPage = React.lazy(() => import('src/routes/admin/log/LogPage'))
 
 export default function App() {
 	return (

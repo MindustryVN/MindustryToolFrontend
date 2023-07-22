@@ -86,9 +86,34 @@
 
 .bell-icon {
 	image-rendering: pixelated;
-	height: 1.5rem;
-	width: 1.5rem;
+	height: 2rem;
+	width: 2rem;
+
+	box-sizing: border-box;
 
 	border: 2px solid var(--gray);
 	border-radius: 5px;
+}
+
+.unread-notification-number {
+	position: absolute;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+	border-radius: 5px;
+
+	font-size: 0.75rem;
+
+	padding: 1px;
+	min-width: 1rem;
+
+	top: 0;
+	right: 0;
+
+	transform: translateX(50%) translateY(-50%);
+
+	background-color: red;
 }

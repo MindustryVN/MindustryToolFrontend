@@ -229,7 +229,7 @@ export default function UploadPage() {
 			<footer className='flex-column center small-gap medium-padding'>
 				<span children={checkUploadRequirement()} />
 				<Button onClick={() => handleSubmit()}>
-					<Trans i18nKey='upload-schematic' />
+					<Trans i18nKey='upload' />
 				</Button>
 			</footer>
 		</main>

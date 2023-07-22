@@ -19,7 +19,7 @@ export default function DropdownMenu(props: DropdownMenuProps) {
 			{props.parent}
 			<section className='dropdown-icon'>{open ? <img src='/assets/icons/play-2.png' alt='button' /> : <img src='/assets/icons/down-vote.png' alt='button' />}</section>
 			<section className='dropdown-container'>
-				<IfTrue condition={open} whenTrue={<section className='menu-container absolute w100p flex-column small-gap small-padding'>{props.children}</section>} />
+				<IfTrue condition={open} whenTrue={<section className='absolute w100p flex-column small-gap small-padding'>{props.children}</section>} />
 			</section>
 		</Button>
 	);
