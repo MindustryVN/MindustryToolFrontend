@@ -59,7 +59,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 				type: 'info',
 			});
 			return () => clearTimeout(id);
-		}, 3000);
+		}, 4000);
 
 		API.REQUEST.get('ping') //
 			.then(() => {

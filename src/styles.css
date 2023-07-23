@@ -95,14 +95,36 @@
 	align-items: center;
 }
 
-.start {
+.justify-start {
 	justify-content: flex-start;
+}
+
+.justify-end {
+	justify-content: flex-end;
+}
+
+.justify-self-start {
+	justify-self: flex-start;
+}
+
+.justify-self-end {
+	justify-self: flex-end;
+}
+
+.align-start {
 	align-items: flex-start;
 }
 
-.end {
-	justify-content: flex-end;
+.align-end {
 	align-items: flex-end;
+}
+
+.align-self-start {
+	align-self: flex-start;
+}
+
+.align-self-end {
+	align-self: flex-end;
 }
 
 .space-between {

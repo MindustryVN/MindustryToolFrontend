@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 
 interface MarkdownProps {
+	className? : string;
 	children: string;
 }
 
@@ -13,5 +14,5 @@ function RouterLink(props: any) {
 }
 
 export default function Markdown(props: MarkdownProps) {
-	return <ReactMarkdown components={{ link: RouterLink }}>{props.children}</ReactMarkdown>;
+	return <ReactMarkdown className={props.className} components={{ link: RouterLink }}>{props.children}</ReactMarkdown>;
 }

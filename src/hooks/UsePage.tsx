@@ -10,14 +10,14 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
-	const ref = useRef({ url: url, searchConfig: searchConfig });
+	const ref = useRef(url);
 
 	useEffect(() => {
 		setIsLoading(true);
 		setIsError(false);
 		setPages([[]]);
 
-		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
+		API.REQUEST.get(`${ref.current}/0`, searchConfig) //
 			.then((result) =>
 				setPages(() => {
 					let data: T[] = result.data;

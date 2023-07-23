@@ -24,6 +24,6 @@ function getRoleSpan(role: UserRole): ReactNode {
 
 		case 'USER':
 		default:
-			return role;
+			return <></>;
 	}
 }

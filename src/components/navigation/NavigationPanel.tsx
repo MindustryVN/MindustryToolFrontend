@@ -1,7 +1,7 @@
 import './NavigationPanel.css';
 import 'src/styles.css';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Users } from 'src/data/User';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
@@ -12,7 +12,6 @@ import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import DropdownMenu from 'src/components/dropbox/DropdownMenu';
 import { API } from 'src/API';
 import useUser from 'src/hooks/UseUser';
-import usePrivate from 'src/hooks/UsePrivate';
 import IfTrue from 'src/components/common/IfTrue';
 
 export default function NavigationPanel() {
@@ -23,15 +22,13 @@ export default function NavigationPanel() {
 
 	const navigate = useNavigate();
 	const PrivateAlert = usePrivateAlert();
-	const Private = useRef(usePrivate());
 
 	useEffect(() => {
-		Private.current(() =>
+		if (user)
 			API.REQUEST.get('notification/unread') //
 				.then((result) => setUnreadNotifications(result.data))
-				.catch(() => console.log('Fail to get unread notification count')),
-		);
-	}, []);
+				.catch(() => console.log('Fail to get unread notification count'));
+	}, [user]);
 
 	return (
 		<nav className='navigation-bar'>

@@ -226,7 +226,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 			<section className='flex-row medium-gap flex-wrap'>
 				<SchematicInfoImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} />
 				<section className='flex-column small-gap flex-wrap'>
-					<ColorText className='capitalize h2' text={props.schematic.name}/>
+					<ColorText className='capitalize h2' text={props.schematic.name} />
 					<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
 					<SchematicDescription description={props.schematic.description} />
 					<SchematicRequirement requirement={props.schematic.requirement} />
@@ -239,7 +239,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 				handleCloseModel={props.handleCloseModel} //
 				handleDeleteSchematic={props.handleDeleteSchematic}
 			/>
-			<CommentContainer url={`schematic/${props.schematic.id}/comment`} targetId={props.schematic.id} nesting={0} />
+			<CommentContainer url={`schematic/${props.schematic.id}/comment`} targetId={props.schematic.id} />
 		</main>
 	);
 }
@@ -274,9 +274,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			{dialog(
 				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => props.handleDeleteSchematic(props.schematic)}>
 					<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
-					<span>
-						<Trans i18nKey='delete-schematic-dialog' />
-					</span>
+					<Trans i18nKey='delete-schematic-dialog' />
 				</ConfirmDialog>,
 			)}
 		</section>

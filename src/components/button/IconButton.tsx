@@ -1,7 +1,7 @@
 import 'src/styles.css';
 
 import React from 'react';
-import { IconType } from 'src/components/common/Icons';
+import { IconType } from 'src/data/Icons';
 import Button from 'src/components/button/Button';
 
 interface IconButtonProps {

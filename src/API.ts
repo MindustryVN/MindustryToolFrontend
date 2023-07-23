@@ -19,9 +19,10 @@ export class API {
 		});
 	}
 
-	static postNotification(userId: string, message: string) {
+	static postNotification(userId: string,header: string, message: string) {
 		let form = new FormData();
 		form.append('userId', userId);
+		form.append("header", header)
 		form.append('message', message);
 		return API.REQUEST.post('notification', form);
 	}
