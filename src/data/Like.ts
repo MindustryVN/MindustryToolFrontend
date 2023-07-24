@@ -1,4 +1,4 @@
-export interface UserLike {
+export interface Like {
 	userId: string;
 	targetId: string;
 	state: number;

@@ -6,18 +6,18 @@ import { Utils } from 'src/util/Utils';
 
 export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfig<any>) {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
-	const ref = useRef({ url: url, searchConfig: searchConfig });
+	const ref = useRef(url);
 
 	useEffect(() => {
 		setIsLoading(true);
 		setIsError(false);
 		setPages([[]]);
 
-		API.REQUEST.get(`${ref.current.url}/0`, searchConfig) //
+		API.REQUEST.get(`${ref.current}/0`, searchConfig) //
 			.then((result) =>
 				setPages(() => {
 					let data: T[] = result.data;

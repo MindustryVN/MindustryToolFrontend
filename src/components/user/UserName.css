@@ -1,6 +1,7 @@
 .user-name-card {
 	display: flex;
 	align-items: center;
+	flex-wrap: nowrap;
 
 	gap: 0.25rem;
 	height: 2rem;
@@ -8,8 +9,6 @@
 
 	padding: 0.25rem 0.25rem 0.25rem 0;
 	box-sizing: border-box;
-
-	overflow: hidden;
 
 	width: fit-content;
 
@@ -28,11 +27,6 @@
 	text-transform: uppercase;
 }
 
-.user-name-card > * {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 
 .avatar {
 	height: 2rem;

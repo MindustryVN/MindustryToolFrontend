@@ -28,7 +28,7 @@ interface PopupMessageContextProps {
 }
 
 export const PopupMessageContext = React.createContext<PopupMessageContextProps>({
-	addPopup: (message: ReactNode, duration: number, type: PopupMessageType) => {},
+	addPopup: (_: ReactNode, __: number, ___: PopupMessageType) => {},
 });
 
 interface PopupMessageProviderProps {
@@ -59,7 +59,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 				type: 'info',
 			});
 			return () => clearTimeout(id);
-		}, 3000);
+		}, 4000);
 
 		API.REQUEST.get('ping') //
 			.then(() => {
@@ -126,7 +126,7 @@ function PopupMessage(props: PopupMessageNodeProps) {
 		<section className={'popup-message w100p ' + props.type}>
 			<section className='popup-message-content flex-row w100p'>
 				{props.message}
-				<ClearIconButton icon='/assets/icons/quit.png' title='remove' onClick={() => props.onTimeOut()} />
+				<ClearIconButton className='absolute top right small-margin' icon='/assets/icons/quit.png' title='remove' onClick={() => props.onTimeOut()} />
 			</section>
 			<div className='timer' style={{ animation: `timer ${props.duration}s linear forwards` }} />
 		</section>

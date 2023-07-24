@@ -4,9 +4,11 @@ export const MAP_FILE_EXTENSION = 'msav';
 
 export const ACCESS_TOKEN = 'accessToken';
 
-export const API_BASE_URL = keys.apiBaseUrl;
-
 export const SCHEMATIC_FILE_EXTENSION = 'msch';
+
+export const FRONTEND_URL = keys.frontendBaseURl;
+
+export const API_BASE_URL = keys.apiBaseUrl;
 
 export const OAUTH2_REDIRECT_URL = keys.redirectUri;
 

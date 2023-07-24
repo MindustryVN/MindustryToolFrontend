@@ -1,7 +1,7 @@
 import './NavigationPanel.css';
 import 'src/styles.css';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Users } from 'src/data/User';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
@@ -10,28 +10,19 @@ import UserDisplay from 'src/components/user/UserDisplay';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import DropdownMenu from 'src/components/dropbox/DropdownMenu';
-import { API } from 'src/API';
 import useUser from 'src/hooks/UseUser';
-import usePrivate from 'src/hooks/UsePrivate';
 import IfTrue from 'src/components/common/IfTrue';
+import useNotification from 'src/hooks/UseNotification';
 
 export default function NavigationPanel() {
 	const { user } = useUser();
 
-	const [unreadNotifications, setUnreadNotifications] = useState(0);
+	const { unreadNotifications } = useNotification();
+
 	const [showNavigatePanel, setShowNavigatePanel] = useState(false);
 
 	const navigate = useNavigate();
 	const PrivateAlert = usePrivateAlert();
-	const Private = useRef(usePrivate());
-
-	useEffect(() => {
-		Private.current(() =>
-			API.REQUEST.get('notification/unread') //
-				.then((result) => setUnreadNotifications(result.data))
-				.catch(() => console.log('Fail to get unread notification count')),
-		);
-	}, []);
 
 	return (
 		<nav className='navigation-bar'>

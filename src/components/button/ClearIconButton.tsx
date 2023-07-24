@@ -2,7 +2,7 @@ import 'src/styles.css';
 import './ClearButton.css';
 
 import React from 'react';
-import { IconType } from 'src/components/common/Icons';
+import { IconType } from 'src/data/Icons';
 
 interface ClearIconButtonProps {
 	className?: string;

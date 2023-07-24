@@ -49,32 +49,26 @@ export default function VerifySchematicPage() {
 	}
 
 	function rejectSchematic(schematic: Schematic, reason: string) {
-		setVisibility(false);
 		API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
-			.then(() => API.postNotification(schematic.authorId, reason))
+			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has been reject', reason))
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //.
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => {
+				reloadPage();
+				setVisibility(false);
+			});
 	}
 
 	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
-		let form = new FormData();
 		const tagString = Tags.toString(tags);
-
-		form.append('id', schematic.id);
-		form.append('authorId', schematic.authorId);
-		form.append('data', schematic.data);
-
-		form.append('tags', tagString);
-
-		API.REQUEST.post('schematic', form) //
-			.then(() => API.postNotification(schematic.authorId, "Post schematic success"))
-			.then(() => {
-				addPopup(i18n.t('verify-success'), 5, 'info');
+		API.verifySchematic(schematic, tagString) //
+			.then(() => API.postNotification(schematic.authorId,'Your schematic submission has be accept', 'Post schematic success'))
+			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
+			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
+			.finally(() => {
 				reloadPage();
 				setVisibility(false);
-			})
-			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'));
+			});
 	}
 
 	function buildLoadAndScrollButton() {
@@ -205,8 +199,8 @@ function SchematicInfo(props: SchematicInfoProps) {
 					href={Utils.getDownloadUrl(props.schematic.data)} //
 					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
-				<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />
 				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
+				<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />
 				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
@@ -243,7 +237,7 @@ function TypeDialog(props: TypeDialogProps) {
 				<ClearIconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
 			</header>
 			<textarea className='type-dialog' title='reason' onChange={(event) => setContent(event.target.value)} />
-			<section className='flex-row end w100p small-padding border-box'>
+			<section className='flex-row justify-end w100p small-padding border-box'>
 				<Button onClick={() => props.onSubmit(content)}>
 					<Trans i18nKey='reject' />
 				</Button>

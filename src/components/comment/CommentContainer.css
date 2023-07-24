@@ -1,0 +1,13 @@
+.comment-container {
+	width: 100%;
+}
+
+
+.comment-input-area,
+.comment-input-area:is(:hover, :focus) {
+	background-color: transparent;
+	background-color: var(--black);
+	border-bottom: 2px solid var(--gray);
+	outline: none;
+	resize: none;
+}

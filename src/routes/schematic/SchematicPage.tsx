@@ -1,12 +1,11 @@
 import 'src/styles.css';
 import './SchematicPage.css';
 
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Schematic, { Schematics } from 'src/data/Schematic';
 
 import { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal, Tags } from 'src/components/tag/Tag';
-import { API_BASE_URL } from 'src/config/Config';
-import { UserContext } from 'src/context/UserProvider';
+import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
 import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
@@ -41,6 +40,8 @@ import IfTrue from 'src/components/common/IfTrue';
 import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
+import CommentContainer from 'src/components/comment/CommentContainer';
+import useUser from 'src/hooks/UseUser';
 
 export default function SchematicPage() {
 	const currentSchematic = useRef<Schematic>();
@@ -146,7 +147,7 @@ export default function SchematicPage() {
 				</section>
 			</header>
 			<SchematicContainer
-				children={pages.map((schematic) => (
+				children={pages.map((schematic, index) => (
 					<SchematicPreview
 						key={schematic.id} //
 						schematic={schematic}
@@ -183,9 +184,16 @@ interface SchematicPreviewProps {
 	handleOpenModel: (schematic: Schematic) => void;
 }
 
-function SchematicPreview(props: SchematicPreviewProps) {
+export function SchematicPreview(props: SchematicPreviewProps) {
+	const { copy } = useClipboard();
+
 	return (
-		<SchematicPreviewCard key={props.schematic.id}>
+		<SchematicPreviewCard className='relative' key={props.schematic.id}>
+			<ClearIconButton
+				className='absolute top left small-padding'
+				title={i18n.t('copy-link').toString()}
+				icon='/assets/icons/copy.png'
+				onClick={() => copy(`${FRONTEND_URL}schematic/${props.schematic.id}`)}></ClearIconButton>
 			<SchematicPreviewImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
 			<ColorText className='capitalize small-padding flex-center text-center' text={props.schematic.name} />
 			<SchematicPreviewButton schematic={props.schematic} />
@@ -199,7 +207,7 @@ interface SchematicPreviewButtonProps {
 function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
 	const { copy } = useClipboard();
 
-	const likeService = useLike(`${API_BASE_URL}schematic/${props.schematic.id}`, props.schematic.like);
+	const likeService = useLike(`schematic/${props.schematic.id}`, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
 	return (
@@ -219,13 +227,21 @@ interface SchematicInfoProps {
 	handleDeleteSchematic: (schematic: Schematic) => void;
 }
 
-function SchematicInfo(props: SchematicInfoProps) {
+export function SchematicInfo(props: SchematicInfoProps) {
+	const { copy } = useClipboard();
+
 	return (
 		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<section className='flex-row medium-gap flex-wrap'>
+			<section className='relative flex-row medium-gap flex-wrap'>
 				<SchematicInfoImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} />
+				<ClearIconButton
+					className='absolute top left small-padding'
+					title={i18n.t('copy-link').toString()}
+					icon='/assets/icons/copy.png'
+					onClick={() => copy(`${FRONTEND_URL}schematic/${props.schematic.id}`)}
+				/>
 				<section className='flex-column small-gap flex-wrap'>
-					<ColorText className='capitalize h2' text={props.schematic.name}/>
+					<ColorText className='capitalize h2' text={props.schematic.name} />
 					<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
 					<SchematicDescription description={props.schematic.description} />
 					<SchematicRequirement requirement={props.schematic.requirement} />
@@ -238,6 +254,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 				handleCloseModel={props.handleCloseModel} //
 				handleDeleteSchematic={props.handleDeleteSchematic}
 			/>
+			<CommentContainer url={`schematic/${props.schematic.id}/comment`} targetId={props.schematic.id} />
 		</main>
 	);
 }
@@ -249,12 +266,12 @@ interface SchematicInfoButtonProps {
 }
 
 function SchematicInfoButton(props: SchematicInfoButtonProps) {
-	const { user } = useContext(UserContext);
+	const { user } = useUser();
 	const { copy } = useClipboard();
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike(`${API_BASE_URL}schematic/${props.schematic.id}`, props.schematic.like);
+	const likeService = useLike(`schematic/${props.schematic.id}`, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
 	return (
@@ -272,9 +289,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			{dialog(
 				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => props.handleDeleteSchematic(props.schematic)}>
 					<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
-					<span>
-						<Trans i18nKey='delete-schematic-dialog' />
-					</span>
+					<Trans i18nKey='delete-schematic-dialog' />
 				</ConfirmDialog>,
 			)}
 		</section>
