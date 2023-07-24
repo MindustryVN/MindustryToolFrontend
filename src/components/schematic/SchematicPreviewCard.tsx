@@ -4,9 +4,10 @@ import 'src/styles.css';
 import React, { ReactNode } from 'react';
 
 interface SchematicPreviewCardProps {
+	className?: string;
 	children: ReactNode;
 }
 
 export default function SchematicPreviewCard(props: SchematicPreviewCardProps) {
-	return <section className='schematic-preview-card'>{props.children}</section>;
+	return <section className={`schematic-preview-card ${props.className ? props.className : ''}`}>{props.children}</section>;
 }
