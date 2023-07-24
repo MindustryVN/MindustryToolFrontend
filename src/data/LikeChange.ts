@@ -1,6 +1,6 @@
-import { UserLike } from 'src/data/UserLike';
+import { Like } from 'src/data/Like';
 
 export interface LikeChange {
 	amount: number;
-	userLike: UserLike;
+	like: Like;
 }

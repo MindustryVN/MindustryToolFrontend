@@ -61,7 +61,7 @@ a {
 }
 
 button:focus {
-	border: 3px solid white;
+	outline: 2px solid white;
 }
 
 :root {

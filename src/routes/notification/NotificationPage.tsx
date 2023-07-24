@@ -14,6 +14,7 @@ import i18n from 'src/util/I18N';
 import IfTrue from 'src/components/common/IfTrue';
 import Markdown from 'src/components/markdown/Markdown';
 import PrivateRoute from 'src/components/router/PrivateRoute';
+import useNotification from 'src/hooks/UseNotification';
 
 export default function NotificationPage() {
 	return <PrivateRoute element={<NotificationContainer />} />;
@@ -22,14 +23,15 @@ export default function NotificationPage() {
 function NotificationContainer() {
 	const { pages, isLoading, reloadPage } = usePage<Notification>('notification/page');
 
+	const { setUnreadNotifications } = useNotification();
+
 	const { addPopup } = usePopup();
 
 	function handleMarkAsRead(notification: Notification) {
 		API.REQUEST.put(`notification/${notification.id}`) //
-			.then(() => {
-				addPopup(i18n.t('mark-as-read'), 5, 'info');
-				notification.read = true;
-			})
+			.then(() => addPopup(i18n.t('mark-as-read'), 5, 'info'))
+			.then(() => (notification.read = true))
+			.then(() => setUnreadNotifications((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
 	}

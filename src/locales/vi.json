@@ -35,6 +35,9 @@
 	"upload": "Đăng",
 	"content": "Nội dung",
 	"time": "Thời gian",
+	"reply": "Phản hồi",
+	"show-reply": "Hiện phản hồi",
+	"write-a-comment": "Viết bình luận",
 	"high-ping-reason": "Vì trang web đăng sử dụng dịch vụ hosting miễn phí nên sẽ cần 1-2 phút để khởi động, vui lòng chờ",
 	"loading": {
 		"short": "Đang tải",

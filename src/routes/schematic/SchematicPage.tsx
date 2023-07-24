@@ -1,12 +1,11 @@
 import 'src/styles.css';
 import './SchematicPage.css';
 
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Schematic, { Schematics } from 'src/data/Schematic';
 
 import { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL } from 'src/config/Config';
-import { UserContext } from 'src/context/UserProvider';
 import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
@@ -42,6 +41,7 @@ import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 import CommentContainer from 'src/components/comment/CommentContainer';
+import useUser from 'src/hooks/UseUser';
 
 export default function SchematicPage() {
 	const currentSchematic = useRef<Schematic>();
@@ -200,7 +200,7 @@ interface SchematicPreviewButtonProps {
 function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
 	const { copy } = useClipboard();
 
-	const likeService = useLike(`${API_BASE_URL}schematic/${props.schematic.id}`, props.schematic.like);
+	const likeService = useLike(`schematic/${props.schematic.id}`, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
 	return (
@@ -251,12 +251,12 @@ interface SchematicInfoButtonProps {
 }
 
 function SchematicInfoButton(props: SchematicInfoButtonProps) {
-	const { user } = useContext(UserContext);
+	const { user } = useUser();
 	const { copy } = useClipboard();
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike(`${API_BASE_URL}schematic/${props.schematic.id}`, props.schematic.like);
+	const likeService = useLike(`schematic/${props.schematic.id}`, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
 	return (

@@ -28,7 +28,7 @@ interface PopupMessageContextProps {
 }
 
 export const PopupMessageContext = React.createContext<PopupMessageContextProps>({
-	addPopup: (message: ReactNode, duration: number, type: PopupMessageType) => {},
+	addPopup: (_: ReactNode, __: number, ___: PopupMessageType) => {},
 });
 
 interface PopupMessageProviderProps {

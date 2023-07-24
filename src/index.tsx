@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom/client';
 import TagProvider from 'src/context/TagProvider';
 import UserProvider from 'src/context/UserProvider';
 import PopupMessageProvider from 'src/context/PopupMessageProvider';
+import NotificationProvider from 'src/context/NotificationProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -19,7 +20,9 @@ root.render(
 				<PopupMessageProvider>
 					<TagProvider>
 						<UserProvider>
+							<NotificationProvider>
 								<App />
+							</NotificationProvider>
 						</UserProvider>
 					</TagProvider>
 				</PopupMessageProvider>

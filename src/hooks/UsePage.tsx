@@ -6,7 +6,7 @@ import { Utils } from 'src/util/Utils';
 
 export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfig<any>) {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
