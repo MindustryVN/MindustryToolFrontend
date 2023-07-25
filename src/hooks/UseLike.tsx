@@ -6,7 +6,6 @@ import { MeContext } from 'src/context/MeProvider';
 import usePopup from 'src/hooks/UsePopup';
 import i18n from 'src/util/I18N';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
-import { API_BASE_URL } from 'src/config/Config';
 
 export default function useLike(contentType: string, targetId: string, initialLike: number = 0) {
 	const [userLike, setUserLike] = useState<Like>({ userId: '', targetId: '', state: 0 });
@@ -17,14 +16,14 @@ export default function useLike(contentType: string, targetId: string, initialLi
 
 	const { addPopup } = usePopup();
 
-	const refUrl = useRef(`${API_BASE_URL}like/${contentType}/${targetId}`);
+	const refUrl = useRef({ contentType, targetId });
 	const refAddPopup = useRef(addPopup);
 
 	const meContext = useContext(MeContext);
 
 	useEffect(() => {
 		if (meContext.me && meContext.loading === false)
-			API.REQUEST.get(`${refUrl.current}/likes`) //
+			API.getLikes(refUrl.current.contentType, refUrl.current.targetId) //
 				.then((result) => setUserLike(result.data))
 				.catch(() => refAddPopup.current(i18n.t('get-like-fail'), 5, 'warning'));
 	}, [meContext.me, meContext.loading]);
@@ -65,7 +64,7 @@ export default function useLike(contentType: string, targetId: string, initialLi
 
 			PrivateAlert(() => {
 				setLoading(true);
-				API.REQUEST.get(`${refUrl.current}/like`) //
+				API.setLike(contentType, targetId) //
 					.then((result) => processLike(result.data))
 					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
 					.finally(() => setLoading(false));
@@ -77,7 +76,7 @@ export default function useLike(contentType: string, targetId: string, initialLi
 
 			PrivateAlert(() => {
 				setLoading(true);
-				API.REQUEST.get(`${refUrl.current}/dislike`) //
+				API.setDislike(contentType, targetId) //
 					.then((result) => processDislike(result.data))
 					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
 					.finally(() => setLoading(false));

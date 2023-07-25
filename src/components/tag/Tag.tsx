@@ -33,7 +33,7 @@ export class Tags {
 	static SCHEMATIC_SEARCH_TAG: TagChoiceLocal[] = [];
 
 	static getTag(tag: string, result: TagChoiceLocal[]) {
-		API.REQUEST.get(`tag/${tag}`) //
+		API.getTagByName(tag) //
 			.then((r) => {
 				result.length = 0;
 				let customTagList: Array<CustomTag> = r.data;

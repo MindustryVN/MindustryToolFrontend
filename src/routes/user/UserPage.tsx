@@ -25,10 +25,11 @@ export default function UserPage() {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 
 	useEffect(() => {
-		API.REQUEST.get(`user/${userId}`) //
-			.then((result) => setUser(result.data)) //
-			.catch(() => popup.current.addPopup(i18n.t('user.load-fail'), 5, 'error'))
-			.finally(() => setLoading(false));
+		if (userId)
+			API.getUser(userId) //
+				.then((result) => setUser(result.data)) //
+				.catch(() => popup.current.addPopup(i18n.t('user.load-fail'), 5, 'error'))
+				.finally(() => setLoading(false));
 	}, [userId]);
 
 	function renderTab(currentTab: string) {

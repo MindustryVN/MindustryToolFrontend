@@ -17,7 +17,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 		setIsError(false);
 		setPages([[]]);
 
-		API.REQUEST.get(`${ref.current}/0`, searchConfig) //
+		API.get(`${ref.current}/0`, searchConfig) //
 			.then((result) =>
 				setPages(() => {
 					let data: T[] = result.data;
@@ -59,7 +59,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 			setIsError(false);
 
 			for (let i = 0; i < page; i++) {
-				API.REQUEST.get(`${url}/${i}`, searchConfig)
+				API.get(`${url}/${i}`, searchConfig)
 					.then((result) => {
 						let data: T[] = result.data;
 						handleSetPage(i, data);
@@ -82,7 +82,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 			const newPage = pages[lastIndex].length === MAX_ITEM_PER_PAGE;
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
 
-			API.REQUEST.get(`${url}/${requestPage}`, searchConfig)
+			API.get(`${url}/${requestPage}`, searchConfig)
 				.then((result) => {
 					let data: T[] = result.data;
 					handleSetPage(requestPage, data);

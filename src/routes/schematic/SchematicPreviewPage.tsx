@@ -52,7 +52,7 @@ export default function SchematicPreviewPage() {
 	let schematic = data;
 
 	function handleDeleteSchematic(schematic: Schematic) {
-		API.REQUEST.delete(`schematic/${schematic.id}`) //
+		API.deleteSchematic(schematic.id) //
 			.then(() => addPopup(i18n.t('schematic.delete-success'), 5, 'info'))
 			.then(() => navigate('/schematic'))
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));

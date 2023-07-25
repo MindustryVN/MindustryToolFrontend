@@ -61,7 +61,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 			return () => clearTimeout(id);
 		}, 4000);
 
-		API.REQUEST.get('ping') //
+		API.getPing() //
 			.then(() => {
 				addMessage({
 					message: `Ping: ${Date.now() - start}ms`,

@@ -32,7 +32,7 @@ export default function MeProvider(props: MeProviderProps) {
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
 		if (accessToken) {
 			API.setBearerToken(accessToken);
-			API.REQUEST.get('/user/me') //
+			API.getMe() //
 				.then((result) => setMe(result.data))
 				.catch(() => ref.current.addPopup(i18n.t('login-fail'), 5, 'error'))
 				.finally(() => setLoading(false));

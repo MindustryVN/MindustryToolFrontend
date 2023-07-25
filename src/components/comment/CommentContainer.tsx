@@ -86,7 +86,7 @@ function Reply(props: ReplyProps) {
 	function handleRemoveComment(comment: Comment) {
 		setLoading(true);
 
-		API.REQUEST.delete(`comment/${props.contentType}/${comment.id}`)
+		API.deleteComment(props.contentType, comment.id)
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.then(() => props.reloadPage())
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))

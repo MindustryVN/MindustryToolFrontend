@@ -28,7 +28,7 @@ function NotificationContainer() {
 	const { addPopup } = usePopup();
 
 	function handleMarkAsRead(notification: Notification) {
-		API.REQUEST.put(`notification/${notification.id}`) //
+		API.markNotificationAsRead(notification.id) //
 			.then(() => addPopup(i18n.t('mark-as-read'), 5, 'info'))
 			.then(() => (notification.read = true))
 			.then(() => setUnreadNotifications((prev) => prev - 1))
@@ -37,7 +37,7 @@ function NotificationContainer() {
 	}
 
 	function handleDelete(notification: Notification) {
-		API.REQUEST.delete(`notification/${notification.id}`) //
+		API.deleteNotification(notification.id)
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.then(() => setUnreadNotifications((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))

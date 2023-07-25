@@ -23,12 +23,12 @@ export default function NotificationProvider(props: NotificationProviderProps) {
 
 	useEffect(() => {
 		if (me) {
-			API.REQUEST.get('notification/unread') //
+			API.getUnreadNotification() //
 				.then((result) => setUnreadNotifications(result.data))
 				.catch(() => console.log('Fail to get unread notification count'));
 
 			let id: NodeJS.Timer = setInterval(() => {
-				API.REQUEST.get('notification/unread') //
+				API.getUnreadNotification() //
 					.then((result) => setUnreadNotifications(result.data))
 					.catch(() => console.log('Fail to get unread notification count'));
 

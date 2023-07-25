@@ -69,11 +69,7 @@ export default function UploadPage() {
 		setFile(files[0]);
 		setCode('');
 
-		const form = new FormData();
-		form.delete('code');
-		form.append('file', files[0]);
-
-		getPreview(form);
+		getPreview();
 	}
 
 	function handleCodeChange() {
@@ -87,18 +83,13 @@ export default function UploadPage() {
 
 				setCode(text);
 				setFile(undefined);
-
-				const form = new FormData();
-				form.delete('file');
-				form.append('code', text);
-
-				getPreview(form);
+				getPreview();
 			});
 	}
 
-	function getPreview(form: FormData) {
+	function getPreview() {
 		setIsLoading(true);
-		API.REQUEST.post('schematic-upload/preview', form) //
+		API.getSchematicPreview(code, file) //
 			.then((result) => setPreview(result.data)) //
 			.catch((error) => popup.current.addPopup(i18n.t(`message.invalid-schematic`) + JSON.stringify(error), 10, 'error')) //
 			.finally(() => setIsLoading(false));
@@ -114,17 +105,12 @@ export default function UploadPage() {
 			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
-		const formData = new FormData();
 		const tagString = Tags.toString(tags);
-
-		formData.append('tags', tagString);
-
-		if (file) formData.append('file', file);
-		else formData.append('code', code);
-
+		
+	
 		setIsLoading(true);
 
-		API.REQUEST.post('schematic-upload', formData)
+		API.postSchematicUpload(code, file, tagString)
 			.then(() => {
 				setCode('');
 				setFile(undefined);

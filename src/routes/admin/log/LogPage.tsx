@@ -35,7 +35,7 @@ export default function LogPage() {
 	}
 
 	function handleDeleteLog(id: string) {
-		API.REQUEST.delete(`log/${contentType}/${id}`) //
+		API.deleteLog(contentType, id) //
 			.then(() => {
 				addPopup('delete-success', 5, 'info');
 				reloadPage();
