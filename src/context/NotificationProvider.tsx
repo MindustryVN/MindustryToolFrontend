@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { API } from 'src/API';
-import useUser from 'src/hooks/UseUser';
+import useMe from 'src/hooks/UseMe';
 
 interface NotificationContextProps {
 	unreadNotifications: number;
@@ -17,25 +17,25 @@ interface NotificationProviderProps {
 }
 
 export default function NotificationProvider(props: NotificationProviderProps) {
-	const { user } = useUser();
+	const { me } = useMe();
 
 	const [unreadNotifications, setUnreadNotifications] = useState(0);
 
 	useEffect(() => {
-		if (user) {
-			API.REQUEST.get('notification/unread') //
+		if (me) {
+			API.getUnreadNotification() //
 				.then((result) => setUnreadNotifications(result.data))
 				.catch(() => console.log('Fail to get unread notification count'));
 
 			let id: NodeJS.Timer = setInterval(() => {
-				API.REQUEST.get('notification/unread') //
+				API.getUnreadNotification() //
 					.then((result) => setUnreadNotifications(result.data))
 					.catch(() => console.log('Fail to get unread notification count'));
 
 				return clearInterval(id);
 			}, 60000);
 		}
-	}, [user]);
+	}, [me]);
 
 	return (
 		<NotificationContext.Provider

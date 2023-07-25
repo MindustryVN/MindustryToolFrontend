@@ -13,7 +13,7 @@ export default function useQuery<T>(url: string, initialValue: T, searchConfig?:
 		setIsLoading(true);
 		setIsError(false);
 
-		API.REQUEST.get(`${ref.current}`, searchConfig) //
+		API.get(`${ref.current}`, searchConfig) //
 			.then((result) => setData(result.data))
 			.catch(() => setIsError(true))
 			.finally(() => setIsLoading(false)); //

@@ -1,11 +1,11 @@
 import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import usePopup from 'src/hooks/UsePopup';
-import useUser from 'src/hooks/UseUser';
+import useMe from 'src/hooks/UseMe';
 
 export default function usePrivateAlert() {
 	const { addPopup } = usePopup();
-	const { user } = useUser();
+	const { me } = useMe();
 
 	const loginMessage = (
 		<>
@@ -17,7 +17,7 @@ export default function usePrivateAlert() {
 	);
 
 	return (request: () => any) => {
-		if (user) return request();
+		if (me) return request();
 		else addPopup(loginMessage, 5, 'warning');
 	};
 }

@@ -1,20 +1,20 @@
 import 'src/styles.css';
 import './UserDisplay.css';
 
-import React, { useContext } from 'react';
+import React from 'react';
 import UserName from './UserName';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from 'src/context/UserProvider';
 import { Trans } from 'react-i18next';
 import Button from 'src/components/button/Button';
+import useMe from 'src/hooks/UseMe';
 
 export default function UserDisplay() {
-	const { user } = useContext(UserContext);
+	const { me } = useMe();
 
 	const navigate = useNavigate();
 
 	function buildUserDisplay() {
-		if (user) return <UserName displayUser={user} />;
+		if (me) return <UserName displayUser={me} />;
 
 		return (
 			<Button className='user-display button' title='Login' onClick={() => navigate('/login')}>

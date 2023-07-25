@@ -49,8 +49,7 @@ export default function VerifySchematicPage() {
 	}
 
 	function rejectSchematic(schematic: Schematic, reason: string) {
-		API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
-			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has been reject', reason))
+		API.rejectSchematic(schematic, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //.
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => {
@@ -62,7 +61,7 @@ export default function VerifySchematicPage() {
 	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
 		const tagString = Tags.toString(tags);
 		API.verifySchematic(schematic, tagString) //
-			.then(() => API.postNotification(schematic.authorId,'Your schematic submission has be accept', 'Post schematic success'))
+			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has be accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => {

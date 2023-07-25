@@ -10,12 +10,12 @@ import UserDisplay from 'src/components/user/UserDisplay';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import DropdownMenu from 'src/components/dropbox/DropdownMenu';
-import useUser from 'src/hooks/UseUser';
+import useMe from 'src/hooks/UseMe';
 import IfTrue from 'src/components/common/IfTrue';
 import useNotification from 'src/hooks/UseNotification';
 
 export default function NavigationPanel() {
-	const { user } = useUser();
+	const { me } = useMe();
 
 	const { unreadNotifications } = useNotification();
 
@@ -67,7 +67,7 @@ export default function NavigationPanel() {
 							<Link className='nav-link' to='/info' onClick={() => setShowNavigatePanel(false)}>
 								Info
 							</Link>
-							{Users.isAdmin(user) && (
+							{Users.isAdmin(me) && (
 								<DropdownMenu className='nav-link' parent={<span>Admin</span>}>
 									<Link className='nav-link' to='/admin/verify' onClick={() => setShowNavigatePanel(false)}>
 										Verify

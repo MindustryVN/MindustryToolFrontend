@@ -41,7 +41,7 @@ import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 import CommentContainer from 'src/components/comment/CommentContainer';
-import useUser from 'src/hooks/UseUser';
+import useMe from 'src/hooks/UseMe';
 
 export default function SchematicPage() {
 	const currentSchematic = useRef<Schematic>();
@@ -114,7 +114,7 @@ export default function SchematicPage() {
 	}
 
 	function handleDeleteSchematic(schematic: Schematic) {
-		API.REQUEST.delete(`schematic/${schematic.id}`) //
+		API.deleteSchematic(schematic.id) //
 			.then(() => {
 				addPopup(i18n.t('schematic.delete-success'), 5, 'info');
 				reloadPage();
@@ -147,7 +147,7 @@ export default function SchematicPage() {
 				</section>
 			</header>
 			<SchematicContainer
-				children={pages.map((schematic, index) => (
+				children={pages.map((schematic) => (
 					<SchematicPreview
 						key={schematic.id} //
 						schematic={schematic}
@@ -266,7 +266,7 @@ interface SchematicInfoButtonProps {
 }
 
 function SchematicInfoButton(props: SchematicInfoButtonProps) {
-	const { user } = useUser();
+	const { me } = useMe();
 	const { copy } = useClipboard();
 
 	const { dialog, setVisibility } = useDialog();
@@ -282,7 +282,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 			<IfTrue
-				condition={Schematics.canDelete(props.schematic, user)} //
+				condition={Schematics.canDelete(props.schematic, me)} //
 				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 			/>
 			<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />

@@ -1,19 +1,19 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loading from 'src/components/loader/Loading';
-import { UserContext } from 'src/context/UserProvider';
 import { Users } from 'src/data/User';
+import useMe from 'src/hooks/UseMe';
 
 interface PrivateRouteProps {
 	element: ReactElement;
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
-	const { loading, user } = useContext(UserContext);
+	const { loading, me } = useMe();
 
 	if (loading) return <Loading />;
 
-	if (Users.isUser(user)) return props.element;
+	if (Users.isUser(me)) return props.element;
 
 	return <Navigate to='/login' />;
 };

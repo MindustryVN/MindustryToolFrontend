@@ -1,4 +1,4 @@
-import { UserRole } from "src/data/UserRole";
+import { UserRole } from 'src/data/UserRole';
 
 export default class User {
 	id: string;
@@ -21,5 +21,9 @@ export class Users {
 
 	static isAdmin(user: User | undefined) {
 		return user && user.role.includes('ADMIN');
+	}
+
+	static isAuthorOrAdmin(authorId: string, user: User | undefined) {
+		return user && (authorId === user.id || Users.isAdmin(user))
 	}
 }

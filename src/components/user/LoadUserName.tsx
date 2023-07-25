@@ -27,7 +27,7 @@ export default function LoadUserName(props: LoadUserNameProps) {
 				setLoading(false);
 				setDisplayUser(d);
 			} else {
-				API.REQUEST.get(`/user/${props.userId}`)
+				API.getUser(props.userId)
 					.then((result) => {
 						setDisplayUser(result.data);
 						LoadingUserCache.users.cache[props.userId] = result.data;

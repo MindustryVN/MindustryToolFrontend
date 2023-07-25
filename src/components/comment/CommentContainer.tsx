@@ -12,9 +12,12 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import IfTrue from 'src/components/common/IfTrue';
 import LoadUserName from 'src/components/user/LoadUserName';
 import { Trans } from 'react-i18next';
-import Button from 'src/components/button/Button';
 import IfTrueElse from 'src/components/common/IfTrueElse';
 import ClearIconButton from 'src/components/button/ClearIconButton';
+import ClearButton from 'src/components/button/ClearButton';
+import { Ellipsis } from 'src/components/common/Icon';
+import { Users } from 'src/data/User';
+import useMe from 'src/hooks/UseMe';
 
 interface CommentContainerProps {
 	contentType: string;
@@ -26,27 +29,37 @@ export default function CommentContainer(props: CommentContainerProps) {
 
 	const { addPopup } = usePopup();
 
+	const [loading, setLoading] = useState(false);
+
 	function handleAddComment(message: string, targetId: string) {
-		API.postComment(`comment/${props.contentType}`, targetId, message)
+		setLoading(true);
+		API.postComment(`comment/${props.contentType}`, targetId, message, props.contentType)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.then(() => reloadPage())
-			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
+			.finally(() => setLoading(false));
 	}
 
-	if (isLoading) return <LoadingSpinner />;
+	if (isLoading || loading) return <LoadingSpinner />;
 
 	return (
-		<section className='flex-column small-gap w100p'>
+		<section className='flex-column medium-gap w100p'>
 			<CommentInput targetId={props.targetId} handleAddComment={handleAddComment} />
 			{pages.map((comment) => (
-				<Reply key={comment.id} url={`comment/${props.contentType}/`} comment={comment} nestLevel={0} reloadPage={reloadPage} />
+				<Reply //
+					key={comment.id}
+					contentType={props.contentType + '_reply'}
+					comment={comment}
+					nestLevel={0}
+					reloadPage={reloadPage}
+				/>
 			))}
 		</section>
 	);
 }
 
 interface ReplyProps {
-	url: string;
+	contentType: string;
 	comment: Comment;
 	nestLevel: number;
 	reloadPage: () => void;
@@ -55,20 +68,39 @@ interface ReplyProps {
 function Reply(props: ReplyProps) {
 	const [showInput, setShowInput] = useState(false);
 	const [showReply, setShowReply] = useState(false);
+	const [showDropdown, setShowDropdown] = useState(false);
+	const [loading, setLoading] = useState(false);
+
+	const { me } = useMe();
 
 	const { addPopup } = usePopup();
 
-	const { pages, reloadPage, isLoading } = usePage<Comment>(`${props.url}${props.comment.id}/page`);
+	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.comment.id}/page`);
 
 	function handleAddComment(message: string, targetId: string) {
-		API.postComment('comment/reply', targetId, message)
+		setLoading(true);
+
+		API.postComment(`comment/${props.contentType}`, targetId, message, `${props.contentType}`)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.then(() => props.reloadPage())
-			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
+			.finally(() => setLoading(false));
 	}
 
+	function handleRemoveComment(comment: Comment) {
+		setLoading(true);
+
+		API.deleteComment(props.contentType, comment.id)
+			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
+			.then(() => props.reloadPage())
+			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
+			.finally(() => setLoading(false));
+	}
+
+	if (loading) return <LoadingSpinner />;
+
 	return (
-		<section className='comment-container flex-column medium-gap border-box' style={{ paddingLeft: props.nestLevel + 'rem' }}>
+		<section className='comment-container relative flex-column medium-gap'>
 			<span className='flex-row medium-gap flex-wrap'>
 				<LoadUserName userId={props.comment.authorId} />
 				<span>{props.comment.message}</span>
@@ -76,11 +108,11 @@ function Reply(props: ReplyProps) {
 			<IfTrue
 				condition={props.nestLevel < 3}
 				whenTrue={
-					<section>
-						<section className='flex-row'>
-							<Button onClick={() => setShowInput((prev) => !prev)}>
+					<section className='flex-column small-gap'>
+						<section className='flex-row small-gap'>
+							<ClearButton onClick={() => setShowInput((prev) => !prev)}>
 								<Trans i18nKey='reply' />
-							</Button>
+							</ClearButton>
 							<IfTrue
 								condition={pages.length > 0}
 								whenTrue={
@@ -97,7 +129,6 @@ function Reply(props: ReplyProps) {
 							condition={showInput}
 							whenTrue={
 								<ReplyInput
-									url={props.url}
 									targetId={props.comment.id}
 									handleAddComment={handleAddComment} //
 									onClose={() => setShowInput(false)}
@@ -113,13 +144,31 @@ function Reply(props: ReplyProps) {
 									whenFalse={
 										<section className='flex-column small-gap w100p'>
 											{pages.map((comment) => (
-												<Reply key={comment.id} url={props.url} comment={comment} nestLevel={props.nestLevel + 1} reloadPage={reloadPage} />
+												<Reply //
+													key={comment.id}
+													contentType={props.contentType}
+													comment={comment}
+													nestLevel={props.nestLevel + 1}
+													reloadPage={reloadPage}
+												/>
 											))}
 										</section>
 									}
 								/>
 							}
 						/>
+					</section>
+				}
+			/>
+
+			<IfTrue
+				condition={Users.isAuthorOrAdmin(props.comment.id, me)}
+				whenTrue={
+					<section className='ellipsis absolute flex-column center small-padding'>
+						<ClearButton onClick={() => setShowDropdown((prev) => !prev)}>
+							<Ellipsis />
+						</ClearButton>
+						<IfTrue condition={showDropdown} whenTrue={<ClearIconButton icon='/assets/icons/trash-16.png' onClick={() => handleRemoveComment(props.comment)} />} />
 					</section>
 				}
 			/>
@@ -152,7 +201,6 @@ function CommentInput(props: CommentInputProps) {
 }
 
 interface ReplyInputProps {
-	url: string;
 	targetId: string;
 	handleAddComment: (message: string, targetId: string) => void;
 	onClose: () => void;
@@ -171,8 +219,10 @@ function ReplyInput(props: ReplyInputProps) {
 				onChange={(event) => setMessage(event.target.value)}
 			/>
 			<section className='flex-row justify-end'>
-				<IconButton icon='/assets/icons/check.png' onClick={() => props.handleAddComment(message, props.targetId)} />
-				<IconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+				<section className='grid-row small-gap'>
+					<IconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+					<IconButton icon='/assets/icons/check.png' onClick={() => props.handleAddComment(message, props.targetId)} />
+				</section>
 			</section>
 		</section>
 	);

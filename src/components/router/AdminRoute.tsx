@@ -1,21 +1,21 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import Loading from 'src/components/loader/Loading';
 import { Users } from 'src/data/User';
 import { Navigate } from 'react-router-dom';
-import { UserContext } from 'src/context/UserProvider';
+import useMe from 'src/hooks/UseMe';
 
 interface AdminRouteProps {
 	element: ReactElement;
 }
 
 const AdminRoute = (props: AdminRouteProps) => {
-	const { loading, user } = useContext(UserContext);
+	const { loading, me } = useMe();
 
 	if (loading) return <Loading />;
 
-	if (!user) return <Navigate to='/login' />;
+	if (!me) return <Navigate to='/login' />;
 
-	if (Users.isAdmin(user)) return props.element;
+	if (Users.isAdmin(me)) return props.element;
 	return <Navigate to='/home' />;
 };
 

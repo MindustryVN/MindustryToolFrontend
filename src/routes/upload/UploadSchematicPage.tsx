@@ -10,7 +10,6 @@ import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { getFileExtension } from 'src/util/StringUtils';
-import { UserContext } from 'src/context/UserProvider';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import { Link } from 'react-router-dom';
 import TagPick from 'src/components/tag/TagPick';
@@ -23,6 +22,7 @@ import SchematicDescription from 'src/components/schematic/SchematicDescription'
 import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
 import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import useMe from 'src/hooks/UseMe';
 
 const tabs = ['File', 'Code'];
 
@@ -45,12 +45,12 @@ export default function UploadPage() {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	const { user, loading } = useContext(UserContext);
+	const { me, loading } = useMe();
 	const popup = useRef(useContext(PopupMessageContext));
 
 	useEffect(() => {
-		if (!loading && !user) popup.current.addPopup(notLoginMessage, 20, 'warning');
-	}, [user, loading]);
+		if (!loading && !me) popup.current.addPopup(notLoginMessage, 20, 'warning');
+	}, [me, loading]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
@@ -69,11 +69,7 @@ export default function UploadPage() {
 		setFile(files[0]);
 		setCode('');
 
-		const form = new FormData();
-		form.delete('code');
-		form.append('file', files[0]);
-
-		getPreview(form);
+		getPreview();
 	}
 
 	function handleCodeChange() {
@@ -87,18 +83,13 @@ export default function UploadPage() {
 
 				setCode(text);
 				setFile(undefined);
-
-				const form = new FormData();
-				form.delete('file');
-				form.append('code', text);
-
-				getPreview(form);
+				getPreview();
 			});
 	}
 
-	function getPreview(form: FormData) {
+	function getPreview() {
 		setIsLoading(true);
-		API.REQUEST.post('schematic-upload/preview', form) //
+		API.getSchematicPreview(code, file) //
 			.then((result) => setPreview(result.data)) //
 			.catch((error) => popup.current.addPopup(i18n.t(`message.invalid-schematic`) + JSON.stringify(error), 10, 'error')) //
 			.finally(() => setIsLoading(false));
@@ -114,17 +105,12 @@ export default function UploadPage() {
 			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
-		const formData = new FormData();
 		const tagString = Tags.toString(tags);
-
-		formData.append('tags', tagString);
-
-		if (file) formData.append('file', file);
-		else formData.append('code', code);
-
+		
+	
 		setIsLoading(true);
 
-		API.REQUEST.post('schematic-upload', formData)
+		API.postSchematicUpload(code, file, tagString)
 			.then(() => {
 				setCode('');
 				setFile(undefined);
@@ -206,7 +192,7 @@ export default function UploadPage() {
 							<section className='flex-column space-between'>
 								<section className='flex-column small-gap flex-wrap'>
 									<ColorText className='capitalize h2' text={preview.name} />
-									<Trans i18nKey='author' /> <LoadUserName userId={user ? user.id : 'community'} />
+									<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
 									<SchematicDescription description={preview.description} />
 									<SchematicRequirement requirement={preview.requirement} />
 									<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
