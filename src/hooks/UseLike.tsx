@@ -2,13 +2,13 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import { LikeChange } from 'src/data/LikeChange';
 import { Like } from 'src/data/Like';
-import { UserContext } from 'src/context/UserProvider';
+import { MeContext } from 'src/context/MeProvider';
 import usePopup from 'src/hooks/UsePopup';
 import i18n from 'src/util/I18N';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import { API_BASE_URL } from 'src/config/Config';
 
-export default function useLike(contentType : string, targetId: string, initialLike: number = 0) {
+export default function useLike(contentType: string, targetId: string, initialLike: number = 0) {
 	const [userLike, setUserLike] = useState<Like>({ userId: '', targetId: '', state: 0 });
 	const [likes, setLikes] = useState<number>(initialLike);
 	const [loading, setLoading] = useState(false);
@@ -20,14 +20,14 @@ export default function useLike(contentType : string, targetId: string, initialL
 	const refUrl = useRef(`${API_BASE_URL}like/${contentType}/${targetId}`);
 	const refAddPopup = useRef(addPopup);
 
-	const userContext = useContext(UserContext);
+	const meContext = useContext(MeContext);
 
 	useEffect(() => {
-		if (userContext.user && userContext.loading === false)
+		if (meContext.me && meContext.loading === false)
 			API.REQUEST.get(`${refUrl.current}/likes`) //
 				.then((result) => setUserLike(result.data))
 				.catch(() => refAddPopup.current(i18n.t('get-like-fail'), 5, 'warning'));
-	}, [userContext.user, userContext.loading]);
+	}, [meContext.me, meContext.loading]);
 
 	function processLike(data: LikeChange) {
 		if (data.amount === 0) {

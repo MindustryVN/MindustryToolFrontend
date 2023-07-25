@@ -27,7 +27,7 @@ import useDialog from 'src/hooks/UseDialog';
 import useLike from 'src/hooks/UseLike';
 import usePopup from 'src/hooks/UsePopup';
 import useQuery from 'src/hooks/UseQuery';
-import useUser from 'src/hooks/UseUser';
+import useMe from 'src/hooks/UseMe';
 import i18n from 'src/util/I18N';
 import { Utils } from 'src/util/Utils';
 
@@ -95,7 +95,7 @@ interface SchematicInfoButtonProps {
 }
 
 function SchematicInfoButton(props: SchematicInfoButtonProps) {
-	const { user } = useUser();
+	const { me } = useMe();
 	const { copy } = useClipboard();
 
 	const { dialog, setVisibility } = useDialog();
@@ -111,7 +111,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 			<IfTrue
-				condition={Schematics.canDelete(props.schematic, user)} //
+				condition={Schematics.canDelete(props.schematic, me)} //
 				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 			/>
 			{dialog(

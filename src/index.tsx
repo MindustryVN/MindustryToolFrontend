@@ -8,7 +8,7 @@ import i18n from './util/I18N';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import TagProvider from 'src/context/TagProvider';
-import UserProvider from 'src/context/UserProvider';
+import UserProvider from 'src/context/MeProvider';
 import PopupMessageProvider from 'src/context/PopupMessageProvider';
 import NotificationProvider from 'src/context/NotificationProvider';
 

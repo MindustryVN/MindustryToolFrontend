@@ -1,9 +1,9 @@
-import useUser from 'src/hooks/UseUser';
+import useMe from 'src/hooks/UseMe';
 
 export default function usePrivate() {
-	const { user } = useUser();
+	const { me } = useMe();
 
 	return (request: () => any) => {
-		if (user) return request();
+		if (me) return request();
 	};
 }

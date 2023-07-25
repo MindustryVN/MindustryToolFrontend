@@ -38,11 +38,12 @@ export class API {
 		return API.REQUEST.post('schematic', form);
 	}
 
-	static postComment(url: string, targetId: string, message: string) {
+	static postComment(url: string, targetId: string, message: string, contentType : string) {
 		let form = new FormData();
 		
 		form.append('message', message);
 		form.append('targetId', targetId);
+		form.append('contentType', contentType);
 
 		return API.REQUEST.post(url, form);
 	}
