@@ -147,7 +147,7 @@ export default function SchematicPage() {
 				</section>
 			</header>
 			<SchematicContainer
-				children={pages.map((schematic, index) => (
+				children={pages.map((schematic) => (
 					<SchematicPreview
 						key={schematic.id} //
 						schematic={schematic}

@@ -39,8 +39,6 @@
 	border: 2px solid var(--gray);
 }
 
-
-
 .text-center {
 	text-align: center;
 }
@@ -274,7 +272,7 @@
 }
 
 .scroll-y {
-	overflow-y: auto;
+	overflow: hidden auto;
 }
 
 .error {

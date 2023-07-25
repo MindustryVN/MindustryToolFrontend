@@ -78,7 +78,7 @@ export class API {
 	}
 
 	static getLikes(contentType: string, targetId: string) {
-		return API.REQUEST.get(`like/${contentType}/${targetId}`);
+		return API.REQUEST.get(`like/${contentType}/${targetId}/likes`);
 	}
 
 	static setLike(contentType: string, targetId: string) {

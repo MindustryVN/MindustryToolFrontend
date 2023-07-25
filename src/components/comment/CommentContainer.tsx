@@ -16,6 +16,8 @@ import IfTrueElse from 'src/components/common/IfTrueElse';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import ClearButton from 'src/components/button/ClearButton';
 import { Ellipsis } from 'src/components/common/Icon';
+import { Users } from 'src/data/User';
+import useMe from 'src/hooks/UseMe';
 
 interface CommentContainerProps {
 	contentType: string;
@@ -68,6 +70,8 @@ function Reply(props: ReplyProps) {
 	const [showReply, setShowReply] = useState(false);
 	const [showDropdown, setShowDropdown] = useState(false);
 	const [loading, setLoading] = useState(false);
+
+	const { me } = useMe();
 
 	const { addPopup } = usePopup();
 
@@ -156,12 +160,18 @@ function Reply(props: ReplyProps) {
 					</section>
 				}
 			/>
-			<section className='ellipsis absolute flex-column center small-padding'>
-				<ClearButton onClick={() => setShowDropdown((prev) => !prev)}>
-					<Ellipsis />
-				</ClearButton>
-				<IfTrue condition={showDropdown} whenTrue={<ClearIconButton icon='/assets/icons/trash-16.png' onClick={() => handleRemoveComment(props.comment)} />} />
-			</section>
+
+			<IfTrue
+				condition={Users.isAuthorOrAdmin(props.comment.id, me)}
+				whenTrue={
+					<section className='ellipsis absolute flex-column center small-padding'>
+						<ClearButton onClick={() => setShowDropdown((prev) => !prev)}>
+							<Ellipsis />
+						</ClearButton>
+						<IfTrue condition={showDropdown} whenTrue={<ClearIconButton icon='/assets/icons/trash-16.png' onClick={() => handleRemoveComment(props.comment)} />} />
+					</section>
+				}
+			/>
 		</section>
 	);
 }

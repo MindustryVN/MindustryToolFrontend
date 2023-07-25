@@ -63,7 +63,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	return (
 		<main id='schematic-tab' className='flex-column small-gap w100p h100p scroll-y'>
 			<SchematicContainer
-				children={pages.map((schematic, index) => (
+				children={pages.map((schematic) => (
 					<SchematicPreview
 						key={schematic.id}
 						schematic={schematic} //
