@@ -4,7 +4,7 @@ import 'src/styles.css';
 import { v4 } from 'uuid';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import { API } from 'src/API';
 import i18n from 'src/util/I18N';
 
@@ -87,7 +87,8 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 			uuid: uuid,
 			type: type,
 		};
-		setMessages([val, ...messages]);
+
+		setMessages((prev) => [val, ...prev]);
 	}
 
 	function removeMessage(id: string) {
@@ -98,7 +99,13 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 		<PopupMessageContext.Provider value={{ addPopup: addMessage }}>
 			<section id='popup-container' className='flex-column small-gap'>
 				{messages.map((val) => (
-					<PopupMessage key={val.uuid} message={val.message} duration={val.duration} type={val.type} onTimeOut={() => removeMessage(val.uuid)} />
+					<PopupMessage //
+						key={val.uuid}
+						message={val.message}
+						duration={val.duration}
+						type={val.type}
+						onTimeOut={() => removeMessage(val.uuid)}
+					/>
 				))}
 			</section>
 			{props.children}
@@ -114,19 +121,26 @@ interface PopupMessageNodeProps {
 }
 
 function PopupMessage(props: PopupMessageNodeProps) {
+	const ref = useRef(props);
+
 	useEffect(() => {
 		let id: NodeJS.Timeout = setTimeout(() => {
-			props.onTimeOut();
-		}, props.duration * 1000);
+			ref.current.onTimeOut();
+		}, ref.current.duration * 1000);
 
 		return () => clearTimeout(id);
-	}, [props]);
+	}, []);
 
 	return (
 		<section className={'popup-message w100p ' + props.type}>
 			<section className='popup-message-content flex-row w100p'>
 				{props.message}
-				<ClearIconButton className='absolute top right small-margin' icon='/assets/icons/quit.png' title='remove' onClick={() => props.onTimeOut()} />
+				<ClearIconButton //
+					className='absolute top right small-margin'
+					icon='/assets/icons/quit.png'
+					title='remove'
+					onClick={() => props.onTimeOut()}
+				/>
 			</section>
 			<div className='timer' style={{ animation: `timer ${props.duration}s linear forwards` }} />
 		</section>

@@ -39,6 +39,7 @@
 	"show-reply": "Hiện phản hồi",
 	"write-a-comment": "Viết bình luận",
 	"high-ping-reason": "Vì trang web đăng sử dụng dịch vụ hosting miễn phí nên sẽ cần 1-2 phút để khởi động, vui lòng chờ",
+	"copy-link":"Sao chép liên kết",
 	"loading": {
 		"short": "Đang tải",
 		"long": "Đang tải, vui lòng đợi 1-2 phút."

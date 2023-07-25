@@ -17,17 +17,17 @@ import IfTrueElse from 'src/components/common/IfTrueElse';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
 interface CommentContainerProps {
-	url: string;
+	contentType: string;
 	targetId: string;
 }
 
 export default function CommentContainer(props: CommentContainerProps) {
-	const { pages, reloadPage, isLoading } = usePage<Comment>(`${props.url}/${props.targetId}/page`);
+	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.targetId}/page`);
 
 	const { addPopup } = usePopup();
 
 	function handleAddComment(message: string, targetId: string) {
-		API.postComment(props.url, targetId, message)
+		API.postComment(`comment/${props.contentType}`, targetId, message)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.then(() => reloadPage())
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'));
@@ -37,9 +37,9 @@ export default function CommentContainer(props: CommentContainerProps) {
 
 	return (
 		<section className='flex-column small-gap w100p'>
-			<CommentInput url={props.url} targetId={props.targetId} handleAddComment={handleAddComment} />
+			<CommentInput targetId={props.targetId} handleAddComment={handleAddComment} />
 			{pages.map((comment) => (
-				<Reply key={comment.id} url={props.url} comment={comment} nestLevel={0} reloadPage={reloadPage} />
+				<Reply key={comment.id} url={`comment/${props.contentType}/`} comment={comment} nestLevel={0} reloadPage={reloadPage} />
 			))}
 		</section>
 	);
@@ -58,10 +58,10 @@ function Reply(props: ReplyProps) {
 
 	const { addPopup } = usePopup();
 
-	const { pages, reloadPage, isLoading } = usePage<Comment>(`${props.url}/${props.comment.id}/page`);
+	const { pages, reloadPage, isLoading } = usePage<Comment>(`${props.url}${props.comment.id}/page`);
 
 	function handleAddComment(message: string, targetId: string) {
-		API.postComment(props.url, targetId, message)
+		API.postComment('comment/reply', targetId, message)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.then(() => props.reloadPage())
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'));
@@ -70,7 +70,7 @@ function Reply(props: ReplyProps) {
 	return (
 		<section className='comment-container flex-column medium-gap border-box' style={{ paddingLeft: props.nestLevel + 'rem' }}>
 			<span className='flex-row medium-gap flex-wrap'>
-				<LoadUserName userId={props.comment.userId} />
+				<LoadUserName userId={props.comment.authorId} />
 				<span>{props.comment.message}</span>
 			</span>
 			<IfTrue
@@ -128,7 +128,6 @@ function Reply(props: ReplyProps) {
 }
 
 interface CommentInputProps {
-	url: string;
 	targetId: string;
 	handleAddComment: (message: string, targetId: string) => void;
 }

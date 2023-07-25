@@ -207,7 +207,7 @@ interface SchematicPreviewButtonProps {
 function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
 	const { copy } = useClipboard();
 
-	const likeService = useLike(`schematic/${props.schematic.id}`, props.schematic.like);
+	const likeService = useLike('schematic', props.schematic.id, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
 	return (
@@ -254,7 +254,7 @@ export function SchematicInfo(props: SchematicInfoProps) {
 				handleCloseModel={props.handleCloseModel} //
 				handleDeleteSchematic={props.handleDeleteSchematic}
 			/>
-			<CommentContainer url={`schematic/${props.schematic.id}/comment`} targetId={props.schematic.id} />
+			<CommentContainer contentType='schematic' targetId={props.schematic.id} />
 		</main>
 	);
 }
@@ -271,7 +271,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike(`schematic/${props.schematic.id}`, props.schematic.like);
+	const likeService = useLike('schematic', props.schematic.id, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
 	return (

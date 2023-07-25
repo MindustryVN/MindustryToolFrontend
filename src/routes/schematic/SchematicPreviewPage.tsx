@@ -84,7 +84,7 @@ export default function SchematicPreviewPage() {
 				schematic={schematic} //
 				handleDeleteSchematic={handleDeleteSchematic}
 			/>
-			<CommentContainer url={`schematic/${schematic.id}/comment`} targetId={schematic.id} />
+			<CommentContainer contentType='schematic' targetId={schematic.id} />
 		</main>
 	);
 }
@@ -100,7 +100,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike(`schematic/${props.schematic.id}`, props.schematic.like);
+	const likeService = useLike('schematic', props.schematic.id, props.schematic.like);
 	props.schematic.like = likeService.likes;
 
 	return (
