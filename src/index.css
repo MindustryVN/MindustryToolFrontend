@@ -60,9 +60,6 @@ a {
 	background-color: white;
 }
 
-button:focus {
-	outline: 2px solid white;
-}
 
 :root {
 	--black: #111111;

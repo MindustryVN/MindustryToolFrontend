@@ -1,7 +1,7 @@
 export interface Comment {
 	id: string;
 	targetId: string;
-	userId: string;
+	authorId: string;
 	message: string;
 	time: string;
 }

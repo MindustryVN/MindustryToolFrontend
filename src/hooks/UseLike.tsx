@@ -8,7 +8,7 @@ import i18n from 'src/util/I18N';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import { API_BASE_URL } from 'src/config/Config';
 
-export default function useLike(url: string, initialLike: number = 0) {
+export default function useLike(contentType : string, targetId: string, initialLike: number = 0) {
 	const [userLike, setUserLike] = useState<Like>({ userId: '', targetId: '', state: 0 });
 	const [likes, setLikes] = useState<number>(initialLike);
 	const [loading, setLoading] = useState(false);
@@ -17,21 +17,21 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 	const { addPopup } = usePopup();
 
-	const refUrl = useRef(url);
+	const refUrl = useRef(`${API_BASE_URL}like/${contentType}/${targetId}`);
 	const refAddPopup = useRef(addPopup);
 
 	const userContext = useContext(UserContext);
 
 	useEffect(() => {
 		if (userContext.user && userContext.loading === false)
-			API.REQUEST.get(`${API_BASE_URL}${refUrl.current}/liked`) //
+			API.REQUEST.get(`${refUrl.current}/likes`) //
 				.then((result) => setUserLike(result.data))
 				.catch(() => refAddPopup.current(i18n.t('get-like-fail'), 5, 'warning'));
-	}, [userContext]);
+	}, [userContext.user, userContext.loading]);
 
 	function processLike(data: LikeChange) {
 		if (data.amount === 0) {
-			addPopup(i18n.t('action-fail'), 5, 'warning');
+			addPopup(i18n.t('like-fail'), 5, 'warning');
 			return;
 		}
 
@@ -43,7 +43,7 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 	function processDislike(data: LikeChange) {
 		if (data.amount === 0) {
-			addPopup(i18n.t('action-fail'), 5, 'warning');
+			addPopup(i18n.t('dislike-fail'), 5, 'warning');
 			return;
 		}
 		setUserLike(data.like);
@@ -65,7 +65,7 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 			PrivateAlert(() => {
 				setLoading(true);
-				API.REQUEST.get(`${API_BASE_URL}${url}/like`) //
+				API.REQUEST.get(`${refUrl.current}/like`) //
 					.then((result) => processLike(result.data))
 					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
 					.finally(() => setLoading(false));
@@ -77,7 +77,7 @@ export default function useLike(url: string, initialLike: number = 0) {
 
 			PrivateAlert(() => {
 				setLoading(true);
-				API.REQUEST.get(`${API_BASE_URL}${url}/dislike`) //
+				API.REQUEST.get(`${refUrl.current}/dislike`) //
 					.then((result) => processDislike(result.data))
 					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
 					.finally(() => setLoading(false));
