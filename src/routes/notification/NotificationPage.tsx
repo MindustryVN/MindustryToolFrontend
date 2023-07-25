@@ -39,6 +39,7 @@ function NotificationContainer() {
 	function handleDelete(notification: Notification) {
 		API.REQUEST.delete(`notification/${notification.id}`) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
+			.then(() => setUnreadNotifications((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
 	}

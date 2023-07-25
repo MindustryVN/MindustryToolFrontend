@@ -15,7 +15,8 @@ import usePopup from 'src/hooks/UsePopup';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
 export default function LogPage() {
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>('log/page');
+	const contentType = 'system';
+	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>(`log/${contentType}/page`);
 	const { addPopup } = usePopup();
 
 	function buildLoadAndScrollButton() {
@@ -34,7 +35,7 @@ export default function LogPage() {
 	}
 
 	function handleDeleteLog(id: string) {
-		API.REQUEST.delete(`log/${id}`) //
+		API.REQUEST.delete(`log/${contentType}/${id}`) //
 			.then(() => {
 				addPopup('delete-success', 5, 'info');
 				reloadPage();
@@ -75,7 +76,7 @@ function LogCard(props: LogCardProps) {
 			<summary>
 				<p>ID: {props.log.id}</p>
 				<p>Environment: {props.log.environment}</p>
-				<p>Time: {props.log.time}</p>
+				<p>Time: {new Date(props.log.time).toLocaleString('en-GB')}</p>
 				<p>Message: {header}</p>
 				<ClearIconButton
 					className='absolute top right small-margin ' //
