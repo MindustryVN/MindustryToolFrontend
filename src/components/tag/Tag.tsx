@@ -28,47 +28,6 @@ export interface CustomTag {
 	color: string;
 }
 
-export class Tags {
-	static SCHEMATIC_UPLOAD_TAG: TagChoiceLocal[] = [];
-	static SCHEMATIC_SEARCH_TAG: TagChoiceLocal[] = [];
-
-	static getTag(tag: string, result: TagChoiceLocal[]) {
-		API.getTagByName(tag) //
-			.then((r) => {
-				result.length = 0;
-				let customTagList: Array<CustomTag> = r.data;
-				let temp = customTagList.map((customTag) =>
-					customTag.value.map((v) => new TagChoiceLocal(customTag.name, i18n.t(`tag.${customTag.name}.name`), v, i18n.t(`tag.${customTag.name}.value.${v}`), customTag.color)),
-				);
-				temp.forEach((t) => t.forEach((m) => result.push(m)));
-			}) //
-			.catch(() => console.log(`Fail to load tag: ${tag}`));
-	}
-
-	static parse(value: string, source: Array<TagChoiceLocal>) {
-		let str = value.split(':');
-		if (str.length !== 2) return undefined;
-
-		let r = source.find((t) => t.name === str[0] && t.value === str[1]);
-		if (!r) return undefined;
-
-		return r;
-	}
-
-	static parseArray(value: Array<string>, source: Array<TagChoiceLocal>) {
-		let arr = [];
-		for (let i in value) {
-			var r = this.parse(value[i], source);
-			if (r) arr.push(r);
-		}
-		return arr;
-	}
-
-	static toString(tags: Array<TagChoiceLocal>) {
-		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
-	}
-}
-
 export class TagChoiceLocal {
 	name: string;
 	displayName: string;
@@ -87,18 +46,69 @@ export class TagChoiceLocal {
 	toDisplayString() {
 		return `${this.displayName}:${this.displayValue}`;
 	}
-}
-export class SortChoice {
-	name: string;
-	value: string;
 
-	constructor(name: string, value: string) {
-		this.name = name;
-		this.value = value;
+	toString() {
+		return `${this.name}:${this.value}`;
 	}
 }
-export const SCHEMATIC_SORT_CHOICE = [
-	new SortChoice(i18n.t('tag.newest'), 'time:1'), //
-	new SortChoice(i18n.t('tag.oldest'), 'time:-1'), //
-	new SortChoice(i18n.t('tag.most-liked'), 'like:1'),
-];
+
+export class Tags {
+	static SCHEMATIC_UPLOAD_TAG: TagChoiceLocal[] = [];
+	static SCHEMATIC_SEARCH_TAG: TagChoiceLocal[] = [];
+	static SCHEMATIC_SORT_TAG: TagChoiceLocal[] = [
+		new TagChoiceLocal('time', i18n.t('tag.newest'), '1', 'time:1', 'green'), //
+		new TagChoiceLocal('time', i18n.t('tag.oldest'), '-1', 'time:1', 'green'), //
+		new TagChoiceLocal('like', i18n.t('tag.most-liked'), '1', 'time:1', 'green'),
+	];
+
+	static getTag(tag: string, result: TagChoiceLocal[]) {
+		API.getTagByName(tag) //
+			.then((r) => {
+				result.length = 0;
+				let customTagList: Array<CustomTag> = r.data;
+				let temp = customTagList.map((customTag) =>
+					customTag.value.map((value) => new TagChoiceLocal(customTag.name, i18n.t(`tag.${customTag.name}.name`), value, i18n.t(`tag.${customTag.name}.value.${value}`), customTag.color)),
+				);
+				temp.forEach((t) => t.forEach((m) => result.push(m)));
+			}) //
+			.catch(() => console.log(`Fail to load tag: ${tag}`));
+	}
+
+	static parse(value: string | null | undefined, source: Array<TagChoiceLocal>) {
+		if (!value) return null;
+
+		if (source && source.length > 0) {
+			let str = value.split(':');
+			if (str.length !== 2) return null;
+
+			let r = source.find((t) => t.name === str[0] && t.value === str[1]);
+			if (!r) return undefined;
+
+			return r;
+		}
+		return this.getTagFromString(value);
+	}
+
+	static getTagFromString(str: string) {
+		let arr = str.split(':');
+		if (arr.length !== 2) return null;
+
+		const name = arr[0];
+		const value = arr[1];
+
+		return new TagChoiceLocal(name, i18n.t(`tag.${name}.name`), value, i18n.t(`tag.${name}.value.${value}`), 'green');
+	}
+
+	static parseArray(value: Array<string>, source: Array<TagChoiceLocal>) {
+		let arr = [];
+		for (let i in value) {
+			var r = this.parse(value[i], source);
+			if (r) arr.push(r);
+		}
+		return arr;
+	}
+
+	static toString(tags: Array<TagChoiceLocal>) {
+		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
+	}
+}

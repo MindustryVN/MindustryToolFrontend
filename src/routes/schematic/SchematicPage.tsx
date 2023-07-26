@@ -4,8 +4,9 @@ import './SchematicPage.css';
 import React, { useRef, useState } from 'react';
 import Schematic, { Schematics } from 'src/data/Schematic';
 
-import { SCHEMATIC_SORT_CHOICE, SortChoice, TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
+import { useSearchParams } from 'react-router-dom';
 import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
@@ -44,16 +45,22 @@ import CommentContainer from 'src/components/comment/CommentContainer';
 import useMe from 'src/hooks/UseMe';
 
 export default function SchematicPage() {
+	const [searchParam, setSearchParam] = useSearchParams();
+
+	const sort = Tags.parse(searchParam.get('sort'), Tags.SCHEMATIC_SORT_TAG);
+	const urlTags = searchParam.get('tags');
+	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), Tags.SCHEMATIC_SEARCH_TAG);
+
 	const currentSchematic = useRef<Schematic>();
 	const [tag, setTag] = useState<string>('');
 
-	const [sortQuery, setSortQuery] = useState<SortChoice>(SCHEMATIC_SORT_CHOICE[0]);
-	const [tagQuery, setTagQuery] = useState<TagChoiceLocal[]>([]);
+	const sortQuery = sort ? sort : Tags.SCHEMATIC_SORT_TAG[0];
+	const tagQuery = tags;
 
 	const searchConfig = useRef({
 		params: {
 			tags: Tags.toString(tagQuery), //
-			sort: sortQuery.value,
+			sort: sortQuery.toString(),
 		},
 	});
 
@@ -61,35 +68,30 @@ export default function SchematicPage() {
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
-	function setSearchConfig(sort: SortChoice, tags: TagChoiceLocal[]) {
+	function setSearchConfig(sort: TagChoiceLocal, tags: TagChoiceLocal[]) {
 		searchConfig.current = {
 			params: {
 				tags: Tags.toString(tags), //
-				sort: sort.value,
+				sort: sort.toString(),
 			},
 		};
+
+		setSearchParam(searchConfig.current.params);
 	}
 
-	function handleSetSortQuery(sort: SortChoice) {
-		setSortQuery(sort);
+	function handleSetSortQuery(sort: TagChoiceLocal) {
 		setSearchConfig(sort, tagQuery);
 	}
 
 	function handleRemoveTag(index: number) {
-		setTagQuery((prev) => {
-			let tags = [...prev.filter((_, i) => i !== index)];
-			setSearchConfig(sortQuery, tags);
-			return tags;
-		});
+		let t = tags.filter((_, i) => i !== index);
+		setSearchConfig(sortQuery, t);
 	}
 
 	function handleAddTag(tag: TagChoiceLocal) {
-		setTagQuery((prev) => {
-			let tags = prev.filter((q) => q !== tag);
-			tags = [...tags, tag];
-			setSearchConfig(sortQuery, tags);
-			return tags;
-		});
+		let t = tags.filter((q) => q !== tag);
+		t.push(tag);
+		setSearchConfig(sortQuery, t);
 		setTag('');
 	}
 
@@ -139,9 +141,9 @@ export default function SchematicPage() {
 				</section>
 				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 				<section className='sort-container grid-row small-gap center'>
-					{SCHEMATIC_SORT_CHOICE.map((c: SortChoice) => (
-						<Button className='capitalize' key={c.name} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
-							{c.name}
+					{Tags.SCHEMATIC_SORT_TAG.map((c: TagChoiceLocal) => (
+						<Button className='capitalize' key={c.name + c.value} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
+							{c.displayName}
 						</Button>
 					))}
 				</section>

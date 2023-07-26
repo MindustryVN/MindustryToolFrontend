@@ -12,6 +12,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 
 	const ref = useRef(url);
 
+	
 	useEffect(() => {
 		setIsLoading(true);
 		setIsError(false);
