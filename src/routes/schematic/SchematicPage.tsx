@@ -1,7 +1,7 @@
 import 'src/styles.css';
 import './SchematicPage.css';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Schematic, { Schematics } from 'src/data/Schematic';
 
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
@@ -64,9 +64,17 @@ export default function SchematicPage() {
 		},
 	});
 
+	const [totalSchematic, setTotalSchematic] = useState(0);
+
 	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>('schematic/page', searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
+
+	useEffect(() => {
+		API.getTotalSchematic()
+			.then((result) => setTotalSchematic(result.data))
+			.catch(() => console.log('Error fletching total schematic'));
+	}, []);
 
 	function setSearchConfig(sort: TagChoiceLocal, tags: TagChoiceLocal[]) {
 		searchConfig.current = {
@@ -117,11 +125,10 @@ export default function SchematicPage() {
 
 	function handleDeleteSchematic(schematic: Schematic) {
 		API.deleteSchematic(schematic.id) //
-			.then(() => {
-				addPopup(i18n.t('schematic.delete-success'), 5, 'info');
-				reloadPage();
-				setVisibility(false);
-			})
+			.then(() => addPopup(i18n.t('schematic.delete-success'), 5, 'info')) //
+			.then(() => reloadPage())
+			.then(() => setVisibility(false))
+			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
 	}
 
@@ -148,6 +155,9 @@ export default function SchematicPage() {
 					))}
 				</section>
 			</header>
+			<section className='flex-row center medium-padding'>
+				<Trans i18nKey='total-schematic' />:{totalSchematic}
+			</section>
 			<SchematicContainer
 				children={pages.map((schematic) => (
 					<SchematicPreview

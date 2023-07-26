@@ -20,13 +20,13 @@
 	cursor: pointer;
 
 	text-decoration: none;
+	overflow: hidden;
 }
 
 .admin {
 	color: lime;
 	text-transform: uppercase;
 }
-
 
 .avatar {
 	height: 2rem;

@@ -1,7 +1,7 @@
 import 'src/styles.css';
 import './VerifySchematicPage.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
@@ -43,6 +43,14 @@ export default function VerifySchematicPage() {
 	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Schematic>('schematic-upload/page');
 	const { model, setVisibility } = useModel();
 
+	const [totalSchematic, setTotalSchematic] = useState(0);
+
+	useEffect(() => {
+		API.getTotalSchematicUpload()
+			.then((result) => setTotalSchematic(result.data))
+			.catch(() => console.log('Error fletching total schematic'));
+	}, []);
+
 	function handleOpenSchematicInfo(schematic: Schematic) {
 		setCurrentSchematic(schematic);
 		setVisibility(true);
@@ -50,7 +58,8 @@ export default function VerifySchematicPage() {
 
 	function rejectSchematic(schematic: Schematic, reason: string) {
 		API.rejectSchematic(schematic, reason) //
-			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //.
+			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
+			.then(() => setTotalSchematic((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => {
 				reloadPage();
@@ -63,6 +72,7 @@ export default function VerifySchematicPage() {
 		API.verifySchematic(schematic, tagString) //
 			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has be accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
+			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => {
 				reloadPage();
@@ -87,6 +97,9 @@ export default function VerifySchematicPage() {
 
 	return (
 		<main id='verify-schematic' className='flex-column h100p w100p scroll-y'>
+			<section className='flex-row center medium-padding'>
+				<Trans i18nKey='total-schematic' />:{totalSchematic}
+			</section>
 			<SchematicContainer
 				children={pages.map((schematic) => (
 					<SchematicPreview
