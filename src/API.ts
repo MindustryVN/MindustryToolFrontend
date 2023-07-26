@@ -19,12 +19,28 @@ export class API {
 		});
 	}
 
+	static getTotalSchematic() {
+		return API.REQUEST.get('schematic/total');
+	}
+
+	static getTotalSchematicUpload() {
+		return API.REQUEST.get('schematic-upload/total');
+	}
+
 	static postNotification(userId: string, header: string, message: string) {
 		let form = new FormData();
 		form.append('userId', userId);
 		form.append('header', header);
 		form.append('message', message);
 		return API.REQUEST.post('notification', form);
+	}
+
+	static markAsReadNotificationAll() {
+		return API.REQUEST.put('notification/all');
+	}
+
+	static deleteNotificationAll() {
+		return API.REQUEST.delete('notification/all');
 	}
 
 	static verifySchematic(schematic: Schematic, tagString: string) {

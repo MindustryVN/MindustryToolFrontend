@@ -39,7 +39,7 @@
 	"show-reply": "Hiện phản hồi",
 	"write-a-comment": "Viết bình luận",
 	"high-ping-reason": "Vì trang web đăng sử dụng dịch vụ hosting miễn phí nên sẽ cần 1-2 phút để khởi động, vui lòng chờ",
-	"copy-link":"Sao chép liên kết",
+	"copy-link": "Sao chép liên kết",
 	"loading": {
 		"short": "Đang tải",
 		"long": "Đang tải, vui lòng đợi 1-2 phút."
@@ -152,6 +152,50 @@
 			"value": {
 				"verified": "Đã được duyệt",
 				"unverified": "Không được duyệt"
+			}
+		},
+		"factory": {
+			"name": "Nhà máy",
+			"value": {
+				"graphite-press": "Máy Nén Than Chì",
+				"multi-press": "Máy Nén Than Chì Lớn",
+				"silicon-smelter": "Máy Nấu Silicon",
+				"silicon-crucible": "Máy Nấu Silicon Lớn",
+				"kiln": "Lò Thuỷ Tinh",
+				"plastanium-compressor": "Máy Nén Nhựa",
+				"phase-weaver": "Máy Dệt Sợi Lượng Tử",
+				"surge-smelter": "Lò Tinh Luyện Hợp Kim",
+				"cryofluid-mixer": "Máy Pha Trộn Chất Làm Lạnh",
+				"pyratite-mixer": "Máy Trộn Nhiệt Thạch",
+				"blast-compound-mixer": "Máy Trộn Chất Nổ",
+				"melter": "Lò Nấu Chảy",
+				"separator": "Máy Phân Tách",
+				"disassemble": "Máy Phân Tách Lớn",
+				"spore-press": "Máy Nén Bào Tử",
+				"pulverizer": "Máy Nghiền",
+				"coal-centrifuge": "Máy Tạo Than Nhân Tạo",
+				"incinerator": "Máy Phân Thuỷ",
+				"silicon-arc-furnace": "Lò Nung Silicon",
+				"electrolyzer": "Máy Phân Điện",
+				"atmospheric-concentrator": "Máy Cô Đặc Khí Quyển",
+				"oxidation-chamber": "Bể Oxy Hoá",
+				"carbide-crucible": "Máy Tinh Luyện Carbide",
+				"surge-crucible": "Nồi Nấu Tinh Luyện Hợp Kim"
+			}
+		},
+		"generator": {
+			"name": "Máy tạo năng lượng",
+			"value": {
+				"combustion-generator": "Máy Phát Điện Đốt Cháy",
+				"steam-generator": "Máy Phát Điện Hơi Nước",
+				"differential-generator": "Máy Phát Điện Vi Sai",
+				"rtg-generator": "Máy Phát Điện Phân Rả Phóng Xạ RTG",
+				"thorium-reactor": "Lò Phóng Xạ Thorium",
+				"impact-reactor": "Lò Phản Ứng Nhiệt Hạch",
+				"chemical-combustion-chamber": "Lò Đốt Cháy Hoá Học",
+				"pyrolysis-generator": " Máy Điện Phân",
+				"flux-reactor": "Lò Phản Ứng Bốc Hơi",
+				"neoplasia-reactor": "Lò Phản Ứng Siêu Tân Tinh"
 			}
 		}
 	}

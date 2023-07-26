@@ -15,6 +15,7 @@ import IfTrue from 'src/components/common/IfTrue';
 import Markdown from 'src/components/markdown/Markdown';
 import PrivateRoute from 'src/components/router/PrivateRoute';
 import useNotification from 'src/hooks/UseNotification';
+import Button from 'src/components/button/Button';
 
 export default function NotificationPage() {
 	return <PrivateRoute element={<NotificationContainer />} />;
@@ -36,10 +37,25 @@ function NotificationContainer() {
 			.finally(() => reloadPage());
 	}
 
+	function handleMarkAsReadAll() {
+		API.markAsReadNotificationAll() //
+			.then(() => addPopup(i18n.t('mark-as-read'), 5, 'info'))
+			.then(() => setUnreadNotifications((_) => 0))
+			.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
+			.finally(() => reloadPage());
+	}
+
 	function handleDelete(notification: Notification) {
 		API.deleteNotification(notification.id)
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.then(() => setUnreadNotifications((prev) => prev - 1))
+			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
+			.finally(() => reloadPage());
+	}
+	function handleDeleteAll() {
+		API.deleteNotificationAll()
+			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
+			.then(() => setUnreadNotifications((_) => 0))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
 	}
@@ -54,7 +70,15 @@ function NotificationContainer() {
 		);
 
 	return (
-		<main className='h100p w100p scroll-y flex-column small-padding small-gap'>
+		<main className='h100p w100p scroll-y flex-column small-padding small-gap border-box'>
+			<section className='flex-row justify-end'>
+				<Button onClick={() => handleMarkAsReadAll()}>
+					<Trans i18nKey='mark-as-read-all' />
+				</Button>
+				<Button onClick={() => handleDeleteAll()}>
+					<Trans i18nKey='delete-all' />
+				</Button>
+			</section>
 			{pages.map((notification) => (
 				<section className='notification flex-row flex-wrap space-between medium-padding border-box' key={notification.id}>
 					<section className='flex-column'>
