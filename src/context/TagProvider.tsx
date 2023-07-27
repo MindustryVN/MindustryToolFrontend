@@ -11,7 +11,9 @@ export default function TagProvider(props: TagProviderProps) {
 	useEffect(() => {
 		Tags.getTag('schematic-upload-tag', Tags.SCHEMATIC_UPLOAD_TAG);
 		Tags.getTag('schematic-search-tag', Tags.SCHEMATIC_SEARCH_TAG);
+		Tags.getTag('map-upload-tag', Tags.MAP_UPLOAD_TAG);
+		Tags.getTag('map-search-tag', Tags.MAP_SEARCH_TAG);
 	}, []);
 
-	return <section className='h100p w100p'>{props.children}</section>;
+	return <>{props.children}</>;
 }

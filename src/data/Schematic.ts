@@ -1,5 +1,3 @@
-import UserData, { Users } from 'src/data/User';
-
 export default class Schematic {
 	id: string;
 	name: string;
@@ -21,12 +19,6 @@ export default class Schematic {
 		this.tags = tags;
 		this.like = like;
 		this.verifyAdmin = verifyAdmin;
-	}
-}
-
-export class Schematics {
-	static canDelete(schematic: Schematic, user: UserData | undefined) {
-		return user && (schematic.authorId === user.id || Users.isAdmin(user));
 	}
 }
 

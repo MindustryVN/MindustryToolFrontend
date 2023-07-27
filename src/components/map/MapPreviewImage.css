@@ -1,0 +1,19 @@
+.map-image-wrapper {
+	width: var(--preview-image-min-size);
+	height: var(--preview-image-min-size);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	align-self: flex-start;
+	
+	background-color: var(--black);
+}
+
+.map-preview-image {
+	width: var(--preview-image-min-size);
+	height: var(--preview-image-min-size);
+
+	border-bottom: 2px solid var(--white);
+}

@@ -55,7 +55,11 @@ export class TagChoiceLocal {
 export class Tags {
 	static SCHEMATIC_UPLOAD_TAG: TagChoiceLocal[] = [];
 	static SCHEMATIC_SEARCH_TAG: TagChoiceLocal[] = [];
-	static SCHEMATIC_SORT_TAG: TagChoiceLocal[] = [
+	
+	static MAP_UPLOAD_TAG: TagChoiceLocal[] = [];
+	static MAP_SEARCH_TAG: TagChoiceLocal[] = [];
+
+	static SORT_TAG: TagChoiceLocal[] = [
 		new TagChoiceLocal('time', i18n.t('tag.newest'), '1', 'time:1', 'green'), //
 		new TagChoiceLocal('time', i18n.t('tag.oldest'), '-1', 'time:1', 'green'), //
 		new TagChoiceLocal('like', i18n.t('tag.most-liked'), '1', 'time:1', 'green'),
