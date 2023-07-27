@@ -41,8 +41,9 @@ const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
-const VerifyPage = React.lazy(() => import('src/routes/admin/verify/VerifyPage'))
-const LogPage = React.lazy(() => import('src/routes/admin/log/LogPage'))
+const VerifyPage = React.lazy(() => import('src/routes/admin/verify/VerifyPage'));
+const LogPage = React.lazy(() => import('src/routes/admin/log/LogPage'));
+const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
 
 export default function App() {
 	return (
@@ -52,6 +53,7 @@ export default function App() {
 				<section className='main background-image-1'>
 					<Suspense fallback={<Loading />}>
 						<Routes>
+							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 							<Route path='/' element={<Navigate to='/home' />} />
 							<Route path='/map' element={<Map />} />
 							<Route path='/home' element={<Home />} />
@@ -68,8 +70,8 @@ export default function App() {
 							<Route path='/admin/verify' element={<AdminRoute element={<VerifyPage />} />} />
 							<Route path='/admin/log' element={<AdminRoute element={<LogPage />} />} />
 							<Route path='/info' element={<Info />} />
-							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 							<Route path='/notification' element={<Notification />} />
+							<Route path='/mindustry-server' element={<MindustryServer />} />
 						</Routes>
 					</Suspense>
 				</section>

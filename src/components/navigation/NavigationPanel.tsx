@@ -64,6 +64,9 @@ export default function NavigationPanel() {
 							<Link className='nav-link' to='/upload' onClick={() => setShowNavigatePanel(false)}>
 								Upload
 							</Link>
+							<Link className='nav-link' to='/mindustry-server' onClick={() => setShowNavigatePanel(false)}>
+								Server
+							</Link>
 							<Link className='nav-link' to='/info' onClick={() => setShowNavigatePanel(false)}>
 								Info
 							</Link>
@@ -95,7 +98,10 @@ export default function NavigationPanel() {
 						icon='/assets/icons/chat.png' //
 						onClick={() => PrivateAlert(() => navigate('/notification'))}
 					/>
-					<IfTrue condition={unreadNotifications} whenTrue={<span className='unread-notification-number'>{unreadNotifications <= 100 ? unreadNotifications : '100+'}</span>} />
+					<IfTrue
+						condition={unreadNotifications}
+						whenTrue={<span className='unread-notification-number'>{(unreadNotifications > 0 ? unreadNotifications : 0) <= 100 ? unreadNotifications : '100+'}</span>}
+					/>
 				</section>
 				<UserDisplay />
 			</section>

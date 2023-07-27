@@ -25,7 +25,7 @@ interface CommentContainerProps {
 }
 
 export default function CommentContainer(props: CommentContainerProps) {
-	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.targetId}/page`);
+	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
 
 	const { addPopup } = usePopup();
 
@@ -75,7 +75,7 @@ function Reply(props: ReplyProps) {
 
 	const { addPopup } = usePopup();
 
-	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.comment.id}/page`);
+	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
 
 	function handleAddComment(message: string, targetId: string) {
 		setLoading(true);

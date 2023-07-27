@@ -142,4 +142,15 @@ export class API {
 
 		return API.REQUEST.post('schematic-upload', formData);
 	}
+
+	static postMindustryServer(address: string) {
+		const form = new FormData();
+		form.append('address', address);
+
+		return API.REQUEST.post('mindustry-server', form);
+	}
+
+	static deleteServer(id: string) {
+		return this.REQUEST.delete(`mindustry-server/${id}`);
+	}
 }

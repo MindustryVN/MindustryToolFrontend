@@ -1,0 +1,79 @@
+.input-address-dialog {
+	width: 50vw;
+
+	background-color: transparent;
+}
+
+.input-address {
+	outline: none;
+	border: none;
+	border-bottom: 2px solid var(--white);
+	background-color: transparent;
+}
+
+.input-address:is(:hover, :focus) {
+	outline: none;
+	border: none;
+	border-bottom: 2px solid var(--white);
+	background-color: transparent;
+}
+
+.server-table {
+	padding: 0.5rem;
+
+	overflow-x: auto;
+	border-spacing: 0 0.2rem;
+}
+
+.server-table-header {
+	background-color: var(--black);
+	text-align: left;
+
+	padding: 1rem;
+}
+
+.server-table-body {
+	padding: 1rem;
+}
+
+td,
+th {
+	padding: 1rem;
+}
+
+.server-table-row {
+	padding: 1rem;
+	background-color: var(--black);
+	vertical-align: top;
+}
+
+.server-card-container {
+	display: none;
+}
+
+@media screen and (max-width: 900px) {
+	.input-address-dialog {
+		width: 80vw;
+	}
+
+	.server-table {
+		display: none;
+	}
+
+	.server-card-container {
+		display: flex;
+	}
+
+	.server-card {
+		background-color: var(--gray);
+		padding: 0.5rem;
+	}
+
+	.server-card-info {
+		background-color: var(--black);
+
+		min-height: 4rem;
+		padding: 0.5rem;
+		box-sizing: border-box;
+	}
+}

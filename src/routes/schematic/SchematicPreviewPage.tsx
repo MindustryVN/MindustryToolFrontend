@@ -43,7 +43,7 @@ export default function SchematicPreviewPage() {
 
 	if (isError)
 		return (
-			<div>
+			<div className='flex-center w100p h100p'>
 				<Trans i18nKey='schematic-not-found' />
 			</div>
 		);
