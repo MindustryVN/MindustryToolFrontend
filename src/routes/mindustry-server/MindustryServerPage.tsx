@@ -23,7 +23,6 @@ export default function MindustryServerPage() {
 	const { pages, hasMore, isLoading, loadPage, reloadPage } = usePage<MindustryServer>('mindustry-server', 100);
 	const { addPopup } = usePopup();
 	const { dialog, setVisibility } = useDialog();
-	
 
 	function handleAddServer(address: string) {
 		API.postMindustryServer(address) //
@@ -46,7 +45,7 @@ export default function MindustryServerPage() {
 	return (
 		<main className='flex-column small-gap h100p w100p scroll-y big-padding border-box'>
 			<section className='flex-row justify-end'>
-				<Button className='small-padding ' onClick={() => setVisibility(true)}>
+				<Button onClick={() => setVisibility(true)}>
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>
