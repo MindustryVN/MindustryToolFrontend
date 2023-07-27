@@ -15,11 +15,12 @@ import IfTrueElse from 'src/components/common/IfTrueElse';
 import IfTrue from 'src/components/common/IfTrue';
 import { Users } from 'src/data/User';
 import useMe from 'src/hooks/UseMe';
-import ClearButton from 'src/components/button/ClearButton';
-import { Ellipsis } from 'src/components/common/Icon';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import ColorText from 'src/components/common/ColorText';
+import useClipboard from 'src/hooks/UseClipboard';
 
 export default function MindustryServerPage() {
-	const { pages, hasMore, loadPage, reloadPage } = usePage<MindustryServer>('mindustry-server', 100);
+	const { pages, hasMore, isLoading, loadPage, reloadPage } = usePage<MindustryServer>('mindustry-server', 100);
 	const { addPopup } = usePopup();
 	const { dialog, setVisibility } = useDialog();
 
@@ -39,29 +40,131 @@ export default function MindustryServerPage() {
 			.catch(() => addPopup(i18n.t('delete-server-fail'), 5, 'warning'));
 	}
 
+	pages.sort((a, b) => (b.name ? 1 : 0) - (a.name ? 1 : 0));
+
 	return (
-		<main className='flex-column small-gap h100p w100p scroll-y'>
+		<main className='flex-column small-gap h100p w100p scroll-y big-padding border-box'>
 			<section className='flex-row justify-end'>
-				<Button onClick={() => setVisibility(true)}>
+				<Button className='small-padding ' onClick={() => setVisibility(true)}>
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>
-			<section className='flex-column small-gap'>
+			<table className='server-table '>
+				<thead className='server-table-header'>
+					<tr className='server-table-header'>
+						<th>
+							<Trans i18nKey='address' />
+						</th>
+						<th>
+							<Trans i18nKey='ping' />
+						</th>
+						<th>
+							<Trans i18nKey='name' />
+						</th>
+						<th>
+							<Trans i18nKey='description' />
+						</th>
+						<th>
+							<Trans i18nKey='map-name' />
+						</th>
+						<th>
+							<Trans i18nKey='wave' />
+						</th>
+						<th>
+							<Trans i18nKey='players' />
+						</th>
+						<th>
+							<Trans i18nKey='mode' />
+						</th>
+						<th>
+							<Trans i18nKey='version' />
+						</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody className='server-table-body'>
+					{pages.map((server) => (
+						<MindustryServerTableRow key={server.id} server={server} handleRemoveServer={handleRemoveServer} />
+					))}
+				</tbody>
+			</table>
+			<section className='server-card-container flex-column small-gap'>
 				{pages.map((server) => (
-					<MindustryServerCard server={server} handleRemoveServer={handleAddServer} />
+					<MindustryServerCard key={server.id} server={server} handleRemoveServer={handleRemoveServer} />
 				))}
 			</section>
 			<footer className='flex-center'>
-				<Button onClick={() => loadPage()}>
-					<IfTrueElse
-						condition={hasMore} //
-						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more' />}
-					/>
-				</Button>
+				<IfTrueElse
+					condition={isLoading}
+					whenTrue={<LoadingSpinner />} //
+					whenFalse={
+						<Button onClick={() => loadPage()}>
+							<IfTrueElse
+								condition={hasMore} //
+								whenTrue={<Trans i18nKey='load-more' />}
+								whenFalse={<Trans i18nKey='no-more' />}
+							/>
+						</Button>
+					}
+				/>
 			</footer>
 			{dialog(<InputAddressDialog onSubmit={handleAddServer} onClose={() => setVisibility(false)} />)}
 		</main>
+	);
+}
+
+interface MindustryServerTableRowProps {
+	server: MindustryServer;
+	handleRemoveServer: (id: string) => void;
+}
+
+function MindustryServerTableRow(props: MindustryServerTableRowProps) {
+	const { server } = props;
+	const { me } = useMe();
+
+	const { copy } = useClipboard();
+
+	return (
+		<tr className='server-table-row medium-padding'>
+			<td>
+				<section className='flex-row'>
+					<ClearIconButton icon='/assets/icons/copy.png' onClick={() => copy(server.address)} />
+					{server.address}
+				</section>
+			</td>
+			<td>{server.ping}</td>
+			<td>
+				<ColorText text={server.name} />
+			</td>
+			<td>
+				<ColorText text={server.description} />
+			</td>
+			<td>
+				<ColorText text={server.mapname} />
+			</td>
+			<td>{server.wave}</td>
+			<td>
+				<span className='flex-row small-gap'>
+					{server.players}/{server.playerLimit}
+					<span>
+						<Trans i18nKey='players' />
+					</span>
+				</span>
+			</td>
+			<td className='capitalize'>{server.modeName ? server.mapname : server.mode}</td>
+			<td>{server.version === -1 ? server.versionType : server.version}</td>
+			<IfTrue
+				condition={Users.isAdmin(me)}
+				whenTrue={
+					<td>
+						<ClearIconButton
+							icon='/assets/icons/trash-16.png' //
+							onClick={() => props.handleRemoveServer(props.server.id)}
+						/>
+					</td>
+				}
+			/>
+		</tr>
 	);
 }
 
@@ -71,32 +174,50 @@ interface MindustryServerCardProps {
 }
 
 function MindustryServerCard(props: MindustryServerCardProps) {
+	const { server } = props;
 	const { me } = useMe();
 
-	const [showDropdown, setShowDropdown] = useState(false);
+	const { copy } = useClipboard();
 
 	return (
-		<section>
-			{props.server.toString()}
-			<IfTrue
-				condition={Users.isAdmin(me)}
-				whenTrue={
-					<section className='ellipsis absolute flex-column center small-padding'>
-						<ClearButton onClick={() => setShowDropdown((prev) => !prev)}>
-							<Ellipsis />
-						</ClearButton>
-						<IfTrue
-							condition={showDropdown}
-							whenTrue={
-								<ClearIconButton
-									icon='/assets/icons/trash-16.png' //
-									onClick={() => props.handleRemoveServer(props.server.id)}
-								/>
-							}
-						/>
-					</section>
-				}
-			/>
+		<section className='server-card flex-column'>
+			<header className='flex-row space-between'>
+				<section className='flex-row small-gap center'>
+					<span className='flex-row small-gap'>
+						<ColorText text={server.name ? server.name : server.address} /> | <span className='capitalize'>{server.modeName ? server.mapname : server.mode}</span>
+					</span>
+					<ClearIconButton className='small-padding' icon='/assets/icons/copy.png' onClick={() => copy(server.address)} />
+				</section>
+				<IfTrue
+					condition={Users.isAdmin(me)}
+					whenTrue={
+						<section className='flex-column'>
+							<ClearIconButton
+								icon='/assets/icons/trash-16.png' //
+								onClick={() => props.handleRemoveServer(props.server.id)}
+							/>
+						</section>
+					}
+				/>
+			</header>
+
+			<section className='server-card-info flex-column'>
+				<ColorText text={server.description} />
+				<span>
+					{server.players}/{server.playerLimit}
+					<Trans i18nKey='players' />
+				</span>
+				Ping: {server.ping}ms
+				<span className='flex-row small-gap'>
+					<Trans i18nKey='map' />: <ColorText text={server.mapname} />
+				</span>
+				<span className='flex-row small-gap'>
+					<Trans i18nKey='wave' />: {server.wave}
+				</span>
+				<span>
+					<Trans i18nKey='version' />: {server.version === -1 ? server.versionType : server.version}
+				</span>
+			</section>
 		</section>
 	);
 }

@@ -87,7 +87,7 @@ export default function VerifySchematicPage() {
 					<IfTrueElse
 						condition={hasMore} //
 						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more-schematic' />}
+						whenFalse={<Trans i18nKey='no-more' />}
 					/>
 				</Button>
 				<ScrollToTopButton containerId='verify-schematic' />

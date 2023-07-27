@@ -26,7 +26,7 @@ export default function LogPage() {
 					<IfTrueElse
 						condition={hasMore} //
 						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more-log' />}
+						whenFalse={<Trans i18nKey='no-more' />}
 					/>
 				</Button>
 				<ScrollToTopButton containerId='log' />
