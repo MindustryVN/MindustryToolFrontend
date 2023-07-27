@@ -23,6 +23,7 @@ export default function MindustryServerPage() {
 	const { pages, hasMore, isLoading, loadPage, reloadPage } = usePage<MindustryServer>('mindustry-server', 100);
 	const { addPopup } = usePopup();
 	const { dialog, setVisibility } = useDialog();
+	
 
 	function handleAddServer(address: string) {
 		API.postMindustryServer(address) //
