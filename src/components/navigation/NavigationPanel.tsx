@@ -95,7 +95,10 @@ export default function NavigationPanel() {
 						icon='/assets/icons/chat.png' //
 						onClick={() => PrivateAlert(() => navigate('/notification'))}
 					/>
-					<IfTrue condition={unreadNotifications} whenTrue={<span className='unread-notification-number'>{unreadNotifications <= 100 ? unreadNotifications : '100+'}</span>} />
+					<IfTrue
+						condition={unreadNotifications}
+						whenTrue={<span className='unread-notification-number'>{(unreadNotifications > 0 ? unreadNotifications : 0) <= 100 ? unreadNotifications : '100+'}</span>}
+					/>
 				</section>
 				<UserDisplay />
 			</section>

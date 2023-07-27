@@ -28,7 +28,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	const { addPopup } = usePopup();
 
 	const { model, setVisibility } = useModel();
-	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>(`schematic/user/${props.user.id}/page`);
+	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>(`user/schematic/${props.user.id}`, 20);
 
 	function handleDeleteSchematic(schematic: Schematic) {
 		API.deleteSchematic(schematic.id) //

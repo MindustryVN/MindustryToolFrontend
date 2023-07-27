@@ -66,7 +66,7 @@ export default function SchematicPage() {
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 
-	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>('schematic/page', searchConfig.current);
+	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>('schematic', 20, searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
@@ -156,7 +156,7 @@ export default function SchematicPage() {
 				</section>
 			</header>
 			<section className='flex-row center medium-padding'>
-				<Trans i18nKey='total-schematic' />:{totalSchematic}
+				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
 			</section>
 			<SchematicContainer
 				children={pages.map((schematic) => (

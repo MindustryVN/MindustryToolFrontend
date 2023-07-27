@@ -4,21 +4,20 @@ import { API } from 'src/API';
 import { MAX_ITEM_PER_PAGE } from 'src/config/Config';
 import { Utils } from 'src/util/Utils';
 
-export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfig<any>) {
+export default function usePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
-	const ref = useRef(url);
+	const ref = useRef({ url, itemPerPage });
 
-	
 	useEffect(() => {
 		setIsLoading(true);
 		setIsError(false);
 		setPages([[]]);
 
-		API.get(`${ref.current}/0`, searchConfig) //
+		getPage(ref.current.url, 0, ref.current.itemPerPage, searchConfig) //
 			.then((result) =>
 				setPages(() => {
 					let data: T[] = result.data;
@@ -60,7 +59,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 			setIsError(false);
 
 			for (let i = 0; i < page; i++) {
-				API.get(`${url}/${i}`, searchConfig)
+				getPage(url, i, itemPerPage, searchConfig)
 					.then((result) => {
 						let data: T[] = result.data;
 						handleSetPage(i, data);
@@ -83,7 +82,7 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 			const newPage = pages[lastIndex].length === MAX_ITEM_PER_PAGE;
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
 
-			API.get(`${url}/${requestPage}`, searchConfig)
+			getPage(url, requestPage, itemPerPage, searchConfig)
 				.then((result) => {
 					let data: T[] = result.data;
 					handleSetPage(requestPage, data);
@@ -92,4 +91,19 @@ export default function usePage<T>(url: string, searchConfig?: AxiosRequestConfi
 				.finally(() => setIsLoading(false)); //
 		},
 	};
+}
+
+function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
+	if (!searchConfig) {
+		searchConfig = {
+			params: {
+				page: page,
+				items: itemPerPage,
+			},
+		};
+	}
+
+	searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage } };
+
+	return API.get(url, searchConfig);
 }

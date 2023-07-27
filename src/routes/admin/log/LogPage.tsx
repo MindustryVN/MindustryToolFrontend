@@ -16,7 +16,7 @@ import ClearIconButton from 'src/components/button/ClearIconButton';
 
 export default function LogPage() {
 	const contentType = 'system';
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>(`log/${contentType}/page`);
+	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>(`log/${contentType}`, 20);
 	const { addPopup } = usePopup();
 
 	function buildLoadAndScrollButton() {

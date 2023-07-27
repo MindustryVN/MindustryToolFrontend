@@ -7,5 +7,5 @@ interface SchematicInfoImageProps {
 }
 
 export default function SchematicInfoImage(props: SchematicInfoImageProps) {
-	return <img className='schematic-info-image' src={props.src} alt='schematic' />;
+	return <img className='schematic-info-image' src={`${props.src}`} alt='schematic' />;
 }

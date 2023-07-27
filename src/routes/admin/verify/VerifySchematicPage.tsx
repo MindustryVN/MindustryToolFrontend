@@ -40,7 +40,7 @@ export default function VerifySchematicPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Schematic>('schematic-upload/page');
+	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Schematic>('schematic-upload', 20);
 	const { model, setVisibility } = useModel();
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
@@ -98,7 +98,7 @@ export default function VerifySchematicPage() {
 	return (
 		<main id='verify-schematic' className='flex-column h100p w100p scroll-y'>
 			<section className='flex-row center medium-padding'>
-				<Trans i18nKey='total-schematic' />:{totalSchematic}
+				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
 			</section>
 			<SchematicContainer
 				children={pages.map((schematic) => (

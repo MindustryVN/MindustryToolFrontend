@@ -106,8 +106,7 @@ export default function UploadPage() {
 			return;
 		}
 		const tagString = Tags.toString(tags);
-		
-	
+
 		setIsLoading(true);
 
 		API.postSchematicUpload(code, file, tagString)

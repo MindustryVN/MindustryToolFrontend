@@ -22,7 +22,7 @@ export default function NotificationPage() {
 }
 
 function NotificationContainer() {
-	const { pages, isLoading, reloadPage } = usePage<Notification>('notification/page');
+	const { pages, isLoading, reloadPage } = usePage<Notification>('notification', 20);
 
 	const { setUnreadNotifications } = useNotification();
 

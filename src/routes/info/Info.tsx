@@ -13,6 +13,9 @@ export default function InfoPage() {
 			<span>
 				<Trans i18nKey='admin' />: <LoadUserName userId='64b6def5fa35080d51928849' />
 			</span>
+			<span>
+				<Trans i18nKey='contributor' />: <LoadUserName userId='64b7f3cf830ef61869872548' />
+			</span>
 		</main>
 	);
 }
