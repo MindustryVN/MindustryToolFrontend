@@ -331,3 +331,8 @@
 .right {
 	right: 0;
 }
+
+.ellipsis {
+	right: -6px;
+	top: -2px;
+}

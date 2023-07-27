@@ -4,12 +4,7 @@
 	outline: 2px solid var(--gray);
 	border-radius: 5px;
 
-	padding: 0.25rem ;
-}
-
-.ellipsis {
-	right: -6px;
-	top: -2px;
+	padding: 0.25rem;
 }
 
 .comment-input-area,

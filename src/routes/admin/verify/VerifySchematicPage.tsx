@@ -223,12 +223,10 @@ function SchematicInfo(props: SchematicInfoProps) {
 				</ConfirmDialog>,
 			)}
 			{rejectDialog.dialog(
-				<section>
-					<TypeDialog
-						onSubmit={(reason) => props.handleRejectSchematic(props.schematic, reason)} //
-						onClose={() => rejectDialog.setVisibility(false)}
-					/>
-				</section>,
+				<TypeDialog
+					onSubmit={(reason) => props.handleRejectSchematic(props.schematic, reason)} //
+					onClose={() => rejectDialog.setVisibility(false)}
+				/>,
 			)}
 		</main>
 	);

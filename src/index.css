@@ -60,7 +60,6 @@ a {
 	background-color: white;
 }
 
-
 :root {
 	--black: #111111;
 	--gray: #3f3f3f;
@@ -88,9 +87,10 @@ input[type='file'] {
 
 textarea,
 textarea:is(:focus, :hover) {
-	background-color: transparent;
 	outline: none;
 	border: none;
+	resize: none;
+	background-color: transparent;
 }
 
 footer {

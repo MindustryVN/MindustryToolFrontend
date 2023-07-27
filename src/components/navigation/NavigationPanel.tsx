@@ -64,6 +64,9 @@ export default function NavigationPanel() {
 							<Link className='nav-link' to='/upload' onClick={() => setShowNavigatePanel(false)}>
 								Upload
 							</Link>
+							<Link className='nav-link' to='/mindustry-server' onClick={() => setShowNavigatePanel(false)}>
+								Server
+							</Link>
 							<Link className='nav-link' to='/info' onClick={() => setShowNavigatePanel(false)}>
 								Info
 							</Link>
