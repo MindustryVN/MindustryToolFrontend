@@ -5,7 +5,7 @@ import 'src/components/schematic/SchematicInfoImage.css';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import Dropbox from 'src/components/dropbox/Dropbox';
-import SchematicPreviewData from 'src/components/schematic/SchematicUploadPreview';
+import SchematicPreviewData from 'src/data/SchematicUploadPreview';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';

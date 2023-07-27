@@ -1,6 +1,39 @@
-.map {
-	overflow: hidden auto;
-    
-	height: 100%;
-	width: 100%;
+.search-container {
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+
+	margin: 2rem auto auto auto;
+
+	width: 40%;
+
+	gap: 0.25rem;
+}
+
+@media screen and (max-width: 768px) {
+	.search-container {
+		display: flex;
+
+		justify-content: center;
+		align-items: center;
+
+		margin: 2rem auto auto auto;
+
+		width: 60%;
+
+		gap: 0.25rem;
+	}
+}
+
+.sort-container {
+	width: fit-content;
+	margin: auto;
+	gap: 0.25rem;
+	justify-content: center;
+}
+
+.index-number {
+	left: 0.2em;
+	color: rgb(255, 255, 255, 0.7);
 }

@@ -2,7 +2,7 @@ import 'src/styles.css';
 import './SchematicPage.css';
 
 import React, { useEffect, useRef, useState } from 'react';
-import Schematic, { Schematics } from 'src/data/Schematic';
+import Schematic from 'src/data/Schematic';
 
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
@@ -43,18 +43,19 @@ import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 import CommentContainer from 'src/components/comment/CommentContainer';
 import useMe from 'src/hooks/UseMe';
+import { Users } from 'src/data/User';
 
 export default function SchematicPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
 
-	const sort = Tags.parse(searchParam.get('sort'), Tags.SCHEMATIC_SORT_TAG);
+	const sort = Tags.parse(searchParam.get('sort'), Tags.SORT_TAG);
 	const urlTags = searchParam.get('tags');
 	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), Tags.SCHEMATIC_SEARCH_TAG);
 
 	const currentSchematic = useRef<Schematic>();
 	const [tag, setTag] = useState<string>('');
 
-	const sortQuery = sort ? sort : Tags.SCHEMATIC_SORT_TAG[0];
+	const sortQuery = sort ? sort : Tags.SORT_TAG[0];
 	const tagQuery = tags;
 
 	const searchConfig = useRef({
@@ -148,7 +149,7 @@ export default function SchematicPage() {
 				</section>
 				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 				<section className='sort-container grid-row small-gap center'>
-					{Tags.SCHEMATIC_SORT_TAG.map((c: TagChoiceLocal) => (
+					{Tags.SORT_TAG.map((c: TagChoiceLocal) => (
 						<Button className='capitalize' key={c.name + c.value} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
 							{c.displayName}
 						</Button>
@@ -294,7 +295,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 			<IfTrue
-				condition={Schematics.canDelete(props.schematic, me)} //
+				condition={Users.isAuthorOrAdmin(props.schematic.id, me)} //
 				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 			/>
 			<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />

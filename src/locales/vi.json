@@ -112,7 +112,7 @@
 				"tier5": "Cấp 5"
 			}
 		},
-		"planet-tech": {
+		"planet": {
 			"name": "Công nghệ",
 			"value": {
 				"serpulo": "Serpulo",

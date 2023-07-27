@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { API_BASE_URL } from './config/Config';
 import Schematic from 'src/data/Schematic';
+import Map from 'src/data/Map';
 
 export class API {
 	static REQUEST = axios.create({
@@ -25,6 +26,14 @@ export class API {
 
 	static getTotalSchematicUpload() {
 		return API.REQUEST.get('schematic-upload/total');
+	}
+
+	static getTotalMap() {
+		return API.REQUEST.get('map/total');
+	}
+
+	static getTotalMapUpload() {
+		return API.REQUEST.get('map-upload/total');
 	}
 
 	static postNotification(userId: string, header: string, message: string) {
@@ -56,7 +65,23 @@ export class API {
 
 	static rejectSchematic(schematic: Schematic, reason: string) {
 		return API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
-			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has been reject', reason));
+			.then(() => API.postNotification(schematic.authorId, 'Your map submission has been reject', reason));
+	}
+
+	static verifyMap(map: Map, tagString: string) {
+		let form = new FormData();
+
+		form.append('id', map.id);
+		form.append('authorId', map.authorId);
+		form.append('data', map.data);
+		form.append('tags', tagString);
+
+		return API.REQUEST.post('schematic', form);
+	}
+
+	static rejectMap(map: Map, reason: string) {
+		return API.REQUEST.delete(`map-upload/${map.id}`) //
+			.then(() => API.postNotification(map.authorId, 'Your map submission has been reject', reason));
 	}
 
 	static postComment(url: string, targetId: string, message: string, contentType: string) {
@@ -125,12 +150,23 @@ export class API {
 		return API.REQUEST.delete(`schematic/${schematicId}`); //
 	}
 
+	static deleteMap(mapId: string) {
+		return API.REQUEST.delete(`map/${mapId}`); //
+	}
+
 	static getSchematicPreview(code: string, file: File | undefined) {
 		const form = new FormData();
 		if (file) form.append('file', file);
 		else form.append('code', code);
 
 		return API.REQUEST.post('schematic-upload/preview', form);
+	}
+
+	static getMapPreview(file: File | undefined) {
+		const form = new FormData();
+		if (file) form.append('file', file);
+
+		return API.REQUEST.post('map-upload/preview', form);
 	}
 
 	static postSchematicUpload(code: string, file: File | undefined, tag: string) {
@@ -141,6 +177,15 @@ export class API {
 		else formData.append('code', code);
 
 		return API.REQUEST.post('schematic-upload', formData);
+	}
+
+	static postMapUpload(file: File, tag: string) {
+		const formData = new FormData();
+		formData.append('tags', tag);
+
+		formData.append('file', file);
+
+		return API.REQUEST.post('map-upload', formData);
 	}
 
 	static postMindustryServer(address: string) {
