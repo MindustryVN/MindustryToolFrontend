@@ -1,7 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import { MAX_ITEM_PER_PAGE } from 'src/config/Config';
 import { Utils } from 'src/util/Utils';
 
 export default function usePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
@@ -21,17 +20,17 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 			.then((result) =>
 				setPages(() => {
 					let data: T[] = result.data;
-					if (data.length < MAX_ITEM_PER_PAGE) setHasMore(false);
+					if (data.length < itemPerPage) setHasMore(false);
 					else setHasMore(true);
 					return [data];
 				}),
 			)
 			.catch(() => setIsError(true))
 			.finally(() => setIsLoading(false)); //
-	}, [searchConfig]);
+	}, [searchConfig, itemPerPage]);
 
 	function handleSetPage(pageNumber: number, data: T[]) {
-		if (data.length < MAX_ITEM_PER_PAGE) setHasMore(false);
+		if (data.length < itemPerPage) setHasMore(false);
 		else setHasMore(true);
 
 		if (pages.length <= pageNumber) {
@@ -63,7 +62,7 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 					.then((result) => {
 						let data: T[] = result.data;
 						handleSetPage(i, data);
-						if (data.length < MAX_ITEM_PER_PAGE) {
+						if (data.length < itemPerPage) {
 							i = page;
 						}
 					})
@@ -79,7 +78,7 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 			setIsError(false);
 
 			const lastIndex = pages.length - 1;
-			const newPage = pages[lastIndex].length === MAX_ITEM_PER_PAGE;
+			const newPage = pages[lastIndex].length === itemPerPage;
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
 
 			getPage(url, requestPage, itemPerPage, searchConfig)
