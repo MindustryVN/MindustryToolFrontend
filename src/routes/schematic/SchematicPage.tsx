@@ -10,6 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
+import { Buffer } from 'buffer';
 
 import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
 import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
@@ -228,7 +229,7 @@ function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
 			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
 			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
+			<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 		</section>
 	);
@@ -292,7 +293,7 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
 			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
+			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 			<IfTrue
 				condition={Users.isAuthorOrAdmin(props.schematic.id, me)} //

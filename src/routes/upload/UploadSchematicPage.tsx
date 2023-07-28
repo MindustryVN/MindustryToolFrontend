@@ -91,7 +91,7 @@ export default function UploadPage() {
 		setIsLoading(true);
 		API.getSchematicPreview(code, file) //
 			.then((result) => setPreview(result.data)) //
-			.catch((error) => popup.current.addPopup(i18n.t(`message.invalid-schematic`) + JSON.stringify(error), 10, 'error')) //
+			.catch(() => popup.current.addPopup(i18n.t(`message.invalid-schematic`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 
