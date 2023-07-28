@@ -33,7 +33,7 @@ const Me = React.lazy(() => import('src/routes/me/MePage'));
 const Logic = React.lazy(() => import('src/routes/logic/LogicPage'));
 const Schematic = React.lazy(() => import('src/routes/schematic/SchematicPage'));
 const Login = React.lazy(() => import('src/routes/login/LoginPage'));
-const Upload = React.lazy(() => import('src/routes/upload/UploadSchematicPage'));
+const Upload = React.lazy(() => import('src/routes/upload/UploadPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
@@ -41,8 +41,6 @@ const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
-const VerifyPage = React.lazy(() => import('src/routes/admin/verify/VerifyPage'));
-const LogPage = React.lazy(() => import('src/routes/admin/log/LogPage'));
 const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
 
 export default function App() {
@@ -67,8 +65,6 @@ export default function App() {
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
-							<Route path='/admin/verify' element={<AdminRoute element={<VerifyPage />} />} />
-							<Route path='/admin/log' element={<AdminRoute element={<LogPage />} />} />
 							<Route path='/info' element={<Info />} />
 							<Route path='/notification' element={<Notification />} />
 							<Route path='/mindustry-server' element={<MindustryServer />} />

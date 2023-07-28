@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
-import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
+import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX } from 'src/config/Config';
 import { getFileExtension } from 'src/util/StringUtils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
@@ -22,8 +22,6 @@ import MapDescription from 'src/components/map/MapDescription';
 import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import useMe from 'src/hooks/UseMe';
-
-const tabs = ['File', 'Code'];
 
 let notLoginMessage = (
 	<span>
@@ -58,7 +56,7 @@ export default function UploadPage() {
 
 		const extension: string = getFileExtension(files[0]);
 
-		if (extension !== SCHEMATIC_FILE_EXTENSION) {
+		if (extension !== MAP_FILE_EXTENSION) {
 			popup.current.addPopup(i18n.t('invalid-map-file'), 5, 'error');
 			return;
 		}
@@ -66,9 +64,10 @@ export default function UploadPage() {
 		setFile(files[0]);
 
 		setIsLoading(true);
-		API.getMapPreview(file) //
+
+		API.getMapPreview(files[0]) //
 			.then((result) => setPreview(result.data)) //
-			.catch(() => popup.current.addPopup(i18n.t(`message.invalid-map`), 10, 'error')) //
+			.catch(() => popup.current.addPopup(i18n.t(`invalid-map`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 
@@ -93,7 +92,7 @@ export default function UploadPage() {
 				setTags([]);
 				popup.current.addPopup(i18n.t('upload-success'), 10, 'info');
 			})
-			.catch((error) => popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`message.${error.response.data}`), 10, 'error')) //
+			.catch((error) => popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 

@@ -1,10 +1,9 @@
 let keys = require('./Export');
 
-export const MAP_FILE_EXTENSION = 'msav';
-
 export const ACCESS_TOKEN = 'accessToken';
 
 export const SCHEMATIC_FILE_EXTENSION = 'msch';
+export const MAP_FILE_EXTENSION = 'msav';
 
 export const FRONTEND_URL = keys.frontendBaseURl;
 

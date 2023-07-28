@@ -81,21 +81,6 @@ export default function VerifySchematicPage() {
 			});
 	}
 
-	function buildLoadAndScrollButton() {
-		return (
-			<section className='grid-row small-gap'>
-				<Button onClick={() => loadPage()}>
-					<IfTrueElse
-						condition={hasMore} //
-						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more' />}
-					/>
-				</Button>
-				<ScrollToTopButton containerId='verify-schematic' />
-			</section>
-		);
-	}
-
 	return (
 		<main id='verify-schematic' className='flex-column h100p w100p'>
 			<section className='flex-row center medium-padding'>
@@ -114,8 +99,18 @@ export default function VerifySchematicPage() {
 				<IfTrueElse
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={buildLoadAndScrollButton()}
+					whenFalse={
+						<Button onClick={() => loadPage()}>
+							<IfTrueElse
+								condition={hasMore} //
+								whenTrue={<Trans i18nKey='load-more' />}
+								whenFalse={<Trans i18nKey='no-more' />}
+							/>
+						</Button>
+					}
 				/>
+
+				<ScrollToTopButton containerId='verify-schematic' />
 			</footer>
 			<IfTrue
 				condition={currentSchematic}
@@ -187,7 +182,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 	return (
 		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
 			<section className='flex-row medium-gap flex-wrap'>
-				<SchematicInfoImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} />
+				<SchematicInfoImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} />
 				<section className='flex-column small-gap flex-wrap'>
 					<h2 className='capitalize'>{props.schematic.name}</h2>
 					<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />

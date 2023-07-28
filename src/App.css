@@ -6,7 +6,7 @@
 .web-version {
 	position: fixed;
 	bottom: 0;
-	right: 0.25rem;
+	left: 0.25rem;
 	z-index: var(--top-z-index);
 }
 

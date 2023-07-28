@@ -79,10 +79,12 @@
 	font-weight: bold;
 }
 
+.active,
 .nav-link:is(:hover, :focus) {
 	color: var(--black);
 	background-color: var(--yellow);
 }
+
 
 .bell-icon {
 	image-rendering: pixelated;

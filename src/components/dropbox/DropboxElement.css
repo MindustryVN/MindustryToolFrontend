@@ -4,6 +4,10 @@
 
 	outline: none;
 	border: none;
+
+	background-color: transparent;
+
+	padding: 0.25rem;
 }
 
 .dropbox-element:is(:active, :hover, :focus) {

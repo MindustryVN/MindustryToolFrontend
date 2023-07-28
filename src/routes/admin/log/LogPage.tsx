@@ -19,23 +19,6 @@ export default function LogPage() {
 	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>(`log/${contentType}`, 20);
 	const { addPopup } = usePopup();
 
-	console.log(contentType)
-
-	function buildLoadAndScrollButton() {
-		return (
-			<section className='grid-row small-gap'>
-				<Button onClick={() => loadPage()}>
-					<IfTrueElse
-						condition={hasMore} //
-						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more' />}
-					/>
-				</Button>
-				<ScrollToTopButton containerId='log' />
-			</section>
-		);
-	}
-
 	function handleDeleteLog(id: string) {
 		API.deleteLog(contentType, id) //
 			.then(() => addPopup('delete-success', 5, 'info'))
@@ -60,8 +43,17 @@ export default function LogPage() {
 				<IfTrueElse
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={buildLoadAndScrollButton()}
+					whenFalse={
+						<Button onClick={() => loadPage()}>
+							<IfTrueElse
+								condition={hasMore} //
+								whenTrue={<Trans i18nKey='load-more' />}
+								whenFalse={<Trans i18nKey='no-more' />}
+							/>
+						</Button>
+					}
 				/>
+				<ScrollToTopButton containerId='log' />
 			</footer>
 		</main>
 	);

@@ -16,7 +16,7 @@ export default function usePage<T extends Data>(url: string, itemPerPage: number
 	const [hasMore, setHasMore] = useState(false);
 
 	const ref = useRef({ url, itemPerPage });
-	
+
 	useEffect(() => {
 		setIsLoading(true);
 		setIsError(false);

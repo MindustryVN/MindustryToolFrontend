@@ -20,6 +20,9 @@ export default function NavigationPanel() {
 
 	const [showNavigatePanel, setShowNavigatePanel] = useState(false);
 
+	const pathName = window.location.pathname.slice(1);
+
+
 	const navigate = useNavigate();
 	const PrivateAlert = usePrivateAlert();
 
@@ -39,40 +42,40 @@ export default function NavigationPanel() {
 					<section className='popup' onMouseLeave={() => setShowNavigatePanel(false)}>
 						<section className='nav-link-container'>
 							<img src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='' />
-							<Link className='nav-link' to='/home' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('home') ? 'active' : '')} to='/home' onClick={() => setShowNavigatePanel(false)}>
 								Home
 							</Link>
-							<Link className='nav-link' to='/user' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('user') ? 'active' : '')} to='/user' onClick={() => setShowNavigatePanel(false)}>
 								User
 							</Link>
-							<Link className='nav-link' to='/forum' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('forum') ? 'active' : '')} to='/forum' onClick={() => setShowNavigatePanel(false)}>
 								Forum
 							</Link>
-							<Link className='nav-link' to='/schematic' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('schematic') ? 'active' : '')} to='/schematic' onClick={() => setShowNavigatePanel(false)}>
 								Schematic
 							</Link>
-							<Link className='nav-link' to='/map' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('map') ? 'active' : '')} to='/map' onClick={() => setShowNavigatePanel(false)}>
 								Map
 							</Link>
-							<Link className='nav-link' to='/mod' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('mod') ? 'active' : '')} to='/mod' onClick={() => setShowNavigatePanel(false)}>
 								Mod
 							</Link>
-							<Link className='nav-link' to='/logic' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('logic') ? 'active' : '')} to='/logic' onClick={() => setShowNavigatePanel(false)}>
 								Logic
 							</Link>
-							<Link className='nav-link' to='/upload' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('upload') ? 'active' : '')} to='/upload' onClick={() => setShowNavigatePanel(false)}>
 								Upload
 							</Link>
-							<Link className='nav-link' to='/mindustry-server' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('server') ? 'active' : '')} to='/mindustry-server' onClick={() => setShowNavigatePanel(false)}>
 								Server
 							</Link>
-							<Link className='nav-link' to='/info' onClick={() => setShowNavigatePanel(false)}>
+							<Link className={'nav-link ' + (pathName.startsWith('info') ? 'active' : '')} to='/info' onClick={() => setShowNavigatePanel(false)}>
 								Info
 							</Link>
 							{Users.isAdmin(me) && (
-									<Link className='nav-link' to='/admin' onClick={() => setShowNavigatePanel(false)}>
-										Admin
-									</Link>
+								<Link className={'nav-link ' + (pathName.startsWith('admin') ? 'active' : '')} to='/admin' onClick={() => setShowNavigatePanel(false)}>
+									Admin
+								</Link>
 							)}
 						</section>
 						<ClearButton onClick={() => setShowNavigatePanel(false)}>

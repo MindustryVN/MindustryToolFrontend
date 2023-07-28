@@ -1,9 +1,10 @@
-import { Trans } from 'react-i18next';
+import './ScrollToTopButton.css';
 import 'src/styles.css';
 
 import React from 'react';
-import Button from 'src/components/button/Button';
 import i18n from 'src/util/I18N';
+import { ArrowUpCircle } from 'src/components/common/Icon';
+import ClearButton from 'src/components/button/ClearButton';
 
 interface ScrollToTopButtonProps {
 	//id of the container
@@ -18,8 +19,8 @@ export default function ScrollToTopButton(props: ScrollToTopButtonProps) {
 	}
 
 	return (
-		<Button title={i18n.t('scroll-to-top').toString()} onClick={() => scrollToTop()}>
-			<Trans i18nKey='scroll-to-top' />
-		</Button>
+		<ClearButton className='scroll-to-top-button' title={i18n.t('scroll-to-top').toString()} onClick={() => scrollToTop()}>
+			<ArrowUpCircle />
+		</ClearButton>
 	);
 }

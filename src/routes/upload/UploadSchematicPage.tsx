@@ -24,7 +24,7 @@ import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import useMe from 'src/hooks/UseMe';
 
-const tabs = ['File', 'Code'];
+const tabs = ['file', 'code'];
 
 let notLoginMessage = (
 	<span>
@@ -54,7 +54,7 @@ export default function UploadSchematicPage() {
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
-		if (!files || files.length <= 0) {
+		if (!files || files.length <= 0 || !files[0]) {
 			popup.current.addPopup(i18n.t('invalid-schematic-file'), 5, 'error');
 			return;
 		}
@@ -67,9 +67,8 @@ export default function UploadSchematicPage() {
 		}
 
 		setFile(files[0]);
-		setCode('');
 
-		getPreview();
+		getPreview(files[0], '');
 	}
 
 	function handleCodeChange() {
@@ -82,16 +81,16 @@ export default function UploadSchematicPage() {
 				}
 
 				setCode(text);
-				setFile(undefined);
-				getPreview();
+				getPreview(undefined, text);
 			});
 	}
 
-	function getPreview() {
+	function getPreview(file: File | undefined, code: string) {
 		setIsLoading(true);
+
 		API.getSchematicPreview(code, file) //
 			.then((result) => setPreview(result.data)) //
-			.catch(() => popup.current.addPopup(i18n.t(`message.invalid-schematic`), 10, 'error')) //
+			.catch(() => popup.current.addPopup(i18n.t(`invalid-schematic`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 
@@ -117,7 +116,7 @@ export default function UploadSchematicPage() {
 				setTags([]);
 				popup.current.addPopup(i18n.t('upload-success'), 10, 'info');
 			})
-			.catch((error) => popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`message.${error.response.data}`), 10, 'error')) //
+			.catch((error) => popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 
@@ -137,21 +136,19 @@ export default function UploadSchematicPage() {
 		switch (currentTab) {
 			case tabs[0]:
 				return (
-					<section>
+					<>
 						<label className='button' htmlFor='ufb'>
 							<Trans i18nKey='upload-a-file' />
 						</label>
 						<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
-					</section>
+					</>
 				);
 
 			case tabs[1]:
 				return (
-					<section>
-						<Button onClick={() => handleCodeChange()}>
-							<Trans i18nKey='copy-from-clipboard' />
-						</Button>
-					</section>
+					<Button onClick={() => handleCodeChange()}>
+						<Trans i18nKey='copy-from-clipboard' />
+					</Button>
 				);
 
 			default:
@@ -174,8 +171,15 @@ export default function UploadSchematicPage() {
 				<section className='flex-center'>
 					<section className='code-file grid-row small-gap small-padding'>
 						{tabs.map((name, index) => (
-							<Button className={'code-file-button ' + (currentTab === name ? 'active' : '')} key={index} onClick={() => setCurrentTab(name)}>
-								<Trans i18nKey={name}/>
+							<Button
+								className={'code-file-button ' + (currentTab === name ? 'active' : '')}
+								key={index}
+								onClick={() => {
+									setFile(undefined);
+									setCode('');
+									setCurrentTab(name);
+								}}>
+								<Trans i18nKey={name} />
 							</Button>
 						))}
 					</section>

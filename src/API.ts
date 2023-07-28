@@ -174,7 +174,8 @@ export class API {
 		formData.append('tags', tag);
 
 		if (file) formData.append('file', file);
-		else formData.append('code', code);
+		
+		formData.append('code', code);
 
 		return API.REQUEST.post('schematic-upload', formData);
 	}

@@ -3,6 +3,7 @@ import 'src/styles.css';
 
 import React, { ChangeEventHandler, ReactNode, useState } from 'react';
 import DropboxElement from './DropboxElement';
+import { Trans } from 'react-i18next';
 
 interface DropboxProps<ItemType> {
 	placeholder?: string;
@@ -53,7 +54,7 @@ export default function Dropbox<ItemType>(props: DropboxProps<ItemType>) {
 								/>
 							))
 						) : (
-							<span>No result</span>
+							<Trans i18next='no-result' />
 						)}
 					</section>
 				)}
