@@ -97,7 +97,7 @@ export default function VerifySchematicPage() {
 	}
 
 	return (
-		<main id='verify-schematic' className='flex-column h100p w100p scroll-y'>
+		<main id='verify-schematic' className='flex-column h100p w100p'>
 			<section className='flex-row center medium-padding'>
 				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
 			</section>

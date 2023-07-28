@@ -9,7 +9,6 @@ import ClearButton from 'src/components/button/ClearButton';
 import UserDisplay from 'src/components/user/UserDisplay';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
-import DropdownMenu from 'src/components/dropbox/DropdownMenu';
 import useMe from 'src/hooks/UseMe';
 import IfTrue from 'src/components/common/IfTrue';
 import useNotification from 'src/hooks/UseNotification';
@@ -71,17 +70,9 @@ export default function NavigationPanel() {
 								Info
 							</Link>
 							{Users.isAdmin(me) && (
-								<DropdownMenu className='nav-link' parent={<span>Admin</span>}>
-									<Link className='nav-link' to='/admin/verify' onClick={() => setShowNavigatePanel(false)}>
-										Verify
+									<Link className='nav-link' to='/admin' onClick={() => setShowNavigatePanel(false)}>
+										Admin
 									</Link>
-									<Link className='nav-link' to='/admin/report' onClick={() => setShowNavigatePanel(false)}>
-										Report
-									</Link>
-									<Link className='nav-link' to='/admin/log' onClick={() => setShowNavigatePanel(false)}>
-										Log
-									</Link>
-								</DropdownMenu>
 							)}
 						</section>
 						<ClearButton onClick={() => setShowNavigatePanel(false)}>

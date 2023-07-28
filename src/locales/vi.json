@@ -49,6 +49,7 @@
 	"mode": "Chế độ",
 	"address": "Địa chỉ IP",
 	"description": "Mô tả",
+	"total-schematic":"Tổng bản thiết kế",
 	"loading": {
 		"short": "Đang tải",
 		"long": "Đang tải, vui lòng đợi 1-2 phút."

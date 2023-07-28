@@ -1,7 +1,7 @@
 import './LogPage.css';
 import 'src/styles.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import { LogData } from 'src/components/log/LogData';
@@ -15,9 +15,11 @@ import usePopup from 'src/hooks/UsePopup';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
 export default function LogPage() {
-	const contentType = 'system';
+	const [contentType, setContentType] = useState('system');
 	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>(`log/${contentType}`, 20);
 	const { addPopup } = usePopup();
+
+	console.log(contentType)
 
 	function buildLoadAndScrollButton() {
 		return (
@@ -36,14 +38,19 @@ export default function LogPage() {
 
 	function handleDeleteLog(id: string) {
 		API.deleteLog(contentType, id) //
-			.then(() => {
-				addPopup('delete-success', 5, 'info');
-				reloadPage();
-			})
+			.then(() => addPopup('delete-success', 5, 'info'))
+			.then(() => reloadPage())
 			.catch(() => addPopup('delete-fail', 5, 'warning'));
 	}
 	return (
 		<main id='log' className='log flex-column h100p w100p scroll-y'>
+			<section className='grid-row'>
+				{['system', 'api'].map((item, index) => (
+					<Button key={index} active={item === contentType} onClick={() => setContentType(item)}>
+						{item}
+					</Button>
+				))}
+			</section>
 			<section className='flex-column medium-gap'>
 				{pages.map((log) => (
 					<LogCard key={log.id} log={log} handleDeleteLog={handleDeleteLog} />

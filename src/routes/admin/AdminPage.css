@@ -1,0 +1,30 @@
+.tab-button-container {
+	background-color: var(--black);
+
+	border: 2px solid var(--gray);
+	border-radius: 5px;
+
+	overflow: hidden;
+}
+
+.tab-button,
+.tab-button-selected {
+	outline: none;
+	border: none;
+
+	padding: 0.2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+	cursor: pointer;
+}
+
+.tab-button {
+	background-color: var(--black);
+}
+
+.tab-button-selected {
+	background-color: var(--yellow);
+}

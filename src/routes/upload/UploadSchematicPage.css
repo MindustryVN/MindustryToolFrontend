@@ -5,3 +5,17 @@
 label {
 	font-size: calc(1rem * 40 / 3 / 16);
 }
+
+.code-file {
+	background-color: var(--black);
+	border-radius: 5px;
+	border: 2px solid var(--gray);
+}
+
+.code-file-button {
+	min-width: 4rem;
+}
+
+.code-file-button.active {
+	background-color: var(--yellow);
+}

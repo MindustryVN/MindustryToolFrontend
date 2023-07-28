@@ -27,7 +27,10 @@ export default function VerifyPage() {
 			<section className='flex-center'>
 				<section className='tab-button-container grid-row small-gap small-padding'>
 					{tabs.map((name, index) => (
-						<Button active={currentTab === name} key={index} onClick={() => setCurrentTab(name)}>
+						<Button
+							active={currentTab === name} //
+							key={index}
+							onClick={() => setCurrentTab(name)}>
 							{name}
 						</Button>
 					))}

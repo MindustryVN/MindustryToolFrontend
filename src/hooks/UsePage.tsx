@@ -3,14 +3,20 @@ import { useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import { Utils } from 'src/util/Utils';
 
-export default function usePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
+interface Data {
+	id: string;
+}
+
+var cancelRequest: AbortController;
+
+export default function usePage<T extends Data>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
 	const ref = useRef({ url, itemPerPage });
-
+	
 	useEffect(() => {
 		setIsLoading(true);
 		setIsError(false);
@@ -51,24 +57,28 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 		reloadPage: function reloadPage() {
 			if (isLoading) return;
 
-			let page = pages.length;
-
-			setPages([[]]);
 			setIsLoading(true);
 			setIsError(false);
 
-			for (let i = 0; i < page; i++) {
-				getPage(url, i, itemPerPage, searchConfig)
-					.then((result) => {
-						let data: T[] = result.data;
-						handleSetPage(i, data);
-						if (data.length < itemPerPage) {
-							i = page;
-						}
-					})
-					.catch(() => setIsError(true))
-					.finally(() => setIsLoading(false)); //
-			}
+			setPages([[]]);
+			getPage(
+				url,
+				0,
+				pages.map((ele) => ele.length).reduce((prev, curr) => curr + prev, 0),
+				searchConfig,
+			)
+				.then((result) => {
+					let data: T[] = result.data;
+					setPages(() => {
+						let a: T[][] = [];
+
+						for (var i = 0; i < data.length; i = i + itemPerPage) a.push(data.slice(i, i + itemPerPage));
+
+						return a;
+					});
+				})
+				.catch(() => setIsError(true))
+				.finally(() => setIsLoading(false)); //
 		},
 
 		loadPage: function loadPage() {
@@ -93,6 +103,10 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 }
 
 function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
+	if (cancelRequest) cancelRequest.abort();
+
+	cancelRequest = new AbortController();
+
 	if (!searchConfig) {
 		searchConfig = {
 			params: {
@@ -102,7 +116,7 @@ function getPage(url: string, page: number, itemPerPage: number, searchConfig: A
 		};
 	}
 
-	searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage } };
+	searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
 
 	return API.get(url, searchConfig);
 }
