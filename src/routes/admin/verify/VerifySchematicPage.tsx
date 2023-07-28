@@ -2,14 +2,16 @@ import 'src/styles.css';
 import './VerifySchematicPage.css';
 
 import React, { useEffect, useState } from 'react';
+import { Buffer } from 'buffer';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
+import { Trans } from 'react-i18next';
+import { Utils } from 'src/util/Utils';
 import Schematic from 'src/data/Schematic';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import { Utils } from 'src/util/Utils';
 import IconButton from 'src/components/button/IconButton';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
@@ -22,7 +24,6 @@ import useModel from 'src/hooks/UseModel';
 import SchematicContainer from 'src/components/schematic/SchematicContainer';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import LoadUserName from 'src/components/user/LoadUserName';
-import { Trans } from 'react-i18next';
 import SchematicDescription from 'src/components/schematic/SchematicDescription';
 import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
 import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
@@ -147,7 +148,7 @@ function SchematicPreview(props: SchematicPreviewProps) {
 			<SchematicPreviewImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
 			<ColorText className='capitalize small-padding flex-center text-center' text={props.schematic.name} />
 			<section className='grid-row small-gap small-padding'>
-				<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
+				<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 				<DownloadButton
 					href={Utils.getDownloadUrl(props.schematic.data)} //
 					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
@@ -206,7 +207,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 				/>
 			</section>
 			<section className='grid-row small-gap'>
-				<IconButton icon='/assets/icons/copy.png' onClick={() => copy(props.schematic.data)} />
+				<IconButton icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 				<DownloadButton
 					href={Utils.getDownloadUrl(props.schematic.data)} //
 					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
