@@ -13,3 +13,8 @@
 
 	color: var(--neutral);
 }
+
+input,
+textarea {
+	color: var(--neutral);
+}
