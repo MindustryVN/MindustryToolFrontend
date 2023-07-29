@@ -71,13 +71,14 @@
 	text-decoration: none;
 	padding: 0.2rem;
 
+	color: var(--neutral);
 	background-color: transparent;
 
 	font-weight: bold;
 }
 
-.active,
 .nav-link:is(:hover, :focus) {
+	color: var(--neutral);
 	background-color: var(--primary);
 }
 
