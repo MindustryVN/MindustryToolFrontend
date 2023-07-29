@@ -1,4 +1,5 @@
-import './ThemeProvider.css'
+import './ThemeProvider.css';
+import 'src/styles.css';
 
 import React, { ReactNode } from 'react';
 
@@ -23,7 +24,9 @@ export default function ThemeProvider(props: ThemeProviderProps) {
 
 	return (
 		<ThemeContext.Provider value={{ theme, setTheme: (theme: Theme) => setTheme(theme) }}>
-			<section className='theme' property={theme}>{props.children}</section>
+			<section className='theme w100p h100p' property={theme}>
+				{props.children}
+			</section>
 		</ThemeContext.Provider>
 	);
 }
