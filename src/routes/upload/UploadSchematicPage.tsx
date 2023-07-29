@@ -16,7 +16,6 @@ import TagPick from 'src/components/tag/TagPick';
 import { Trans } from 'react-i18next';
 import Button from 'src/components/button/Button';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
-import IfTrue from 'src/components/common/IfTrue';
 import LoadUserName from 'src/components/user/LoadUserName';
 import SchematicDescription from 'src/components/schematic/SchematicDescription';
 import SchematicRequirement from 'src/components/schematic/SchematicRequirement';

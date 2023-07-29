@@ -7,5 +7,5 @@ interface MapContainerProps {
 }
 
 export default function MapContainer(props: MapContainerProps) {
-	return <section className='schematic-container'>{props.children}</section>;
+	return <section className='map-container'>{props.children}</section>;
 }

@@ -5,15 +5,11 @@
 }
 
 .input-address {
-	outline: none;
-	border: none;
 	border-bottom: 2px solid var(--neutral);
 	background-color: transparent;
 }
 
 .input-address:is(:hover, :focus) {
-	outline: none;
-	border: none;
 	border-bottom: 2px solid var(--neutral);
 	background-color: transparent;
 }

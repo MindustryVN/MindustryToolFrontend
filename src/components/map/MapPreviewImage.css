@@ -1,4 +1,7 @@
 .map-preview-image-card {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	align-self: center;
 
 	background-color: black;
@@ -14,6 +17,11 @@
 .map-preview-image {
 	width: 100%;
 	height: 100%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
 	object-fit: contain;
 	overflow: hidden;
 }
