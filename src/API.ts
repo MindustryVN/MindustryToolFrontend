@@ -76,7 +76,7 @@ export class API {
 		form.append('data', map.data);
 		form.append('tags', tagString);
 
-		return API.REQUEST.post('schematic', form);
+		return API.REQUEST.post('map', form);
 	}
 
 	static rejectMap(map: Map, reason: string) {

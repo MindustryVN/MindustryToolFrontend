@@ -186,35 +186,30 @@ export default function UploadSchematicPage() {
 				</section>
 				<section className='flex-center'>{renderTab(currentTab)}</section>
 			</header>
-			<IfTrue
-				condition={preview}
-				whenTrue={
-					preview && (
-						<section className='flex-row flex-wrap medium-gap'>
-							<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
-							<section className='flex-column space-between'>
-								<section className='flex-column small-gap flex-wrap'>
-									<ColorText className='capitalize h2' text={preview.name} />
-									<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
-									<SchematicDescription description={preview.description} />
-									<SchematicRequirement requirement={preview.requirement} />
-									<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
-								</section>
-							</section>
-							<section className='flex-column flex-nowrap small-gap w100p'>
-								<Dropbox
-									placeholder={i18n.t('add-tag').toString()}
-									value={tag}
-									items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
-									onChange={(event) => setTag(event.target.value)}
-									onChoose={(item) => handleAddTag(item)}
-									mapper={(t, index) => <TagPick key={index} tag={t} />}
-								/>
-							</section>
+			{preview && (
+				<section className='flex-row flex-wrap medium-gap'>
+					<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
+					<section className='flex-column space-between'>
+						<section className='flex-column small-gap flex-wrap'>
+							<ColorText className='capitalize h2' text={preview.name} />
+							<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
+							<SchematicDescription description={preview.description} />
+							<SchematicRequirement requirement={preview.requirement} />
+							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 						</section>
-					)
-				}
-			/>
+					</section>
+					<section className='flex-column flex-nowrap small-gap w100p'>
+						<Dropbox
+							placeholder={i18n.t('add-tag').toString()}
+							value={tag}
+							items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+							onChange={(event) => setTag(event.target.value)}
+							onChoose={(item) => handleAddTag(item)}
+							mapper={(t, index) => <TagPick key={index} tag={t} />}
+						/>
+					</section>
+				</section>
+			)}
 			<footer className='flex-column center small-gap medium-padding'>
 				<span children={checkUploadRequirement()} />
 				<Button onClick={() => handleSubmit()}>

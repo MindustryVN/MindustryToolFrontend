@@ -1,19 +1,19 @@
-.map-image-wrapper {
-	width: var(--preview-image-min-size);
-	height: var(--preview-image-min-size);
+.map-preview-image-card {
+	align-self: center;
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	align-self: flex-start;
-
-	background-color: var(--accent);
+	background-color: black;
 }
 
-.map-preview-image {
+.map-preview-image-wrapper {
 	width: var(--preview-image-min-size);
 	height: var(--preview-image-min-size);
 
 	border-bottom: 2px solid var(--neutral);
+}
+
+.map-preview-image {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	overflow: hidden;
 }
