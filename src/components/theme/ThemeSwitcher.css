@@ -1,5 +1,5 @@
 .theme-switch {
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 	background-color: var(--neutral);
 
 	border-radius: 5px;

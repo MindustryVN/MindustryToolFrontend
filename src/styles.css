@@ -7,14 +7,14 @@
 
 	background-color: var(--accent);
 	color: var(--neutral);
-	
+
 	cursor: pointer;
-	
+
 	padding: 0.2rem;
 	box-sizing: border-box;
-	
+
 	border-radius: 5px;
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 }
 
 .button:hover,
@@ -26,9 +26,9 @@
 	align-items: center;
 
 	background-color: var(--primary);
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 	color: var(--neutral);
-	
+
 	cursor: pointer;
 
 	padding: 0.2rem;
