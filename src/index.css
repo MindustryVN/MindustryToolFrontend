@@ -41,10 +41,9 @@ body,
 	user-select: none;
 }
 
-section{
+section {
 	padding: 0;
 	margin: 0;
-	
 }
 
 a {
@@ -68,10 +67,10 @@ a {
 }
 
 :root {
-	--gray: #3f3f3f;
+	--gray: #c0c0c0;
 	--black: #111111;
-	--white: #e0e0e0;
-	--yellow: #ddad00;
+	--white: #ffffff;
+	--yellow: #f8d568;
 
 	--preview-image-min-size: 192px;
 

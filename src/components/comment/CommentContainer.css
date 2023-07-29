@@ -16,6 +16,6 @@
 	border-bottom: 2px solid var(--gray);
 	resize: none;
 
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 	border-radius: 5px;
 }

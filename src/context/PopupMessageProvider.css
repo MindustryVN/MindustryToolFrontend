@@ -27,7 +27,7 @@
 	min-width: 20vw;
 	max-width: 30vw;
 
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 
 	animation: slide-in 0.5s forwards;
 }

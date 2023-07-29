@@ -1,5 +1,5 @@
 .theme-switch {
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 	background-color: var(--neutral);
 
 	border-radius: 5px;
@@ -15,6 +15,6 @@
 	padding: 0.25rem;
 }
 
-.active {
+.theme-switch-button.active {
 	color: var(--primary);
 }

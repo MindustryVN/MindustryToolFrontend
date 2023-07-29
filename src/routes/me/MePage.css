@@ -3,7 +3,7 @@
 }
 
 .avatar-image {
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 }
 
 .username {

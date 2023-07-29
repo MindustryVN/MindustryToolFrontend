@@ -9,7 +9,7 @@
 	box-sizing: border-box;
 
 	border-radius: 5px;
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 }
 
 .negative-count {

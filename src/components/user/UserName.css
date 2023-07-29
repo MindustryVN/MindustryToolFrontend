@@ -12,7 +12,7 @@
 
 	width: fit-content;
 
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 	border-radius: 1rem;
 
 	background-color: var(--accent);

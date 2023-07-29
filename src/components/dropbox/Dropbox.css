@@ -9,7 +9,7 @@
 
 	justify-content: center;
 
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 
 	width: 100%;
 }
@@ -54,6 +54,6 @@
 	background-color: var(--accent);
 	overflow: hidden auto;
 
-	border: 2px solid var(--neutral);
+	border: 2px solid var(--gray);
 	border-radius: 5px;
 }
