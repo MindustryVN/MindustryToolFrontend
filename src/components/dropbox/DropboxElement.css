@@ -14,14 +14,14 @@
 	display: flex;
 	justify-content: flex-start;
 
-	color: var(--black);
-	background-color: var(--yellow);
+	color: var(--accent);
+	background-color: var(--primary);
 }
 
 .dropbox-element:is(:active, :hover, :focus) > * {
 	display: flex;
 	justify-content: flex-start;
 
-	color: var(--black);
-	background-color: var(--yellow);
+	color: var(--accent);
+	background-color: var(--primary);
 }

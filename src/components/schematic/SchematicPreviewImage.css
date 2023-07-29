@@ -5,15 +5,15 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	
+
 	align-self: flex-start;
-	
-	background-color: var(--black);
+
+	background-color: var(--accent);
 }
 
 .schematic-preview-image {
 	width: var(--preview-image-min-size);
 	height: var(--preview-image-min-size);
 
-	border-bottom: 2px solid var(--white);
+	border-bottom: 2px solid var(--neutral);
 }

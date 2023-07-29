@@ -143,7 +143,7 @@ export default function UploadPage() {
 								<Dropbox
 									placeholder={i18n.t('add-tag').toString()}
 									value={tag}
-									items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+									items={Tags.MAP_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 									onChange={(event) => setTag(event.target.value)}
 									onChoose={(item) => handleAddTag(item)}
 									mapper={(t, index) => <TagPick key={index} tag={t} />}

@@ -1,5 +1,5 @@
 .tab-button-container {
-	background-color: var(--black);
+	background-color: var(--accent);
 
 	border: 2px solid var(--gray);
 	border-radius: 5px;
@@ -22,9 +22,9 @@
 }
 
 .tab-button {
-	background-color: var(--black);
+	background-color: var(--accent);
 }
 
 .tab-button-selected {
-	background-color: var(--yellow);
+	background-color: var(--primary);
 }

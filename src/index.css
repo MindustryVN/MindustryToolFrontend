@@ -61,10 +61,10 @@ a {
 }
 
 :root {
-	--black: #111111;
+	--accent: #111111;
 	--gray: #3f3f3f;
-	--white: #d0d0d0;
-	--yellow: #ffcb74;
+	--neutral: #d0d0d0;
+	--primary: #ffcb74;
 
 	--preview-image-min-size: 192px;
 

@@ -7,7 +7,7 @@ label {
 }
 
 .code-file {
-	background-color: var(--black);
+	background-color: var(--accent);
 	border-radius: 5px;
 	border: 2px solid var(--gray);
 }
@@ -17,5 +17,5 @@ label {
 }
 
 .code-file-button.active {
-	background-color: var(--yellow);
+	background-color: var(--primary);
 }
