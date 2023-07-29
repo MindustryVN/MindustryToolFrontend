@@ -1,12 +1,22 @@
-.map-info-image {
+.map-info-image-wrapper {
 	display: block;
 	border-radius: 5px;
-	border: 2px solid var(--white);
+	border: 2px solid var(--neutral);
 
 	min-width: var(--preview-image-min-size);
 	min-height: var(--preview-image-min-size);
 
-	max-width: min(512px, 80vw);
+	max-width: min(1024px, 100vw);
+
+	aspect-ratio: 1;
 
 	align-self: flex-start;
+	background-color: black;
+}
+
+.map-info-image {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	overflow: hidden;
 }

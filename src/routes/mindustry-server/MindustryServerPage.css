@@ -7,14 +7,14 @@
 .input-address {
 	outline: none;
 	border: none;
-	border-bottom: 2px solid var(--white);
+	border-bottom: 2px solid var(--neutral);
 	background-color: transparent;
 }
 
 .input-address:is(:hover, :focus) {
 	outline: none;
 	border: none;
-	border-bottom: 2px solid var(--white);
+	border-bottom: 2px solid var(--neutral);
 	background-color: transparent;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .server-table-header {
-	background-color: var(--black);
+	background-color: var(--accent);
 	text-align: left;
 
 	padding: 1rem;
@@ -43,7 +43,7 @@ th {
 
 .server-table-row {
 	padding: 1rem;
-	background-color: var(--black);
+	background-color: var(--accent);
 	vertical-align: top;
 }
 
@@ -70,7 +70,7 @@ th {
 	}
 
 	.server-card-info {
-		background-color: var(--black);
+		background-color: var(--accent);
 
 		min-height: 4rem;
 		padding: 0.5rem;

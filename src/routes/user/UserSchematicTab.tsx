@@ -45,21 +45,6 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 		setVisibility(true);
 	}
 
-	function buildLoadAndScrollButton() {
-		return (
-			<section className='grid-row small-gap'>
-				<Button onClick={() => loadPage()}>
-					<IfTrueElse
-						condition={hasMore} //
-						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more' />}
-					/>
-				</Button>
-				<ScrollToTopButton containerId='schematic-tab' />
-			</section>
-		);
-	}
-
 	return (
 		<main id='schematic-tab' className='flex-column small-gap w100p h100p scroll-y'>
 			<SchematicContainer
@@ -75,8 +60,17 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 				<IfTrueElse
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={buildLoadAndScrollButton()}
+					whenFalse={
+						<Button onClick={() => loadPage()}>
+							<IfTrueElse
+								condition={hasMore} //
+								whenTrue={<Trans i18nKey='load-more' />}
+								whenFalse={<Trans i18nKey='no-more' />}
+							/>
+						</Button>
+					}
 				/>
+				<ScrollToTopButton containerId='schematic-tab' />
 			</footer>
 			<IfTrue
 				condition={currentSchematic}

@@ -10,10 +10,6 @@ interface UserNameProps {
 }
 
 export function UserName(props: UserNameProps) {
-	if (!props.displayUser) return <span>User not found</span>;
-
-	if (props.displayUser.id === 'community') return <span>Community</span>;
-
 	return (
 		<Link className='user-name-card' to={`/user/${props.displayUser.id}`}>
 			<img

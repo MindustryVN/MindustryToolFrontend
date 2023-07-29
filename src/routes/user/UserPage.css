@@ -12,7 +12,7 @@
 }
 
 .avatar-image {
-	border: 2px solid var(--white);
+	border: 2px solid var(--neutral);
 
 	align-self: flex-start;
 }

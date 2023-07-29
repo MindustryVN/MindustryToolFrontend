@@ -18,7 +18,7 @@
 	"no-tag": "Thêm ít nhất một nhãn(Tag) để đăng",
 	"no-data": "Vui lòng thêm dữ liệu bản thiết kế",
 	"recommend-login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập",
-	"invalid-schematic": "Bản thiết kế lỗi: ",
+	"invalid-schematic": "Bản thiết kế lỗi",
 	"not-schematic-code": "Mã bản thiết kế lỗi",
 	"delete-schematic-dialog": "Xóa bản thiết kế?",
 	"lost-connection": "Mất kết nối với máy chủ",
@@ -49,6 +49,12 @@
 	"mode": "Chế độ",
 	"address": "Địa chỉ IP",
 	"description": "Mô tả",
+	"total-schematic": "Tổng bản thiết kế",
+	"total-map": "Tổng bản đồ",
+	"file": "Tệp",
+	"code": "Mã",
+	"upload-a-file": "Chọn một tệp",
+	"copy-from-clipboard": "Sao chép từ bộ nhớ tạm",
 	"loading": {
 		"short": "Đang tải",
 		"long": "Đang tải, vui lòng đợi 1-2 phút."
@@ -167,7 +173,8 @@
 				"resource": "Tài nguyên",
 				"j4f": "J4F",
 				"power": "Năng lượng",
-				"defense": "Phòng thủ"
+				"defense": "Phòng thủ",
+				"art": "Tác phẩm nghệ thuật"
 			}
 		},
 		"game-mode": {
@@ -178,7 +185,8 @@
 				"attack": "Tấn công",
 				"sandbox": "Sáng tạo (Sandbox)",
 				"hex": "Hex",
-				"tower-defense": "Thủ thành(Tower defense)"
+				"tower-defense": "Thủ thành(Tower defense)",
+				"survival": "Sinh tồn"
 			}
 		},
 		"verify": {

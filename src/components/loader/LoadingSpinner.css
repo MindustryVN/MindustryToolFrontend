@@ -9,7 +9,7 @@
 	animation: 1.5s linear infinite spinner;
 	animation-play-state: inherit;
 	border: solid 5px #cfd0d1;
-	border-bottom-color: var(--black);
+	border-bottom-color: var(--accent);
 	border-radius: 50%;
 
 	content: '';

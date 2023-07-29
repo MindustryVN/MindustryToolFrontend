@@ -5,7 +5,7 @@
 
 	box-sizing: border-box;
 
-	background-color: var(--black);
+	background-color: var(--accent);
 
 	display: flex;
 
@@ -38,7 +38,7 @@
 	left: 0;
 	height: 100%;
 
-	background-color: var(--black);
+	background-color: var(--accent);
 	max-width: 300px;
 
 	box-sizing: border-box;
@@ -73,15 +73,16 @@
 	text-decoration: none;
 	padding: 0.2rem;
 
-	color: var(--white);
+	color: var(--neutral);
 	background-color: transparent;
 
 	font-weight: bold;
 }
 
+.active,
 .nav-link:is(:hover, :focus) {
-	color: var(--black);
-	background-color: var(--yellow);
+	color: var(--accent);
+	background-color: var(--primary);
 }
 
 .bell-icon {

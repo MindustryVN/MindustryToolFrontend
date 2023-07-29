@@ -12,10 +12,10 @@
 
 	width: fit-content;
 
-	border: 2px solid var(--white);
+	border: 2px solid var(--neutral);
 	border-radius: 1rem;
 
-	background-color: var(--black);
+	background-color: var(--accent);
 
 	cursor: pointer;
 

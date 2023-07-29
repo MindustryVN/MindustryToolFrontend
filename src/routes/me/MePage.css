@@ -3,9 +3,9 @@
 }
 
 .avatar-image {
-	border: 2px solid var(--white);
+	border: 2px solid var(--neutral);
 }
 
-.username{
+.username {
 	font-size: 1.5rem;
 }

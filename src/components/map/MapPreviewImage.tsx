@@ -9,8 +9,10 @@ interface MapPreviewImageProps {
 
 export default function MapPreviewImage(props: MapPreviewImageProps) {
 	return (
-		<button className='map-image-wrapper' type='button' onClick={() => props.onClick()}>
-			<img className='map-preview-image' src={props.src} alt='map' />
+		<button className='map-preview-image-card' type='button' onClick={() => props.onClick()}>
+			<section className='map-preview-image-wrapper'>
+				<img className='map-preview-image' src={props.src} alt='map' />
+			</section>
 		</button>
 	);
 }

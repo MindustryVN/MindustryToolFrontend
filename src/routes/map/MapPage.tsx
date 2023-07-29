@@ -108,21 +108,6 @@ export default function MapPage() {
 		setVisibility(true);
 	}
 
-	function buildLoadAndScrollButton() {
-		return (
-			<section className='grid-row small-gap'>
-				<Button onClick={() => loadPage()}>
-					<IfTrueElse
-						condition={hasMore} //
-						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more' />}
-					/>
-				</Button>
-				<ScrollToTopButton containerId='map' />
-			</section>
-		);
-	}
-
 	function handleDeleteMap(map: Map) {
 		API.deleteMap(map.id) //
 			.then(() => addPopup(i18n.t('map.delete-success'), 5, 'info')) //
@@ -171,8 +156,17 @@ export default function MapPage() {
 				<IfTrueElse
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={buildLoadAndScrollButton()}
+					whenFalse={
+						<Button onClick={() => loadPage()}>
+							<IfTrueElse
+								condition={hasMore} //
+								whenTrue={<Trans i18nKey='load-more' />}
+								whenFalse={<Trans i18nKey='no-more' />}
+							/>
+						</Button>
+					}
 				/>
+				<ScrollToTopButton containerId='map' />
 			</footer>
 			<IfTrue
 				condition={currentMap}
@@ -217,7 +211,6 @@ interface MapPreviewButtonProps {
 }
 
 function MapPreviewButton(props: MapPreviewButtonProps) {
-
 	const likeService = useLike('map', props.map.id, props.map.like);
 	props.map.like = likeService.likes;
 

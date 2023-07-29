@@ -1,7 +1,7 @@
 .schematic-info-image {
 	display: block;
 	border-radius: 5px;
-	border: 2px solid var(--white);
+	border: 2px solid var(--neutral);
 
 	min-width: var(--preview-image-min-size);
 	min-height: var(--preview-image-min-size);

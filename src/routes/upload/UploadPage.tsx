@@ -1,31 +1,27 @@
-import './AdminPage.css';
+import './UploadPage.css';
 import 'src/styles.css';
 
 import React, { useState } from 'react';
-import VerifyPage from 'src/routes/admin/verify/VerifyPage';
 import { Trans } from 'react-i18next';
-import LogPage from 'src/routes/admin/log/LogPage';
+import UploadMapPage from 'src/routes/upload/UploadMapPage';
+import UploadSchematicPage from 'src/routes/upload/UploadSchematicPage';
 
-const tabs = ['verify', 'report', 'log'];
+const tabs = ['schematic', 'map'];
 
-export default function AdminPage() {
+export default function UploadPage() {
 	const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
 	function renderTab() {
 		switch (selectedTab) {
 			case tabs[0]:
-				return <VerifyPage />;
+				return <UploadSchematicPage />;
 
 			case tabs[1]:
-				return <>No</>;
-
-			case tabs[2]:
-				return <LogPage />;
+				return <UploadMapPage />;
 		}
 	}
-
 	return (
-		<main id='admin' className='flex-column h100p w100p small-gap small-padding border-box'>
+		<main className='flex-column h100p w100p small-gap small-padding border-box'>
 			<section className='grid-row tab-button-container'>
 				{tabs.map((name, index) => (
 					<button

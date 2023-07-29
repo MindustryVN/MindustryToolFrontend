@@ -30,7 +30,6 @@ function NotificationContainer() {
 
 	function handleMarkAsRead(notification: Notification) {
 		API.markNotificationAsRead(notification.id) //
-			.then(() => addPopup(i18n.t('mark-as-read'), 5, 'info'))
 			.then(() => (notification.read = true))
 			.then(() => setUnreadNotifications((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
@@ -39,7 +38,6 @@ function NotificationContainer() {
 
 	function handleMarkAsReadAll() {
 		API.markAsReadNotificationAll() //
-			.then(() => addPopup(i18n.t('mark-as-read'), 5, 'info'))
 			.then(() => setUnreadNotifications((_) => 0))
 			.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
@@ -47,14 +45,12 @@ function NotificationContainer() {
 
 	function handleDelete(notification: Notification) {
 		API.deleteNotification(notification.id)
-			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.then(() => setUnreadNotifications((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
 	}
 	function handleDeleteAll() {
 		API.deleteNotificationAll()
-			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.then(() => setUnreadNotifications((_) => 0))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => reloadPage());

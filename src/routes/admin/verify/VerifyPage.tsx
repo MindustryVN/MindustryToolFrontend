@@ -3,6 +3,7 @@ import 'src/styles.css';
 import React, { useState } from 'react';
 import Button from 'src/components/button/Button';
 import VerifySchematicPage from 'src/routes/admin/verify/VerifySchematicPage';
+import VerifyMapPage from 'src/routes/admin/verify/VerifyMapPage';
 
 const tabs = ['Schematic', 'Map'];
 
@@ -15,7 +16,7 @@ export default function VerifyPage() {
 				return <VerifySchematicPage />;
 
 			case tabs[1]:
-				return <>{currentTab}</>;
+				return <VerifyMapPage />;
 
 			default:
 				return <>No tab</>;
@@ -27,7 +28,10 @@ export default function VerifyPage() {
 			<section className='flex-center'>
 				<section className='tab-button-container grid-row small-gap small-padding'>
 					{tabs.map((name, index) => (
-						<Button active={currentTab === name} key={index} onClick={() => setCurrentTab(name)}>
+						<Button
+							active={currentTab === name} //
+							key={index}
+							onClick={() => setCurrentTab(name)}>
 							{name}
 						</Button>
 					))}

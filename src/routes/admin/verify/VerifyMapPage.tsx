@@ -1,5 +1,5 @@
 import 'src/styles.css';
-import './VerifySchematicPage.css';
+import './VerifyMapPage.css';
 
 import React, { useEffect, useState } from 'react';
 import { Buffer } from 'buffer';
@@ -8,7 +8,7 @@ import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
 import { Trans } from 'react-i18next';
 import { Utils } from 'src/util/Utils';
-import Schematic from 'src/data/Schematic';
+import Map from 'src/data/Map';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
@@ -17,50 +17,49 @@ import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import useClipboard from 'src/hooks/UseClipboard';
 import usePage from 'src/hooks/UsePage';
-import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
+import MapPreviewImage from 'src/components/map/MapPreviewImage';
 import ColorText from 'src/components/common/ColorText';
 import DownloadButton from 'src/components/button/DownloadButton';
 import useModel from 'src/hooks/UseModel';
-import SchematicContainer from 'src/components/schematic/SchematicContainer';
+import MapContainer from 'src/components/map/MapContainer';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import LoadUserName from 'src/components/user/LoadUserName';
-import SchematicDescription from 'src/components/schematic/SchematicDescription';
-import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
-import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
+import MapDescription from 'src/components/map/MapDescription';
+import MapInfoImage from 'src/components/map/MapInfoImage';
 import IfTrueElse from 'src/components/common/IfTrueElse';
 import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
-import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
+import MapPreviewCard from 'src/components/map/MapPreviewCard';
 import usePopup from 'src/hooks/UsePopup';
 import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
-export default function VerifySchematicPage() {
-	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
+export default function VerifyMapPage() {
+	const [currentMap, setCurrentMap] = useState<Map>();
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Schematic>('schematic-upload', 20);
+	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Map>('map-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const [totalSchematic, setTotalSchematic] = useState(0);
+	const [totalMap, setTotalMap] = useState(0);
 
 	useEffect(() => {
-		API.getTotalSchematicUpload()
-			.then((result) => setTotalSchematic(result.data))
-			.catch(() => console.log('Error fletching total schematic'));
+		API.getTotalMapUpload()
+			.then((result) => setTotalMap(result.data))
+			.catch(() => console.log('Error fletching total map'));
 	}, []);
 
-	function handleOpenSchematicInfo(schematic: Schematic) {
-		setCurrentSchematic(schematic);
+	function handleOpenMapInfo(map: Map) {
+		setCurrentMap(map);
 		setVisibility(true);
 	}
 
-	function rejectSchematic(schematic: Schematic, reason: string) {
-		API.rejectSchematic(schematic, reason) //
+	function rejectMap(map: Map, reason: string) {
+		API.rejectMap(map, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
-			.then(() => setTotalSchematic((prev) => prev - 1)) //
+			.then(() => setTotalMap((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => {
 				reloadPage();
@@ -68,12 +67,12 @@ export default function VerifySchematicPage() {
 			});
 	}
 
-	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
+	function verifyMap(map: Map, tags: TagChoiceLocal[]) {
 		const tagString = Tags.toString(tags);
-		API.verifySchematic(schematic, tagString) //
-			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has be accept', 'Post schematic success'))
+		API.verifyMap(map, tagString) //
+			.then(() => API.postNotification(map.authorId, 'Your map submission has be accept', 'Post map success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
-			.then(() => setTotalSchematic((prev) => prev - 1))
+			.then(() => setTotalMap((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => {
 				reloadPage();
@@ -82,16 +81,16 @@ export default function VerifySchematicPage() {
 	}
 
 	return (
-		<main id='verify-schematic' className='flex-column h100p w100p'>
+		<main id='verify-map' className='flex-column h100p w100p'>
 			<section className='flex-row center medium-padding'>
-				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
+				<Trans i18nKey='total-map' />:{totalMap > 0 ? totalMap : 0}
 			</section>
-			<SchematicContainer
-				children={pages.map((schematic) => (
-					<SchematicPreview
-						key={schematic.id} //
-						schematic={schematic}
-						handleOpenModel={(schematic) => handleOpenSchematicInfo(schematic)}
+			<MapContainer
+				children={pages.map((map) => (
+					<MapPreview
+						key={map.id} //
+						map={map}
+						handleOpenModel={(map) => handleOpenMapInfo(map)}
 					/>
 				))}
 			/>
@@ -110,18 +109,18 @@ export default function VerifySchematicPage() {
 					}
 				/>
 
-				<ScrollToTopButton containerId='verify-schematic' />
+				<ScrollToTopButton containerId='verify-map' />
 			</footer>
 			<IfTrue
-				condition={currentSchematic}
+				condition={currentMap}
 				whenTrue={
-					currentSchematic &&
+					currentMap &&
 					model(
-						<SchematicInfo
-							schematic={currentSchematic} //
+						<MapInfo
+							map={currentMap} //
 							handleCloseModel={() => setVisibility(false)}
-							handleVerifySchematic={verifySchematic}
-							handleRejectSchematic={rejectSchematic}
+							handleVerifyMap={verifyMap}
+							handleRejectMap={rejectMap}
 						/>,
 					)
 				}
@@ -130,44 +129,39 @@ export default function VerifySchematicPage() {
 	);
 }
 
-interface SchematicPreviewProps {
-	schematic: Schematic;
-	handleOpenModel: (schematic: Schematic) => void;
+interface MapPreviewProps {
+	map: Map;
+	handleOpenModel: (map: Map) => void;
 }
 
-function SchematicPreview(props: SchematicPreviewProps) {
-	const { copy } = useClipboard();
-
+function MapPreview(props: MapPreviewProps) {
 	return (
-		<SchematicPreviewCard>
-			<SchematicPreviewImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
-			<ColorText className='capitalize small-padding flex-center text-center' text={props.schematic.name} />
+		<MapPreviewCard>
+			<MapPreviewImage src={`${API_BASE_URL}map-upload/${props.map.id}/image`} onClick={() => props.handleOpenModel(props.map)} />
+			<ColorText className='capitalize small-padding flex-center text-center' text={props.map.name} />
 			<section className='grid-row small-gap small-padding'>
-				<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 				<DownloadButton
-					href={Utils.getDownloadUrl(props.schematic.data)} //
-					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
+					href={Utils.getDownloadUrl(props.map.data)} //
+					download={`${('map_' + props.map.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 			</section>
-		</SchematicPreviewCard>
+		</MapPreviewCard>
 	);
 }
 
-interface SchematicInfoProps {
-	schematic: Schematic;
-	handleVerifySchematic: (schematic: Schematic, tags: TagChoiceLocal[]) => void;
-	handleRejectSchematic: (schematic: Schematic, reason: string) => void;
+interface MapInfoProps {
+	map: Map;
+	handleVerifyMap: (map: Map, tags: TagChoiceLocal[]) => void;
+	handleRejectMap: (map: Map, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
-function SchematicInfo(props: SchematicInfoProps) {
-	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.schematic.tags, Tags.SCHEMATIC_UPLOAD_TAG));
+function MapInfo(props: MapInfoProps) {
+	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.map.tags, Tags.MAP_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
 
 	const verifyDialog = useDialog();
 	const rejectDialog = useDialog();
-
-	const { copy } = useClipboard();
 
 	function handleAddTag(tag: TagChoiceLocal) {
 		tags.filter((q) => q !== tag);
@@ -182,12 +176,11 @@ function SchematicInfo(props: SchematicInfoProps) {
 	return (
 		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
 			<section className='flex-row medium-gap flex-wrap'>
-				<SchematicInfoImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} />
+				<MapInfoImage src={`${API_BASE_URL}map-upload/${props.map.id}/image`} />
 				<section className='flex-column small-gap flex-wrap'>
-					<h2 className='capitalize'>{props.schematic.name}</h2>
-					<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
-					<SchematicDescription description={props.schematic.description} />
-					<SchematicRequirement requirement={props.schematic.requirement} />
+					<h2 className='capitalize'>{props.map.name}</h2>
+					<Trans i18nKey='author' /> <LoadUserName userId={props.map.authorId} />
+					<MapDescription description={props.map.description} />
 					<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 				</section>
 			</section>
@@ -195,17 +188,16 @@ function SchematicInfo(props: SchematicInfoProps) {
 				<Dropbox
 					placeholder={i18n.t('add-tag').toString()}
 					value={tag}
-					items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+					items={Tags.MAP_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 					onChange={(event) => setTag(event.target.value)}
 					onChoose={(item) => handleAddTag(item)}
 					mapper={(t, index) => <TagPick key={index} tag={t} />}
 				/>
 			</section>
 			<section className='grid-row small-gap'>
-				<IconButton icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 				<DownloadButton
-					href={Utils.getDownloadUrl(props.schematic.data)} //
-					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
+					href={Utils.getDownloadUrl(props.map.data)} //
+					download={`${('map_' + props.map.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
 				<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />
@@ -213,14 +205,14 @@ function SchematicInfo(props: SchematicInfoProps) {
 			</section>
 			{verifyDialog.dialog(
 				<ConfirmDialog
-					onConfirm={() => props.handleVerifySchematic(props.schematic, tags)} //
+					onConfirm={() => props.handleVerifyMap(props.map, tags)} //
 					onClose={() => verifyDialog.setVisibility(false)}>
 					<Trans i18nKey='verify' />
 				</ConfirmDialog>,
 			)}
 			{rejectDialog.dialog(
 				<TypeDialog
-					onSubmit={(reason) => props.handleRejectSchematic(props.schematic, reason)} //
+					onSubmit={(reason) => props.handleRejectMap(props.map, reason)} //
 					onClose={() => rejectDialog.setVisibility(false)}
 				/>,
 			)}

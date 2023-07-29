@@ -110,21 +110,6 @@ export default function SchematicPage() {
 		setVisibility(true);
 	}
 
-	function buildLoadAndScrollButton() {
-		return (
-			<section className='grid-row small-gap'>
-				<Button onClick={() => loadPage()}>
-					<IfTrueElse
-						condition={hasMore} //
-						whenTrue={<Trans i18nKey='load-more' />}
-						whenFalse={<Trans i18nKey='no-more' />}
-					/>
-				</Button>
-				<ScrollToTopButton containerId='schematic' />
-			</section>
-		);
-	}
-
 	function handleDeleteSchematic(schematic: Schematic) {
 		API.deleteSchematic(schematic.id) //
 			.then(() => addPopup(i18n.t('schematic.delete-success'), 5, 'info')) //
@@ -173,8 +158,17 @@ export default function SchematicPage() {
 				<IfTrueElse
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={buildLoadAndScrollButton()}
+					whenFalse={
+						<Button onClick={() => loadPage()}>
+							<IfTrueElse
+								condition={hasMore} //
+								whenTrue={<Trans i18nKey='load-more' />}
+								whenFalse={<Trans i18nKey='no-more' />}
+							/>
+						</Button>
+					}
 				/>
+				<ScrollToTopButton containerId='schematic' />
 			</footer>
 			<IfTrue
 				condition={currentSchematic}

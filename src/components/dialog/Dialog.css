@@ -24,8 +24,8 @@
 
 	overflow: hidden;
 
-	background-color: var(--black);
-	border: 2px solid var(--black);
+	background-color: var(--accent);
+	border: 2px solid var(--accent);
 	border-radius: 0.5rem;
 }
 

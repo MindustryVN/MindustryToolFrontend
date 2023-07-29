@@ -7,5 +7,9 @@ interface MapInfoImageProps {
 }
 
 export default function MapInfoImage(props: MapInfoImageProps) {
-	return <img className='map-info-image' src={`${props.src}`} alt='map' />;
+	return (
+		<section className='map-info-image-wrapper'>
+			<img className='map-info-image' src={`${props.src}`} alt='map' />
+		</section>
+	);
 }

@@ -76,7 +76,7 @@ export class API {
 		form.append('data', map.data);
 		form.append('tags', tagString);
 
-		return API.REQUEST.post('schematic', form);
+		return API.REQUEST.post('map', form);
 	}
 
 	static rejectMap(map: Map, reason: string) {
@@ -174,7 +174,8 @@ export class API {
 		formData.append('tags', tag);
 
 		if (file) formData.append('file', file);
-		else formData.append('code', code);
+		
+		formData.append('code', code);
 
 		return API.REQUEST.post('schematic-upload', formData);
 	}
