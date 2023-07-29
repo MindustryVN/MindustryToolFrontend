@@ -19,8 +19,6 @@
 
 .icon {
 	background-color: transparent;
-	outline: none;
-	border: none;
 
 	image-rendering: pixelated;
 }
@@ -79,9 +77,8 @@
 	font-weight: bold;
 }
 
-.active,
 .nav-link:is(:hover, :focus) {
-	color: var(--accent);
+	color: var(--neutral);
 	background-color: var(--primary);
 }
 
@@ -92,7 +89,7 @@
 
 	box-sizing: border-box;
 
-	border: 2px solid var(--gray);
+	border: 2px solid var(--neutral);
 	border-radius: 5px;
 }
 

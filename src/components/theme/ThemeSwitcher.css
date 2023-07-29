@@ -1,0 +1,20 @@
+.theme-switch {
+	border: 2px solid var(--neutral);
+	background-color: var(--neutral);
+
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.theme-switch-button {
+	color: var(--neutral);
+	background-color: var(--accent);
+
+	cursor: pointer;
+
+	padding: 0.25rem;
+}
+
+.active {
+	color: var(--primary);
+}

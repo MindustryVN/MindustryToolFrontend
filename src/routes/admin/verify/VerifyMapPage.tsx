@@ -2,7 +2,6 @@ import 'src/styles.css';
 import './VerifyMapPage.css';
 
 import React, { useEffect, useState } from 'react';
-import { Buffer } from 'buffer';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
@@ -12,10 +11,8 @@ import Map from 'src/data/Map';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import IconButton from 'src/components/button/IconButton';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
-import useClipboard from 'src/hooks/UseClipboard';
 import usePage from 'src/hooks/UsePage';
 import MapPreviewImage from 'src/components/map/MapPreviewImage';
 import ColorText from 'src/components/common/ColorText';

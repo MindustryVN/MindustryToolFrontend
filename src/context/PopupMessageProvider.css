@@ -27,7 +27,7 @@
 	min-width: 20vw;
 	max-width: 30vw;
 
-	border: 2px solid var(--gray);
+	border: 2px solid var(--neutral);
 
 	animation: slide-in 0.5s forwards;
 }
@@ -71,4 +71,3 @@
 		transform: translateX(0);
 	}
 }
-

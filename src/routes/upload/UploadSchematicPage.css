@@ -9,7 +9,7 @@ label {
 .code-file {
 	background-color: var(--accent);
 	border-radius: 5px;
-	border: 2px solid var(--gray);
+	border: 2px solid var(--neutral);
 }
 
 .code-file-button {

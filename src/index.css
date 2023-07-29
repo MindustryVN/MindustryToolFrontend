@@ -28,9 +28,10 @@ body,
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	color: white;
-
 	font-weight: 800;
+
+	border: none;
+	outline: none;
 
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -38,6 +39,12 @@ body,
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+section{
+	padding: 0;
+	margin: 0;
+	
 }
 
 a {
@@ -61,10 +68,10 @@ a {
 }
 
 :root {
-	--accent: #111111;
 	--gray: #3f3f3f;
-	--neutral: #d0d0d0;
-	--primary: #ffcb74;
+	--black: #111111;
+	--white: #e0e0e0;
+	--yellow: #ddad00;
 
 	--preview-image-min-size: 192px;
 

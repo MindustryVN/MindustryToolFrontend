@@ -8,8 +8,6 @@
 }
 
 .input-bar[type='text'] {
-	outline: none;
-	border: none;
 	box-shadow: none;
 	background-color: transparent;
 

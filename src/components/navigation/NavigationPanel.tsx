@@ -12,6 +12,7 @@ import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import useMe from 'src/hooks/UseMe';
 import IfTrue from 'src/components/common/IfTrue';
 import useNotification from 'src/hooks/UseNotification';
+import ThemeSwitcher from 'src/components/theme/ThemeSwitcher';
 
 export default function NavigationPanel() {
 	const { me } = useMe();
@@ -21,7 +22,6 @@ export default function NavigationPanel() {
 	const [showNavigatePanel, setShowNavigatePanel] = useState(false);
 
 	const pathName = window.location.pathname.slice(1);
-
 
 	const navigate = useNavigate();
 	const PrivateAlert = usePrivateAlert();
@@ -85,6 +85,7 @@ export default function NavigationPanel() {
 				)}
 			</section>
 			<section className='flex-row center big-gap relative '>
+				<ThemeSwitcher />
 				<section className='relative'>
 					<ClearIconButton
 						className='bell-icon small-padding'

@@ -1,7 +1,7 @@
 .tab-button-container {
 	background-color: var(--accent);
 
-	border: 2px solid var(--gray);
+	border: 2px solid var(--neutral);
 	border-radius: 5px;
 
 	overflow: hidden;
@@ -9,9 +9,6 @@
 
 .tab-button,
 .tab-button-selected {
-	outline: none;
-	border: none;
-
 	padding: 0.2rem;
 	display: flex;
 	justify-content: center;

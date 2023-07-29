@@ -16,7 +16,6 @@ import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import Button from 'src/components/button/Button';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
-import IfTrue from 'src/components/common/IfTrue';
 import LoadUserName from 'src/components/user/LoadUserName';
 import MapDescription from 'src/components/map/MapDescription';
 import ColorText from 'src/components/common/ColorText';
