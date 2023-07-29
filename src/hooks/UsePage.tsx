@@ -3,13 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import { Utils } from 'src/util/Utils';
 
-interface Data {
-	id: string;
-}
-
 var cancelRequest: AbortController;
 
-export default function usePage<T extends Data>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
+export default function usePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
