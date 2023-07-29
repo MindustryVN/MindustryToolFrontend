@@ -10,6 +10,7 @@ import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import { Trans } from 'react-i18next';
 import UserSchematicTab from './UserSchematicTab';
+import ClearButton from 'src/components/button/ClearButton';
 
 const tabs = ['Schematic', 'Map'];
 
@@ -92,9 +93,12 @@ export default function UserPage() {
 			<div className='tab-card flex-center'>
 				<section className='grid-row small-gap small-padding'>
 					{tabs.map((name, index) => (
-						<button className={currentTab === name ? 'button-active' : 'button'} key={index} type='button' onClick={() => setCurrentTab(name)}>
+						<ClearButton
+							className={currentTab === name ? 'button-active' : 'button'}
+							key={index} //
+							onClick={() => setCurrentTab(name)}>
 							{name}
-						</button>
+						</ClearButton>
 					))}
 				</section>
 			</div>

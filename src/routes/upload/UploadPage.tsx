@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
 import UploadMapPage from 'src/routes/upload/UploadMapPage';
 import UploadSchematicPage from 'src/routes/upload/UploadSchematicPage';
+import ClearButton from 'src/components/button/ClearButton';
 
 const tabs = ['schematic', 'map'];
 
@@ -24,14 +25,13 @@ export default function UploadPage() {
 		<main className='flex-column h100p w100p small-gap small-padding border-box'>
 			<section className='grid-row tab-button-container'>
 				{tabs.map((name, index) => (
-					<button
+					<ClearButton
 						key={index}
 						title={name}
-						type='button'
 						className={name === selectedTab ? 'tab-button-selected' : 'tab-button'} //
 						onClick={() => setSelectedTab(name)}>
 						<Trans i18nKey={name} />
-					</button>
+					</ClearButton>
 				))}
 			</section>
 			{renderTab()}

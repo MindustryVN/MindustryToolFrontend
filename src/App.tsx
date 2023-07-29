@@ -39,6 +39,7 @@ const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
+const MapPreview = React.lazy(() => import('src/routes/map/MapPreviewPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
 const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
@@ -53,12 +54,13 @@ export default function App() {
 						<Routes>
 							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 							<Route path='/' element={<Navigate to='/home' />} />
-							<Route path='/map' element={<Map />} />
 							<Route path='/home' element={<Home />} />
 							<Route path='/logic' element={<Logic />} />
 							<Route path='/login' element={<Login />} />
 							<Route path='/mod' element={<Mod />} />
 							<Route path='/upload' element={<Upload />} />
+							<Route path='/map' element={<Map />} />
+							<Route path='/map/:mapId' element={<MapPreview />} />
 							<Route path='/schematic' element={<Schematic />} />
 							<Route path='/schematic/:schematicId' element={<SchematicPreview />} />
 							<Route path='/forum/*' element={<Forum />} />

@@ -1,6 +1,7 @@
 import './ThemeSwitcher.css';
 
 import React, { useContext } from 'react';
+import ClearButton from 'src/components/button/ClearButton';
 import { Theme, ThemeContext } from 'src/context/ThemeProvider';
 
 export default function ThemeSwitcher() {
@@ -12,9 +13,9 @@ export default function ThemeSwitcher() {
 		<section className='theme-switch flex-row'>
 			<section className='grid-row'>
 				{themes.map((item, index) => (
-					<button className={'theme-switch-button ' + (item === theme ? 'active' : '')} key={index} onClick={() => setTheme(item)}>
+					<ClearButton className={'theme-switch-button ' + (item === theme ? 'active' : '')} key={index} onClick={() => setTheme(item)}>
 						{item}
-					</button>
+					</ClearButton>
 				))}
 			</section>
 		</section>
