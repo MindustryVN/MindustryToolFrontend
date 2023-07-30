@@ -58,27 +58,23 @@ export default function VerifySchematicPage() {
 	}
 
 	function rejectSchematic(schematic: Schematic, reason: string) {
+		setVisibility(false);
 		API.rejectSchematic(schematic, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.then(() => setTotalSchematic((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => {
-				reloadPage();
-				setVisibility(false);
-			});
+			.finally(() => reloadPage());
 	}
 
 	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
 		const tagString = Tags.toString(tags);
+		setVisibility(false);
 		API.verifySchematic(schematic, tagString) //
 			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has be accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
-			.finally(() => {
-				reloadPage();
-				setVisibility(false);
-			});
+			.finally(() => reloadPage());
 	}
 
 	return (

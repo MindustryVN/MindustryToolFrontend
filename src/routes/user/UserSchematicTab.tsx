@@ -31,12 +31,10 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>(`user/schematic/${props.user.id}`, 20);
 
 	function handleDeleteSchematic(schematic: Schematic) {
+		setVisibility(false);
 		API.deleteSchematic(schematic.id) //
-			.then(() => {
-				addPopup(i18n.t('schematic.delete-success'), 5, 'info');
-				reloadPage();
-				setVisibility(false);
-			})
+			.then(() => addPopup(i18n.t('schematic.delete-success'), 5, 'info'))
+			.then(() => reloadPage())
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
 	}
 

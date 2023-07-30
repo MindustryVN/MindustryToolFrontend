@@ -25,18 +25,18 @@ export default function MindustryServerPage() {
 	const { dialog, setVisibility } = useDialog();
 
 	function handleAddServer(address: string) {
+		setVisibility(false);
 		API.postMindustryServer(address) //
 			.then(() => addPopup(i18n.t('add-server-success'), 5, 'info'))
 			.then(() => reloadPage())
-			.then(() => setVisibility(false))
 			.catch(() => addPopup(i18n.t('add-server-fail'), 5, 'warning'));
 	}
 
 	function handleRemoveServer(id: string) {
+		setVisibility(false);
 		API.deleteServer(id)
 			.then(() => addPopup(i18n.t('delete-server-success'), 5, 'info'))
 			.then(() => reloadPage())
-			.then(() => setVisibility(false))
 			.catch(() => addPopup(i18n.t('delete-server-fail'), 5, 'warning'));
 	}
 
