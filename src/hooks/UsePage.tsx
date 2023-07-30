@@ -11,8 +11,28 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
-	useEffect(() => {
+	function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
+		if (cancelRequest) cancelRequest.abort();
+
+		cancelRequest = new AbortController();
+
 		setIsLoading(true);
+
+		if (!searchConfig) {
+			searchConfig = {
+				params: {
+					page: page,
+					items: itemPerPage,
+				},
+			};
+		}
+
+		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
+
+		return API.get(url, searchConfig);
+	}
+
+	useEffect(() => {
 		setIsError(false);
 		setPages([[]]);
 
@@ -51,7 +71,6 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 		reloadPage: function reloadPage() {
 			if (isLoading) return;
 
-			setIsLoading(true);
 			setIsError(false);
 
 			setPages([[]]);
@@ -78,7 +97,6 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 		loadPage: function loadPage() {
 			if (isLoading) return;
 
-			setIsLoading(true);
 			setIsError(false);
 
 			const lastIndex = pages.length - 1;
@@ -94,23 +112,4 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 				.finally(() => setIsLoading(false)); //
 		},
 	};
-}
-
-function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
-	if (cancelRequest) cancelRequest.abort();
-
-	cancelRequest = new AbortController();
-
-	if (!searchConfig) {
-		searchConfig = {
-			params: {
-				page: page,
-				items: itemPerPage,
-			},
-		};
-	}
-
-	searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
-
-	return API.get(url, searchConfig);
 }
