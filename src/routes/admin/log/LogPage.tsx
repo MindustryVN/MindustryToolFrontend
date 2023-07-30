@@ -22,8 +22,8 @@ export default function LogPage() {
 	function handleDeleteLog(id: string) {
 		API.deleteLog(contentType, id) //
 			.then(() => addPopup('delete-success', 5, 'info'))
-			.then(() => reloadPage())
-			.catch(() => addPopup('delete-fail', 5, 'warning'));
+			.catch(() => addPopup('delete-fail', 5, 'warning'))
+			.finally(() => reloadPage())
 	}
 	return (
 		<main id='log' className='log flex-column h100p w100p scroll-y small-gap'>

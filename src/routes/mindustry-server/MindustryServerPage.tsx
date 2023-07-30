@@ -28,16 +28,16 @@ export default function MindustryServerPage() {
 		setVisibility(false);
 		API.postMindustryServer(address) //
 			.then(() => addPopup(i18n.t('add-server-success'), 5, 'info'))
-			.then(() => reloadPage())
-			.catch(() => addPopup(i18n.t('add-server-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('add-server-fail'), 5, 'warning'))
+			.finally(() => reloadPage());
 	}
 
 	function handleRemoveServer(id: string) {
 		setVisibility(false);
 		API.deleteServer(id)
 			.then(() => addPopup(i18n.t('delete-server-success'), 5, 'info'))
-			.then(() => reloadPage())
-			.catch(() => addPopup(i18n.t('delete-server-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('delete-server-fail'), 5, 'warning'))
+			.finally(() => reloadPage());
 	}
 
 	pages.sort((a, b) => (b.name ? 1 : 0) - (a.name ? 1 : 0));

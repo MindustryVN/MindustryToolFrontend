@@ -112,9 +112,9 @@ export default function MapPage() {
 		setVisibility(false);
 		API.deleteMap(map.id) //
 			.then(() => addPopup(i18n.t('map.delete-success'), 5, 'info')) //
-			.then(() => reloadPage())
 			.then(() => setTotalMap((prev) => prev - 1))
-			.catch(() => addPopup(i18n.t('map.delete-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('map.delete-fail'), 5, 'warning'))
+			.finally(() => reloadPage())
 	}
 
 	return (

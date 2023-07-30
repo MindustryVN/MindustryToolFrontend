@@ -35,9 +35,9 @@ export default function CommentContainer(props: CommentContainerProps) {
 		setLoading(true);
 		API.postComment(`comment/${props.contentType}`, targetId, message, props.contentType)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
-			.then(() => reloadPage())
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
-			.finally(() => setLoading(false));
+			.finally(() => setLoading(false))
+			.then(() => reloadPage());
 	}
 
 	if (isLoading || loading) return <LoadingSpinner />;
@@ -82,9 +82,9 @@ function Reply(props: ReplyProps) {
 
 		API.postComment(`comment/${props.contentType}`, targetId, message, `${props.contentType}`)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
-			.then(() => props.reloadPage())
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
-			.finally(() => setLoading(false));
+			.finally(() => setLoading(false))
+			.then(() => props.reloadPage());
 	}
 
 	function handleRemoveComment(comment: Comment) {
@@ -92,9 +92,9 @@ function Reply(props: ReplyProps) {
 
 		API.deleteComment(props.contentType, comment.id)
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
-			.then(() => props.reloadPage())
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
-			.finally(() => setLoading(false));
+			.finally(() => setLoading(false))
+			.then(() => props.reloadPage())
 	}
 
 	if (loading) return <LoadingSpinner />;

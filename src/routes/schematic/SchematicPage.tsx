@@ -114,9 +114,9 @@ export default function SchematicPage() {
 		setVisibility(false);
 		API.deleteSchematic(schematic.id) //
 			.then(() => addPopup(i18n.t('schematic.delete-success'), 5, 'info')) //
-			.then(() => reloadPage())
 			.then(() => setTotalSchematic((prev) => prev - 1))
-			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
+			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'))
+			.finally(() => reloadPage());
 	}
 
 	return (
