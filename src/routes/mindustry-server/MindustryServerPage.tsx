@@ -25,18 +25,18 @@ export default function MindustryServerPage() {
 	const { dialog, setVisibility } = useDialog();
 
 	function handleAddServer(address: string) {
+		setVisibility(false);
 		API.postMindustryServer(address) //
 			.then(() => addPopup(i18n.t('add-server-success'), 5, 'info'))
 			.then(() => reloadPage())
-			.then(() => setVisibility(false))
 			.catch(() => addPopup(i18n.t('add-server-fail'), 5, 'warning'));
 	}
 
 	function handleRemoveServer(id: string) {
+		setVisibility(false);
 		API.deleteServer(id)
 			.then(() => addPopup(i18n.t('delete-server-success'), 5, 'info'))
 			.then(() => reloadPage())
-			.then(() => setVisibility(false))
 			.catch(() => addPopup(i18n.t('delete-server-fail'), 5, 'warning'));
 	}
 
@@ -84,13 +84,13 @@ export default function MindustryServerPage() {
 				</thead>
 				<tbody className='server-table-body'>
 					{pages.map((server) => (
-						<MindustryServerTableRow key={server.id} server={server} handleRemoveServer={handleRemoveServer} />
+						<MindustryServerTableRow key={server.address} server={server} handleRemoveServer={handleRemoveServer} />
 					))}
 				</tbody>
 			</table>
 			<section className='server-card-container flex-column small-gap'>
 				{pages.map((server) => (
-					<MindustryServerCard key={server.id} server={server} handleRemoveServer={handleRemoveServer} />
+					<MindustryServerCard key={server.address} server={server} handleRemoveServer={handleRemoveServer} />
 				))}
 			</section>
 			<footer className='flex-center'>
@@ -159,7 +159,7 @@ function MindustryServerTableRow(props: MindustryServerTableRowProps) {
 					<td>
 						<ClearIconButton
 							icon='/assets/icons/trash-16.png' //
-							onClick={() => props.handleRemoveServer(props.server.id)}
+							onClick={() => props.handleRemoveServer(props.server.address)}
 						/>
 					</td>
 				}
@@ -194,7 +194,7 @@ function MindustryServerCard(props: MindustryServerCardProps) {
 						<section className='flex-column'>
 							<ClearIconButton
 								icon='/assets/icons/trash-16.png' //
-								onClick={() => props.handleRemoveServer(props.server.id)}
+								onClick={() => props.handleRemoveServer(props.server.address)}
 							/>
 						</section>
 					}

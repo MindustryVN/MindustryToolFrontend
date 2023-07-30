@@ -1,5 +1,4 @@
 export default interface MindustryServer {
-	id: string;
 	name: string;
 	online: boolean;
 	address: string;

@@ -54,27 +54,23 @@ export default function VerifyMapPage() {
 	}
 
 	function rejectMap(map: Map, reason: string) {
+		setVisibility(false);
 		API.rejectMap(map, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.then(() => setTotalMap((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => {
-				reloadPage();
-				setVisibility(false);
-			});
+			.finally(() => reloadPage());
 	}
 
 	function verifyMap(map: Map, tags: TagChoiceLocal[]) {
 		const tagString = Tags.toString(tags);
+		setVisibility(false);
 		API.verifyMap(map, tagString) //
 			.then(() => API.postNotification(map.authorId, 'Your map submission has be accept', 'Post map success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalMap((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
-			.finally(() => {
-				reloadPage();
-				setVisibility(false);
-			});
+			.finally(() => reloadPage());
 	}
 
 	return (

@@ -196,7 +196,7 @@ export class API {
 		return API.REQUEST.post('mindustry-server', form);
 	}
 
-	static deleteServer(id: string) {
-		return this.REQUEST.delete(`mindustry-server/${id}`);
+	static deleteServer(address: string) {
+		return this.REQUEST.delete(`mindustry-server/${address}`);
 	}
 }
