@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { API } from 'src/API';
 import { Utils } from 'src/util/Utils';
 
@@ -11,14 +11,12 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
-	const ref = useRef({ url, itemPerPage });
-
 	useEffect(() => {
 		setIsLoading(true);
 		setIsError(false);
 		setPages([[]]);
 
-		getPage(ref.current.url, 0, ref.current.itemPerPage, searchConfig) //
+		getPage(url, 0, itemPerPage, searchConfig) //
 			.then((result) =>
 				setPages(() => {
 					let data: T[] = result.data;
@@ -29,7 +27,7 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 			)
 			.catch(() => setIsError(true))
 			.finally(() => setIsLoading(false)); //
-	}, [searchConfig, itemPerPage]);
+	}, [searchConfig, itemPerPage, url]);
 
 	function handleSetPage(pageNumber: number, data: T[]) {
 		if (data.length < itemPerPage) setHasMore(false);

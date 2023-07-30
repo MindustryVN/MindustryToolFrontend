@@ -26,8 +26,8 @@ export default function LogPage() {
 			.catch(() => addPopup('delete-fail', 5, 'warning'));
 	}
 	return (
-		<main id='log' className='log flex-column h100p w100p scroll-y'>
-			<section className='grid-row'>
+		<main id='log' className='log flex-column h100p w100p scroll-y small-gap'>
+			<section className='grid-row small-gap'>
 				{['system', 'api'].map((item, index) => (
 					<Button key={index} active={item === contentType} onClick={() => setContentType(item)}>
 						{item}
