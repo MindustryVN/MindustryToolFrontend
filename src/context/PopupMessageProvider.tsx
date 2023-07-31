@@ -11,20 +11,20 @@ import i18n from 'src/util/I18N';
 type PopupMessageType = 'info' | 'warning' | 'error';
 
 interface PopupMessageData {
-	message: ReactNode;
+	content: ReactNode;
 	duration: number;
 	type: PopupMessageType;
 	uuid: string;
 }
 
 interface PopupMessageProps {
-	message: ReactNode;
+	content: ReactNode;
 	duration: number;
 	type: PopupMessageType;
 }
 
 interface PopupMessageContextProps {
-	addPopup: (message: ReactNode, duration: number, type: PopupMessageType) => void;
+	addPopup: (content: ReactNode, duration: number, type: PopupMessageType) => void;
 }
 
 export const PopupMessageContext = React.createContext<PopupMessageContextProps>({
@@ -36,7 +36,7 @@ interface PopupMessageProviderProps {
 }
 
 export default function AlertProvider(props: PopupMessageProviderProps) {
-	const [messages, setMessages] = React.useState<PopupMessageData[]>([]);
+	const [contents, setMessages] = React.useState<PopupMessageData[]>([]);
 
 	useEffect(() => {
 		const start = Date.now();
@@ -44,7 +44,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 		function addMessage(props: PopupMessageProps) {
 			let uuid: string = v4();
 			let val: PopupMessageData = {
-				message: props.message,
+				content: props.content,
 				duration: props.duration,
 				uuid: uuid,
 				type: props.type,
@@ -54,7 +54,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 
 		const id: NodeJS.Timeout = setTimeout(() => {
 			addMessage({
-				message: i18n.t('high-ping-reason').toString(),
+				content: i18n.t('high-ping-reason').toString(),
 				duration: 10,
 				type: 'info',
 			});
@@ -64,7 +64,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 		API.getPing() //
 			.then(() => {
 				addMessage({
-					message: `Ping: ${Date.now() - start}ms`,
+					content: `Ping: ${Date.now() - start}ms`,
 					duration: 5,
 					type: 'info',
 				});
@@ -72,17 +72,17 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 			}) //
 			.catch(() =>
 				addMessage({
-					message: 'lost-connection',
+					content: 'lost-connection',
 					duration: 5,
 					type: 'error',
 				}),
 			);
 	}, []);
 
-	function addMessage(message: ReactNode, duration: number, type: PopupMessageType) {
+	function addMessage(content: ReactNode, duration: number, type: PopupMessageType) {
 		let uuid: string = v4();
 		let val: PopupMessageData = {
-			message: message,
+			content: content,
 			duration: duration,
 			uuid: uuid,
 			type: type,
@@ -98,10 +98,10 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 	return (
 		<PopupMessageContext.Provider value={{ addPopup: addMessage }}>
 			<section id='popup-container' className='flex-column small-gap'>
-				{messages.map((val) => (
+				{contents.map((val) => (
 					<PopupMessage //
 						key={val.uuid}
-						message={val.message}
+						content={val.content}
 						duration={val.duration}
 						type={val.type}
 						onTimeOut={() => removeMessage(val.uuid)}
@@ -114,7 +114,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 }
 
 interface PopupMessageNodeProps {
-	message: ReactNode;
+	content: ReactNode;
 	duration: number;
 	type: PopupMessageType;
 	onTimeOut: () => void;
@@ -132,9 +132,9 @@ function PopupMessage(props: PopupMessageNodeProps) {
 	}, []);
 
 	return (
-		<section className={'popup-message w100p ' + props.type}>
-			<section className='popup-message-content flex-row w100p'>
-				{props.message}
+		<section className={'popup-content w100p ' + props.type}>
+			<section className='popup-content-content flex-row w100p'>
+				{props.content}
 				<ClearIconButton //
 					className='absolute top right small-margin'
 					icon='/assets/icons/quit.png'

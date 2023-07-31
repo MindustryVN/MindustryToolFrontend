@@ -79,7 +79,7 @@ function NotificationContainer() {
 				<section className='notification flex-row flex-wrap space-between medium-padding border-box' key={notification.id}>
 					<section className='flex-column'>
 						<h3>{notification.header}</h3>
-						<Markdown>{notification.message}</Markdown>
+						<Markdown>{notification.content}</Markdown>
 					</section>
 					<section className='flex-row medium-gap align-self-end'>
 						<Trans i18nKey='time' />: {new Date(notification.time).toLocaleString('en-GB')}

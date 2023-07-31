@@ -31,9 +31,9 @@ export default function CommentContainer(props: CommentContainerProps) {
 
 	const [loading, setLoading] = useState(false);
 
-	function handleAddComment(message: string, targetId: string) {
+	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
-		API.postComment(`comment/${props.contentType}`, targetId, message, props.contentType)
+		API.postComment(`comment/${props.contentType}`, targetId, content, props.contentType)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
 			.finally(() => setLoading(false))
@@ -77,10 +77,10 @@ function Reply(props: ReplyProps) {
 
 	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
 
-	function handleAddComment(message: string, targetId: string) {
+	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
 
-		API.postComment(`comment/${props.contentType}`, targetId, message, `${props.contentType}`)
+		API.postComment(`comment/${props.contentType}`, targetId, content, `${props.contentType}`)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
 			.finally(() => setLoading(false))
@@ -94,7 +94,7 @@ function Reply(props: ReplyProps) {
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => setLoading(false))
-			.then(() => props.reloadPage())
+			.then(() => props.reloadPage());
 	}
 
 	if (loading) return <LoadingSpinner />;
@@ -103,7 +103,7 @@ function Reply(props: ReplyProps) {
 		<section className='comment-container relative flex-column medium-gap'>
 			<span className='flex-row medium-gap flex-wrap'>
 				<LoadUserName userId={props.comment.authorId} />
-				<span>{props.comment.message}</span>
+				<span>{props.comment.content}</span>
 			</span>
 			<IfTrue
 				condition={props.nestLevel < 3}
@@ -178,11 +178,11 @@ function Reply(props: ReplyProps) {
 
 interface CommentInputProps {
 	targetId: string;
-	handleAddComment: (message: string, targetId: string) => void;
+	handleAddComment: (content: string, targetId: string) => void;
 }
 
 function CommentInput(props: CommentInputProps) {
-	const [message, setMessage] = useState('');
+	const [content, setMessage] = useState('');
 
 	return (
 		<section className='w100p'>
@@ -190,11 +190,11 @@ function CommentInput(props: CommentInputProps) {
 				className='comment-input-area w100p border-box' //
 				placeholder={i18n.t('write-a-comment').toString()}
 				maxLength={200}
-				value={message}
+				value={content}
 				onChange={(event) => setMessage(event.target.value)}
 			/>
 			<section className='flex-row justify-end'>
-				<IconButton icon='/assets/icons/check.png' onClick={() => props.handleAddComment(message, props.targetId)} />
+				<IconButton icon='/assets/icons/check.png' onClick={() => props.handleAddComment(content, props.targetId)} />
 			</section>
 		</section>
 	);
@@ -202,12 +202,12 @@ function CommentInput(props: CommentInputProps) {
 
 interface ReplyInputProps {
 	targetId: string;
-	handleAddComment: (message: string, targetId: string) => void;
+	handleAddComment: (content: string, targetId: string) => void;
 	onClose: () => void;
 }
 
 function ReplyInput(props: ReplyInputProps) {
-	const [message, setMessage] = useState('');
+	const [content, setMessage] = useState('');
 
 	return (
 		<section className='w100p'>
@@ -215,13 +215,13 @@ function ReplyInput(props: ReplyInputProps) {
 				className='comment-input-area w100p border-box' //
 				placeholder={i18n.t('write-a-comment').toString()}
 				maxLength={200}
-				value={message}
+				value={content}
 				onChange={(event) => setMessage(event.target.value)}
 			/>
 			<section className='flex-row justify-end'>
 				<section className='grid-row small-gap'>
 					<IconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
-					<IconButton icon='/assets/icons/check.png' onClick={() => props.handleAddComment(message, props.targetId)} />
+					<IconButton icon='/assets/icons/check.png' onClick={() => props.handleAddComment(content, props.targetId)} />
 				</section>
 			</section>
 		</section>

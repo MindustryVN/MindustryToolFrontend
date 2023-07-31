@@ -4,7 +4,7 @@ import 'src/styles.css';
 import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
-import { LogData } from 'src/components/log/LogData';
+import { Log } from 'src/data/Log';
 
 import Button from 'src/components/button/Button';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
@@ -16,14 +16,14 @@ import ClearIconButton from 'src/components/button/ClearIconButton';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<LogData>(`log/${contentType}`, 20);
+	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Log>(`log/${contentType}`, 20);
 	const { addPopup } = usePopup();
 
 	function handleDeleteLog(id: string) {
 		API.deleteLog(contentType, id) //
 			.then(() => addPopup('delete-success', 5, 'info'))
 			.catch(() => addPopup('delete-fail', 5, 'warning'))
-			.finally(() => reloadPage())
+			.finally(() => reloadPage());
 	}
 	return (
 		<main id='log' className='log flex-column h100p w100p scroll-y small-gap'>
@@ -60,14 +60,14 @@ export default function LogPage() {
 }
 
 interface LogCardProps {
-	log: LogData;
+	log: Log;
 	handleDeleteLog: (id: string) => void;
 }
 
 function LogCard(props: LogCardProps) {
-	const message: string[] = props.log.message.split('\n');
-	const header = message[0];
-	let detail: string[] = message.slice(1);
+	const content: string[] = props.log.content.split('\n');
+	const header = content[0];
+	let detail: string[] = content.slice(1);
 	detail = detail ? detail : ['No content'];
 
 	return (

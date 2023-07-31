@@ -84,7 +84,7 @@ a {
 
 	--overlay-z-index: 2;
 	--model-z-index: 3;
-	--popup-message-z-index: 4;
+	--popup-content-z-index: 4;
 	--navigation-bar-z-index: 5;
 	--top-z-index: 6;
 
