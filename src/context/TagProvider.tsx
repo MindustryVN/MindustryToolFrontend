@@ -13,6 +13,8 @@ export default function TagProvider(props: TagProviderProps) {
 		Tags.getTag('schematic-search-tag', Tags.SCHEMATIC_SEARCH_TAG);
 		Tags.getTag('map-upload-tag', Tags.MAP_UPLOAD_TAG);
 		Tags.getTag('map-search-tag', Tags.MAP_SEARCH_TAG);
+		Tags.getTag('post-upload-tag', Tags.POST_UPLOAD_TAG);
+		Tags.getTag('post-search-tag', Tags.POST_SEARCH_TAG);
 	}, []);
 
 	return <>{props.children}</>;

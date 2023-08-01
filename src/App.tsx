@@ -28,21 +28,24 @@ import ErrorBoundary from 'src/components/common/ErrorBoundery';
 // const analytics = getAnalytics(app);
 
 const Map = React.lazy(() => import('src/routes/map/MapPage'));
+const MapPreview = React.lazy(() => import('src/routes/map/MapPreviewPage'));
 const Home = React.lazy(() => import('src/routes/home/HomePage'));
 const Me = React.lazy(() => import('src/routes/me/MePage'));
 const Logic = React.lazy(() => import('src/routes/logic/LogicPage'));
 const Schematic = React.lazy(() => import('src/routes/schematic/SchematicPage'));
+const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
 const Login = React.lazy(() => import('src/routes/login/LoginPage'));
-const Upload = React.lazy(() => import('src/routes/upload/UploadPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
+const ForumPreview = React.lazy(() => import('src/routes/forum/ForumPreviewPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
-const MapPreview = React.lazy(() => import('src/routes/map/MapPreviewPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
-const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
 const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
+const UploadSchematic = React.lazy(() => import('src/routes/upload/schematic/UploadSchematicPage'));
+const UploadMap = React.lazy(() => import('src/routes/upload/map/UploadMapPage'));
+const UploadPost = React.lazy(() => import('src/routes/upload/post/UploadPostPage'));
 
 export default function App() {
 	return (
@@ -52,18 +55,21 @@ export default function App() {
 				<section className='main background-image-1'>
 					<Suspense fallback={<Loading />}>
 						<Routes>
-							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 							<Route path='/' element={<Navigate to='/home' />} />
+							<Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
 							<Route path='/home' element={<Home />} />
 							<Route path='/logic' element={<Logic />} />
 							<Route path='/login' element={<Login />} />
 							<Route path='/mod' element={<Mod />} />
-							<Route path='/upload' element={<Upload />} />
+							<Route path='/upload/map' element={<UploadMap />} />
+							<Route path='/upload/schematic' element={<UploadSchematic />} />
+							<Route path='/upload/post' element={<PrivateRoute element={<UploadPost />} />} />
 							<Route path='/map' element={<Map />} />
 							<Route path='/map/:mapId' element={<MapPreview />} />
 							<Route path='/schematic' element={<Schematic />} />
 							<Route path='/schematic/:schematicId' element={<SchematicPreview />} />
-							<Route path='/forum/*' element={<Forum />} />
+							<Route path='/forum' element={<Forum />} />
+							<Route path='/forum/post/:postId' element={<ForumPreview />} />
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />

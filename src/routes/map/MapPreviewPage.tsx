@@ -14,16 +14,7 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 
 export default function MapPreviewPage() {
 	const { mapId } = useParams();
-	const { data, isLoading, isError } = useQuery<Map>(`map/${mapId}`, {
-		id: '',
-		name: '',
-		data: '',
-		authorId: '',
-		description: '',
-		tags: [],
-		like: 0,
-		verifyAdmin: '',
-	});
+	const { data, isLoading, isError } = useQuery<Map>(`map/${mapId}`);
 
 	const navigate = useNavigate();
 
@@ -40,7 +31,7 @@ export default function MapPreviewPage() {
 
 	if (isLoading) return <LoadingSpinner />;
 
-	if (isError)
+	if (isError || !map)
 		return (
 			<div className='flex-center w100p h100p'>
 				<Trans i18nKey='map-not-found' />

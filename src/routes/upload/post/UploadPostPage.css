@@ -1,0 +1,5 @@
+.content-editor,
+.content-editor:is(:hover, :focus) {
+	background-color: rgba(0, 0, 0, 0.5);
+	resize: none;
+}

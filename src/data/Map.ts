@@ -1,4 +1,4 @@
-export default class Map {
+export default interface Map {
 	id: string;
 	name: string;
 	data: string;
@@ -6,16 +6,7 @@ export default class Map {
 	description: string;
 	tags: Array<string>;
 	like: number;
+	height: number;
+	width: number;
 	verifyAdmin: string;
-
-	constructor(id: string, name: string, data: string, authorId: string, description: string, tags: Array<string>, like: number, verifyAdmin: string) {
-		this.id = id;
-		this.name = name;
-		this.data = data;
-		this.authorId = authorId;
-		this.description = description;
-		this.tags = tags;
-		this.like = like;
-		this.verifyAdmin = verifyAdmin;
-	}
 }

@@ -6,7 +6,7 @@ import Map from 'src/data/Map';
 
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
@@ -70,6 +70,8 @@ export default function MapPage() {
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		API.getTotalMap()
 			.then((result) => setTotalMap(result.data))
@@ -114,7 +116,7 @@ export default function MapPage() {
 			.then(() => addPopup(i18n.t('map.delete-success'), 5, 'info')) //
 			.then(() => setTotalMap((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('map.delete-fail'), 5, 'warning'))
-			.finally(() => reloadPage())
+			.finally(() => reloadPage());
 	}
 
 	return (
@@ -142,6 +144,11 @@ export default function MapPage() {
 			</header>
 			<section className='flex-row center medium-padding'>
 				<Trans i18nKey='total-map' />:{totalMap > 0 ? totalMap : 0}
+			</section>
+			<section className='flex-row small-padding justify-end'>
+				<Button onClick={() => navigate('/upload/map')}>
+					<Trans i18nKey='upload-your-map' />
+				</Button>
 			</section>
 			<MapContainer
 				children={pages.map((map) => (

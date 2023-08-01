@@ -13,6 +13,7 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import usePage from 'src/hooks/UsePage';
 import usePopup from 'src/hooks/UsePopup';
 import ClearIconButton from 'src/components/button/ClearIconButton';
+import DateDisplay from 'src/components/common/Date';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
@@ -75,7 +76,9 @@ function LogCard(props: LogCardProps) {
 			<summary>
 				<p>ID: {props.log.id}</p>
 				<p>Environment: {props.log.environment}</p>
-				<p>Time: {new Date(props.log.time).toLocaleString('en-GB')}</p>
+				<p>
+					Time: <DateDisplay time={props.log.time} />
+				</p>
 				<p>Message: {header}</p>
 				<ClearIconButton
 					className='absolute top right small-margin ' //

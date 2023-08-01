@@ -6,7 +6,7 @@ import Schematic from 'src/data/Schematic';
 
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
@@ -71,6 +71,8 @@ export default function SchematicPage() {
 	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>('schematic', 20, searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		API.getTotalSchematic()
@@ -144,6 +146,11 @@ export default function SchematicPage() {
 			</header>
 			<section className='flex-row center medium-padding'>
 				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
+			</section>
+			<section className='flex-row small-padding justify-end'>
+				<Button onClick={() => navigate('/upload/schematic')}>
+					<Trans i18nKey='upload-your-schematic' />
+				</Button>
 			</section>
 			<SchematicContainer
 				children={pages.map((schematic) => (

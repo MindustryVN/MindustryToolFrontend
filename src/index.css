@@ -93,17 +93,6 @@ a {
 	--info-color: #3ac152;
 }
 
-input[type='file'] {
-	display: none;
-}
-
-textarea,
-textarea:is(:focus, :hover) {
-	outline: none;
-	border: none;
-	resize: none;
-	background-color: transparent;
-}
 
 footer {
 	min-height: 2rem;

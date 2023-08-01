@@ -1,6 +1,18 @@
-.button {
-	position: relative;
+input[type='file'] {
+	display: none;
+}
 
+textarea,
+textarea:is(:focus, :hover) {
+	outline: none;
+	border: none;
+	resize: none;
+	background-color: transparent;
+
+	background-color: var(--accent);
+}
+
+.button {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -19,8 +31,6 @@
 
 .button:hover,
 .button-active {
-	position: relative;
-
 	display: flex;
 	justify-content: center;
 	align-items: center;

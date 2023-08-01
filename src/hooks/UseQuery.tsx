@@ -4,8 +4,8 @@ import { API } from 'src/API';
 
 var cancelRequest: AbortController;
 
-export default function useQuery<T>(url: string, initialValue: T, searchConfig?: AxiosRequestConfig<any>) {
-	const [data, setData] = useState<T>(initialValue);
+export default function useQuery<T>(url: string, initialValue?: T, searchConfig?: AxiosRequestConfig<any>) {
+	const [data, setData] = useState<T | undefined>(initialValue);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 

@@ -2,8 +2,8 @@ import 'src/styles.css';
 
 import React, { useState } from 'react';
 import Button from 'src/components/button/Button';
-import VerifySchematicPage from 'src/routes/admin/verify/VerifySchematicPage';
-import VerifyMapPage from 'src/routes/admin/verify/VerifyMapPage';
+import VerifySchematicPage from 'src/routes/admin/verify/schematic/VerifySchematicPage';
+import VerifyMapPage from 'src/routes/admin/verify/map/VerifyMapPage';
 
 const tabs = ['Schematic', 'Map'];
 
