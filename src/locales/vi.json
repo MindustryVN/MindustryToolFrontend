@@ -251,6 +251,14 @@
 				"mid-game": "Giữa game",
 				"early-game": "Đầu game"
 			}
+		},
+		"category": {
+			"name": "Loại",
+			"value": {
+				"j4f": "J4F",
+				"help": "Giúp đỡ",
+				"document": "Tài liệu"
+			}
 		}
 	}
 }

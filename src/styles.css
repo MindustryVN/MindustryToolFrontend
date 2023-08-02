@@ -27,6 +27,8 @@ textarea:is(:focus, :hover) {
 
 	border-radius: 5px;
 	border: 2px solid var(--gray);
+
+	text-decoration: none;
 }
 
 .button:hover,
@@ -45,6 +47,7 @@ textarea:is(:focus, :hover) {
 	box-sizing: border-box;
 
 	border-radius: 5px;
+	text-decoration: none;
 }
 
 .text-center {
@@ -81,6 +84,10 @@ textarea:is(:focus, :hover) {
 
 .small-margin {
 	margin: 0.25rem;
+}
+
+.medium-margin {
+	margin: 0.5rem;
 }
 
 .icon {
@@ -282,7 +289,7 @@ textarea:is(:focus, :hover) {
 .scroll-y {
 	overflow: hidden auto;
 
-	padding-right: 0.2rem;
+	padding-right: 0.4rem;
 	box-sizing: border-box;
 }
 

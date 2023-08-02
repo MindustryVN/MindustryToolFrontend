@@ -28,12 +28,12 @@ import ErrorBoundary from 'src/components/common/ErrorBoundery';
 // const analytics = getAnalytics(app);
 
 const Map = React.lazy(() => import('src/routes/map/MapPage'));
-const MapPreview = React.lazy(() => import('src/routes/map/MapPreviewPage'));
+const MapPreview = React.lazy(() => import('src/routes/map/MapViewPage'));
 const Home = React.lazy(() => import('src/routes/home/HomePage'));
 const Me = React.lazy(() => import('src/routes/me/MePage'));
 const Logic = React.lazy(() => import('src/routes/logic/LogicPage'));
 const Schematic = React.lazy(() => import('src/routes/schematic/SchematicPage'));
-const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicPreviewPage'));
+const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicViewPage'));
 const Login = React.lazy(() => import('src/routes/login/LoginPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));

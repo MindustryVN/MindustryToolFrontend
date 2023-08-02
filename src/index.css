@@ -48,6 +48,7 @@ section {
 
 a {
 	color: rgb(50, 200, 200);
+	font-size: 0.8rem;
 }
 
 *::-webkit-scrollbar-track {

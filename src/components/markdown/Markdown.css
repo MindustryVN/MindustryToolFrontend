@@ -1,0 +1,4 @@
+*:has(.markdown-image) {
+	display: flex;
+	flex-direction: column;
+}

@@ -1,5 +1,17 @@
+.editor-background {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.title-editor[type="text"] {
+	font-size: 1.5rem;
+	border-bottom: 2px solid white;
+}
+
+.title-editor,
 .content-editor,
 .content-editor:is(:hover, :focus) {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: transparent;
 	resize: none;
+	font-size: 1rem;
 }
