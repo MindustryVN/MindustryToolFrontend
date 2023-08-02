@@ -2,7 +2,7 @@ import './ForumPage.css';
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
-import Tag, { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import usePage from 'src/hooks/UsePage';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import i18n from 'src/util/I18N';
@@ -20,7 +20,6 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import { Trans } from 'react-i18next';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import DateDisplay from 'src/components/common/Date';
-import ClearButton from 'src/components/button/ClearButton';
 import LoadUserName from 'src/components/user/LoadUserName';
 import TagContainer from 'src/components/tag/TagContainer';
 
