@@ -67,9 +67,8 @@ export default function VerifySchematicPage() {
 	}
 
 	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
-		const tagString = Tags.toString(tags);
 		setVisibility(false);
-		API.verifySchematic(schematic, tagString) //
+		API.verifySchematic(schematic, tags) //
 			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has be accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalSchematic((prev) => prev - 1))

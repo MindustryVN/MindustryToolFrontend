@@ -10,8 +10,8 @@ interface SchematicPreviewImageProps {
 
 export default function SchematicPreviewImage(props: SchematicPreviewImageProps) {
 	return (
-		<ClearButton className="schematic-image-wrapper" onClick={() => props.onClick()}>
-			<img className="schematic-preview-image" src={props.src} alt="schematic" />
+		<ClearButton className='schematic-image-wrapper' onClick={() => props.onClick()}>
+			<img className='schematic-preview-image' src={props.src} alt='schematic' />
 		</ClearButton>
 	);
 }

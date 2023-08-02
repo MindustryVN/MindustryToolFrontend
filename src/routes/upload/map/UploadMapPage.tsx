@@ -11,7 +11,6 @@ import { getFileExtension } from 'src/util/StringUtils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import Dropbox from 'src/components/dropbox/Dropbox';
-import MapPreviewData from 'src/data/MapUploadPreview';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import Button from 'src/components/button/Button';
@@ -22,6 +21,7 @@ import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import useMe from 'src/hooks/UseMe';
 import MapInfoImage from 'src/components/map/MapInfoImage';
+import MapUploadPreview from 'src/data/MapUploadPreview';
 
 let notLoginMessage = (
 	<span>
@@ -34,7 +34,7 @@ let notLoginMessage = (
 
 export default function UploadPage() {
 	const [file, setFile] = useState<File>();
-	const [preview, setPreview] = useState<MapPreviewData>();
+	const [preview, setPreview] = useState<MapUploadPreview>();
 	const [tag, setTag] = useState<string>('');
 	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
 
@@ -81,11 +81,10 @@ export default function UploadPage() {
 			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
-		const tagString = Tags.toString(tags);
 
 		setIsLoading(true);
 
-		API.postMapUpload(file, tagString)
+		API.postMapUpload(file, tags)
 			.then(() => {
 				setFile(undefined);
 				setPreview(undefined);

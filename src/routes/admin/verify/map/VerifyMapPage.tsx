@@ -63,9 +63,8 @@ export default function VerifyMapPage() {
 	}
 
 	function verifyMap(map: Map, tags: TagChoiceLocal[]) {
-		const tagString = Tags.toString(tags);
 		setVisibility(false);
-		API.verifyMap(map, tagString) //
+		API.verifyMap(map, tags) //
 			.then(() => API.postNotification(map.authorId, 'Your map submission has be accept', 'Post map success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalMap((prev) => prev - 1))

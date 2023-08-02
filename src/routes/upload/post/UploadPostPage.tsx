@@ -2,15 +2,19 @@ import 'src/styles.css';
 import './UploadPostPage.css';
 
 import React, { useState } from 'react';
-import Markdown from 'src/components/markdown/Markdown';
+import { Trans } from 'react-i18next';
+import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import useModel from 'src/hooks/UseModel';
 import Button from 'src/components/button/Button';
-import { Trans } from 'react-i18next';
 import i18n from 'src/util/I18N';
 import Dropbox from 'src/components/dropbox/Dropbox';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import TagPick from 'src/components/tag/TagPick';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
+import PostView from 'src/components/post/PostView';
+import useMe from 'src/hooks/UseMe';
+import usePopup from 'src/hooks/UsePopup';
+import { API } from 'src/API';
+import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 
 export default function UploadPostPage() {
 	const [title, setTitle] = useState('');
@@ -27,8 +31,15 @@ export default function UploadPostPage() {
 - Chọn phiên bản cần tải và tải thôi`);
 
 	const { model, setVisibility } = useModel();
+
 	const [tag, setTag] = useState<string>('');
 	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
+
+	const { me } = useMe();
+
+	const [isLoading, setIsLoading] = useState(false);
+
+	const { addPopup } = usePopup();
 
 	function handleRemoveTag(index: number) {
 		setTags((prev) => [...prev.filter((_, i) => i !== index)]);
@@ -42,7 +53,31 @@ export default function UploadPostPage() {
 		setTag('');
 	}
 
-	function handleSubmit() {}
+	function handleSubmit() {
+		if (!title) {
+			addPopup(i18n.t('no-title'), 5, 'error');
+			return;
+		}
+
+		if (!content) {
+			addPopup(i18n.t('no-content'), 5, 'error');
+			return;
+		}
+
+		if (!tags || tags.length === 0) {
+			addPopup(i18n.t('no-tag'), 5, 'error');
+			return;
+		}
+
+		setIsLoading(true);
+
+		API.postPost(title, content, tags) //
+			.then(() => addPopup(i18n.t('post-success'), 10, 'info'))
+			.catch(() => addPopup(i18n.t('post-fail'), 5, 'error'))
+			.finally(() => setIsLoading(false));
+	}
+
+	if (isLoading) return <LoadingSpinner />;
 
 	return (
 		<main className='w100p h100p small-gap border-box'>
@@ -74,7 +109,17 @@ export default function UploadPostPage() {
 			</section>
 			{model(
 				<section className='relative w100p h100p scroll-y'>
-					<Markdown children={content} />
+					<PostView
+						post={{
+							id: '',
+							authorId: me ? me.id : '',
+							header: title,
+							content: content,
+							tags: Tags.toStringArray(tags),
+							like: 0,
+							time: new Date().toString(),
+						}}
+					/>
 					<Button className='absolute top right medium-margin' onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>

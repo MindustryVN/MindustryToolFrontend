@@ -318,15 +318,15 @@ textarea:is(:focus, :hover) {
 	height: 100%;
 }
 
-.white-background {
+.neutral-background {
 	background-color: var(--neutral);
 }
 
-.black-background {
+.accent-background {
 	background-color: var(--accent);
 }
 
-.yellow-background {
+.primary-background {
 	background-color: var(--primary);
 }
 
@@ -353,4 +353,30 @@ textarea:is(:focus, :hover) {
 .ellipsis {
 	right: -6px;
 	top: -2px;
+}
+
+.post-title {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.title {
+	font-size: 1.5rem;
+}
+
+.editor-background {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.title-editor[type="text"] {
+	font-size: 1.5rem;
+	border-bottom: 2px solid white;
+}
+
+.title-editor,
+.content-editor,
+.content-editor:is(:hover, :focus) {
+	background-color: transparent;
+	resize: none;
+	font-size: 1rem;
 }

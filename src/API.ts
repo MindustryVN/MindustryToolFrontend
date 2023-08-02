@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { API_BASE_URL } from './config/Config';
 import Schematic from 'src/data/Schematic';
 import Map from 'src/data/Map';
+import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 
 export class API {
 	static REQUEST = axios.create({
@@ -52,12 +53,12 @@ export class API {
 		return API.REQUEST.delete('notification/all');
 	}
 
-	static verifySchematic(schematic: Schematic, tagString: string) {
+	static verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
 		let form = new FormData();
 
+		const tagString = Tags.toString(tags);
+
 		form.append('id', schematic.id);
-		form.append('authorId', schematic.authorId);
-		form.append('data', schematic.data);
 		form.append('tags', tagString);
 
 		return API.REQUEST.post('schematic', form);
@@ -68,12 +69,12 @@ export class API {
 			.then(() => API.postNotification(schematic.authorId, 'Your map submission has been reject', reason));
 	}
 
-	static verifyMap(map: Map, tagString: string) {
+	static verifyMap(map: Map, tags: TagChoiceLocal[]) {
 		let form = new FormData();
 
+		const tagString = Tags.toString(tags);
+
 		form.append('id', map.id);
-		form.append('authorId', map.authorId);
-		form.append('data', map.data);
 		form.append('tags', tagString);
 
 		return API.REQUEST.post('map', form);
@@ -169,20 +170,26 @@ export class API {
 		return API.REQUEST.post('map-upload/preview', form);
 	}
 
-	static postSchematicUpload(code: string, file: File | undefined, tag: string) {
+	static postSchematicUpload(code: string, file: File | undefined, tags: TagChoiceLocal[]) {
 		const formData = new FormData();
-		formData.append('tags', tag);
+
+		const tagString = Tags.toString(tags);
+
+		formData.append('tags', tagString);
 
 		if (file) formData.append('file', file);
-		
+
 		formData.append('code', code);
 
 		return API.REQUEST.post('schematic-upload', formData);
 	}
 
-	static postMapUpload(file: File, tag: string) {
+	static postMapUpload(file: File, tags: TagChoiceLocal[]) {
 		const formData = new FormData();
-		formData.append('tags', tag);
+
+		const tagString = Tags.toString(tags);
+
+		formData.append('tags', tagString);
 
 		formData.append('file', file);
 
@@ -198,5 +205,37 @@ export class API {
 
 	static deleteServer(address: string) {
 		return this.REQUEST.delete(`mindustry-server/${address}`);
+	}
+
+	static postPost(title: string, content: string, tags: TagChoiceLocal[]) {
+		const form = new FormData();
+		form.append('header', title);
+		form.append('content', content);
+
+		const tagString = Tags.toString(tags);
+
+		form.append('tags', tagString);
+
+		return this.REQUEST.post('post-upload', form);
+	}
+
+	static verifyPost(post: Post, tags: TagChoiceLocal[]) {
+		let form = new FormData();
+
+		const tagString = Tags.toString(tags);
+
+		form.append('id', post.id);
+		form.append('tags', tagString);
+
+		return API.REQUEST.post('post', form);
+	}
+
+	static rejectPost(post: Post, reason: string) {
+		return API.REQUEST.delete(`post-upload/${post.id}`) //
+			.then(() => API.postNotification(post.authorId, 'Your post submission has been reject', reason));
+	}
+
+	static deletePost(postId: string) {
+		return API.REQUEST.delete(`post/${postId}`); //
 	}
 }

@@ -5,7 +5,6 @@ import 'src/components/schematic/SchematicInfoImage.css';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import Dropbox from 'src/components/dropbox/Dropbox';
-import SchematicPreviewData from 'src/data/SchematicUploadPreview';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
@@ -22,6 +21,7 @@ import SchematicRequirement from 'src/components/schematic/SchematicRequirement'
 import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import useMe from 'src/hooks/UseMe';
+import SchematicUploadPreview from 'src/data/SchematicUploadPreview';
 
 const tabs = ['file', 'code'];
 
@@ -38,7 +38,7 @@ export default function UploadSchematicPage() {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
 	const [file, setFile] = useState<File>();
 	const [code, setCode] = useState<string>('');
-	const [preview, setPreview] = useState<SchematicPreviewData>();
+	const [preview, setPreview] = useState<SchematicUploadPreview>();
 	const [tag, setTag] = useState<string>('');
 	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
 
@@ -67,7 +67,7 @@ export default function UploadSchematicPage() {
 
 		setFile(files[0]);
 
-		getPreview(files[0], '');
+		getView(files[0], '');
 	}
 
 	function handleCodeChange() {
@@ -80,11 +80,11 @@ export default function UploadSchematicPage() {
 				}
 
 				setCode(text);
-				getPreview(undefined, text);
+				getView(undefined, text);
 			});
 	}
 
-	function getPreview(file: File | undefined, code: string) {
+	function getView(file: File | undefined, code: string) {
 		setIsLoading(true);
 
 		API.getSchematicPreview(code, file) //
@@ -103,11 +103,10 @@ export default function UploadSchematicPage() {
 			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
-		const tagString = Tags.toString(tags);
 
 		setIsLoading(true);
 
-		API.postSchematicUpload(code, file, tagString)
+		API.postSchematicUpload(code, file, tags)
 			.then(() => {
 				setCode('');
 				setFile(undefined);

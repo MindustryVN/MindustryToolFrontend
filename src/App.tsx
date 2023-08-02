@@ -28,16 +28,16 @@ import ErrorBoundary from 'src/components/common/ErrorBoundery';
 // const analytics = getAnalytics(app);
 
 const Map = React.lazy(() => import('src/routes/map/MapPage'));
-const MapPreview = React.lazy(() => import('src/routes/map/MapViewPage'));
+const MapView = React.lazy(() => import('src/routes/map/MapViewPage'));
 const Home = React.lazy(() => import('src/routes/home/HomePage'));
 const Me = React.lazy(() => import('src/routes/me/MePage'));
 const Logic = React.lazy(() => import('src/routes/logic/LogicPage'));
 const Schematic = React.lazy(() => import('src/routes/schematic/SchematicPage'));
-const SchematicPreview = React.lazy(() => import('src/routes/schematic/SchematicViewPage'));
+const SchematicView = React.lazy(() => import('src/routes/schematic/SchematicViewPage'));
 const Login = React.lazy(() => import('src/routes/login/LoginPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
-const ForumPreview = React.lazy(() => import('src/routes/forum/ForumPreviewPage'));
+const ForumView = React.lazy(() => import('src/routes/forum/ForumViewPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
@@ -65,11 +65,11 @@ export default function App() {
 							<Route path='/upload/schematic' element={<UploadSchematic />} />
 							<Route path='/upload/post' element={<PrivateRoute element={<UploadPost />} />} />
 							<Route path='/map' element={<Map />} />
-							<Route path='/map/:mapId' element={<MapPreview />} />
+							<Route path='/map/:mapId' element={<MapView />} />
 							<Route path='/schematic' element={<Schematic />} />
-							<Route path='/schematic/:schematicId' element={<SchematicPreview />} />
+							<Route path='/schematic/:schematicId' element={<SchematicView />} />
 							<Route path='/forum' element={<Forum />} />
-							<Route path='/forum/post/:postId' element={<ForumPreview />} />
+							<Route path='/forum/post/:postId' element={<ForumView />} />
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />

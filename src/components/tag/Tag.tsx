@@ -118,4 +118,7 @@ export class Tags {
 	static toString(tags: Array<TagChoiceLocal>) {
 		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
 	}
+	static toStringArray(tags: Array<TagChoiceLocal>) {
+		return tags.map((tag) =>tag.toString());
+	}
 }

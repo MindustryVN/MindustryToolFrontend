@@ -20,6 +20,9 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import { Trans } from 'react-i18next';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import DateDisplay from 'src/components/common/Date';
+import ClearButton from 'src/components/button/ClearButton';
+import LoadUserName from 'src/components/user/LoadUserName';
+import TagContainer from 'src/components/tag/TagContainer';
 
 export default function ForumPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -136,25 +139,26 @@ function PostPreview(props: PostPreviewProps) {
 	props.post.like = likeService.likes;
 
 	return (
-		<Button className='flex-column small-gap' onClick={() => navigate(`forum/post/${props.post.id}`)}>
-			<section className='flex-row small-gap'>
-				{Tags.parseArray(props.post.tags, Tags.POST_SEARCH_TAG).map((tag) => (
-					<Tag key={tag.toDisplayString()} tag={tag}></Tag>
-				))}
+		<section role='button' className='post-preview-card relative flex-column medium-gap medium-padding space-between' onClick={() => navigate(`post/${props.post.id}`)}>
+			<header className='flex-column medium-gap'>
+				<span className='title'>{props.post.header}</span>
+				<LoadUserName userId={props.post.authorId} />
+				<TagContainer tags={Tags.parseArray(props.post.tags, Tags.POST_SEARCH_TAG)} />
+			</header>
+			<section className='flex-row'>
+				<section className='grid-row small-gap'>
+					<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+					<LikeCount count={likeService.likes} />
+					<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+				</section>
 			</section>
-			<h2>{props.post.header}</h2>
-			<section className='grid-row small-gap'>
-				<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-				<LikeCount count={likeService.likes} />
-				<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			</section>
-			<DateDisplay time={props.post.time} />
+			<DateDisplay className='absolute bottom right small-margin align-self-end' time={props.post.time} />
 			<ClearIconButton
-				className='absolute top left small-padding'
+				className='absolute top right small-padding small-margin'
 				title={i18n.t('copy-link').toString()}
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}forum/post/${props.post.id}`)}
 			/>
-		</Button>
+		</section>
 	);
 }
