@@ -5,15 +5,15 @@ import 'src/styles.css';
 import './Loading.css';
 
 export default function Loading() {
-	const [message, setMessage] = useState<string>('loading.short');
+	const [content, setMessage] = useState<string>('loading.short');
 
 	useEffect(() => {
 		setTimeout(() => setMessage('loading.long'), 5000);
 	}, []);
 
 	return (
-		<span className="flex-center loading">
-			<Trans i18nKey={message} />
+		<span className='flex-center loading'>
+			<Trans i18nKey={content} />
 		</span>
 	);
 }

@@ -16,6 +16,7 @@ import Markdown from 'src/components/markdown/Markdown';
 import PrivateRoute from 'src/components/router/PrivateRoute';
 import useNotification from 'src/hooks/UseNotification';
 import Button from 'src/components/button/Button';
+import DateDisplay from 'src/components/common/Date';
 
 export default function NotificationPage() {
 	return <PrivateRoute element={<NotificationContainer />} />;
@@ -79,10 +80,10 @@ function NotificationContainer() {
 				<section className='notification flex-row flex-wrap space-between medium-padding border-box' key={notification.id}>
 					<section className='flex-column'>
 						<h3>{notification.header}</h3>
-						<Markdown>{notification.message}</Markdown>
+						<Markdown>{notification.content}</Markdown>
 					</section>
 					<section className='flex-row medium-gap align-self-end'>
-						<Trans i18nKey='time' />: {new Date(notification.time).toLocaleString('en-GB')}
+						<Trans i18nKey='time' />: <DateDisplay time={notification.time} />
 						<section className='flex-row small-gap center justify-start'>
 							<IfTrue condition={notification.read === false} whenTrue={<IconButton icon='/assets/icons/check.png' onClick={() => handleMarkAsRead(notification)} />} />
 							<IconButton icon='/assets/icons/trash-16.png' onClick={() => handleDelete(notification)} />

@@ -1,29 +1,27 @@
-import './UploadSchematicPage.css';
+import './UploadMapPage.css';
 import 'src/styles.css';
-import 'src/components/schematic/SchematicInfoImage.css';
+import 'src/components/map/MapInfoImage.css';
 
-import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Trans } from 'react-i18next';
 import { API } from 'src/API';
-import Dropbox from 'src/components/dropbox/Dropbox';
-import SchematicPreviewData from 'src/data/SchematicUploadPreview';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
-import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
-import i18n from 'src/util/I18N';
+import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX } from 'src/config/Config';
 import { getFileExtension } from 'src/util/StringUtils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
-import { Link } from 'react-router-dom';
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import Dropbox from 'src/components/dropbox/Dropbox';
+import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
-import { Trans } from 'react-i18next';
 import Button from 'src/components/button/Button';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import LoadUserName from 'src/components/user/LoadUserName';
-import SchematicDescription from 'src/components/schematic/SchematicDescription';
-import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
+import MapDescription from 'src/components/map/MapDescription';
 import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import useMe from 'src/hooks/UseMe';
-
-const tabs = ['file', 'code'];
+import MapInfoImage from 'src/components/map/MapInfoImage';
+import MapUploadPreview from 'src/data/MapUploadPreview';
 
 let notLoginMessage = (
 	<span>
@@ -34,11 +32,9 @@ let notLoginMessage = (
 	</span>
 );
 
-export default function UploadSchematicPage() {
-	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
+export default function UploadPage() {
 	const [file, setFile] = useState<File>();
-	const [code, setCode] = useState<string>('');
-	const [preview, setPreview] = useState<SchematicPreviewData>();
+	const [preview, setPreview] = useState<MapUploadPreview>();
 	const [tag, setTag] = useState<string>('');
 	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
 
@@ -53,48 +49,30 @@ export default function UploadSchematicPage() {
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
-		if (!files || files.length <= 0 || !files[0]) {
-			popup.current.addPopup(i18n.t('invalid-schematic-file'), 5, 'error');
+		if (!files || files.length <= 0) {
+			popup.current.addPopup(i18n.t('invalid-map-file'), 5, 'error');
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
-		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-			popup.current.addPopup(i18n.t('invalid-schematic-file'), 5, 'error');
+		if (extension !== MAP_FILE_EXTENSION) {
+			popup.current.addPopup(i18n.t('invalid-map-file'), 5, 'error');
 			return;
 		}
 
 		setFile(files[0]);
 
-		getPreview(files[0], '');
-	}
-
-	function handleCodeChange() {
-		navigator.clipboard
-			.readText() //
-			.then((text) => {
-				if (!text.startsWith('bXNja')) {
-					popup.current.addPopup(i18n.t('not-schematic-code'), 5, 'warning');
-					return;
-				}
-
-				setCode(text);
-				getPreview(undefined, text);
-			});
-	}
-
-	function getPreview(file: File | undefined, code: string) {
 		setIsLoading(true);
 
-		API.getSchematicPreview(code, file) //
+		API.getMapPreview(files[0]) //
 			.then((result) => setPreview(result.data)) //
-			.catch(() => popup.current.addPopup(i18n.t(`invalid-schematic`), 10, 'error')) //
+			.catch(() => popup.current.addPopup(i18n.t(`invalid-map`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 
 	function handleSubmit() {
-		if (!file && !code) {
+		if (!file) {
 			popup.current.addPopup(i18n.t('no-data'), 5, 'error');
 			return;
 		}
@@ -103,13 +81,11 @@ export default function UploadSchematicPage() {
 			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
-		const tagString = Tags.toString(tags);
 
 		setIsLoading(true);
 
-		API.postSchematicUpload(code, file, tagString)
+		API.postMapUpload(file, tags)
 			.then(() => {
-				setCode('');
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
@@ -131,32 +107,8 @@ export default function UploadSchematicPage() {
 		setTag('');
 	}
 
-	function renderTab(currentTab: string) {
-		switch (currentTab) {
-			case tabs[0]:
-				return (
-					<>
-						<label className='button' htmlFor='ufb'>
-							<Trans i18nKey='upload-a-file' />
-						</label>
-						<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
-					</>
-				);
-
-			case tabs[1]:
-				return (
-					<Button onClick={() => handleCodeChange()}>
-						<Trans i18nKey='copy-from-clipboard' />
-					</Button>
-				);
-
-			default:
-				return <>No tab</>;
-		}
-	}
-
 	function checkUploadRequirement() {
-		if (!file && !code) return <Trans i18nKey='no-data' />;
+		if (!file) return <Trans i18nKey='no-data' />;
 		if (!tags || tags.length === 0) return <Trans i18nKey='no-tag' />;
 
 		return <Trans i18nKey='ok' />;
@@ -166,34 +118,20 @@ export default function UploadSchematicPage() {
 
 	return (
 		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<header className='flex-column medium-gap'>
-				<section className='flex-center'>
-					<section className='code-file grid-row small-gap small-padding'>
-						{tabs.map((name, index) => (
-							<Button
-								className={'code-file-button ' + (currentTab === name ? 'active' : '')}
-								key={index}
-								onClick={() => {
-									setFile(undefined);
-									setCode('');
-									setCurrentTab(name);
-								}}>
-								<Trans i18nKey={name} />
-							</Button>
-						))}
-					</section>
-				</section>
-				<section className='flex-center'>{renderTab(currentTab)}</section>
+			<header className='flex-center'>
+				<label className='button' htmlFor='ufb'>
+					<Trans i18nKey='upload-a-file' />
+				</label>
+				<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
 			</header>
 			{preview && (
 				<section className='flex-row flex-wrap medium-gap'>
-					<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
+					<MapInfoImage src={PNG_IMAGE_PREFIX + preview.image} />
 					<section className='flex-column space-between'>
 						<section className='flex-column small-gap flex-wrap'>
 							<ColorText className='capitalize h2' text={preview.name} />
 							<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
-							<SchematicDescription description={preview.description} />
-							<SchematicRequirement requirement={preview.requirement} />
+							<MapDescription description={preview.description} />
 							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 						</section>
 					</section>
@@ -201,7 +139,7 @@ export default function UploadSchematicPage() {
 						<Dropbox
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
-							items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+							items={Tags.MAP_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 							onChange={(event) => setTag(event.target.value)}
 							onChoose={(item) => handleAddTag(item)}
 							mapper={(t, index) => <TagPick key={index} tag={t} />}
@@ -209,6 +147,7 @@ export default function UploadSchematicPage() {
 					</section>
 				</section>
 			)}
+
 			<footer className='flex-column center small-gap medium-padding'>
 				<span children={checkUploadRequirement()} />
 				<Button onClick={() => handleSubmit()}>

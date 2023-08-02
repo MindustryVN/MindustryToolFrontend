@@ -1,27 +1,255 @@
 {
+	"back": "Back",
+	"close": "Close",
+	"confirm": "Confirm",
+	"cancel": "Cancel",
+	"search-with-tag": "Insert some tags",
+	"login": "Login",
+	"logout": "Logout",
+	"login-fail": "Login failed",
+	"copied": "Copied",
+	"load-more": "Load more",
+	"no-more": "Out",
+	"scroll-to-top": "Scroll to top",
+	"author": "Author",
+	"verify-by": "Verified by",
+	"user-not-found": "Người dùng không tồn tại",
+	"invalid-schematic-file": "File bản thiết kế không hợp lệ, file phải có đuôi .msch",
+	"no-tag": "Thêm ít nhất một nhãn(Tag) để đăng",
+	"no-data": "Vui lòng thêm dữ liệu bản thiết kế",
+	"recommend-login": "Bạn hiện không đăng nhập, các bản thiết kế được đăng sẽ có tên tác giả là Community, cân nhắc đăng nhập",
+	"invalid-schematic": "Bản thiết kế lỗi",
+	"not-schematic-code": "Mã bản thiết kế lỗi",
+	"delete-schematic-dialog": "Xóa bản thiết kế?",
+	"lost-connection": "Mất kết nối với máy chủ",
+	"no-notification": "Không có thông báo",
+	"schematic": "Bản thiết kế",
+	"map": "Bản đồ",
+	"log": "Log",
+	"report": "Báo cáo",
+	"submit": "Đăng",
+	"reject": "Từ chối",
+	"verify": "Duyệt",
+	"reject-reason": "Lý do từ chối",
+	"add-tag": "Thêm nhãn",
+	"upload": "Đăng",
+	"content": "Nội dung",
+	"time": "Thời gian",
+	"reply": "Phản hồi",
+	"show-reply": "Hiện phản hồi",
+	"write-a-comment": "Viết bình luận",
+	"high-ping-reason": "Vì trang web đăng sử dụng dịch vụ hosting miễn phí nên sẽ cần 1-2 phút để khởi động, vui lòng chờ",
+	"copy-link": "Sao chép liên kết",
+	"name": "Tên",
+	"ping": "Ping",
+	"map-name": "Bản đồ",
+	"version": "Phiên bản",
+	"wave": "Đợt",
+	"players": "Người chơi",
+	"mode": "Chế độ",
+	"address": "Địa chỉ IP",
+	"description": "Mô tả",
+	"total-schematic": "Tổng bản thiết kế",
+	"total-map": "Tổng bản đồ",
+	"file": "Tệp",
+	"code": "Mã",
+	"upload-a-file": "Chọn một tệp",
+	"copy-from-clipboard": "Sao chép từ bộ nhớ tạm",
 	"loading": {
-		"short": "Loading",
-		"long": "Please wait 1-2 minutes"
+		"short": "Đang tải",
+		"long": "Đang tải, vui lòng đợi 1-2 phút."
 	},
-	"tags": {
-		"categories": {
-			"author": "Author",
-			"size": "Size",
-			"sizes": {
-				"micro": "micro (4 tiles)",
-				"small": "small (16 tiles)",
-				"medium": "medium (64 tiles)",
-				"big": "big (255 tiles)",
-				"huge": "huge (900 tiles)"
-			},
-			"position": "Position",
-			"positions": {
-				"core": "Core",
-				"ore": "Ore",
-				"liquid": "Liquid",
-				"remote": "Remote",
-				"mass-driver": "Mass driver",
+	"tag": {
+		"newest": "Mới nhất",
+		"oldest": "Cũ nhất",
+		"most-liked": "Được thích nhất",
+		"size": {
+			"name": "Kích thước",
+			"value": {
+				"micro": "Siêu nhỏ",
+				"small": "Nhỏ",
+				"medium": "Trung bình",
+				"big": "Lớn",
+				"huge": "Rất lớn"
+			}
+		},
+		"position": {
+			"name": "Vị trí",
+			"value": {
+				"core": "Cạnh căn cứ",
+				"remote": "Dùng lính để chuyển",
+				"mass-driver": "Máy phóng",
+				"any": "Bất cứ đâu",
+				"dark-sand": "Cát đen",
+				"sand": "Cát",
+				"sand-wall": "Tường cát",
+				"liquid-slag": "Trên sỉ",
+				"liquid-cryofluid": "Trên chất làm lạnh",
+				"liquid-tar": "Trên dầu",
+				"liquid-water": "Trên nước",
+				"liquid-deep-water": "Trên nước sâu",
+				"ore-graphitic-wall": "Trên tường chì",
+				"ore-tungsten-wall": "Trên tường tungsten",
+				"ore-beryllium-wall": "Trên tường beryllium",
+				"ore-thorium-wall": "Trên tường thorium",
+				"ore-copper": "Trên đồng",
+				"ore-lead": "Trên chì",
+				"ore-coal": "Trên than",
+				"ore-titanium": "Trên titan",
+				"ore-thorium": "Trên thorium",
+				"ore-tungsten": "Trên tungsten",
+				"ore-beryllium": "Trên beryllium",
+				"ore-scrap": "Trên phế liệu",
+				"core-shard": "Cạnh căn cứ nhỏ",
+				"core-foundation": "Cạnh căn cứ trụ sở",
+				"core-nucleus": "Cạnh căn cứ trung tâm",
+				"core-bastion": "Cạnh căn cứ pháo đài",
+				"core-citadel": "Cạnh căn cứ thủ phủ",
+				"core-acropolis": "Cạnh căn cứ đại đô"
+			}
+		},
+		"unit-tier": {
+			"name": "Cấp độ lính",
+			"value": {
+				"tier1": "Cấp 1",
+				"tier2": "Cấp 2",
+				"tier3": "Cấp 3",
+				"tier4": "Cấp 4",
+				"tier5": "Cấp 5"
+			}
+		},
+		"planet": {
+			"name": "Công nghệ",
+			"value": {
+				"serpulo": "Serpulo",
+				"erekir": "Erekir",
 				"any": "Any"
+			}
+		},
+		"item": {
+			"name": "Vật phẩm",
+			"value": {
+				"copper": "Đồng",
+				"lead": "Chì",
+				"coal": "Than",
+				"scrap": "Phế liệu",
+				"graphite": "Than chì",
+				"metaglass": "Thủy tinh",
+				"silicon": "Silicon",
+				"spore": "Bào tử",
+				"titanium": "Titanium",
+				"plastanium": "Nhựa",
+				"pyratite": "Nhiệt thạch",
+				"blast-compound": "Chất nổ",
+				"thorium": "Thorium",
+				"phase-fabric": "Vải lượng tử",
+				"surge-alloy": "Hợp kim",
+				"beryllium": "beryllium",
+				"tungsten": "tungsten",
+				"oxide": "oxide",
+				"carbide": "carbide"
+			}
+		},
+		"liquid": {
+			"name": "Chất lỏng",
+			"value": {
+				"water": "Nước",
+				"slag": "Sỉ nóng chảy",
+				"oil": "Dầu",
+				"cryofluid": "Chất làm lạnh",
+				"neoplasm": "neoplasm",
+				"arkycite": "arkycite",
+				"ozone": "ozone",
+				"hydrogen": "hydrogen",
+				"nitrogen": "nitrogen",
+				"cyanogen": "cyanogen"
+			}
+		},
+		"type": {
+			"name": "Loại",
+			"value": {
+				"unit": "Lính",
+				"logic": "Logic",
+				"resource": "Tài nguyên",
+				"j4f": "J4F",
+				"power": "Năng lượng",
+				"defense": "Phòng thủ",
+				"art": "Tác phẩm nghệ thuật"
+			}
+		},
+		"game-mode": {
+			"name": "Chế độ",
+			"value": {
+				"campaign": "Chiến dịch",
+				"pvp": "PvP",
+				"attack": "Tấn công",
+				"sandbox": "Sáng tạo (Sandbox)",
+				"hex": "Hex",
+				"tower-defense": "Thủ thành(Tower defense)",
+				"survival": "Sinh tồn"
+			}
+		},
+		"verify": {
+			"name": "Duyệt",
+			"value": {
+				"verified": "Đã được duyệt",
+				"unverified": "Không được duyệt"
+			}
+		},
+		"factory": {
+			"name": "Nhà máy",
+			"value": {
+				"graphite-press": "Máy nén than chì",
+				"multi-press": "Máy nén than chì lớn",
+				"silicon-smelter": "Máy nấu silicon",
+				"silicon-crucible": "Máy nấu silicon lớn",
+				"klin": "Lò thuỷ tinh",
+				"plastanium-compressor": "Máy nén nhựa",
+				"phase-weaver": "Máy dệt sợi lượng tử",
+				"surge-smelter": "Lò tinh luyện hợp kim",
+				"cryofluid-mixer": "Máy làm chất làm Lạnh",
+				"pyratite-mixer": "Máy trộn nhiệt thạch",
+				"blast-mixer": "Máy trộn chất nổ",
+				"melter": "Lò nấu chảy",
+				"separator": "Máy phân tách",
+				"disassembler": "Máy phân tách lớn",
+				"spore-press": "Máy nén bào tử",
+				"pulverizer": "Máy nghiền",
+				"coal-centrifuge": "Máy tạo than",
+				"silicon-arc-furnace": "Lò nung silicon",
+				"electrolyzer": "Máy điện phân",
+				"atmospheric-concentrator": "Máy cô đặc khí quyển",
+				"oxidation-chamber": "Bể oxy hoá",
+				"carbide-crucible": "Máy tinh luyện carbide",
+				"surge-crucible": "Nồi nấu tinh luyện hợp kim",
+				"phase-synthesizer": "Máy tổng hợp lượng tử",
+				"cyanogen-synthesizer": "Máy tổng hợp Cyano",
+				"phase-heater": "Máy tạo nhiệt lượng tử",
+				"slag-heater": "Máy tạo nhiệt bằng xỉ",
+				"electric-heater": "Máy tạo nhiệt bằng điện"
+			}
+		},
+		"generator": {
+			"name": "Máy tạo năng lượng",
+			"value": {
+				"combustion-generator": "Máy phát điện đốt cháy",
+				"steam-generator": "Máy phát điện hơi nước",
+				"differential-generator": "Máy phát điện vi sai",
+				"rtg-generator": "Máy phát điện phân rả phóng xạ RTG",
+				"thorium-reactor": "Lò phóng xạ thorium",
+				"impact-reactor": "Lò phản ứng nhiệt hạch",
+				"chemical-combustion-chamber": "Lò đốt cháy hoá học",
+				"pyrolysis-generator": " Bể điện hóa",
+				"flux-reactor": "Lò phản ứng bốc hơi",
+				"neoplasia-reactor": "Lò phản ứng siêu tân tinh"
+			}
+		},
+		"time": {
+			"name": "Thời gian",
+			"value": {
+				"late-game": "Cuối game",
+				"mid-game": "Giữa game",
+				"early-game": "Đầu game"
 			}
 		}
 	}

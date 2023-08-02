@@ -55,6 +55,9 @@ export class TagChoiceLocal {
 export class Tags {
 	static SCHEMATIC_UPLOAD_TAG: TagChoiceLocal[] = [];
 	static SCHEMATIC_SEARCH_TAG: TagChoiceLocal[] = [];
+
+	static POST_UPLOAD_TAG: TagChoiceLocal[] = [];
+	static POST_SEARCH_TAG: TagChoiceLocal[] = [];
 	
 	static MAP_UPLOAD_TAG: TagChoiceLocal[] = [];
 	static MAP_SEARCH_TAG: TagChoiceLocal[] = [];
@@ -114,5 +117,8 @@ export class Tags {
 
 	static toString(tags: Array<TagChoiceLocal>) {
 		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
+	}
+	static toStringArray(tags: Array<TagChoiceLocal>) {
+		return tags.map((tag) =>tag.toString());
 	}
 }

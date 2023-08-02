@@ -48,6 +48,7 @@ section {
 
 a {
 	color: rgb(50, 200, 200);
+	font-size: 0.8rem;
 }
 
 *::-webkit-scrollbar-track {
@@ -84,7 +85,7 @@ a {
 
 	--overlay-z-index: 2;
 	--model-z-index: 3;
-	--popup-message-z-index: 4;
+	--popup-content-z-index: 4;
 	--navigation-bar-z-index: 5;
 	--top-z-index: 6;
 
@@ -93,17 +94,6 @@ a {
 	--info-color: #3ac152;
 }
 
-input[type='file'] {
-	display: none;
-}
-
-textarea,
-textarea:is(:focus, :hover) {
-	outline: none;
-	border: none;
-	resize: none;
-	background-color: transparent;
-}
 
 footer {
 	min-height: 2rem;

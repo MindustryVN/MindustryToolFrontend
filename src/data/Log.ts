@@ -1,6 +1,6 @@
-export interface LogData {
+export interface Log {
 	id: string;
-	message: string;
+	content: string;
 	environment: string;
 	time: string;
 }

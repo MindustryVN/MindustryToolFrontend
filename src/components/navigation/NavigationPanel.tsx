@@ -63,9 +63,6 @@ export default function NavigationPanel() {
 							<Link className={'nav-link ' + (pathName.startsWith('logic') ? 'active' : '')} to='/logic' onClick={() => setShowNavigatePanel(false)}>
 								Logic
 							</Link>
-							<Link className={'nav-link ' + (pathName.startsWith('upload') ? 'active' : '')} to='/upload' onClick={() => setShowNavigatePanel(false)}>
-								Upload
-							</Link>
 							<Link className={'nav-link ' + (pathName.startsWith('server') ? 'active' : '')} to='/mindustry-server' onClick={() => setShowNavigatePanel(false)}>
 								Server
 							</Link>

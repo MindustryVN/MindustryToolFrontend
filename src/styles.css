@@ -1,6 +1,18 @@
-.button {
-	position: relative;
+input[type='file'] {
+	display: none;
+}
 
+textarea,
+textarea:is(:focus, :hover) {
+	outline: none;
+	border: none;
+	resize: none;
+	background-color: transparent;
+
+	background-color: var(--accent);
+}
+
+.button {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -15,12 +27,12 @@
 
 	border-radius: 5px;
 	border: 2px solid var(--gray);
+
+	text-decoration: none;
 }
 
 .button:hover,
 .button-active {
-	position: relative;
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -35,6 +47,7 @@
 	box-sizing: border-box;
 
 	border-radius: 5px;
+	text-decoration: none;
 }
 
 .text-center {
@@ -71,6 +84,10 @@
 
 .small-margin {
 	margin: 0.25rem;
+}
+
+.medium-margin {
+	margin: 0.5rem;
 }
 
 .icon {
@@ -272,7 +289,7 @@
 .scroll-y {
 	overflow: hidden auto;
 
-	padding-right: 0.2rem;
+	padding-right: 0.4rem;
 	box-sizing: border-box;
 }
 
@@ -301,15 +318,15 @@
 	height: 100%;
 }
 
-.white-background {
+.neutral-background {
 	background-color: var(--neutral);
 }
 
-.black-background {
+.accent-background {
 	background-color: var(--accent);
 }
 
-.yellow-background {
+.primary-background {
 	background-color: var(--primary);
 }
 
@@ -336,4 +353,30 @@
 .ellipsis {
 	right: -6px;
 	top: -2px;
+}
+
+.post-title {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.title {
+	font-size: 1.5rem;
+}
+
+.editor-background {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.title-editor[type="text"] {
+	font-size: 1.5rem;
+	border-bottom: 2px solid white;
+}
+
+.title-editor,
+.content-editor,
+.content-editor:is(:hover, :focus) {
+	background-color: transparent;
+	resize: none;
+	font-size: 1rem;
 }

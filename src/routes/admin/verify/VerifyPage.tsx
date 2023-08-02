@@ -2,10 +2,11 @@ import 'src/styles.css';
 
 import React, { useState } from 'react';
 import Button from 'src/components/button/Button';
-import VerifySchematicPage from 'src/routes/admin/verify/VerifySchematicPage';
-import VerifyMapPage from 'src/routes/admin/verify/VerifyMapPage';
+import VerifySchematicPage from 'src/routes/admin/verify/schematic/VerifySchematicPage';
+import VerifyMapPage from 'src/routes/admin/verify/map/VerifyMapPage';
+import VerifyPostPage from 'src/routes/admin/verify/post/VerifyPostPage';
 
-const tabs = ['Schematic', 'Map'];
+const tabs = ['Schematic', 'Map', 'Post'];
 
 export default function VerifyPage() {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
@@ -18,8 +19,11 @@ export default function VerifyPage() {
 			case tabs[1]:
 				return <VerifyMapPage />;
 
+			case tabs[2]:
+				return <VerifyPostPage />;
+
 			default:
-				return <>No tab</>;
+				return <>Error</>;
 		}
 	}
 

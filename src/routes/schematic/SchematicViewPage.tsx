@@ -14,17 +14,7 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 
 export default function SchematicPreviewPage() {
 	const { schematicId } = useParams();
-	const { data, isLoading, isError } = useQuery<Schematic>(`schematic/${schematicId}`, {
-		id: '',
-		name: '',
-		data: '',
-		authorId: '',
-		description: '',
-		requirement: [],
-		tags: [],
-		like: 0,
-		verifyAdmin: '',
-	});
+	const { data, isLoading, isError } = useQuery<Schematic>(`schematic/${schematicId}`);
 
 	const navigate = useNavigate();
 
@@ -41,7 +31,7 @@ export default function SchematicPreviewPage() {
 
 	if (isLoading) return <LoadingSpinner />;
 
-	if (isError)
+	if (isError || !schematic)
 		return (
 			<div className='flex-center w100p h100p'>
 				<Trans i18nKey='schematic-not-found' />
