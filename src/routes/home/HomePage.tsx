@@ -2,6 +2,7 @@ import 'src/styles.css';
 import './HomePage.css';
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
 	return (
@@ -16,9 +17,9 @@ export default function HomePage() {
 						</a>
 					</li>
 					<li>
-						<a className='link' href='/forum/how-to-download-mindustry'>
+						<Link className='link' to='/forum/post/64ca803ea51a933422a49aac'>
 							Cách tải game miễn phí
-						</a>
+						</Link>
 					</li>
 				</ul>
 				<b>Muốn tìm người chơi game cùng?</b>
