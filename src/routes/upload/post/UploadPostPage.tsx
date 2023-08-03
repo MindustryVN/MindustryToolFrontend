@@ -73,8 +73,16 @@ export default function UploadPostPage() {
 
 		API.postPost(title, content, tags) //
 			.then(() => addPopup(i18n.t('post-success'), 10, 'info'))
+			.then(() => handleSubmitSuccess())
 			.catch(() => addPopup(i18n.t('post-fail'), 5, 'error'))
 			.finally(() => setIsLoading(false));
+	}
+
+	function handleSubmitSuccess() {
+		setContent('');
+		setTitle('');
+		setTag('');
+		setTags([]);
 	}
 
 	if (isLoading) return <LoadingSpinner />;

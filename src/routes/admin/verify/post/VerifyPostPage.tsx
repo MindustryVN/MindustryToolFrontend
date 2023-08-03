@@ -53,6 +53,7 @@ export default function VerifyPostPage() {
 	return (
 		<main id='verify-post' className='flex-column h100p w100p'>
 			<section
+				className='flex-column medium-gap'
 				children={pages.map((post) => (
 					<PostPreviewCard
 						key={post.id} //
