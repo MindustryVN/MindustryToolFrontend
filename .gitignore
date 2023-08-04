@@ -43,3 +43,5 @@ out/
 resources/
 cache/
 lib/
+
+node_modules/
