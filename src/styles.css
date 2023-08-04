@@ -262,14 +262,6 @@ textarea:is(:focus, :hover) {
 	box-sizing: border-box;
 }
 
-.forum-image {
-	width: 70vw;
-	width: 70dvw;
-
-	border: 2px solid white;
-	border-radius: 5px;
-}
-
 .fixed {
 	position: fixed;
 }
@@ -318,21 +310,6 @@ textarea:is(:focus, :hover) {
 	height: 100%;
 }
 
-.neutral-background {
-	background-color: var(--neutral);
-}
-
-.accent-background {
-	background-color: var(--accent);
-}
-
-.primary-background {
-	background-color: var(--primary);
-}
-
-.gray-background {
-	background-color: var(--gray);
-}
 
 .top {
 	top: 0;

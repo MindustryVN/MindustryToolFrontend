@@ -58,7 +58,7 @@ export class Tags {
 
 	static POST_UPLOAD_TAG: TagChoiceLocal[] = [];
 	static POST_SEARCH_TAG: TagChoiceLocal[] = [];
-	
+
 	static MAP_UPLOAD_TAG: TagChoiceLocal[] = [];
 	static MAP_SEARCH_TAG: TagChoiceLocal[] = [];
 
@@ -119,6 +119,6 @@ export class Tags {
 		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
 	}
 	static toStringArray(tags: Array<TagChoiceLocal>) {
-		return tags.map((tag) =>tag.toString());
+		return tags.map((tag) => tag.toString());
 	}
 }

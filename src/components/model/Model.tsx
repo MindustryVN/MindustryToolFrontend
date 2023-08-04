@@ -1,6 +1,5 @@
 import './Model.css';
 
-
 import React, { ReactNode } from 'react';
 
 interface ModelProps {

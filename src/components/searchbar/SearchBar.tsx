@@ -11,8 +11,8 @@ interface SearchBarProps {
 
 export default function SearchBar(props: SearchBarProps) {
 	return (
-		<section className="search-bar">
-			<input className="input-bar" type="text" placeholder="Search" value={props.value} onChange={props.onChange} />
+		<section className='search-bar'>
+			<input className='input-bar' type='text' placeholder='Search' value={props.value} onChange={props.onChange} />
 			{props.submitButton}
 		</section>
 	);

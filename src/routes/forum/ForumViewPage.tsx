@@ -46,7 +46,7 @@ export default function ForumViewPage() {
 
 	return (
 		<section className='flex-column w100p h100p small-gap massive-padding border-box scroll-y'>
-			<header className='post-title flex-column massive-padding medium-gap'>
+			<header className='flex-column massive-padding medium-gap'>
 				<span className='title'>{data.header}</span>
 				<LoadUserName userId={data.authorId} />
 				<TagContainer tags={Tags.parseArray(data.tags, Tags.POST_SEARCH_TAG)} />

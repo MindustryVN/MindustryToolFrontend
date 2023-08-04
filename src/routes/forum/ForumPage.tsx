@@ -101,7 +101,7 @@ export default function ForumPage() {
 					</Button>
 				</section>
 			</header>
-			<section className='flex-column small-gap small-padding'>
+			<section className='flex-column medium-gap'>
 				{pages.map((post) => (
 					<PostPreview key={post.id} post={post} />
 				))}

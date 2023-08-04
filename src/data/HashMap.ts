@@ -27,20 +27,18 @@ export class HashMap<V> {
 	ensureSize(size: number) {
 		let mapSize = Object.keys(this.map).length;
 		if (mapSize > size) {
-            let m = Number.MAX_VALUE;
-            let k ;
-            for (let key in Object.keys(this.map)) {
-                if (this.map[key].time < m){
-                    m = this.map[key].time;
-                    k = key 
-                }
-            }
+			let m = Number.MAX_VALUE;
+			let k;
+			for (let key in Object.keys(this.map)) {
+				if (this.map[key].time < m) {
+					m = this.map[key].time;
+					k = key;
+				}
+			}
 
-            if (k){
-                delete this.map[k];
-            }
-        }
+			if (k) {
+				delete this.map[k];
+			}
+		}
 	}
-
-
 }

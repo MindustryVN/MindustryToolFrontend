@@ -12,11 +12,7 @@ interface ButtonProps {
 
 export default function ClearButton(props: ButtonProps) {
 	return (
-		<button
-			className={`clear-button ${props.className ? props.className : ''} `}
-			title={props.title ? props.title : 'button'}
-			type='button'
-			onClick={() => props.onClick()}>
+		<button className={`clear-button ${props.className ? props.className : ''} `} title={props.title ? props.title : 'button'} type='button' onClick={() => props.onClick()}>
 			{props.children}
 		</button>
 	);
