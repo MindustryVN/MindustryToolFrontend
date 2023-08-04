@@ -11,7 +11,7 @@ export default function useQuery<T>(url: string, initialValue?: T, searchConfig?
 
 	useEffect(() => {
 		if (cancelRequest) cancelRequest.abort();
-		
+
 		cancelRequest = new AbortController();
 
 		setIsError(false);

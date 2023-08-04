@@ -3,6 +3,10 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@babel/cli": "^7.22.9",
+		"@babel/node": "^7.22.6",
+		"@babel/preset-react": "^7.22.5",
+		"@babel/register": "^7.22.5",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^13.5.0",
@@ -12,7 +16,6 @@
 		"@types/react-dom": "^18.2.4",
 		"async-each": "^1.0.6",
 		"axios": "^1.4.0",
-		"babel-register": "^6.26.0",
 		"buffer": "^6.0.3",
 		"firebase": "^9.14.0",
 		"i18next": "^22.5.0",
@@ -25,6 +28,7 @@
 		"react-i18next": "^12.3.1",
 		"react-markdown": "^8.0.7",
 		"react-router-dom": "^6.10.0",
+		"react-router-sitemap-maker": "^1.1.0",
 		"react-scripts": "^5.0.1",
 		"reactstrap": "^9.1.9",
 		"typescript": "^5.0.2",
@@ -38,7 +42,8 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
+		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
+		"sitemap": "babel-node src/SitemapGenerator.tsx"
 	},
 	"eslintConfig": {
 		"extends": [

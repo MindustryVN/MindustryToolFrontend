@@ -24,6 +24,6 @@ export class Users {
 	}
 
 	static isAuthorOrAdmin(authorId: string, user: User | undefined) {
-		return user && (authorId === user.id || Users.isAdmin(user))
+		return user && (authorId === user.id || Users.isAdmin(user));
 	}
 }

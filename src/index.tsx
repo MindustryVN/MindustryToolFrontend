@@ -16,22 +16,20 @@ import ThemeProvider from 'src/context/ThemeProvider';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
 	// <React.StrictMode>
-		<ThemeProvider>
-			<I18nextProvider i18n={i18n}>
-				<Router>
-					<PopupMessageProvider>
-						<TagProvider>
-							<UserProvider>
-								<NotificationProvider>
-									<App />
-								</NotificationProvider>
-							</UserProvider>
-						</TagProvider>
-					</PopupMessageProvider>
-				</Router>
-			</I18nextProvider>
-		</ThemeProvider>
+	<ThemeProvider>
+		<I18nextProvider i18n={i18n}>
+			<Router>
+				<PopupMessageProvider>
+					<TagProvider>
+						<UserProvider>
+							<NotificationProvider>
+								<App />
+							</NotificationProvider>
+						</UserProvider>
+					</TagProvider>
+				</PopupMessageProvider>
+			</Router>
+		</I18nextProvider>
+	</ThemeProvider>,
 	// </React.StrictMode>,
 );
-
-

@@ -5,5 +5,5 @@ interface Post {
 	content: string;
 	like: number;
 	tags: string[];
-    time : string;
+	time: string;
 }
