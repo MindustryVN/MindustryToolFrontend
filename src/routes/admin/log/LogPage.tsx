@@ -17,10 +17,10 @@ import IfTrue from 'src/components/common/IfTrue';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
-	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Log>(`log/${contentType}`, 20);
+	const { pages, loadNextPage, reloadPage, isLoading, hasMore } = useInfinitePage<Log>(`log/${contentType}`, 20);
 	const { addPopup } = usePopup();
 
-	const infPages = useInfiniteScroll(pages, (v: Log) => <LogCard log={v} handleDeleteLog={handleDeleteLog} />, loadNextPage);
+	const infPages = useInfiniteScroll(pages,hasMore, (v: Log) => <LogCard log={v} handleDeleteLog={handleDeleteLog} />, loadNextPage);
 
 	function handleDeleteLog(id: string) {
 		API.deleteLog(contentType, id) //

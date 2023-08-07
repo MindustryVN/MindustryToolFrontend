@@ -18,6 +18,7 @@ import ClearButton from 'src/components/button/ClearButton';
 import { Ellipsis } from 'src/components/common/Icon';
 import { Users } from 'src/data/User';
 import useMe from 'src/hooks/UseMe';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
 interface CommentContainerProps {
 	contentType: string;
@@ -25,7 +26,9 @@ interface CommentContainerProps {
 }
 
 export default function CommentContainer(props: CommentContainerProps) {
-	const { pages, reloadPage, isLoading } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
+	const { pages, reloadPage, loadNextPage, isLoading, hasMore } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
+
+	const infPages = useInfiniteScroll(pages, hasMore,(v) => <Reply contentType={props.contentType + '_reply'} comment={v} nestLevel={0} reloadPage={reloadPage} />, loadNextPage);
 
 	const { addPopup } = usePopup();
 
@@ -45,15 +48,7 @@ export default function CommentContainer(props: CommentContainerProps) {
 	return (
 		<section className='flex-column medium-gap w100p'>
 			<CommentInput targetId={props.targetId} handleAddComment={handleAddComment} />
-			{pages.map((comment) => (
-				<Reply //
-					key={comment.id}
-					contentType={props.contentType + '_reply'}
-					comment={comment}
-					nestLevel={0}
-					reloadPage={reloadPage}
-				/>
-			))}
+			{infPages}
 		</section>
 	);
 }
@@ -75,7 +70,8 @@ function Reply(props: ReplyProps) {
 
 	const { addPopup } = usePopup();
 
-	const { pages, reloadPage, isLoading } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
+	const { pages, reloadPage, isLoading, hasMore, loadNextPage } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
+	const infPages = useInfiniteScroll(pages,hasMore, (v) => <Reply contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} reloadPage={reloadPage} />, loadNextPage);
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
@@ -137,25 +133,7 @@ function Reply(props: ReplyProps) {
 						/>
 						<IfTrue
 							condition={showReply}
-							whenTrue={
-								<IfTrueElse
-									condition={isLoading}
-									whenTrue={<LoadingSpinner />}
-									whenFalse={
-										<section className='flex-column small-gap w100p'>
-											{pages.map((comment) => (
-												<Reply //
-													key={comment.id}
-													contentType={props.contentType}
-													comment={comment}
-													nestLevel={props.nestLevel + 1}
-													reloadPage={reloadPage}
-												/>
-											))}
-										</section>
-									}
-								/>
-							}
+							whenTrue={<IfTrueElse condition={isLoading} whenTrue={<LoadingSpinner />} whenFalse={<section className='flex-column small-gap w100p'>{infPages}</section>} />}
 						/>
 					</section>
 				}
