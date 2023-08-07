@@ -5,7 +5,6 @@ import Button from 'src/components/button/Button';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import IfTrue from 'src/components/common/IfTrue';
-import IfTrueElse from 'src/components/common/IfTrueElse';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
@@ -15,8 +14,9 @@ import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import TagPick from 'src/components/tag/TagPick';
 import useDialog from 'src/hooks/UseDialog';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import useModel from 'src/hooks/UseModel';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import usePopup from 'src/hooks/UsePopup';
 import i18n from 'src/util/I18N';
 
@@ -25,8 +25,10 @@ export default function VerifyPostPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Post>('post-upload', 20);
+	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();
+
+	const infPages = useInfiniteScroll(pages, (v) => <PostPreviewCard post={v} handleOpenModel={handleOpenPostInfo} />, loadNextPage);
 
 	function handleOpenPostInfo(post: Post) {
 		setCurrentPost(post);
@@ -52,31 +54,12 @@ export default function VerifyPostPage() {
 
 	return (
 		<main id='verify-post' className='flex-column h100p w100p'>
-			<section
-				className='flex-column medium-gap'
-				children={pages.map((post) => (
-					<PostPreviewCard
-						key={post.id} //
-						post={post}
-						handleOpenModel={(post) => handleOpenPostInfo(post)}
-					/>
-				))}
-			/>
+			<section className='flex-column medium-gap' children={infPages} />
 			<footer className='flex-center'>
-				<IfTrueElse
+				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={
-						<Button onClick={() => loadPage()}>
-							<IfTrueElse
-								condition={hasMore} //
-								whenTrue={<Trans i18nKey='load-more' />}
-								whenFalse={<Trans i18nKey='no-more' />}
-							/>
-						</Button>
-					}
 				/>
-
 				<ScrollToTopButton containerId='verify-post' />
 			</footer>
 			<IfTrue

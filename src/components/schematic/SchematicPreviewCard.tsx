@@ -3,7 +3,7 @@ import 'src/styles.css';
 
 import React, { ReactNode } from 'react';
 
-interface SchematicPreviewCardProps {
+interface SchematicPreviewCardProps extends React.ClassAttributes<HTMLElement> {
 	className?: string;
 	children: ReactNode;
 }

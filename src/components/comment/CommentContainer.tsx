@@ -5,7 +5,7 @@ import { API } from 'src/API';
 import { Comment } from 'src/data/Comment';
 import React, { useState } from 'react';
 import i18n from 'src/util/I18N';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import usePopup from 'src/hooks/UsePopup';
 import IconButton from 'src/components/button/IconButton';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
@@ -25,7 +25,7 @@ interface CommentContainerProps {
 }
 
 export default function CommentContainer(props: CommentContainerProps) {
-	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
+	const { pages, reloadPage, isLoading } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
 
 	const { addPopup } = usePopup();
 
@@ -75,7 +75,7 @@ function Reply(props: ReplyProps) {
 
 	const { addPopup } = usePopup();
 
-	const { pages, reloadPage, isLoading } = usePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
+	const { pages, reloadPage, isLoading } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);

@@ -280,8 +280,6 @@ textarea:is(:focus, :hover) {
 
 .scroll-y {
 	overflow: hidden auto;
-
-	padding-right: 0.4rem;
 	box-sizing: border-box;
 }
 
@@ -309,7 +307,6 @@ textarea:is(:focus, :hover) {
 	width: 100%;
 	height: 100%;
 }
-
 
 .top {
 	top: 0;
@@ -344,8 +341,7 @@ textarea:is(:focus, :hover) {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-
-.title-editor[type="text"] {
+.title-editor[type='text'] {
 	font-size: 1.5rem;
 	border-bottom: 2px solid white;
 }

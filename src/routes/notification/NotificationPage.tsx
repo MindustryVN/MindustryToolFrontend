@@ -5,7 +5,7 @@ import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 
 import React from 'react';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import Notification from 'src/data/Notification';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import IconButton from 'src/components/button/IconButton';
@@ -23,7 +23,7 @@ export default function NotificationPage() {
 }
 
 function NotificationContainer() {
-	const { pages, isLoading, reloadPage } = usePage<Notification>('notification', 20);
+	const { pages, isLoading, reloadPage } = useInfinitePage<Notification>('notification', 20);
 
 	const { setUnreadNotifications } = useNotification();
 

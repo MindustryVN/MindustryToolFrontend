@@ -13,7 +13,7 @@ import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import MapPreviewImage from 'src/components/map/MapPreviewImage';
 import ColorText from 'src/components/common/ColorText';
 import DownloadButton from 'src/components/button/DownloadButton';
@@ -23,7 +23,6 @@ import TagEditContainer from 'src/components/tag/TagEditContainer';
 import LoadUserName from 'src/components/user/LoadUserName';
 import MapDescription from 'src/components/map/MapDescription';
 import MapInfoImage from 'src/components/map/MapInfoImage';
-import IfTrueElse from 'src/components/common/IfTrueElse';
 import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
 import MapPreviewCard from 'src/components/map/MapPreviewCard';
@@ -31,14 +30,17 @@ import usePopup from 'src/hooks/UsePopup';
 import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
 export default function VerifyMapPage() {
 	const [currentMap, setCurrentMap] = useState<Map>();
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Map>('map-upload', 20);
+	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Map>('map-upload', 20);
 	const { model, setVisibility } = useModel();
+
+	const infPages = useInfiniteScroll(pages, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
 
 	const [totalMap, setTotalMap] = useState(0);
 
@@ -77,28 +79,11 @@ export default function VerifyMapPage() {
 			<section className='flex-row center medium-padding'>
 				<Trans i18nKey='total-map' />:{totalMap > 0 ? totalMap : 0}
 			</section>
-			<MapContainer
-				children={pages.map((map) => (
-					<MapPreview
-						key={map.id} //
-						map={map}
-						handleOpenModel={(map) => handleOpenMapInfo(map)}
-					/>
-				))}
-			/>
+			<MapContainer children={infPages} />
 			<footer className='flex-center'>
-				<IfTrueElse
+				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={
-						<Button onClick={() => loadPage()}>
-							<IfTrueElse
-								condition={hasMore} //
-								whenTrue={<Trans i18nKey='load-more' />}
-								whenFalse={<Trans i18nKey='no-more' />}
-							/>
-						</Button>
-					}
 				/>
 
 				<ScrollToTopButton containerId='verify-map' />

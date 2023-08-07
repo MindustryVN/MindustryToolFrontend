@@ -3,7 +3,6 @@ import './MindustryServerPage.css';
 
 import React, { useState } from 'react';
 import MindustryServer from 'src/data/MindustryServer';
-import usePage from 'src/hooks/UsePage';
 import Button from 'src/components/button/Button';
 import { Trans } from 'react-i18next';
 import ClearIconButton from 'src/components/button/ClearIconButton';
@@ -18,9 +17,10 @@ import useMe from 'src/hooks/UseMe';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ColorText from 'src/components/common/ColorText';
 import useClipboard from 'src/hooks/UseClipboard';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 
 export default function MindustryServerPage() {
-	const { pages, hasMore, isLoading, loadPage, reloadPage } = usePage<MindustryServer>('mindustry-server', 100);
+	const { pages, hasMore, isLoading, loadNextPage, reloadPage } = useInfinitePage<MindustryServer>('mindustry-server', 100);
 	const { addPopup } = usePopup();
 	const { dialog, setVisibility } = useDialog();
 
@@ -49,7 +49,7 @@ export default function MindustryServerPage() {
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>
-			<table className='server-table '>
+			<table className='server-table h100p w100p'>
 				<thead className='server-table-header'>
 					<tr className='server-table-header'>
 						<th>
@@ -98,7 +98,7 @@ export default function MindustryServerPage() {
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 					whenFalse={
-						<Button onClick={() => loadPage()}>
+						<Button onClick={() => loadNextPage()}>
 							<IfTrueElse
 								condition={hasMore} //
 								whenTrue={<Trans i18nKey='load-more' />}
@@ -132,7 +132,9 @@ function MindustryServerTableRow(props: MindustryServerTableRowProps) {
 					{server.address}
 				</section>
 			</td>
-			<td>{server.ping}</td>
+			<td>
+				<span>{server.ping}</span>
+			</td>
 			<td>
 				<ColorText text={server.name} />
 			</td>

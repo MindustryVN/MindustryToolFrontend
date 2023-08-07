@@ -1,11 +1,11 @@
 import { AxiosRequestConfig } from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { API } from 'src/API';
 import { Utils } from 'src/util/Utils';
 
 var cancelRequest: AbortController;
 
-export default function usePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
+export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
@@ -49,26 +49,30 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 			.finally(() => setIsLoading(false)); //
 	}, [searchConfig, itemPerPage, url]);
 
-	function handleSetPage(pageNumber: number, data: T[]) {
-		if (data.length < itemPerPage) setHasMore(false);
-		else setHasMore(true);
+	const handleSetPage = useCallback(
+		(pageNumber: number, data: T[]) => {
+			if (data.length < itemPerPage) setHasMore(false);
+			else setHasMore(true);
 
-		if (pages.length <= pageNumber) {
-			setPages((prev) => [...prev, data]);
-		} else {
-			setPages((prev) => {
-				prev[prev.length - 1] = data;
-				return [...prev];
-			});
-		}
-	}
+			if (pages.length <= pageNumber) {
+				setPages((prev) => [...prev, data]);
+			} else {
+				setPages((prev) => {
+					prev[prev.length - 1] = data;
+					return [...prev];
+				});
+			}
+		},
+		[itemPerPage, pages],
+	);
+
 	return {
 		pages: Utils.array2dToArray1d(pages),
 		isLoading: isLoading,
 		isError: isError,
 		hasMore: hasMore,
 
-		reloadPage: function reloadPage() {
+		reloadPage: useCallback(() => {
 			if (isLoading) return;
 
 			setIsError(false);
@@ -92,9 +96,9 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 				})
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
-		},
+		}, [isLoading, itemPerPage, pages, searchConfig, url]),
 
-		loadPage: function loadPage() {
+		loadNextPage: useCallback(() => {
 			if (isLoading) return;
 
 			setIsError(false);
@@ -110,6 +114,6 @@ export default function usePage<T>(url: string, itemPerPage: number, searchConfi
 				})
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
-		},
+		}, [handleSetPage, isLoading, itemPerPage, url, searchConfig, pages]),
 	};
 }

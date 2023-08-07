@@ -3,7 +3,7 @@ import './ForumPage.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
 import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import i18n from 'src/util/I18N';
 import ClearIconButton from 'src/components/button/ClearIconButton';
@@ -15,13 +15,14 @@ import useClipboard from 'src/hooks/UseClipboard';
 import LikeCount from 'src/components/like/LikeCount';
 import IconButton from 'src/components/button/IconButton';
 import useLike from 'src/hooks/UseLike';
-import IfTrueElse from 'src/components/common/IfTrueElse';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import { Trans } from 'react-i18next';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import DateDisplay from 'src/components/common/Date';
 import LoadUserName from 'src/components/user/LoadUserName';
 import TagContainer from 'src/components/tag/TagContainer';
+import IfTrue from 'src/components/common/IfTrue';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
 export default function ForumPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -42,7 +43,9 @@ export default function ForumPage() {
 		},
 	});
 
-	const { pages, isLoading, hasMore, loadPage } = usePage<Post>('post', 20, searchConfig.current);
+	const { pages, isLoading, loadNextPage } = useInfinitePage<Post>('post', 20, searchConfig.current);
+
+	const infPages = useInfiniteScroll(pages, (v) => <PostPreview post={v} />, loadNextPage);
 
 	const navigate = useNavigate();
 
@@ -83,7 +86,7 @@ export default function ForumPage() {
 						items={Tags.POST_SEARCH_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
-						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadPage()} />}
+						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
@@ -101,24 +104,11 @@ export default function ForumPage() {
 					</Button>
 				</section>
 			</header>
-			<section className='flex-column medium-gap'>
-				{pages.map((post) => (
-					<PostPreview key={post.id} post={post} />
-				))}
-			</section>
+			<section className='flex-column medium-gap' children={infPages} />
 			<footer className='flex-center'>
-				<IfTrueElse
+				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={
-						<Button onClick={() => loadPage()}>
-							<IfTrueElse
-								condition={hasMore} //
-								whenTrue={<Trans i18nKey='load-more' />}
-								whenFalse={<Trans i18nKey='no-more' />}
-							/>
-						</Button>
-					}
 				/>
 				<ScrollToTopButton containerId='schematic' />
 			</footer>
