@@ -66,11 +66,11 @@ export default function MapPage() {
 
 	const [totalMap, setTotalMap] = useState(0);
 
-	const { pages, isLoading, loadNextPage, reloadPage } = useInfinitePage<Map>('map', 20, searchConfig.current);
+	const { pages, isLoading,hasMore, loadNextPage, reloadPage } = useInfinitePage<Map>('map', 20, searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
-	const infPages = useInfiniteScroll(pages, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
+	const infPages = useInfiniteScroll(pages,hasMore, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
 
 	const navigate = useNavigate();
 

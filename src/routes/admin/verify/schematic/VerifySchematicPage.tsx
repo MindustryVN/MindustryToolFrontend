@@ -41,10 +41,10 @@ export default function VerifySchematicPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Schematic>('schematic-upload', 20);
+	const { pages, loadNextPage, reloadPage, isLoading, hasMore } = useInfinitePage<Schematic>('schematic-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const infPages = useInfiniteScroll(pages, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />, loadNextPage);
+	const infPages = useInfiniteScroll(pages,hasMore, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />, loadNextPage);
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 

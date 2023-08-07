@@ -88,7 +88,7 @@ export default function MindustryServerPage() {
 					))}
 				</tbody>
 			</table>
-			<section className='server-card-container flex-column small-gap'>
+			<section className='server-card-container flex-row flex-wrap space-evenly small-gap'>
 				{pages.map((server) => (
 					<MindustryServerCard key={server.address} server={server} handleRemoveServer={handleRemoveServer} />
 				))}
@@ -206,7 +206,7 @@ function MindustryServerCard(props: MindustryServerCardProps) {
 			<section className='server-card-info flex-column'>
 				<ColorText text={server.description} />
 				<span>
-					{server.players}/{server.playerLimit}
+					{`${server.players}/${server.playerLimit} `}
 					<Trans i18nKey='players' />
 				</span>
 				Ping: {server.ping}ms

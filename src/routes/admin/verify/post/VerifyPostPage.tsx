@@ -25,10 +25,10 @@ export default function VerifyPostPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Post>('post-upload', 20);
+	const { pages, loadNextPage, reloadPage, isLoading, hasMore } = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const infPages = useInfiniteScroll(pages, (v) => <PostPreviewCard post={v} handleOpenModel={handleOpenPostInfo} />, loadNextPage);
+	const infPages = useInfiniteScroll(pages, hasMore,(v) => <PostPreviewCard post={v} handleOpenModel={handleOpenPostInfo} />, loadNextPage);
 
 	function handleOpenPostInfo(post: Post) {
 		setCurrentPost(post);

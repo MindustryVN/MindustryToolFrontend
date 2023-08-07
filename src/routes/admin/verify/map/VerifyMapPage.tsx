@@ -37,10 +37,10 @@ export default function VerifyMapPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Map>('map-upload', 20);
+	const { pages, loadNextPage, reloadPage, isLoading,hasMore } = useInfinitePage<Map>('map-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const infPages = useInfiniteScroll(pages, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
+	const infPages = useInfiniteScroll(pages,hasMore, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
 
 	const [totalMap, setTotalMap] = useState(0);
 

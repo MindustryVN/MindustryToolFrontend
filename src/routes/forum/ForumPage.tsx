@@ -43,9 +43,9 @@ export default function ForumPage() {
 		},
 	});
 
-	const { pages, isLoading, loadNextPage } = useInfinitePage<Post>('post', 20, searchConfig.current);
+	const { pages, isLoading,hasMore, loadNextPage } = useInfinitePage<Post>('post', 20, searchConfig.current);
 
-	const infPages = useInfiniteScroll(pages, (v) => <PostPreview post={v} />, loadNextPage);
+	const infPages = useInfiniteScroll(pages,hasMore, (v) => <PostPreview post={v} />, loadNextPage);
 
 	const navigate = useNavigate();
 
