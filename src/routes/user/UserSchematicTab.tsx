@@ -1,22 +1,20 @@
 import 'src/styles.css';
 
 import { API } from 'src/API';
-import { Trans } from 'react-i18next';
 import Schematic from 'src/data/Schematic';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
 import IfTrue from 'src/components/common/IfTrue';
-import Button from 'src/components/button/Button';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
 import usePopup from 'src/hooks/UsePopup';
-import IfTrueElse from 'src/components/common/IfTrueElse';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import SchematicContainer from 'src/components/schematic/SchematicContainer';
 import { SchematicInfo, SchematicPreview } from 'src/routes/schematic/SchematicPage';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
 interface UserSchematicTabProps {
 	user: User;
@@ -28,7 +26,8 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	const { addPopup } = usePopup();
 
 	const { model, setVisibility } = useModel();
-	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Schematic>(`user/schematic/${props.user.id}`, 20);
+	const { pages, isLoading, loadNextPage, reloadPage } = useInfinitePage<Schematic>(`user/schematic/${props.user.id}`, 20);
+	const infPages = useInfiniteScroll(pages, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />, loadNextPage);
 
 	function handleDeleteSchematic(schematic: Schematic) {
 		setVisibility(false);
@@ -45,28 +44,11 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 
 	return (
 		<main id='schematic-tab' className='flex-column small-gap w100p h100p scroll-y'>
-			<SchematicContainer
-				children={pages.map((schematic) => (
-					<SchematicPreview
-						key={schematic.id}
-						schematic={schematic} //
-						handleOpenModel={handleOpenSchematicInfo}
-					/>
-				))}
-			/>
+			<SchematicContainer children={infPages} />
 			<footer className='flex-center'>
-				<IfTrueElse
+				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={
-						<Button onClick={() => loadPage()}>
-							<IfTrueElse
-								condition={hasMore} //
-								whenTrue={<Trans i18nKey='load-more' />}
-								whenFalse={<Trans i18nKey='no-more' />}
-							/>
-						</Button>
-					}
 				/>
 				<ScrollToTopButton containerId='schematic-tab' />
 			</footer>

@@ -2,23 +2,25 @@ import './LogPage.css';
 import 'src/styles.css';
 
 import React, { useState } from 'react';
-import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import { Log } from 'src/data/Log';
 
 import Button from 'src/components/button/Button';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import IfTrueElse from 'src/components/common/IfTrueElse';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import usePopup from 'src/hooks/UsePopup';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import DateDisplay from 'src/components/common/Date';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import IfTrue from 'src/components/common/IfTrue';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Log>(`log/${contentType}`, 20);
+	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Log>(`log/${contentType}`, 20);
 	const { addPopup } = usePopup();
+
+	const infPages = useInfiniteScroll(pages, (v: Log) => <LogCard log={v} handleDeleteLog={handleDeleteLog} />, loadNextPage);
 
 	function handleDeleteLog(id: string) {
 		API.deleteLog(contentType, id) //
@@ -30,29 +32,19 @@ export default function LogPage() {
 		<main id='log' className='log flex-column h100p w100p scroll-y small-gap'>
 			<section className='grid-row small-gap'>
 				{['system', 'api'].map((item, index) => (
-					<Button key={index} active={item === contentType} onClick={() => setContentType(item)}>
+					<Button
+						key={index}
+						active={item === contentType} //
+						onClick={() => setContentType(item)}>
 						{item}
 					</Button>
 				))}
 			</section>
-			<section className='flex-column medium-gap'>
-				{pages.map((log) => (
-					<LogCard key={log.id} log={log} handleDeleteLog={handleDeleteLog} />
-				))}
-			</section>
+			<section className='flex-column medium-gap' children={infPages} />
 			<footer className='flex-center'>
-				<IfTrueElse
+				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={
-						<Button onClick={() => loadPage()}>
-							<IfTrueElse
-								condition={hasMore} //
-								whenTrue={<Trans i18nKey='load-more' />}
-								whenFalse={<Trans i18nKey='no-more' />}
-							/>
-						</Button>
-					}
 				/>
 				<ScrollToTopButton containerId='log' />
 			</footer>

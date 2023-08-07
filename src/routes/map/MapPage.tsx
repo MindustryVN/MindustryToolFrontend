@@ -26,13 +26,12 @@ import LoadUserName from 'src/components/user/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
 import TagContainer from 'src/components/tag/TagContainer';
 import IconButton from 'src/components/button/IconButton';
-import IfTrueElse from 'src/components/common/IfTrueElse';
 import LikeCount from 'src/components/like/LikeCount';
 import ColorText from 'src/components/common/ColorText';
 import usePopup from 'src/hooks/UsePopup';
 import useModel from 'src/hooks/UseModel';
 import Dropbox from 'src/components/dropbox/Dropbox';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useLike from 'src/hooks/UseLike';
 import TagPick from 'src/components/tag/TagPick';
 import Button from 'src/components/button/Button';
@@ -43,6 +42,7 @@ import useDialog from 'src/hooks/UseDialog';
 import CommentContainer from 'src/components/comment/CommentContainer';
 import useMe from 'src/hooks/UseMe';
 import { Users } from 'src/data/User';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
 export default function MapPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -66,9 +66,11 @@ export default function MapPage() {
 
 	const [totalMap, setTotalMap] = useState(0);
 
-	const { pages, isLoading, hasMore, loadPage, reloadPage } = usePage<Map>('map', 20, searchConfig.current);
+	const { pages, isLoading, loadNextPage, reloadPage } = useInfinitePage<Map>('map', 20, searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
+
+	const infPages = useInfiniteScroll(pages, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
 
 	const navigate = useNavigate();
 
@@ -129,7 +131,7 @@ export default function MapPage() {
 						items={Tags.MAP_SEARCH_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
-						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadPage()} />}
+						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
@@ -150,28 +152,11 @@ export default function MapPage() {
 					<Trans i18nKey='upload-your-map' />
 				</Button>
 			</section>
-			<MapContainer
-				children={pages.map((map) => (
-					<MapPreview
-						key={map.id} //
-						map={map}
-						handleOpenModel={(map) => handleOpenMapInfo(map)}
-					/>
-				))}
-			/>
+			<MapContainer children={infPages} />
 			<footer className='flex-center'>
-				<IfTrueElse
+				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={
-						<Button onClick={() => loadPage()}>
-							<IfTrueElse
-								condition={hasMore} //
-								whenTrue={<Trans i18nKey='load-more' />}
-								whenFalse={<Trans i18nKey='no-more' />}
-							/>
-						</Button>
-					}
 				/>
 				<ScrollToTopButton containerId='map' />
 			</footer>

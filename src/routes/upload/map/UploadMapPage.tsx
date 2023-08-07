@@ -32,7 +32,7 @@ let notLoginMessage = (
 	</span>
 );
 
-export default function UploadPage() {
+export default function UploadNextPage() {
 	const [file, setFile] = useState<File>();
 	const [preview, setPreview] = useState<MapUploadPreview>();
 	const [tag, setTag] = useState<string>('');

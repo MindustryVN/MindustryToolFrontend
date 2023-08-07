@@ -7,6 +7,7 @@
 		"@babel/node": "^7.22.6",
 		"@babel/preset-react": "^7.22.5",
 		"@babel/register": "^7.22.5",
+		"@mantine/hooks": "^6.0.17",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^13.5.0",

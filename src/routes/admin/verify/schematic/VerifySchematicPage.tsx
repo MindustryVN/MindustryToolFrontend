@@ -16,7 +16,7 @@ import IconButton from 'src/components/button/IconButton';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import useClipboard from 'src/hooks/UseClipboard';
-import usePage from 'src/hooks/UsePage';
+import useInfinitePage from 'src/hooks/UseInfinitePage';
 import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
 import ColorText from 'src/components/common/ColorText';
 import DownloadButton from 'src/components/button/DownloadButton';
@@ -27,7 +27,6 @@ import LoadUserName from 'src/components/user/LoadUserName';
 import SchematicDescription from 'src/components/schematic/SchematicDescription';
 import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
 import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
-import IfTrueElse from 'src/components/common/IfTrueElse';
 import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
 import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
@@ -35,14 +34,17 @@ import usePopup from 'src/hooks/UsePopup';
 import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
+import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
 export default function VerifySchematicPage() {
 	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadPage, reloadPage, isLoading, hasMore } = usePage<Schematic>('schematic-upload', 20);
+	const { pages, loadNextPage, reloadPage, isLoading } = useInfinitePage<Schematic>('schematic-upload', 20);
 	const { model, setVisibility } = useModel();
+
+	const infPages = useInfiniteScroll(pages, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />, loadNextPage);
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 
@@ -81,28 +83,11 @@ export default function VerifySchematicPage() {
 			<section className='flex-row center medium-padding'>
 				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
 			</section>
-			<SchematicContainer
-				children={pages.map((schematic) => (
-					<SchematicPreview
-						key={schematic.id} //
-						schematic={schematic}
-						handleOpenModel={(schematic) => handleOpenSchematicInfo(schematic)}
-					/>
-				))}
-			/>
+			<SchematicContainer children={infPages} />
 			<footer className='flex-center'>
-				<IfTrueElse
+				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
-					whenFalse={
-						<Button onClick={() => loadPage()}>
-							<IfTrueElse
-								condition={hasMore} //
-								whenTrue={<Trans i18nKey='load-more' />}
-								whenFalse={<Trans i18nKey='no-more' />}
-							/>
-						</Button>
-					}
 				/>
 
 				<ScrollToTopButton containerId='verify-schematic' />

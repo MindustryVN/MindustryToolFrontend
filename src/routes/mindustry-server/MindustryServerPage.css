@@ -19,6 +19,8 @@
 
 	overflow-x: auto;
 	border-spacing: 0 0.2rem;
+
+	box-sizing: border-box;
 }
 
 .server-table-header {
