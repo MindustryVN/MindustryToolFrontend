@@ -8,7 +8,7 @@ interface DBObject {
 	id: string;
 }
 
-export default function useInfiniteScroll<T extends DBObject>(pages: T[], hasMore : boolean, mapper: (v: T) => ReactNode, loadNextPage: () => void) {
+export default function useInfiniteScroll<T extends DBObject>(pages: T[], hasMore: boolean, mapper: (v: T) => ReactNode, loadNextPage: () => void) {
 	const lastPageRef = useRef<HTMLElement>(null);
 	const { ref, entry } = useIntersection({
 		root: lastPageRef.current,
@@ -19,20 +19,9 @@ export default function useInfiniteScroll<T extends DBObject>(pages: T[], hasMor
 		if (entry?.isIntersecting && hasMore) loadNextPage();
 	}, [entry, loadNextPage, hasMore]);
 
-	const infPages = pages.map((m, index) => {
-		if (index === pages.length - 1)
-			return (
-				<section className='flex-row' key={m.id} ref={ref}>
-					{mapper(m)}
-				</section>
-			);
+	const infPages = pages.map((m) => mapper(m));
 
-		return (
-			<section className='flex-row' key={m.id}>
-				{mapper(m)}
-			</section>
-		);
-	});
+	infPages.push(<div key={0} ref={ref}></div>);
 
 	return infPages;
 }
