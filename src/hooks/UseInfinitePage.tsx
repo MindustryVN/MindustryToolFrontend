@@ -10,14 +10,14 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
-
+	
 	function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
 		if (cancelRequest) cancelRequest.abort();
-
+	
 		cancelRequest = new AbortController();
-
+	
 		setIsLoading(true);
-
+	
 		if (!searchConfig) {
 			searchConfig = {
 				params: {
@@ -26,9 +26,9 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 				},
 			};
 		}
-
+	
 		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
-
+	
 		return API.get(url, searchConfig);
 	}
 
@@ -106,6 +106,8 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			const lastIndex = pages.length - 1;
 			const newPage = pages[lastIndex].length === itemPerPage;
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
+
+			console.log("reload");
 
 			getPage(url, requestPage, itemPerPage, searchConfig)
 				.then((result) => {
