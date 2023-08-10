@@ -31,6 +31,7 @@ import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import AdminOnly from 'src/components/common/AdminOnly';
 
 export default function VerifyMapPage() {
 	const [currentMap, setCurrentMap] = useState<Map>();
@@ -40,7 +41,7 @@ export default function VerifyMapPage() {
 	const { model, setVisibility } = useModel();
 
 	const usePage = useInfinitePage<Map>('map-upload', 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	const [totalMap, setTotalMap] = useState(0);
 
@@ -93,7 +94,7 @@ export default function VerifyMapPage() {
 				whenTrue={
 					currentMap &&
 					model(
-						<MapInfo
+						<MapUploadInfo
 							map={currentMap} //
 							handleCloseModel={() => setVisibility(false)}
 							handleVerifyMap={verifyMap}
@@ -106,12 +107,12 @@ export default function VerifyMapPage() {
 	);
 }
 
-interface MapPreviewProps {
+interface MapUploadPreviewProps {
 	map: Map;
 	handleOpenModel: (map: Map) => void;
 }
 
-function MapPreview(props: MapPreviewProps) {
+export function MapUploadPreview(props: MapUploadPreviewProps) {
 	return (
 		<MapPreviewCard>
 			<MapPreviewImage src={`${API_BASE_URL}map-upload/${props.map.id}/image`} onClick={() => props.handleOpenModel(props.map)} />
@@ -126,14 +127,14 @@ function MapPreview(props: MapPreviewProps) {
 	);
 }
 
-interface MapInfoProps {
+interface MapUploadInfoProps {
 	map: Map;
 	handleVerifyMap: (map: Map, tags: TagChoiceLocal[]) => void;
 	handleRejectMap: (map: Map, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
-function MapInfo(props: MapInfoProps) {
+export function MapUploadInfo(props: MapUploadInfoProps) {
 	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.map.tags, Tags.MAP_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
 
@@ -177,7 +178,7 @@ function MapInfo(props: MapInfoProps) {
 					download={`${('map_' + props.map.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
-				<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />
+				<AdminOnly children={<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
 				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(

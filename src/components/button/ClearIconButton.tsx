@@ -1,5 +1,4 @@
 import 'src/styles.css';
-import './ClearButton.css';
 
 import React from 'react';
 import { IconType } from 'src/data/Icons';

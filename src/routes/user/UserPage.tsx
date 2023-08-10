@@ -10,9 +10,11 @@ import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import { Trans } from 'react-i18next';
 import UserSchematicTab from './UserSchematicTab';
-import ClearButton from 'src/components/button/ClearButton';
+import UserMapTab from 'src/routes/user/UserMapTab';
+import UserPostTab from 'src/routes/user/UserPostTab';
+import Button from 'src/components/button/Button';
 
-const tabs = ['Schematic', 'Map'];
+const tabs = ['Schematic', 'Map', 'Post'];
 
 export default function UserPage() {
 	const { userId } = useParams();
@@ -34,23 +36,19 @@ export default function UserPage() {
 	}, [userId]);
 
 	function renderTab(currentTab: string) {
+		if (!user) return <Trans i18nKey='user.not-found' />;
+
 		switch (currentTab) {
 			case tabs[0]:
-				if (user) return <UserSchematicTab user={user} />;
-				return (
-					<main className='flex-center h100p w100p'>
-						<Trans i18nKey='user.not-found' />
-					</main>
-				);
+				return <UserSchematicTab user={user} />;
 
 			case tabs[1]:
-				return <>{currentTab}</>;
-
+				return <UserMapTab user={user} />;
 			case tabs[2]:
-				return <>{currentTab}</>;
+				return <UserPostTab user={user} />;
 
 			default:
-				return <>No tab</>;
+				return <>Oh no</>;
 		}
 	}
 
@@ -76,7 +74,7 @@ export default function UserPage() {
 		);
 
 	return (
-		<main className='user flex-column h100p w100p'>
+		<main className='flex-column h100p w100p scroll-y medium-padding border-box'>
 			<section className='user-card flex-row small-gap flex-nowrap'>
 				<img className='avatar-image' src={user.imageUrl} alt='avatar'></img>
 				<section className='info-card small-gap small-padding'>
@@ -90,18 +88,18 @@ export default function UserPage() {
 					</span>
 				</section>
 			</section>
-			<div className='tab-card flex-center'>
+			<section className='flex-center'>
 				<section className='grid-row small-gap small-padding'>
 					{tabs.map((name, index) => (
-						<ClearButton
+						<Button
 							className={currentTab === name ? 'button-active' : 'button'}
 							key={index} //
 							onClick={() => setCurrentTab(name)}>
 							{name}
-						</ClearButton>
+						</Button>
 					))}
 				</section>
-			</div>
+			</section>
 			{renderTab(currentTab)}
 		</main>
 	);

@@ -1,21 +1,5 @@
-.comment-container {
-	background-color: rgba(0, 0, 0, 0.7);
-
-	outline: 2px solid var(--gray);
-	border-radius: 5px;
-
-	padding: 0.25rem;
-}
 
 .comment-input-area,
 .comment-input-area:is(:hover, :focus) {
-	background-color: rgba(0, 0, 0, 0.7);
-
-	padding: 0.25rem;
-
 	border-bottom: 2px solid var(--gray);
-	resize: none;
-
-	border: 2px solid var(--gray);
-	border-radius: 5px;
 }

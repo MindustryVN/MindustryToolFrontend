@@ -50,6 +50,12 @@ textarea:is(:focus, :hover) {
 	text-decoration: none;
 }
 
+.clear-button {
+	background-color: transparent;
+	cursor: pointer;
+	color: var(--neutral);
+}
+
 .text-center {
 	text-align: center;
 }
@@ -295,6 +301,10 @@ textarea:is(:focus, :hover) {
 	background-color: var(--info-color);
 }
 
+.background-transparent {
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
 .background-image-1::before {
 	content: '';
 	position: fixed;
@@ -352,4 +362,20 @@ textarea:is(:focus, :hover) {
 	background-color: transparent;
 	resize: none;
 	font-size: 1rem;
+}
+
+.outline-gray {
+	outline: 2px solid var(--gray);
+}
+
+.border-gray {
+	border: 2px solid var(--gray);
+}
+
+.border-round {
+	border-radius: 5px;
+}
+
+.no-resize {
+	resize: none;
 }

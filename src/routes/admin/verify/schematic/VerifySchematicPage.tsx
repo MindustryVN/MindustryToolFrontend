@@ -35,6 +35,7 @@ import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import AdminOnly from 'src/components/common/AdminOnly';
 
 export default function VerifySchematicPage() {
 	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
@@ -44,7 +45,7 @@ export default function VerifySchematicPage() {
 	const { model, setVisibility } = useModel();
 
 	const usePage = useInfinitePage<Schematic>('schematic-upload', 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 
@@ -97,7 +98,7 @@ export default function VerifySchematicPage() {
 				whenTrue={
 					currentSchematic &&
 					model(
-						<SchematicInfo
+						<SchematicUploadInfo
 							schematic={currentSchematic} //
 							handleCloseModel={() => setVisibility(false)}
 							handleVerifySchematic={verifySchematic}
@@ -110,12 +111,12 @@ export default function VerifySchematicPage() {
 	);
 }
 
-interface SchematicPreviewProps {
+interface SchematicUploadPreviewProps {
 	schematic: Schematic;
 	handleOpenModel: (schematic: Schematic) => void;
 }
 
-function SchematicPreview(props: SchematicPreviewProps) {
+export function SchematicUploadPreview(props: SchematicUploadPreviewProps) {
 	const { copy } = useClipboard();
 
 	return (
@@ -133,14 +134,14 @@ function SchematicPreview(props: SchematicPreviewProps) {
 	);
 }
 
-interface SchematicInfoProps {
+interface SchematicUploadInfoProps {
 	schematic: Schematic;
 	handleVerifySchematic: (schematic: Schematic, tags: TagChoiceLocal[]) => void;
 	handleRejectSchematic: (schematic: Schematic, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
-function SchematicInfo(props: SchematicInfoProps) {
+export function SchematicUploadInfo(props: SchematicUploadInfoProps) {
 	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.schematic.tags, Tags.SCHEMATIC_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
 
@@ -188,7 +189,7 @@ function SchematicInfo(props: SchematicInfoProps) {
 					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
-				<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />
+				<AdminOnly children={<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
 				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(

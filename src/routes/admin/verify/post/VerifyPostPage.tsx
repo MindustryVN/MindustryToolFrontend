@@ -19,6 +19,7 @@ import useModel from 'src/hooks/UseModel';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import usePopup from 'src/hooks/UsePopup';
 import i18n from 'src/util/I18N';
+import AdminOnly from 'src/components/common/AdminOnly';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
@@ -28,7 +29,7 @@ export default function VerifyPostPage() {
 	const usePage = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <PostPreviewCard post={v} handleOpenModel={handleOpenPostInfo} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function handleOpenPostInfo(post: Post) {
 		setCurrentPost(post);
@@ -67,7 +68,7 @@ export default function VerifyPostPage() {
 				whenTrue={
 					currentPost &&
 					model(
-						<PostInfo
+						<PostUploadInfo
 							post={currentPost} //
 							handleCloseModel={() => setVisibility(false)}
 							handleVerifyPost={verifyPost}
@@ -80,12 +81,12 @@ export default function VerifyPostPage() {
 	);
 }
 
-interface PostPreviewProps {
+interface PostUploadPreviewProps {
 	post: Post;
 	handleOpenModel: (post: Post) => void;
 }
 
-function PostPreviewCard(props: PostPreviewProps) {
+export function PostUploadPreview(props: PostUploadPreviewProps) {
 	return (
 		<section role='button' onClick={() => props.handleOpenModel(props.post)}>
 			<PostPreview post={props.post} />
@@ -93,14 +94,14 @@ function PostPreviewCard(props: PostPreviewProps) {
 	);
 }
 
-interface PostInfoProps {
+interface PostUploadInfoProps {
 	post: Post;
 	handleVerifyPost: (post: Post, tags: TagChoiceLocal[]) => void;
 	handleRejectPost: (post: Post, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
-function PostInfo(props: PostInfoProps) {
+export function PostUploadInfo(props: PostUploadInfoProps) {
 	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.post.tags, Tags.POST_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
 
@@ -147,7 +148,7 @@ function PostInfo(props: PostInfoProps) {
 
 			<section className='grid-row small-gap'>
 				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
-				<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />
+				<AdminOnly children={<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
 				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
