@@ -40,7 +40,6 @@ const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
 const ForumView = React.lazy(() => import('src/routes/forum/ForumViewPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
-const Mod = React.lazy(() => import('src/routes/mod/ModPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
 const UploadSchematic = React.lazy(() => import('src/routes/upload/schematic/UploadSchematicPage'));
@@ -60,7 +59,6 @@ export default function App() {
 							<Route path='/home' element={<Home />} />
 							<Route path='/logic' element={<Logic />} />
 							<Route path='/login' element={<Login />} />
-							<Route path='/mod' element={<Mod />} />
 							<Route path='/upload/map' element={<UploadMap />} />
 							<Route path='/upload/schematic' element={<UploadSchematic />} />
 							<Route path='/upload/post' element={<PrivateRoute element={<UploadPost />} />} />

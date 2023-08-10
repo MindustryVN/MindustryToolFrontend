@@ -9,7 +9,6 @@ export default (
 		<Route path='/home' />
 		<Route path='/logic' />
 		<Route path='/login' />
-		<Route path='/mod' />
 		<Route path='/upload/map' />
 		<Route path='/upload/schematic' />
 		<Route path='/upload/post' />
