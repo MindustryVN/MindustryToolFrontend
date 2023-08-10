@@ -68,13 +68,13 @@ export default function SchematicPage() {
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 
-	const { pages, hasMore, isLoading, loadNextPage, reloadPage } = useInfinitePage<Schematic>('schematic', 20, searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
 	const navigate = useNavigate();
 
-	const infPages = useInfiniteScroll(pages,hasMore, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />, loadNextPage);
+	const usePage = useInfinitePage<Schematic>('schematic', 20, searchConfig.current);
+	const { pages, isLoading, loadNextPage, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	useEffect(() => {
 		API.getTotalSchematic()
@@ -163,7 +163,7 @@ export default function SchematicPage() {
 				</Button>
 			</section>
 
-			<SchematicContainer children={infPages} />
+			<SchematicContainer children={pages} />
 
 			<footer className='flex-center'>
 				<IfTrue

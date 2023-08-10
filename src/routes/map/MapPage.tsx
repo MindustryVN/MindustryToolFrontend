@@ -66,11 +66,11 @@ export default function MapPage() {
 
 	const [totalMap, setTotalMap] = useState(0);
 
-	const { pages, isLoading,hasMore, loadNextPage, reloadPage } = useInfinitePage<Map>('map', 20, searchConfig.current);
 	const { model, setVisibility } = useModel();
 	const { addPopup } = usePopup();
 
-	const infPages = useInfiniteScroll(pages,hasMore, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
+	const usePage = useInfinitePage<Map>('map', 20, searchConfig.current);
+	const { pages, loadNextPage, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	const navigate = useNavigate();
 
@@ -152,7 +152,7 @@ export default function MapPage() {
 					<Trans i18nKey='upload-your-map' />
 				</Button>
 			</section>
-			<MapContainer children={infPages} />
+			<MapContainer children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}

@@ -43,9 +43,9 @@ export default function ForumPage() {
 		},
 	});
 
-	const { pages, isLoading,hasMore, loadNextPage } = useInfinitePage<Post>('post', 20, searchConfig.current);
+	const usePage = useInfinitePage<Post>('post', 20, searchConfig.current);
 
-	const infPages = useInfiniteScroll(pages,hasMore, (v) => <PostPreview post={v} />, loadNextPage);
+	const { pages, isLoading, loadNextPage } = useInfiniteScroll(usePage, (v) => <PostPreview post={v} />);
 
 	const navigate = useNavigate();
 
@@ -104,7 +104,7 @@ export default function ForumPage() {
 					</Button>
 				</section>
 			</header>
-			<section className='flex-column medium-gap' children={infPages} />
+			<section className='flex-column medium-gap' children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}

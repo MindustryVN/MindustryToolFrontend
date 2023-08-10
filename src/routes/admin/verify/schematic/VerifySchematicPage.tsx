@@ -41,10 +41,10 @@ export default function VerifySchematicPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadNextPage, reloadPage, isLoading, hasMore } = useInfinitePage<Schematic>('schematic-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const infPages = useInfiniteScroll(pages,hasMore, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />, loadNextPage);
+	const usePage = useInfinitePage<Schematic>('schematic-upload', 20);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 
@@ -83,7 +83,7 @@ export default function VerifySchematicPage() {
 			<section className='flex-row center medium-padding'>
 				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
 			</section>
-			<SchematicContainer children={infPages} />
+			<SchematicContainer children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}
