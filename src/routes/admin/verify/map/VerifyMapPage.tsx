@@ -37,10 +37,10 @@ export default function VerifyMapPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadNextPage, reloadPage, isLoading,hasMore } = useInfinitePage<Map>('map-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const infPages = useInfiniteScroll(pages,hasMore, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />, loadNextPage);
+	const usePage = useInfinitePage<Map>('map-upload', 20);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	const [totalMap, setTotalMap] = useState(0);
 
@@ -79,7 +79,7 @@ export default function VerifyMapPage() {
 			<section className='flex-row center medium-padding'>
 				<Trans i18nKey='total-map' />:{totalMap > 0 ? totalMap : 0}
 			</section>
-			<MapContainer children={infPages} />
+			<MapContainer children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}

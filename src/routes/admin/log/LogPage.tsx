@@ -18,10 +18,10 @@ import useQuery from 'src/hooks/UseQuery';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
-	const { pages, loadNextPage, reloadPage, isLoading, hasMore } = useInfinitePage<Log>(`log/${contentType}`, 20);
 	const { addPopup } = usePopup();
 
-	const infPages = useInfiniteScroll(pages, hasMore, (v: Log) => <LogCard log={v} handleDeleteLog={handleDeleteLog} />, loadNextPage);
+	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard log={v} handleDeleteLog={handleDeleteLog} />);
 
 	const logTypes = useQuery<string[]>('log', []);
 
@@ -46,7 +46,7 @@ export default function LogPage() {
 					</Button>
 				))}
 			</section>
-			<section className='flex-column medium-gap' children={infPages} />
+			<section className='flex-column medium-gap' children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}

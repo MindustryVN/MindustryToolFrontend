@@ -25,10 +25,10 @@ export default function VerifyPostPage() {
 
 	const { addPopup } = usePopup();
 
-	const { pages, loadNextPage, reloadPage, isLoading, hasMore } = useInfinitePage<Post>('post-upload', 20);
+	const usePage = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const infPages = useInfiniteScroll(pages, hasMore,(v) => <PostPreviewCard post={v} handleOpenModel={handleOpenPostInfo} />, loadNextPage);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <PostPreviewCard post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function handleOpenPostInfo(post: Post) {
 		setCurrentPost(post);
@@ -54,7 +54,7 @@ export default function VerifyPostPage() {
 
 	return (
 		<main id='verify-post' className='flex-column h100p w100p'>
-			<section className='flex-column medium-gap' children={infPages} />
+			<section className='flex-column medium-gap' children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}

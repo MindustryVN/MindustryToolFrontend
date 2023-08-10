@@ -26,9 +26,9 @@ interface CommentContainerProps {
 }
 
 export default function CommentContainer(props: CommentContainerProps) {
-	const { pages, reloadPage, loadNextPage, isLoading, hasMore } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
+	const usePage = useInfinitePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
 
-	const infPages = useInfiniteScroll(pages, hasMore,(v) => <Reply contentType={props.contentType + '_reply'} comment={v} nestLevel={0} reloadPage={reloadPage} />, loadNextPage);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <Reply contentType={props.contentType + '_reply'} comment={v} nestLevel={0} reloadPage={reloadPage} />);
 
 	const { addPopup } = usePopup();
 
@@ -48,7 +48,7 @@ export default function CommentContainer(props: CommentContainerProps) {
 	return (
 		<section className='flex-column medium-gap w100p'>
 			<CommentInput targetId={props.targetId} handleAddComment={handleAddComment} />
-			{infPages}
+			{pages}
 		</section>
 	);
 }
@@ -70,8 +70,8 @@ function Reply(props: ReplyProps) {
 
 	const { addPopup } = usePopup();
 
-	const { pages, reloadPage, isLoading, hasMore, loadNextPage } = useInfinitePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
-	const infPages = useInfiniteScroll(pages,hasMore, (v) => <Reply contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} reloadPage={reloadPage} />, loadNextPage);
+	const usePage = useInfinitePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} reloadPage={usePage.reloadPage} />);
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
@@ -133,7 +133,7 @@ function Reply(props: ReplyProps) {
 						/>
 						<IfTrue
 							condition={showReply}
-							whenTrue={<IfTrueElse condition={isLoading} whenTrue={<LoadingSpinner />} whenFalse={<section className='flex-column small-gap w100p'>{infPages}</section>} />}
+							whenTrue={<IfTrueElse condition={isLoading} whenTrue={<LoadingSpinner />} whenFalse={<section className='flex-column small-gap w100p'>{pages}</section>} />}
 						/>
 					</section>
 				}

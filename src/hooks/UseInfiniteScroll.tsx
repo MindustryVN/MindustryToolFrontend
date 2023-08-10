@@ -3,12 +3,13 @@ import 'src/styles.css';
 import { useIntersection } from '@mantine/hooks';
 import React, { useEffect, useRef } from 'react';
 import { ReactNode } from 'react-markdown/lib/ast-to-react';
+import { UseInfinitePage } from 'src/hooks/UseInfinitePage';
 
 interface DBObject {
 	id: string;
 }
 
-export default function useInfiniteScroll<T extends DBObject>(pages: T[], hasMore: boolean, mapper: (v: T) => ReactNode, loadNextPage: () => void) {
+export default function useInfiniteScroll<T extends DBObject>(useInfinitePage: UseInfinitePage<T>, mapper: (v: T) => ReactNode) {
 	const lastPageRef = useRef<HTMLElement>(null);
 	const { ref, entry } = useIntersection({
 		root: lastPageRef.current,
@@ -16,12 +17,12 @@ export default function useInfiniteScroll<T extends DBObject>(pages: T[], hasMor
 	});
 
 	useEffect(() => {
-		if (entry?.isIntersecting && hasMore) loadNextPage();
-	}, [entry, loadNextPage, hasMore]);
+		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading) useInfinitePage.loadNextPage();
+	}, [entry, useInfinitePage]);
 
-	const infPages = pages.map((m) => mapper(m));
+	const pages = useInfinitePage.pages.map((m) => mapper(m));
 
-	infPages.push(<div key={0} ref={ref}></div>);
+	pages.push(<div key={0} ref={ref}></div>);
 
-	return infPages;
+	return { ...useInfinitePage, pages: pages };
 }

@@ -26,8 +26,8 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 	const { addPopup } = usePopup();
 
 	const { model, setVisibility } = useModel();
-	const { pages, hasMore, isLoading, loadNextPage, reloadPage } = useInfinitePage<Schematic>(`user/schematic/${props.user.id}`, 20);
-	const infPages = useInfiniteScroll(pages, hasMore, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />, loadNextPage);
+	const usePage = useInfinitePage<Schematic>(`user/schematic/${props.user.id}`, 20);
+	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function handleDeleteSchematic(schematic: Schematic) {
 		setVisibility(false);
@@ -44,7 +44,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 
 	return (
 		<main id='schematic-tab' className='flex-column small-gap w100p h100p scroll-y'>
-			<SchematicContainer children={infPages} />
+			<SchematicContainer children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}
