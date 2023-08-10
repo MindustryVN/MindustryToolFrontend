@@ -32,7 +32,7 @@ function NotificationContainer() {
 	function handleMarkAsRead(notification: Notification) {
 		API.markNotificationAsRead(notification.id) //
 			.then(() => (notification.read = true))
-			.then(() => setUnreadNotifications((prev) => prev - 1))
+			.then(() => setUnreadNotifications((prev) => (prev === 0 ? 0 : prev - 1)))
 			.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
 	}
@@ -46,7 +46,7 @@ function NotificationContainer() {
 
 	function handleDelete(notification: Notification) {
 		API.deleteNotification(notification.id)
-			.then(() => setUnreadNotifications((prev) => prev - 1))
+			.then(() => setUnreadNotifications((prev) => (prev === 0 ? 0 : prev - 1)))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
 	}

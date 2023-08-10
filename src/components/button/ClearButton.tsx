@@ -1,5 +1,4 @@
 import 'src/styles.css';
-import './ClearButton';
 
 import React, { ReactNode } from 'react';
 

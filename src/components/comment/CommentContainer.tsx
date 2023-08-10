@@ -96,7 +96,7 @@ function Reply(props: ReplyProps) {
 	if (loading) return <LoadingSpinner />;
 
 	return (
-		<section className='comment-container relative flex-column medium-gap'>
+		<section className='relative flex-column outline-gray small-padding medium-gap background-transparent'>
 			<span className='flex-row medium-gap flex-wrap'>
 				<LoadUserName userId={props.comment.authorId} />
 				<span>{props.comment.content}</span>
@@ -165,7 +165,7 @@ function CommentInput(props: CommentInputProps) {
 	return (
 		<section className='w100p'>
 			<textarea
-				className='comment-input-area w100p border-box' //
+				className='comment-input-area border-round small-padding w100p border-box' //
 				placeholder={i18n.t('write-a-comment').toString()}
 				maxLength={200}
 				value={content}

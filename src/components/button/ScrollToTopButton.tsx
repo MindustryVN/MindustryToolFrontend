@@ -1,4 +1,3 @@
-import './ScrollToTopButton.css';
 import 'src/styles.css';
 
 import React from 'react';
@@ -19,7 +18,7 @@ export default function ScrollToTopButton(props: ScrollToTopButtonProps) {
 	}
 
 	return (
-		<ClearButton className='scroll-to-top-button' title={i18n.t('scroll-to-top').toString()} onClick={() => scrollToTop()}>
+		<ClearButton className='fixed bottom right' title={i18n.t('scroll-to-top').toString()} onClick={() => scrollToTop()}>
 			<ArrowUpCircle />
 		</ClearButton>
 	);
