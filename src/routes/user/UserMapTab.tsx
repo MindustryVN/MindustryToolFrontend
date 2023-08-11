@@ -26,7 +26,7 @@ export default function UserMapTab(props: UserMapTabProps) {
 	const { addPopup } = usePopup();
 
 	const { model, setVisibility } = useModel();
-	const usePage = useInfinitePage<Map>(`user/map/${props.user.id}`, 20);
+	const usePage = useInfinitePage<Map>(`user/${props.user.id}/map`, 20);
 	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} key={v.id} handleOpenModel={handleOpenMapInfo} />);
 
 	function handleDeleteMap(map: Map) {
