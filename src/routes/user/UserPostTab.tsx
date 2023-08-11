@@ -15,7 +15,7 @@ interface UserPostTabProps {
 }
 
 export default function UserPostTab(props: UserPostTabProps) {
-	const usePage = useInfinitePage<Post>(`user/post/${props.user.id}`, 20);
+	const usePage = useInfinitePage<Post>(`user/${props.user.id}/post`, 20);
 	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostPreview key={v.id} post={v} />);
 
 	return (
