@@ -11,21 +11,6 @@ import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { WEB_VERSION } from './config/Config';
 import ErrorBoundary from 'src/components/common/ErrorBoundery';
-// import { initializeApp } from 'firebase/app';
-// import { getAnalytics } from 'firebase/analytics';
-
-// const firebaseConfig = {
-// 	apiKey: 'AIzaSyACF4nOPEHnjPESSj_Ds3G-M90qrLLSL08',
-// 	authDomain: 'mindustrytool.firebaseapp.com',
-// 	projectId: 'mindustrytool',
-// 	storageBucket: 'mindustrytool.appspot.com',
-// 	messagingSenderId: '733073499252',
-// 	appId: '1:733073499252:web:48d86079f479e5fcaa1d21',
-// 	measurementId: 'G-CGKXS6096G'
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 
 const Map = React.lazy(() => import('src/routes/map/MapPage'));
 const MapView = React.lazy(() => import('src/routes/map/MapViewPage'));

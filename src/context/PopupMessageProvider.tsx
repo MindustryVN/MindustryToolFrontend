@@ -72,7 +72,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 			}) //
 			.catch(() =>
 				addMessage({
-					content: 'lost-connection',
+					content: i18n.t('lost-connection'),
 					duration: 5,
 					type: 'error',
 				}),
