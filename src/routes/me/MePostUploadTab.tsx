@@ -20,7 +20,7 @@ export default function UserPostUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Post>(`user/post-upload`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <PostUploadPreview post={v} handleOpenModel={handleOpenPostInfo} />);
+	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function rejectPost(post: Post, reason: string) {
 		setVisibility(false);

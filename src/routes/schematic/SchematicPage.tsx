@@ -74,7 +74,7 @@ export default function SchematicPage() {
 	const navigate = useNavigate();
 
 	const usePage = useInfinitePage<Schematic>('schematic', 20, searchConfig.current);
-	const { pages, isLoading, loadNextPage, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, isLoading, loadNextPage, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	useEffect(() => {
 		API.getTotalSchematic()

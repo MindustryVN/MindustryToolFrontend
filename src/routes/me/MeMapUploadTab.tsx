@@ -22,7 +22,7 @@ export default function UserMapUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/map-upload`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <MapUploadPreview map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	function rejectMap(map: Map, reason: string) {
 		setVisibility(false);

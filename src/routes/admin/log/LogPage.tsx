@@ -21,7 +21,7 @@ export default function LogPage() {
 	const { addPopup } = usePopup();
 
 	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard log={v} handleDeleteLog={handleDeleteLog} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard key={v.id} log={v} handleDeleteLog={handleDeleteLog} />);
 
 	const logTypes = useQuery<string[]>('log', []);
 

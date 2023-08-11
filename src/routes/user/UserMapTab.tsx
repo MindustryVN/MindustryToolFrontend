@@ -27,7 +27,7 @@ export default function UserMapTab(props: UserMapTabProps) {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/map/${props.user.id}`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} key={v.id} handleOpenModel={handleOpenMapInfo} />);
 
 	function handleDeleteMap(map: Map) {
 		setVisibility(false);
