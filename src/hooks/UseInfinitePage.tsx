@@ -14,7 +14,7 @@ export interface UseInfinitePage<T> {
 	loadNextPage(): void;
 }
 
-export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>) : UseInfinitePage<T> {
+export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>): UseInfinitePage<T> {
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
@@ -115,8 +115,6 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			const lastIndex = pages.length - 1;
 			const newPage = pages[lastIndex].length === itemPerPage;
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
-
-			console.log('reload');
 
 			getPage(url, requestPage, itemPerPage, searchConfig)
 				.then((result) => {

@@ -11,7 +11,7 @@
 	width: var(--preview-image-min-size);
 	height: var(--preview-image-min-size);
 
-	border-bottom: 2px solid var(--neutral);
+	border-bottom: 2px solid var(--gray);
 }
 
 .map-preview-image {

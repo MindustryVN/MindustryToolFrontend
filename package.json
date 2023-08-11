@@ -63,6 +63,7 @@
 	"devDependencies": {
 		"@babel/plugin-proposal-class-static-block": "^7.21.0",
 		"@babel/plugin-proposal-private-property-in-object": "7.21.11",
+		"@types/react-virtualized": "^9.21.22",
 		"@types/uuid": "^9.0.2",
 		"hint": "^2.0.0",
 		"prettier": "^3.0.0"

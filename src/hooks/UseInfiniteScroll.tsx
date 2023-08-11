@@ -10,14 +10,16 @@ interface DBObject {
 }
 
 export default function useInfiniteScroll<T extends DBObject>(useInfinitePage: UseInfinitePage<T>, mapper: (v: T, index?: number) => ReactNode) {
-	const lastPageRef = useRef<HTMLElement>(null);
+	const rootRef = useRef<HTMLElement>(null);
 	const { ref, entry } = useIntersection({
-		root: lastPageRef.current,
+		root: rootRef.current,
 		threshold: 1,
 	});
 
 	useEffect(() => {
-		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading) useInfinitePage.loadNextPage();
+		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading) {
+			useInfinitePage.loadNextPage();
+		}
 	}, [entry, useInfinitePage]);
 
 	const pages = useInfinitePage.pages.map((m, index) => mapper(m, index));
