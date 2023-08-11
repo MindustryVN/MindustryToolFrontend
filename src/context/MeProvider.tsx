@@ -34,7 +34,10 @@ export default function MeProvider(props: MeProviderProps) {
 			API.setBearerToken(accessToken);
 			API.getMe() //
 				.then((result) => setMe(result.data))
-				.catch(() => ref.current.addPopup(i18n.t('login-fail'), 5, 'error'))
+				.catch((error) => {
+					ref.current.addPopup(i18n.t('login-fail'), 5, 'error');
+					if (error.code !== 'ERR_NETWORK') localStorage.removeItem(ACCESS_TOKEN);
+				})
 				.finally(() => setLoading(false));
 		} else setLoading(false);
 	}, []);
