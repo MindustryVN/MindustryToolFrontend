@@ -45,7 +45,7 @@ export default function VerifySchematicPage() {
 	const { model, setVisibility } = useModel();
 
 	const usePage = useInfinitePage<Schematic>('schematic-upload', 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 

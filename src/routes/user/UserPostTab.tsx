@@ -16,7 +16,7 @@ interface UserPostTabProps {
 
 export default function UserPostTab(props: UserPostTabProps) {
 	const usePage = useInfinitePage<Post>(`user/post/${props.user.id}`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostPreview post={v} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostPreview key={v.id} post={v} />);
 
 	return (
 		<main id='post-tab' className='flex-column small-gap w100p h100p scroll-y'>

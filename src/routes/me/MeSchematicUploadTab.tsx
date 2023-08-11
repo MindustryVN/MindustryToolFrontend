@@ -22,7 +22,7 @@ export default function UserSchematicUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/schematic-upload`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview  key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function rejectSchematic(schematic: Schematic, reason: string) {
 		setVisibility(false);

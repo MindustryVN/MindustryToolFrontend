@@ -41,7 +41,7 @@ export default function VerifyMapPage() {
 	const { model, setVisibility } = useModel();
 
 	const usePage = useInfinitePage<Map>('map-upload', 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	const [totalMap, setTotalMap] = useState(0);
 

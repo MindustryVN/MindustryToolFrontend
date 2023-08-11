@@ -29,7 +29,7 @@ export default function VerifyPostPage() {
 	const usePage = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview post={v} handleOpenModel={handleOpenPostInfo} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function handleOpenPostInfo(post: Post) {
 		setCurrentPost(post);

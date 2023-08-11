@@ -27,7 +27,7 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/schematic/${props.user.id}`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function handleDeleteSchematic(schematic: Schematic) {
 		setVisibility(false);

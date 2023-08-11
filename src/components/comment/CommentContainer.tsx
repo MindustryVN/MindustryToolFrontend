@@ -28,7 +28,7 @@ interface CommentContainerProps {
 export default function CommentContainer(props: CommentContainerProps) {
 	const usePage = useInfinitePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
 
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <Reply contentType={props.contentType + '_reply'} comment={v} nestLevel={0} reloadPage={reloadPage} />);
+	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType + '_reply'} comment={v} nestLevel={0} reloadPage={reloadPage} />);
 
 	const { addPopup } = usePopup();
 
@@ -71,7 +71,7 @@ function Reply(props: ReplyProps) {
 	const { addPopup } = usePopup();
 
 	const usePage = useInfinitePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} reloadPage={usePage.reloadPage} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} reloadPage={usePage.reloadPage} />);
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
