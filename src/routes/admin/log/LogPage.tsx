@@ -9,7 +9,7 @@ import Button from 'src/components/button/Button';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import DateDisplay from 'src/components/common/Date';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
@@ -21,7 +21,7 @@ export default function LogPage() {
 	const { addPopup } = usePopup();
 
 	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard key={v.id} log={v} handleDeleteLog={handleDeleteLog} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard key={v.id} log={v} handleDeleteLog={handleDeleteLog} />);
 
 	const logTypes = useQuery<string[]>('log', []);
 
@@ -29,13 +29,13 @@ export default function LogPage() {
 		API.deleteLog(contentType, id) //
 			.then(() => addPopup('delete-success', 5, 'info'))
 			.catch(() => addPopup('delete-fail', 5, 'warning'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((l) => l.id !== id));
 	}
 
 	if (!logTypes.data) return <LoadingSpinner />;
 
 	return (
-		<main className='log flex-column h100p w100p small-gap'>
+		<main className='flex-column h100p w100p small-gap'>
 			<section className='grid-row small-gap'>
 				{logTypes.data.map((item, index) => (
 					<Button

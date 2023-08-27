@@ -9,7 +9,7 @@ import ClearButton from 'src/components/button/ClearButton';
 import UserDisplay from 'src/components/user/UserDisplay';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 import IfTrue from 'src/components/common/IfTrue';
 import useNotification from 'src/hooks/UseNotification';
 import ThemeSwitcher from 'src/components/theme/ThemeSwitcher';
@@ -56,9 +56,6 @@ export default function NavigationPanel() {
 							</Link>
 							<Link className={'nav-link ' + (pathName.startsWith('map') ? 'active' : '')} to='/map' onClick={() => setShowNavigatePanel(false)}>
 								Map
-							</Link>
-							<Link className={'nav-link ' + (pathName.startsWith('mod') ? 'active' : '')} to='/mod' onClick={() => setShowNavigatePanel(false)}>
-								Mod
 							</Link>
 							<Link className={'nav-link ' + (pathName.startsWith('logic') ? 'active' : '')} to='/logic' onClick={() => setShowNavigatePanel(false)}>
 								Logic

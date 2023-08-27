@@ -1,4 +1,4 @@
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 
 export default function usePrivate() {
 	const { me } = useMe();

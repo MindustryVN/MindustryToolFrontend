@@ -17,7 +17,7 @@ import useDialog from 'src/hooks/UseDialog';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import useModel from 'src/hooks/UseModel';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import AdminOnly from 'src/components/common/AdminOnly';
 
@@ -29,7 +29,7 @@ export default function VerifyPostPage() {
 	const usePage = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();
 
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function handleOpenPostInfo(post: Post) {
 		setCurrentPost(post);
@@ -41,7 +41,7 @@ export default function VerifyPostPage() {
 		API.rejectPost(post, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((p) => p !== post));
 	}
 
 	function verifyPost(post: Post, tags: TagChoiceLocal[]) {
@@ -50,7 +50,7 @@ export default function VerifyPostPage() {
 			.then(() => API.postNotification(post.authorId, 'Your post submission has be accept', 'Post post success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((p) => p !== post));
 	}
 
 	return (

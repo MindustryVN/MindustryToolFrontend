@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { API } from 'src/API';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 
 interface NotificationContextProps {
 	unreadNotifications: number;
@@ -11,6 +11,7 @@ export const NotificationContext = React.createContext<NotificationContextProps>
 	unreadNotifications: 0,
 	setUnreadNotifications: (_: (number: number) => number) => {},
 });
+
 
 interface NotificationProviderProps {
 	children: React.ReactNode;

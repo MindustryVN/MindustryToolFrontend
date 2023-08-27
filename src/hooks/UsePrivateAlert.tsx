@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import usePopup from 'src/hooks/UsePopup';
-import useMe from 'src/hooks/UseMe';
+import { usePopup } from 'src/context/PopupMessageProvider';
+import { useMe } from 'src/context/MeProvider';
 
 export default function usePrivateAlert() {
 	const { addPopup } = usePopup();

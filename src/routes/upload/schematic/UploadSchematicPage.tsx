@@ -20,7 +20,7 @@ import SchematicDescription from 'src/components/schematic/SchematicDescription'
 import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
 import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 import SchematicUploadPreview from 'src/data/SchematicUploadPreview';
 
 const tabs = ['file', 'code'];

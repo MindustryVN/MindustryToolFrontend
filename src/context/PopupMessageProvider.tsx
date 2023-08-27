@@ -4,7 +4,7 @@ import 'src/styles.css';
 import { v4 } from 'uuid';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 
-import React, { ReactNode, useEffect, useRef } from 'react';
+import React, { ReactNode, useContext, useEffect, useRef } from 'react';
 import { API } from 'src/API';
 import i18n from 'src/util/I18N';
 
@@ -21,6 +21,10 @@ interface PopupMessageProps {
 	content: ReactNode;
 	duration: number;
 	type: PopupMessageType;
+}
+
+export function usePopup() {
+	return useContext(PopupMessageContext);
 }
 
 interface PopupMessageContextProps {

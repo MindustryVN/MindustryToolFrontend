@@ -19,7 +19,7 @@ import LoadUserName from 'src/components/user/LoadUserName';
 import MapDescription from 'src/components/map/MapDescription';
 import ColorText from 'src/components/common/ColorText';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 import MapInfoImage from 'src/components/map/MapInfoImage';
 import MapUploadPreview from 'src/data/MapUploadPreview';
 

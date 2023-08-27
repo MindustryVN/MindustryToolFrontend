@@ -2,8 +2,7 @@ import React, { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loading from 'src/components/loader/Loading';
 import { Users } from 'src/data/User';
-import useMe from 'src/hooks/UseMe';
-
+import { useMe } from 'src/context/MeProvider';
 interface PrivateRouteProps {
 	element: ReactElement;
 }

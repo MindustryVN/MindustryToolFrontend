@@ -7,7 +7,7 @@ import i18n from 'src/util/I18N';
 import IfTrue from 'src/components/common/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
@@ -20,14 +20,14 @@ export default function UserPostUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Post>(`user/post-upload`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function rejectPost(post: Post, reason: string) {
 		setVisibility(false);
 		API.rejectPost(post, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((p) => p !== post));
 	}
 
 	function handleOpenPostInfo(post: Post) {

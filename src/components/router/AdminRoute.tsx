@@ -2,8 +2,7 @@ import React, { ReactElement } from 'react';
 import Loading from 'src/components/loader/Loading';
 import { Users } from 'src/data/User';
 import { Navigate } from 'react-router-dom';
-import useMe from 'src/hooks/UseMe';
-
+import { useMe } from 'src/context/MeProvider';
 interface AdminRouteProps {
 	element: ReactElement;
 }

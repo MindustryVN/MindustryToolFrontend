@@ -10,8 +10,9 @@ export interface UseInfinitePage<T> {
 	isLoading: boolean;
 	isError: boolean;
 	hasMore: boolean;
+	loadNextPage: () => void;
 	reloadPage: () => void;
-	loadNextPage(): void;
+	filter: (predicate: (data: T) => boolean) => void;
 }
 
 export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>): UseInfinitePage<T> {
@@ -81,32 +82,6 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 		isError: isError,
 		hasMore: hasMore,
 
-		reloadPage: useCallback(() => {
-			if (isLoading) return;
-
-			setIsError(false);
-
-			setPages([[]]);
-			getPage(
-				url,
-				0,
-				pages.map((ele) => ele.length).reduce((prev, curr) => curr + prev, 0),
-				searchConfig,
-			)
-				.then((result) => {
-					let data: T[] = result.data;
-					setPages(() => {
-						let a: T[][] = [];
-
-						for (var i = 0; i < data.length; i = i + itemPerPage) a.push(data.slice(i, i + itemPerPage));
-
-						return a;
-					});
-				})
-				.catch(() => setIsError(true))
-				.finally(() => setIsLoading(false)); //
-		}, [isLoading, itemPerPage, pages, searchConfig, url]),
-
 		loadNextPage: useCallback(() => {
 			if (isLoading) return;
 
@@ -124,5 +99,23 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
 		}, [handleSetPage, isLoading, itemPerPage, url, searchConfig, pages]),
+
+		reloadPage: () => {
+			if (isLoading) return;
+
+			setIsError(false);
+			setPages([]);
+			getPage(url, 0, itemPerPage, searchConfig)
+				.then((result) => {
+					let data: T[] = result.data;
+					handleSetPage(0, data);
+				})
+				.catch(() => setIsError(true))
+				.finally(() => setIsLoading(false)); //
+		},
+
+		filter: (predicate: (prev: T) => boolean) => {
+			pages.map((page) => page.filter(predicate));
+		},
 	};
 }

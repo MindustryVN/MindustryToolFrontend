@@ -8,7 +8,7 @@ import i18n from 'src/util/I18N';
 import IfTrue from 'src/components/common/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import SchematicContainer from 'src/components/schematic/SchematicContainer';
@@ -22,14 +22,14 @@ export default function UserSchematicUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/schematic-upload`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview  key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function rejectSchematic(schematic: Schematic, reason: string) {
 		setVisibility(false);
 		API.rejectSchematic(schematic, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
 	function handleOpenSchematicInfo(schematic: Schematic) {

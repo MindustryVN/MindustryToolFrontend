@@ -305,7 +305,11 @@ textarea:is(:focus, :hover) {
 	background-color: rgba(0, 0, 0, 0.7);
 }
 
-.background-image-1::before {
+.gradient-background {
+	background-image: linear-gradient(-225deg, #231557 0%, #44107a 29%, #ff1361 67%, #fff800 100%);
+}
+
+.background-image::before {
 	content: '';
 	position: fixed;
 	z-index: -1;
