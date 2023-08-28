@@ -26,7 +26,7 @@ import MapInfoImage from 'src/components/map/MapInfoImage';
 import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
 import MapPreviewCard from 'src/components/map/MapPreviewCard';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
@@ -41,7 +41,7 @@ export default function VerifyMapPage() {
 	const { model, setVisibility } = useModel();
 
 	const usePage = useInfinitePage<Map>('map-upload', 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	const [totalMap, setTotalMap] = useState(0);
 
@@ -62,7 +62,7 @@ export default function VerifyMapPage() {
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.then(() => setTotalMap((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((m) => m !== map));
 	}
 
 	function verifyMap(map: Map, tags: TagChoiceLocal[]) {
@@ -72,7 +72,7 @@ export default function VerifyMapPage() {
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalMap((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((m) => m !== map));
 	}
 
 	return (

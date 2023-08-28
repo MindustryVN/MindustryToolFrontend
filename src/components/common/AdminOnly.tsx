@@ -1,7 +1,6 @@
 import React from 'react';
 import { Users } from 'src/data/User';
-import useMe from 'src/hooks/UseMe';
-
+import { useMe } from 'src/context/MeProvider';
 interface AdminOnlyProps {
 	children?: React.ReactNode;
 }

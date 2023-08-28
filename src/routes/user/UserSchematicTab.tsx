@@ -9,7 +9,7 @@ import IfTrue from 'src/components/common/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import SchematicContainer from 'src/components/schematic/SchematicContainer';
@@ -27,14 +27,14 @@ export default function UserSchematicTab(props: UserSchematicTabProps) {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/${props.user.id}/schematic`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function handleDeleteSchematic(schematic: Schematic) {
 		setVisibility(false);
 		API.deleteSchematic(schematic.id) //
 			.then(() => addPopup(i18n.t('schematic.delete-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
 	function handleOpenSchematicInfo(schematic: Schematic) {

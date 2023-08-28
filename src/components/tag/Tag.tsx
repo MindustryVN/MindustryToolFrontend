@@ -48,7 +48,7 @@ export class TagChoiceLocal {
 	}
 
 	toString() {
-		return `${this.name}:${this.value}`;
+		return `${this.name}${Tags.TAG_SEPARATOR}${this.value}`;
 	}
 }
 
@@ -62,10 +62,12 @@ export class Tags {
 	static MAP_UPLOAD_TAG: TagChoiceLocal[] = [];
 	static MAP_SEARCH_TAG: TagChoiceLocal[] = [];
 
+	static TAG_SEPARATOR = '_';
+
 	static SORT_TAG: TagChoiceLocal[] = [
-		new TagChoiceLocal('time', i18n.t('tag.newest'), '1', 'time:1', 'green'), //
-		new TagChoiceLocal('time', i18n.t('tag.oldest'), '-1', 'time:1', 'green'), //
-		new TagChoiceLocal('like', i18n.t('tag.most-liked'), '1', 'time:1', 'green'),
+		new TagChoiceLocal('time', i18n.t('tag.newest'), '1', `time${this.TAG_SEPARATOR}1`, 'green'), //
+		new TagChoiceLocal('time', i18n.t('tag.oldest'), '-1', `time${this.TAG_SEPARATOR}1`, 'green'), //
+		new TagChoiceLocal('like', i18n.t('tag.most-liked'), '1', `like${this.TAG_SEPARATOR}1`, 'green'),
 	];
 
 	static getTag(tag: string, result: TagChoiceLocal[]) {
@@ -85,7 +87,7 @@ export class Tags {
 		if (!value) return null;
 
 		if (source && source.length > 0) {
-			let str = value.split(':');
+			let str = value.split(this.TAG_SEPARATOR);
 			if (str.length !== 2) return null;
 
 			let r = source.find((t) => t.name === str[0] && t.value === str[1]);
@@ -97,7 +99,7 @@ export class Tags {
 	}
 
 	static getTagFromString(str: string) {
-		let arr = str.split(':');
+		let arr = str.split(this.TAG_SEPARATOR);
 		if (arr.length !== 2) return null;
 
 		const name = arr[0];
@@ -116,7 +118,7 @@ export class Tags {
 	}
 
 	static toString(tags: Array<TagChoiceLocal>) {
-		return `${tags.map((t) => `${t.name}:${t.value}`).join()}`;
+		return `${tags.map((t) => `${t.name}${this.TAG_SEPARATOR}${t.value}`).join()}`;
 	}
 	static toStringArray(tags: Array<TagChoiceLocal>) {
 		return tags.map((tag) => tag.toString());

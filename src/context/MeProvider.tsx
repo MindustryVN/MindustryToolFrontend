@@ -17,6 +17,10 @@ export const MeContext = React.createContext<MeContextProps>({
 	handleLogout: () => {},
 });
 
+export function useMe() {
+	return useContext(MeContext);
+}
+
 interface MeProviderProps {
 	children: ReactNode;
 }
@@ -33,10 +37,14 @@ export default function MeProvider(props: MeProviderProps) {
 		if (accessToken) {
 			API.setBearerToken(accessToken);
 			API.getMe() //
-				.then((result) => setMe(result.data))
+				.then((result) => {
+					let user: User = result.data;
+					setMe(user);
+					console.log('Logged as ' + user.name);
+				})
 				.catch((error) => {
 					ref.current.addPopup(i18n.t('login-fail'), 5, 'error');
-					if (error.code !== 'ERR_NETWORK') localStorage.removeItem(ACCESS_TOKEN);
+					console.log(error);
 				})
 				.finally(() => setLoading(false));
 		} else setLoading(false);

@@ -9,7 +9,7 @@ import IfTrue from 'src/components/common/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import MapContainer from 'src/components/map/MapContainer';
@@ -27,14 +27,14 @@ export default function UserMapTab(props: UserMapTabProps) {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/${props.user.id}/map`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} key={v.id} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} key={v.id} handleOpenModel={handleOpenMapInfo} />);
 
 	function handleDeleteMap(map: Map) {
 		setVisibility(false);
 		API.deleteMap(map.id) //
 			.then(() => addPopup(i18n.t('map.delete-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('map.delete-fail'), 5, 'warning'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((m) => m !== map));
 	}
 
 	function handleOpenMapInfo(map: Map) {

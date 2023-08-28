@@ -28,7 +28,7 @@ import TagContainer from 'src/components/tag/TagContainer';
 import IconButton from 'src/components/button/IconButton';
 import LikeCount from 'src/components/like/LikeCount';
 import ColorText from 'src/components/common/ColorText';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import useModel from 'src/hooks/UseModel';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
@@ -40,7 +40,7 @@ import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 import CommentContainer from 'src/components/comment/CommentContainer';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 import { Users } from 'src/data/User';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
@@ -70,7 +70,7 @@ export default function MapPage() {
 	const { addPopup } = usePopup();
 
 	const usePage = useInfinitePage<Map>('map', 20, searchConfig.current);
-	const { pages, loadNextPage, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, loadNextPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	const navigate = useNavigate();
 
@@ -118,7 +118,7 @@ export default function MapPage() {
 			.then(() => addPopup(i18n.t('map.delete-success'), 5, 'info')) //
 			.then(() => setTotalMap((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('map.delete-fail'), 5, 'warning'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((m) => map !== m));
 	}
 
 	return (

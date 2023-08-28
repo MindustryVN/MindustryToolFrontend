@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import { Navigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 import Button from 'src/components/button/Button';
 import UserSchematicUploadTab from 'src/routes/me/MeSchematicUploadTab';
 import UserMapUploadTab from 'src/routes/me/MeMapUploadTab';

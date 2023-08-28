@@ -6,7 +6,7 @@ import { Comment } from 'src/data/Comment';
 import React, { useState } from 'react';
 import i18n from 'src/util/I18N';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import IconButton from 'src/components/button/IconButton';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import IfTrue from 'src/components/common/IfTrue';
@@ -17,7 +17,7 @@ import ClearIconButton from 'src/components/button/ClearIconButton';
 import ClearButton from 'src/components/button/ClearButton';
 import { Ellipsis } from 'src/components/common/Icon';
 import { Users } from 'src/data/User';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 
 interface CommentContainerProps {
@@ -28,7 +28,7 @@ interface CommentContainerProps {
 export default function CommentContainer(props: CommentContainerProps) {
 	const usePage = useInfinitePage<Comment>(`comment/${props.contentType}/${props.targetId}`, 20);
 
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType + '_reply'} comment={v} nestLevel={0} reloadPage={reloadPage} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType + '_reply'} comment={v} nestLevel={0} />);
 
 	const { addPopup } = usePopup();
 
@@ -39,8 +39,7 @@ export default function CommentContainer(props: CommentContainerProps) {
 		API.postComment(`comment/${props.contentType}`, targetId, content, props.contentType)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
-			.finally(() => setLoading(false))
-			.then(() => reloadPage());
+			.finally(() => setLoading(false));
 	}
 
 	if (isLoading || loading) return <LoadingSpinner />;
@@ -57,7 +56,6 @@ interface ReplyProps {
 	contentType: string;
 	comment: Comment;
 	nestLevel: number;
-	reloadPage: () => void;
 }
 
 function Reply(props: ReplyProps) {
@@ -71,7 +69,7 @@ function Reply(props: ReplyProps) {
 	const { addPopup } = usePopup();
 
 	const usePage = useInfinitePage<Comment>(`comment/${props.contentType}/${props.comment.id}`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} reloadPage={usePage.reloadPage} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} />);
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
@@ -79,8 +77,7 @@ function Reply(props: ReplyProps) {
 		API.postComment(`comment/${props.contentType}`, targetId, content, `${props.contentType}`)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
-			.finally(() => setLoading(false))
-			.then(() => props.reloadPage());
+			.finally(() => setLoading(false));
 	}
 
 	function handleRemoveComment(comment: Comment) {
@@ -90,7 +87,7 @@ function Reply(props: ReplyProps) {
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => setLoading(false))
-			.then(() => props.reloadPage());
+			.then(() => usePage.filter((c) => c !== comment));
 	}
 
 	if (loading) return <LoadingSpinner />;

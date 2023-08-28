@@ -11,8 +11,8 @@ import Dropbox from 'src/components/dropbox/Dropbox';
 import TagPick from 'src/components/tag/TagPick';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import PostView from 'src/components/post/PostView';
-import useMe from 'src/hooks/UseMe';
-import usePopup from 'src/hooks/UsePopup';
+import { useMe } from 'src/context/MeProvider';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import { API } from 'src/API';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 

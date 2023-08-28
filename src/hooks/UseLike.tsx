@@ -3,7 +3,7 @@ import { API } from 'src/API';
 import { LikeChange } from 'src/data/LikeChange';
 import { Like } from 'src/data/Like';
 import { MeContext } from 'src/context/MeProvider';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 
@@ -17,7 +17,6 @@ export default function useLike(contentType: string, targetId: string, initialLi
 	const { addPopup } = usePopup();
 
 	const refUrl = useRef({ contentType, targetId });
-	const refAddPopup = useRef(addPopup);
 
 	const meContext = useContext(MeContext);
 
@@ -25,7 +24,7 @@ export default function useLike(contentType: string, targetId: string, initialLi
 		if (meContext.me && meContext.loading === false)
 			API.getLikes(refUrl.current.contentType, refUrl.current.targetId) //
 				.then((result) => setUserLike(result.data))
-				.catch(() => refAddPopup.current(i18n.t('get-like-fail'), 5, 'warning'));
+				.catch((error) => console.log(error));
 	}, [meContext.me, meContext.loading]);
 
 	function processLike(data: LikeChange) {

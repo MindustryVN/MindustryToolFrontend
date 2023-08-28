@@ -9,7 +9,7 @@ import useInfinitePage from 'src/hooks/UseInfinitePage';
 import Notification from 'src/data/Notification';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import IconButton from 'src/components/button/IconButton';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import IfTrue from 'src/components/common/IfTrue';
 import Markdown from 'src/components/markdown/Markdown';
@@ -50,6 +50,7 @@ function NotificationContainer() {
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => reloadPage());
 	}
+
 	function handleDeleteAll() {
 		API.deleteNotificationAll()
 			.then(() => setUnreadNotifications((_) => 0))

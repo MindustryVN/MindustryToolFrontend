@@ -8,19 +8,19 @@ import { Trans } from 'react-i18next';
 import ClearIconButton from 'src/components/button/ClearIconButton';
 import useDialog from 'src/hooks/UseDialog';
 import { API } from 'src/API';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import IfTrueElse from 'src/components/common/IfTrueElse';
 import IfTrue from 'src/components/common/IfTrue';
 import { Users } from 'src/data/User';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ColorText from 'src/components/common/ColorText';
 import useClipboard from 'src/hooks/UseClipboard';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 
 export default function MindustryServerPage() {
-	const { pages, hasMore, isLoading, loadNextPage, reloadPage } = useInfinitePage<MindustryServer>('mindustry-server', 100);
+	const { pages, hasMore, isLoading, loadNextPage, filter } = useInfinitePage<MindustryServer>('mindustry-server', 100);
 	const { addPopup } = usePopup();
 	const { dialog, setVisibility } = useDialog();
 
@@ -28,16 +28,15 @@ export default function MindustryServerPage() {
 		setVisibility(false);
 		API.postMindustryServer(address) //
 			.then(() => addPopup(i18n.t('add-server-success'), 5, 'info'))
-			.catch(() => addPopup(i18n.t('add-server-fail'), 5, 'warning'))
-			.finally(() => reloadPage());
+			.catch(() => addPopup(i18n.t('add-server-fail'), 5, 'warning'));
 	}
 
-	function handleRemoveServer(id: string) {
+	function handleRemoveServer(address: string) {
 		setVisibility(false);
-		API.deleteServer(id)
+		API.deleteServer(address)
 			.then(() => addPopup(i18n.t('delete-server-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('delete-server-fail'), 5, 'warning'))
-			.finally(() => reloadPage());
+			.finally(() => filter((data) => data.address !== address));
 	}
 
 	pages.sort((a, b) => (b.name ? 1 : 0) - (a.name ? 1 : 0));

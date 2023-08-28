@@ -30,7 +30,7 @@ import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
 import IfTrue from 'src/components/common/IfTrue';
 import Button from 'src/components/button/Button';
 import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import useDialog from 'src/hooks/UseDialog';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import ClearIconButton from 'src/components/button/ClearIconButton';
@@ -45,7 +45,7 @@ export default function VerifySchematicPage() {
 	const { model, setVisibility } = useModel();
 
 	const usePage = useInfinitePage<Schematic>('schematic-upload', 20);
-	const { pages, reloadPage, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	const [totalSchematic, setTotalSchematic] = useState(0);
 
@@ -66,7 +66,7 @@ export default function VerifySchematicPage() {
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.then(() => setTotalSchematic((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
 	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
@@ -76,7 +76,7 @@ export default function VerifySchematicPage() {
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
 	return (

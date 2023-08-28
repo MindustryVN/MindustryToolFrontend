@@ -3,7 +3,7 @@ import 'src/styles.css';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useQuery from 'src/hooks/UseQuery';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import { API } from 'src/API';
 import i18n from 'src/util/I18N';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
@@ -16,7 +16,7 @@ import DateDisplay from 'src/components/common/Date';
 import IconButton from 'src/components/button/IconButton';
 import IfTrue from 'src/components/common/IfTrue';
 import { Users } from 'src/data/User';
-import useMe from 'src/hooks/UseMe';
+import { useMe } from 'src/context/MeProvider';
 
 export default function ForumViewPage() {
 	const { postId } = useParams();

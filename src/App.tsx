@@ -36,7 +36,7 @@ export default function App() {
 		<main className='h100p w100p'>
 			<ErrorBoundary>
 				<NavigationPanel />
-				<section className='main background-image-1'>
+				<section className='main gradient-background'>
 					<Suspense fallback={<Loading />}>
 						<Routes>
 							<Route path='/' element={<Navigate to='/home' />} />

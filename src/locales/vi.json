@@ -120,6 +120,14 @@
 				"tier5": "Cấp 5"
 			}
 		},
+		"version": {
+			"name": "Phiên bản",
+			"value": {
+				"v5": "v5",
+				"v6": "v6",
+				"v7": "v7"
+			}
+		},
 		"planet": {
 			"name": "Công nghệ",
 			"value": {
@@ -176,7 +184,8 @@
 				"j4f": "J4F",
 				"power": "Năng lượng",
 				"defense": "Phòng thủ",
-				"art": "Tác phẩm nghệ thuật"
+				"art": "Tác phẩm nghệ thuật",
+				"support": "Hỗ trợ"
 			}
 		},
 		"game-mode": {
@@ -188,7 +197,8 @@
 				"sandbox": "Sáng tạo (Sandbox)",
 				"hex": "Hex",
 				"tower-defense": "Thủ thành(Tower defense)",
-				"survival": "Sinh tồn"
+				"survival": "Sinh tồn",
+				"ffa": "FFA"
 			}
 		},
 		"verify": {

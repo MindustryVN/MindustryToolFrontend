@@ -8,5 +8,5 @@ interface ModelProps {
 }
 
 export default function Model(props: ModelProps) {
-	return <section className={`model background-image-1 ${props.className ? props.className : ''}`}>{props.children}</section>;
+	return <section className={`model gradient-background ${props.className ? props.className : ''}`}>{props.children}</section>;
 }

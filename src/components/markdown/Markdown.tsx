@@ -9,9 +9,14 @@ interface MarkdownProps {
 	children: string;
 }
 
-//Hack
 function RouterLink(props: any) {
-	return props.href.match(/^(https?:)?\/\//) ? <a href={props.href}>{props.children}</a> : <Link to={props.href}>{props.children}</Link>;
+	return props.href.match(/^(https?:)?\/\//) ? (
+		<a href={props.href} target='_blank' rel='noreferrer'>
+			{props.children}
+		</a>
+	) : (
+		<Link to={props.href}>{props.children}</Link>
+	);
 }
 
 function MarkdownImage(props: any) {

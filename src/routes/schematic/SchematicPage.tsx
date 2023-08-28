@@ -11,6 +11,7 @@ import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import { Buffer } from 'buffer';
+import { useMe } from 'src/context/MeProvider';
 
 import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
 import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
@@ -30,7 +31,7 @@ import TagContainer from 'src/components/tag/TagContainer';
 import IconButton from 'src/components/button/IconButton';
 import LikeCount from 'src/components/like/LikeCount';
 import ColorText from 'src/components/common/ColorText';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import useModel from 'src/hooks/UseModel';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
@@ -42,9 +43,8 @@ import Icon from 'src/components/common/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 import CommentContainer from 'src/components/comment/CommentContainer';
-import useMe from 'src/hooks/UseMe';
-import { Users } from 'src/data/User';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import { Users } from 'src/data/User';
 
 export default function SchematicPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -74,7 +74,7 @@ export default function SchematicPage() {
 	const navigate = useNavigate();
 
 	const usePage = useInfinitePage<Schematic>('schematic', 20, searchConfig.current);
-	const { pages, isLoading, loadNextPage, reloadPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { pages, isLoading, loadNextPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	useEffect(() => {
 		API.getTotalSchematic()
@@ -120,7 +120,7 @@ export default function SchematicPage() {
 			.then(() => addPopup(i18n.t('schematic.delete-success'), 5, 'info')) //
 			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
 	return (

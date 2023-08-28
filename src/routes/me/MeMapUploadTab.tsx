@@ -8,7 +8,7 @@ import i18n from 'src/util/I18N';
 import IfTrue from 'src/components/common/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
-import usePopup from 'src/hooks/UsePopup';
+import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import MapContainer from 'src/components/map/MapContainer';
@@ -22,14 +22,14 @@ export default function UserMapUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/map-upload`, 20);
-	const { pages, isLoading, reloadPage } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	function rejectMap(map: Map, reason: string) {
 		setVisibility(false);
 		API.rejectMap(map, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
-			.finally(() => reloadPage());
+			.finally(() => usePage.filter((m) => m !== map));
 	}
 
 	function handleOpenMapInfo(map: Map) {
