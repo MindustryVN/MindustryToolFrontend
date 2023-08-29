@@ -2,7 +2,7 @@ import './ForumPage.css';
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import Dropbox from 'src/components/dropbox/Dropbox';
 import i18n from 'src/util/I18N';
@@ -49,7 +49,7 @@ export default function ForumPage() {
 
 	const navigate = useNavigate();
 
-	function setSearchConfig(sort: TagChoiceLocal, tags: TagChoiceLocal[]) {
+	function setSearchConfig(sort: TagChoice, tags: TagChoice[]) {
 		searchConfig.current = {
 			params: {
 				tags: Tags.toString(tags), //
@@ -60,7 +60,7 @@ export default function ForumPage() {
 		setSearchParam(searchConfig.current.params);
 	}
 
-	function handleSetSortQuery(sort: TagChoiceLocal) {
+	function handleSetSortQuery(sort: TagChoice) {
 		setSearchConfig(sort, tagQuery);
 	}
 
@@ -69,7 +69,7 @@ export default function ForumPage() {
 		setSearchConfig(sortQuery, t);
 	}
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		let t = tags.filter((q) => q !== tag);
 		t.push(tag);
 		setSearchConfig(sortQuery, t);
@@ -92,7 +92,7 @@ export default function ForumPage() {
 				</section>
 				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 				<section className='sort-container grid-row small-gap center'>
-					{Tags.SORT_TAG.map((c: TagChoiceLocal) => (
+					{Tags.SORT_TAG.map((c: TagChoice) => (
 						<Button className='capitalize' key={c.name + c.value} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
 							{c.displayName}
 						</Button>

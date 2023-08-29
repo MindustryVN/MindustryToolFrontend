@@ -3,7 +3,7 @@ import './VerifySchematicPage.css';
 
 import React, { useEffect, useState } from 'react';
 import { Buffer } from 'buffer';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
 import { Trans } from 'react-i18next';
@@ -69,7 +69,7 @@ export default function VerifySchematicPage() {
 			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
-	function verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
+	function verifySchematic(schematic: Schematic, tags: TagChoice[]) {
 		setVisibility(false);
 		API.verifySchematic(schematic, tags) //
 			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has be accept', 'Post schematic success'))
@@ -136,13 +136,13 @@ export function SchematicUploadPreview(props: SchematicUploadPreviewProps) {
 
 interface SchematicUploadInfoProps {
 	schematic: Schematic;
-	handleVerifySchematic: (schematic: Schematic, tags: TagChoiceLocal[]) => void;
+	handleVerifySchematic: (schematic: Schematic, tags: TagChoice[]) => void;
 	handleRejectSchematic: (schematic: Schematic, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
 export function SchematicUploadInfo(props: SchematicUploadInfoProps) {
-	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.schematic.tags, Tags.SCHEMATIC_UPLOAD_TAG));
+	const [tags, setTags] = useState<TagChoice[]>(Tags.parseArray(props.schematic.tags, Tags.SCHEMATIC_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
 
 	const verifyDialog = useDialog();
@@ -150,7 +150,7 @@ export function SchematicUploadInfo(props: SchematicUploadInfoProps) {
 
 	const { copy } = useClipboard();
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		tags.filter((q) => q !== tag);
 		setTags((prev) => [...prev, tag]);
 		setTag('');

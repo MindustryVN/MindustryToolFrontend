@@ -35,7 +35,7 @@ export default function LogPage() {
 	if (!logTypes.data) return <LoadingSpinner />;
 
 	return (
-		<main className='flex-column h100p w100p small-gap'>
+		<main className='flex-column h100p w100p scroll-y gap-1'>
 			<section className='grid-row small-gap'>
 				{logTypes.data.map((item, index) => (
 					<Button
@@ -46,7 +46,7 @@ export default function LogPage() {
 					</Button>
 				))}
 			</section>
-			<section id='log' className='flex-column medium-gap  scroll-y' children={pages} />
+			<section id='log' className='flex-column medium-gap ' children={pages} />
 			<footer className='flex-center'>
 				<IfTrue
 					condition={isLoading}

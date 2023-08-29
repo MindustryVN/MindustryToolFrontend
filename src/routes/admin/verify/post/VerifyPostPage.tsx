@@ -10,7 +10,7 @@ import Dropbox from 'src/components/dropbox/Dropbox';
 import LoadingSpinner from 'src/components/loader/LoadingSpinner';
 import PostPreview from 'src/components/post/PostPreview';
 import PostView from 'src/components/post/PostView';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import TagPick from 'src/components/tag/TagPick';
 import useDialog from 'src/hooks/UseDialog';
@@ -44,7 +44,7 @@ export default function VerifyPostPage() {
 			.finally(() => usePage.filter((p) => p !== post));
 	}
 
-	function verifyPost(post: Post, tags: TagChoiceLocal[]) {
+	function verifyPost(post: Post, tags: TagChoice[]) {
 		setVisibility(false);
 		API.verifyPost(post, tags) //
 			.then(() => API.postNotification(post.authorId, 'Your post submission has be accept', 'Post post success'))
@@ -96,13 +96,13 @@ export function PostUploadPreview(props: PostUploadPreviewProps) {
 
 interface PostUploadInfoProps {
 	post: Post;
-	handleVerifyPost: (post: Post, tags: TagChoiceLocal[]) => void;
+	handleVerifyPost: (post: Post, tags: TagChoice[]) => void;
 	handleRejectPost: (post: Post, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
 export function PostUploadInfo(props: PostUploadInfoProps) {
-	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.post.tags, Tags.POST_UPLOAD_TAG));
+	const [tags, setTags] = useState<TagChoice[]>(Tags.parseArray(props.post.tags, Tags.POST_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
 
 	const verifyDialog = useDialog();
@@ -110,7 +110,7 @@ export function PostUploadInfo(props: PostUploadInfoProps) {
 
 	const { model, setVisibility } = useModel();
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		tags.filter((q) => q !== tag);
 		setTags((prev) => [...prev, tag]);
 		setTag('');

@@ -1,10 +1,10 @@
 import 'src/styles.css';
 import './SchematicPage.css';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Schematic from 'src/data/Schematic';
 
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Utils } from 'src/util/Utils';
@@ -76,13 +76,17 @@ export default function SchematicPage() {
 	const usePage = useInfinitePage<Schematic>('schematic', 20, searchConfig.current);
 	const { pages, isLoading, loadNextPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
-	useEffect(() => {
-		API.getTotalSchematic()
+	const getTotalSchematic = useCallback(() => {
+		API.getTotalSchematic(searchConfig.current)
 			.then((result) => setTotalSchematic(result.data))
 			.catch(() => console.log('Error fletching total schematic'));
 	}, []);
 
-	function setSearchConfig(sort: TagChoiceLocal, tags: TagChoiceLocal[]) {
+	useEffect(() => {
+		getTotalSchematic();
+	}, [getTotalSchematic]);
+
+	function setSearchConfig(sort: TagChoice, tags: TagChoice[]) {
 		searchConfig.current = {
 			params: {
 				tags: Tags.toString(tags), //
@@ -90,10 +94,12 @@ export default function SchematicPage() {
 			},
 		};
 
+		getTotalSchematic();
+
 		setSearchParam(searchConfig.current.params);
 	}
 
-	function handleSetSortQuery(sort: TagChoiceLocal) {
+	function handleSetSortQuery(sort: TagChoice) {
 		setSearchConfig(sort, tagQuery);
 	}
 
@@ -102,7 +108,7 @@ export default function SchematicPage() {
 		setSearchConfig(sortQuery, t);
 	}
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		let t = tags.filter((q) => q !== tag);
 		t.push(tag);
 		setSearchConfig(sortQuery, t);
@@ -141,7 +147,7 @@ export default function SchematicPage() {
 				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 
 				<section className='sort-container grid-row small-gap center'>
-					{Tags.SORT_TAG.map((c: TagChoiceLocal) => (
+					{Tags.SORT_TAG.map((c: TagChoice) => (
 						<Button
 							className='capitalize' //
 							key={c.name + c.value}

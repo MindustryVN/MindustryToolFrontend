@@ -17,7 +17,7 @@ export default function ClearIconButton(props: ClearIconButtonProps) {
 			type='button'
 			title={props.title ? props.title : 'button'}
 			onClick={() => props.onClick()}>
-			<img className={`${props.className ? props.className : ''}`} src={props.icon} alt={props.title} />
+			<img  src={props.icon} alt={props.title} />
 		</button>
 	);
 }

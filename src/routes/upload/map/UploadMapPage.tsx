@@ -5,7 +5,7 @@ import 'src/components/map/MapInfoImage.css';
 import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX } from 'src/config/Config';
 import { getFileExtension } from 'src/util/StringUtils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
@@ -36,7 +36,7 @@ export default function UploadNextPage() {
 	const [file, setFile] = useState<File>();
 	const [preview, setPreview] = useState<MapUploadPreview>();
 	const [tag, setTag] = useState<string>('');
-	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
+	const [tags, setTags] = useState<TagChoice[]>([]);
 
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -99,7 +99,7 @@ export default function UploadNextPage() {
 		setTags((prev) => [...prev.filter((_, i) => i !== index)]);
 	}
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		setTags((prev) => {
 			let tags = prev.filter((q) => q !== tag);
 			return [...tags, tag];

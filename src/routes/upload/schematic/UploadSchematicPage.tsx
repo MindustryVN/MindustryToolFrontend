@@ -5,7 +5,7 @@ import 'src/components/schematic/SchematicInfoImage.css';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import Dropbox from 'src/components/dropbox/Dropbox';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { getFileExtension } from 'src/util/StringUtils';
@@ -40,7 +40,7 @@ export default function UploadSchematicPage() {
 	const [code, setCode] = useState<string>('');
 	const [preview, setPreview] = useState<SchematicUploadPreview>();
 	const [tag, setTag] = useState<string>('');
-	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
+	const [tags, setTags] = useState<TagChoice[]>([]);
 
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -122,7 +122,7 @@ export default function UploadSchematicPage() {
 		setTags((prev) => [...prev.filter((_, i) => i !== index)]);
 	}
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		setTags((prev) => {
 			let tags = prev.filter((q) => q !== tag);
 			return [...tags, tag];

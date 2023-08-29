@@ -2,7 +2,7 @@ import 'src/styles.css';
 import './VerifyMapPage.css';
 
 import React, { useEffect, useState } from 'react';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
 import { Trans } from 'react-i18next';
@@ -65,7 +65,7 @@ export default function VerifyMapPage() {
 			.finally(() => usePage.filter((m) => m !== map));
 	}
 
-	function verifyMap(map: Map, tags: TagChoiceLocal[]) {
+	function verifyMap(map: Map, tags: TagChoice[]) {
 		setVisibility(false);
 		API.verifyMap(map, tags) //
 			.then(() => API.postNotification(map.authorId, 'Your map submission has be accept', 'Post map success'))
@@ -129,19 +129,19 @@ export function MapUploadPreview(props: MapUploadPreviewProps) {
 
 interface MapUploadInfoProps {
 	map: Map;
-	handleVerifyMap: (map: Map, tags: TagChoiceLocal[]) => void;
+	handleVerifyMap: (map: Map, tags: TagChoice[]) => void;
 	handleRejectMap: (map: Map, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
 export function MapUploadInfo(props: MapUploadInfoProps) {
-	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.map.tags, Tags.MAP_UPLOAD_TAG));
+	const [tags, setTags] = useState<TagChoice[]>(Tags.parseArray(props.map.tags, Tags.MAP_UPLOAD_TAG));
 	const [tag, setTag] = useState('');
 
 	const verifyDialog = useDialog();
 	const rejectDialog = useDialog();
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		tags.filter((q) => q !== tag);
 		setTags((prev) => [...prev, tag]);
 		setTag('');

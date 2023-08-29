@@ -1,10 +1,10 @@
 import 'src/styles.css';
 
 import React from 'react';
-import { TagChoiceLocal } from './Tag';
+import { TagChoice } from './Tag';
 
 interface TagPickProps {
-	tag: TagChoiceLocal;
+	tag: TagChoice;
 }
 
 export default function TagPick(props: TagPickProps) {

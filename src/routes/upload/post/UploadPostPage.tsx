@@ -3,7 +3,7 @@ import './UploadPostPage.css';
 
 import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import useModel from 'src/hooks/UseModel';
 import Button from 'src/components/button/Button';
 import i18n from 'src/util/I18N';
@@ -33,7 +33,7 @@ export default function UploadPostPage() {
 	const { model, setVisibility } = useModel();
 
 	const [tag, setTag] = useState<string>('');
-	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
+	const [tags, setTags] = useState<TagChoice[]>([]);
 
 	const { me } = useMe();
 
@@ -45,7 +45,7 @@ export default function UploadPostPage() {
 		setTags((prev) => [...prev.filter((_, i) => i !== index)]);
 	}
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		setTags((prev) => {
 			let tags = prev.filter((q) => q !== tag);
 			return [...tags, tag];

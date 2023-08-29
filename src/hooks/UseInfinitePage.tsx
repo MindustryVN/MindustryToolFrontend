@@ -39,7 +39,6 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 
 		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
 
-		console.log({ method: 'Get', url, searchConfig });
 		return API.get(url, searchConfig);
 	}
 
@@ -93,10 +92,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
 
 			getPage(url, requestPage, itemPerPage, searchConfig)
-				.then((result) => {
-					let data: T[] = result.data;
-					handleSetPage(requestPage, data);
-				})
+				.then((result) => handleSetPage(requestPage, result.data))
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
 		}, [handleSetPage, isLoading, itemPerPage, url, searchConfig, pages]),
@@ -107,10 +103,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			setIsError(false);
 			setPages([]);
 			getPage(url, 0, itemPerPage, searchConfig)
-				.then((result) => {
-					let data: T[] = result.data;
-					handleSetPage(0, data);
-				})
+				.then((result) => handleSetPage(0, result.data))
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
 		},

@@ -1,10 +1,10 @@
 import 'src/styles.css';
 import './MapPage.css';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Map from 'src/data/Map';
 
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/tag/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Utils } from 'src/util/Utils';
@@ -74,24 +74,27 @@ export default function MapPage() {
 
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		API.getTotalMap()
+	const getTotalMap = useCallback(() => {
+		API.getTotalMap(searchConfig.current)
 			.then((result) => setTotalMap(result.data))
 			.catch(() => console.log('Error fletching total map'));
 	}, []);
 
-	function setSearchConfig(sort: TagChoiceLocal, tags: TagChoiceLocal[]) {
+	useEffect(() => {
+		getTotalMap();
+	}, [getTotalMap]);
+
+	function setSearchConfig(sort: TagChoice, tags: TagChoice[]) {
 		searchConfig.current = {
 			params: {
 				tags: Tags.toString(tags), //
 				sort: sort.toString(),
 			},
 		};
-
+		getTotalMap();
 		setSearchParam(searchConfig.current.params);
 	}
-
-	function handleSetSortQuery(sort: TagChoiceLocal) {
+	function handleSetSortQuery(sort: TagChoice) {
 		setSearchConfig(sort, tagQuery);
 	}
 
@@ -100,7 +103,7 @@ export default function MapPage() {
 		setSearchConfig(sortQuery, t);
 	}
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		let t = tags.filter((q) => q !== tag);
 		t.push(tag);
 		setSearchConfig(sortQuery, t);
@@ -137,7 +140,7 @@ export default function MapPage() {
 				</section>
 				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 				<section className='sort-container grid-row small-gap center'>
-					{Tags.SORT_TAG.map((c: TagChoiceLocal) => (
+					{Tags.SORT_TAG.map((c: TagChoice) => (
 						<Button className='capitalize' key={c.name + c.value} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
 							{c.displayName}
 						</Button>
