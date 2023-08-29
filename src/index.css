@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body,
 #root {
@@ -91,7 +95,6 @@ a {
 	--warning-color: #e9d502;
 	--info-color: #3ac152;
 }
-
 
 footer {
 	min-height: 2rem;

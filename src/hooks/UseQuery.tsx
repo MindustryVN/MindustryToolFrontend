@@ -2,7 +2,6 @@ import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 import { API } from 'src/API';
 
-var cancelRequest: AbortController;
 
 export default function useQuery<T>(url: string, initialValue?: T, searchConfig?: AxiosRequestConfig<any>) {
 	const [data, setData] = useState<T | undefined>(initialValue);
@@ -10,16 +9,15 @@ export default function useQuery<T>(url: string, initialValue?: T, searchConfig?
 	const [isError, setIsError] = useState(false);
 
 	useEffect(() => {
-		if (cancelRequest) cancelRequest.abort();
-
-		cancelRequest = new AbortController();
-
 		setIsError(false);
 		setIsLoading(true);
 
-		API.get(`${url}`, { ...searchConfig, signal: cancelRequest.signal }) //
+		API.get(`${url}`, { ...searchConfig }) //
 			.then((result) => setData(result.data))
-			.catch(() => setIsError(true))
+			.catch((error) => {
+				setIsError(true);
+				console.log(error);
+			})
 			.finally(() => setIsLoading(false)); //
 	}, [searchConfig, url]);
 
