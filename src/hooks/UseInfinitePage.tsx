@@ -39,6 +39,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 
 		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
 
+		console.log({ method: 'Get', url, searchConfig });
 		return API.get(url, searchConfig);
 	}
 
