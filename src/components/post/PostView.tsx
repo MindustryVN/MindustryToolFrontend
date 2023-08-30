@@ -4,7 +4,7 @@ import React from 'react';
 import Markdown from 'src/components/markdown/Markdown';
 import TagContainer from 'src/components/tag/TagContainer';
 import { Tags } from 'src/components/tag/Tag';
-import LoadUserName from 'src/components/user/LoadUserName';
+import LoadUserName from 'src/components/LoadUserName';
 import DateDisplay from 'src/components/common/Date';
 
 interface PostViewProps {

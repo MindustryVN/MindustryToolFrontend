@@ -57,6 +57,8 @@
 	"code": "Mã",
 	"upload-a-file": "Chọn một tệp",
 	"copy-from-clipboard": "Sao chép từ bộ nhớ tạm",
+	"login-discord": "Đăng nhập bằng Discord",
+	"choose-login-method": "Chọn phương thức đăng nhập",
 	"loading": {
 		"short": "Đang tải",
 		"long": "Đang tải, vui lòng đợi 1-2 phút."

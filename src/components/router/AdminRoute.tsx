@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import Loading from 'src/components/loader/Loading';
+import Loading from 'src/components/Loading';
 import { Users } from 'src/data/User';
 import { Navigate } from 'react-router-dom';
 import { useMe } from 'src/context/MeProvider';

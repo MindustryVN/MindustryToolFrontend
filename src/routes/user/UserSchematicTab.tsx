@@ -10,7 +10,7 @@ import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import SchematicContainer from 'src/components/schematic/SchematicContainer';
 import { SchematicInfo, SchematicPreview } from 'src/routes/schematic/SchematicPage';

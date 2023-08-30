@@ -14,7 +14,7 @@ import IfTrueElse from 'src/components/common/IfTrueElse';
 import IfTrue from 'src/components/common/IfTrue';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import ColorText from 'src/components/common/ColorText';
 import useClipboard from 'src/hooks/UseClipboard';
 import useInfinitePage from 'src/hooks/UseInfinitePage';

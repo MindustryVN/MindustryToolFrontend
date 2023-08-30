@@ -14,7 +14,7 @@ import PostView from 'src/components/post/PostView';
 import { useMe } from 'src/context/MeProvider';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import { API } from 'src/API';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 
 export default function UploadPostPage() {
 	const [title, setTitle] = useState('');

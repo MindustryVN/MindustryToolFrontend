@@ -1,7 +1,7 @@
 import 'src/styles.css';
 
 import React from 'react';
-import LoadUserName from 'src/components/user/LoadUserName';
+import LoadUserName from 'src/components/LoadUserName';
 import { Trans } from 'react-i18next';
 
 export default function InfoPage() {

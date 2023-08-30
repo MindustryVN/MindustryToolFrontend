@@ -1,15 +1,13 @@
-import './App.css';
 import './styles.css';
 
-import Loading from 'src/components/loader/Loading';
-import NavigationPanel from 'src/components/navigation/NavigationPanel';
+import Loading from 'src/components/Loading';
+import NavigationPanel from 'src/components/NavigationPanel';
 import AdminRoute from 'src/components/router/AdminRoute';
 import PrivateRoute from 'src/components/router/PrivateRoute';
 import OAuth2RedirectHandler from 'src/routes/login/OAuth2RedirectHandler';
 
 import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { WEB_VERSION } from './config/Config';
 import ErrorBoundary from 'src/components/common/ErrorBoundery';
 
 const Map = React.lazy(() => import('src/routes/map/MapPage'));
@@ -33,10 +31,10 @@ const UploadPost = React.lazy(() => import('src/routes/upload/post/UploadPostPag
 
 export default function App() {
 	return (
-		<main className='h100p w100p'>
+		<main className='w-screen h-screen background-gradient'>
 			<ErrorBoundary>
 				<NavigationPanel />
-				<section className='main gradient-background'>
+				<section className='w-screen h-[calc(100%-3rem)]'>
 					<Suspense fallback={<Loading />}>
 						<Routes>
 							<Route path='/' element={<Navigate to='/home' />} />
@@ -58,11 +56,10 @@ export default function App() {
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
 							<Route path='/info' element={<Info />} />
 							<Route path='/notification' element={<Notification />} />
-							<Route path='/mindustry-server' element={<MindustryServer />} />
+							<Route path='/server' element={<MindustryServer />} />
 						</Routes>
 					</Suspense>
 				</section>
-				<footer className='web-version'>{WEB_VERSION}</footer>
 			</ErrorBoundary>
 		</main>
 	);

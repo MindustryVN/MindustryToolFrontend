@@ -10,7 +10,7 @@ import React from 'react';
 import useQuery from 'src/hooks/UseQuery';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import Map from 'src/data/Map';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 
 export default function MapPreviewPage() {
 	const { mapId } = useParams();

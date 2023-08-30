@@ -8,7 +8,7 @@ import IfTrue from 'src/components/common/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { PostUploadInfo, PostUploadPreview } from 'src/routes/admin/verify/post/VerifyPostPage';

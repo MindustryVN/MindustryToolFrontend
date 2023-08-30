@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
-import Loading from 'src/components/loader/Loading';
+import Loading from 'src/components/Loading';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 interface PrivateRouteProps {

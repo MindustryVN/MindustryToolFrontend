@@ -7,7 +7,7 @@ import { Log } from 'src/data/Log';
 
 import Button from 'src/components/button/Button';
 import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import ClearIconButton from 'src/components/button/ClearIconButton';

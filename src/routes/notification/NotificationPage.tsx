@@ -7,7 +7,7 @@ import { API } from 'src/API';
 import React from 'react';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import Notification from 'src/data/Notification';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import IconButton from 'src/components/button/IconButton';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';

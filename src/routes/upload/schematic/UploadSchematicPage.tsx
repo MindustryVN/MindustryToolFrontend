@@ -15,11 +15,11 @@ import TagPick from 'src/components/tag/TagPick';
 import { Trans } from 'react-i18next';
 import Button from 'src/components/button/Button';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
-import LoadUserName from 'src/components/user/LoadUserName';
+import LoadUserName from 'src/components/LoadUserName';
 import SchematicDescription from 'src/components/schematic/SchematicDescription';
 import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
 import ColorText from 'src/components/common/ColorText';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useMe } from 'src/context/MeProvider';
 import SchematicUploadPreview from 'src/data/SchematicUploadPreview';
 

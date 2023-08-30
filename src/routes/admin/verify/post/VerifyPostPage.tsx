@@ -7,7 +7,7 @@ import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
 import IfTrue from 'src/components/common/IfTrue';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
 import Dropbox from 'src/components/dropbox/Dropbox';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import PostPreview from 'src/components/post/PostPreview';
 import PostView from 'src/components/post/PostView';
 import { TagChoice, Tags } from 'src/components/tag/Tag';

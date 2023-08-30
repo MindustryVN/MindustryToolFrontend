@@ -1,7 +1,7 @@
 import 'src/styles.css';
 
 import React from 'react';
-import LoadUserName from 'src/components/user/LoadUserName';
+import LoadUserName from 'src/components/LoadUserName';
 import TagContainer from 'src/components/tag/TagContainer';
 import { Tags } from 'src/components/tag/Tag';
 import DateDisplay from 'src/components/common/Date';

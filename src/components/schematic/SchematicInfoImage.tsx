@@ -1,4 +1,3 @@
-import SecureImage from 'src/components/common/SecureImage';
 import './SchematicInfoImage.css';
 
 import React from 'react';
@@ -8,5 +7,5 @@ interface SchematicInfoImageProps {
 }
 
 export default function SchematicInfoImage(props: SchematicInfoImageProps) {
-	return <SecureImage className='schematic-info-image' url={props.src} alt='schematic' />;
+	return <img className='schematic-info-image' src={props.src} alt='schematic' />;
 }

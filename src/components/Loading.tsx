@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
-
-import 'src/styles.css';
-import './Loading.css';
+import MessageScreen from 'src/components/MessageScreen';
 
 export default function Loading() {
 	const [content, setMessage] = useState<string>('loading.short');
@@ -12,8 +10,8 @@ export default function Loading() {
 	}, []);
 
 	return (
-		<span className='flex-center loading'>
+		<MessageScreen>
 			<Trans i18nKey={content} />
-		</span>
+		</MessageScreen>
 	);
 }

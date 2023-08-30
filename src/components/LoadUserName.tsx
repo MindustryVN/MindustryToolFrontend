@@ -1,11 +1,9 @@
-import './LoadUserName.css';
-
 import React, { useEffect, useState } from 'react';
 import { API } from 'src/API';
-import UserName from './UserName';
-import User from '../../data/User';
+import User from '../data/User';
 import { Trans } from 'react-i18next';
 import { Cache } from 'src/data/IHash';
+import UserName from 'src/components/UserName';
 
 interface LoadUserNameProps {
 	userId: string;
@@ -42,7 +40,7 @@ export default function LoadUserName(props: LoadUserNameProps) {
 	if (loading) return <span>Loading...</span>;
 	if (displayUser) return <UserName displayUser={displayUser} />;
 	return (
-		<span className='user-not-found'>
+		<span className='text-red-500'>
 			<Trans i18nKey='user-not-found' />
 		</span>
 	);
