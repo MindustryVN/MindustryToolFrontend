@@ -1,9 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import { Utils } from 'src/util/Utils';
-
-var cancelRequest: AbortController;
 
 export interface UseInfinitePage<T> {
 	pages: T[];
@@ -16,15 +14,15 @@ export interface UseInfinitePage<T> {
 }
 
 export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>): UseInfinitePage<T> {
+	const cancelRequest = useRef<AbortController>(new AbortController());
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
 	function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
-		if (cancelRequest) cancelRequest.abort();
-
-		cancelRequest = new AbortController();
+		cancelRequest.current.abort();
+		cancelRequest.current = new AbortController();
 
 		setIsLoading(true);
 
@@ -37,7 +35,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			};
 		}
 
-		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
+		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.current.signal };
 
 		return API.get(url, searchConfig);
 	}
@@ -57,6 +55,8 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			)
 			.catch(() => setIsError(true))
 			.finally(() => setIsLoading(false)); //
+
+		return () => cancelRequest.current.abort();
 	}, [searchConfig, itemPerPage, url]);
 
 	const handleSetPage = useCallback(

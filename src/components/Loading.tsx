@@ -6,7 +6,9 @@ export default function Loading() {
 	const [content, setMessage] = useState<string>('loading.short');
 
 	useEffect(() => {
-		setTimeout(() => setMessage('loading.long'), 5000);
+		let timeout = setTimeout(() => setMessage('loading.long'), 5000);
+
+		return () => clearTimeout(timeout);
 	}, []);
 
 	return (

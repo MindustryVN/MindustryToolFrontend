@@ -25,12 +25,26 @@ module.exports = {
 					transform: 'translateX(0)',
 				},
 			},
+			spin: {
+				'0%': {
+					transform: 'rotate(0deg)',
+				},
+				'100%': {
+					transform: 'rotate(360deg)',
+				},
+			},
 		},
 		animation: {
 			popup: 'popup 0.2s forwards',
+			spin: 'spin 1s linear infinite',
 			'slide-in': 'slide-in 0.5s forwards',
 		},
 
-		plugins: [],
+		plugins: [
+			function ({ addVariant }) {
+				addVariant('child', '&>*');
+				addVariant('child-hover', '&>*:hover');
+			},
+		],
 	},
 };

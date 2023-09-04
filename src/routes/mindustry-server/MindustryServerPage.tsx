@@ -1,21 +1,20 @@
-import 'src/styles.css';
 import './MindustryServerPage.css';
 
 import React, { useState } from 'react';
 import MindustryServer from 'src/data/MindustryServer';
-import Button from 'src/components/button/Button';
+import Button from 'src/components/Button';
 import { Trans } from 'react-i18next';
-import ClearIconButton from 'src/components/button/ClearIconButton';
+import ClearIconButton from 'src/components/ClearIconButton';
 import useDialog from 'src/hooks/UseDialog';
 import { API } from 'src/API';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
-import IfTrueElse from 'src/components/common/IfTrueElse';
-import IfTrue from 'src/components/common/IfTrue';
+import IfTrueElse from 'src/components/IfTrueElse';
+import IfTrue from 'src/components/IfTrue';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import ColorText from 'src/components/common/ColorText';
+import ColorText from 'src/components/ColorText';
 import useClipboard from 'src/hooks/UseClipboard';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 
@@ -42,13 +41,13 @@ export default function MindustryServerPage() {
 	pages.sort((a, b) => (b.name ? 1 : 0) - (a.name ? 1 : 0));
 
 	return (
-		<main className='flex-column small-gap h100p w100p scroll-y big-padding border-box'>
-			<section className='flex-row justify-end'>
-				<Button onClick={() => setVisibility(true)}>
+		<main className='flex flex-row gap-2 h-full w-full overflow-y-auto big-padding box-border'>
+			<section className='flex flex-row justify-end'>
+				<Button title={i18n.t('submit')} onClick={() => setVisibility(true)}>
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>
-			<table className='server-table h100p w100p'>
+			<table className='server-table h-full w-full'>
 				<thead className='server-table-header'>
 					<tr className='server-table-header'>
 						<th>
@@ -87,17 +86,17 @@ export default function MindustryServerPage() {
 					))}
 				</tbody>
 			</table>
-			<section className='server-card-container flex-row flex-wrap space-evenly small-gap'>
+			<section className='server-card-container flex flex-row flex-wrap space-evenly gap-2'>
 				{pages.map((server) => (
 					<MindustryServerCard key={server.address} server={server} handleRemoveServer={handleRemoveServer} />
 				))}
 			</section>
-			<footer className='flex-center'>
+			<footer className='flex justify-center items-center'>
 				<IfTrueElse
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 					whenFalse={
-						<Button onClick={() => loadNextPage()}>
+						<Button title={i18n.t('load-more')} onClick={() => loadNextPage()}>
 							<IfTrueElse
 								condition={hasMore} //
 								whenTrue={<Trans i18nKey='load-more' />}
@@ -126,8 +125,8 @@ function MindustryServerTableRow(props: MindustryServerTableRowProps) {
 	return (
 		<tr className='server-table-row medium-padding'>
 			<td>
-				<section className='flex-row'>
-					<ClearIconButton icon='/assets/icons/copy.png' onClick={() => copy(server.address)} />
+				<section className='flex flex-row'>
+					<ClearIconButton title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(server.address)} />
 					{server.address}
 				</section>
 			</td>
@@ -145,7 +144,7 @@ function MindustryServerTableRow(props: MindustryServerTableRowProps) {
 			</td>
 			<td>{server.wave}</td>
 			<td>
-				<span className='flex-row small-gap'>
+				<span className='flex flex-row gap-2'>
 					{server.players}/{server.playerLimit}
 					<span>
 						<Trans i18nKey='players' />
@@ -159,6 +158,7 @@ function MindustryServerTableRow(props: MindustryServerTableRowProps) {
 				whenTrue={
 					<td>
 						<ClearIconButton
+							title={i18n.t('delete')}
 							icon='/assets/icons/trash-16.png' //
 							onClick={() => props.handleRemoveServer(props.server.address)}
 						/>
@@ -181,19 +181,20 @@ function MindustryServerCard(props: MindustryServerCardProps) {
 	const { copy } = useClipboard();
 
 	return (
-		<section className='server-card flex-column'>
-			<header className='flex-row space-between'>
-				<section className='flex-row small-gap center'>
-					<span className='flex-row small-gap'>
+		<section className='server-card flex flex-row'>
+			<header className='flex flex-row space-between'>
+				<section className='flex flex-row gap-2 center'>
+					<span className='flex flex-row gap-2'>
 						<ColorText text={server.name ? server.name : server.address} /> | <span className='capitalize'>{server.modeName ? server.mapname : server.mode}</span>
 					</span>
-					<ClearIconButton className='small-padding' icon='/assets/icons/copy.png' onClick={() => copy(server.address)} />
+					<ClearIconButton className='p-2' title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(server.address)} />
 				</section>
 				<IfTrue
 					condition={Users.isAdmin(me)}
 					whenTrue={
-						<section className='flex-column'>
+						<section className='flex flex-row'>
 							<ClearIconButton
+								title={i18n.t('delete')}
 								icon='/assets/icons/trash-16.png' //
 								onClick={() => props.handleRemoveServer(props.server.address)}
 							/>
@@ -202,17 +203,17 @@ function MindustryServerCard(props: MindustryServerCardProps) {
 				/>
 			</header>
 
-			<section className='server-card-info flex-column'>
+			<section className='server-card-info flex flex-row'>
 				<ColorText text={server.description} />
 				<span>
 					{`${server.players}/${server.playerLimit} `}
 					<Trans i18nKey='players' />
 				</span>
 				Ping: {server.ping}ms
-				<span className='flex-row small-gap'>
+				<span className='flex flex-row gap-2'>
 					<Trans i18nKey='map' />: <ColorText text={server.mapname} />
 				</span>
-				<span className='flex-row small-gap'>
+				<span className='flex flex-row gap-2'>
 					<Trans i18nKey='wave' />: {server.wave}
 				</span>
 				<span>
@@ -232,14 +233,14 @@ function InputAddressDialog(props: InputAddressDialogProps) {
 	const [content, setContent] = useState<string>('');
 
 	return (
-		<section className='input-address-dialog flex-column small-gap medium-padding'>
-			<header className='flex-row space-between small-padding'>
+		<section className='input-address-dialog flex flex-row gap-2 medium-padding'>
+			<header className='flex flex-row space-between p-2'>
 				<Trans i18nKey='type-ip-address' />
-				<ClearIconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
 			</header>
 			<input className='input-address' type='text' title='address' onChange={(event) => setContent(event.target.value)} />
-			<section className='flex-row justify-end w100p small-padding border-box'>
-				<Button onClick={() => props.onSubmit(content)}>
+			<section className='flex flex-row justify-end w-full p-2 box-border'>
+				<Button title={i18n.t('submit')} onClick={() => props.onSubmit(content)}>
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>

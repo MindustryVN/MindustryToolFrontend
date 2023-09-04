@@ -1,5 +1,0 @@
-
-.comment-input-area,
-.comment-input-area:is(:hover, :focus) {
-	border-bottom: 2px solid var(--gray);
-}

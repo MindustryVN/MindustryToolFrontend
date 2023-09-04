@@ -1,12 +1,10 @@
-import 'src/styles.css';
-
 import React from 'react';
 
-import IfTrue from 'src/components/common/IfTrue';
+import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import User from 'src/data/User';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import PostPreview from 'src/components/post/PostPreview';
 
@@ -19,9 +17,9 @@ export default function UserPostTab(props: UserPostTabProps) {
 	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostPreview key={v.id} post={v} />);
 
 	return (
-		<main id='post-tab' className='flex-column small-gap w100p h100p scroll-y'>
+		<main id='post-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
 			<section children={pages} />
-			<footer className='flex-center'>
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //

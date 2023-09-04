@@ -1,4 +1,3 @@
-import 'src/styles.css';
 import './VerifyMapPage.css';
 
 import React, { useEffect, useState } from 'react';
@@ -8,30 +7,30 @@ import { API_BASE_URL } from 'src/config/Config';
 import { Trans } from 'react-i18next';
 import { Utils } from 'src/util/Utils';
 import Map from 'src/data/Map';
-import Dropbox from 'src/components/dropbox/Dropbox';
+import Dropbox from 'src/components/Dropbox';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import MapPreviewImage from 'src/components/map/MapPreviewImage';
-import ColorText from 'src/components/common/ColorText';
-import DownloadButton from 'src/components/button/DownloadButton';
+import ColorText from 'src/components/ColorText';
+import DownloadButton from 'src/components/DownloadButton';
 import useModel from 'src/hooks/UseModel';
-import MapContainer from 'src/components/map/MapContainer';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import LoadUserName from 'src/components/LoadUserName';
-import MapDescription from 'src/components/map/MapDescription';
-import MapInfoImage from 'src/components/map/MapInfoImage';
-import IfTrue from 'src/components/common/IfTrue';
-import Button from 'src/components/button/Button';
-import MapPreviewCard from 'src/components/map/MapPreviewCard';
+import IfTrue from 'src/components/IfTrue';
+import Button from 'src/components/Button';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import useDialog from 'src/hooks/UseDialog';
-import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
-import ClearIconButton from 'src/components/button/ClearIconButton';
+import ConfirmDialog from 'src/components/ConfirmDialog';
+import ClearIconButton from 'src/components/ClearIconButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import AdminOnly from 'src/components/common/AdminOnly';
+import AdminOnly from 'src/components/AdminOnly';
+import PreviewContainer from 'src/components/PreviewContainer';
+import PreviewCard from 'src/components/PreviewCard';
+import PreviewImage from 'src/components/PreviewImage';
+import InfoImage from 'src/components/InfoImage';
+import Description from 'src/components/Description';
 
 export default function VerifyMapPage() {
 	const [currentMap, setCurrentMap] = useState<Map>();
@@ -76,12 +75,12 @@ export default function VerifyMapPage() {
 	}
 
 	return (
-		<main id='verify-map' className='flex-column h100p w100p'>
-			<section className='flex-row center medium-padding'>
+		<main id='verify-map' className='flex flex-row h-full w-full'>
+			<section className='flex flex-row center medium-padding'>
 				<Trans i18nKey='total-map' />:{totalMap > 0 ? totalMap : 0}
 			</section>
-			<MapContainer children={pages} />
-			<footer className='flex-center'>
+			<PreviewContainer children={pages} />
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -114,16 +113,16 @@ interface MapUploadPreviewProps {
 
 export function MapUploadPreview(props: MapUploadPreviewProps) {
 	return (
-		<MapPreviewCard>
-			<MapPreviewImage src={`${API_BASE_URL}map-upload/${props.map.id}/image`} onClick={() => props.handleOpenModel(props.map)} />
-			<ColorText className='capitalize small-padding flex-center text-center' text={props.map.name} />
-			<section className='grid-row small-gap small-padding'>
+		<PreviewCard>
+			<PreviewImage src={`${API_BASE_URL}map-upload/${props.map.id}/image`} onClick={() => props.handleOpenModel(props.map)} />
+			<ColorText className='capitalize p-2 flex justify-center items-center text-center' text={props.map.name} />
+			<section className='grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
 				<DownloadButton
 					href={Utils.getDownloadUrl(props.map.data)} //
 					download={`${('map_' + props.map.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 			</section>
-		</MapPreviewCard>
+		</PreviewCard>
 	);
 }
 
@@ -152,17 +151,17 @@ export function MapUploadInfo(props: MapUploadInfoProps) {
 	}
 
 	return (
-		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<section className='flex-row medium-gap flex-wrap'>
-				<MapInfoImage src={`${API_BASE_URL}map-upload/${props.map.id}/image`} />
-				<section className='flex-column small-gap flex-wrap'>
+		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
+			<section className='flex flex-row gap-2 flex-wrap'>
+				<InfoImage src={`${API_BASE_URL}map-upload/${props.map.id}/image`} />
+				<section className='flex flex-row gap-2 flex-wrap'>
 					<h2 className='capitalize'>{props.map.name}</h2>
 					<Trans i18nKey='author' /> <LoadUserName userId={props.map.authorId} />
-					<MapDescription description={props.map.description} />
+					<Description description={props.map.description} />
 					<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 				</section>
 			</section>
-			<section className='flex-column small-gap w100p'>
+			<section className='flex flex-row gap-2 w-full'>
 				<Dropbox
 					placeholder={i18n.t('add-tag').toString()}
 					value={tag}
@@ -172,14 +171,14 @@ export function MapUploadInfo(props: MapUploadInfoProps) {
 					mapper={(t, index) => <TagPick key={index} tag={t} />}
 				/>
 			</section>
-			<section className='grid-row small-gap'>
+			<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
 				<DownloadButton
 					href={Utils.getDownloadUrl(props.map.data)} //
 					download={`${('map_' + props.map.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
-				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
-				<AdminOnly children={<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
-				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+				<Button title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
+				<AdminOnly children={<Button title={i18n.t('verify')} children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
+				<Button title={i18n.t('back')} onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
 				<ConfirmDialog
@@ -207,14 +206,14 @@ function TypeDialog(props: TypeDialogProps) {
 	const [content, setContent] = useState('');
 
 	return (
-		<section className='flex-column'>
-			<header className='flex-row space-between small-padding'>
+		<section className='flex flex-row'>
+			<header className='flex flex-row space-between p-2'>
 				<Trans i18nKey='reject-reason' />
-				<ClearIconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+				<ClearIconButton title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
 			</header>
 			<textarea className='type-dialog' title='reason' onChange={(event) => setContent(event.target.value)} />
-			<section className='flex-row justify-end w100p small-padding border-box'>
-				<Button onClick={() => props.onSubmit(content)}>
+			<section className='flex flex-row justify-end w-full p-2 box-border'>
+				<Button title={i18n.t('reject')} onClick={() => props.onSubmit(content)}>
 					<Trans i18nKey='reject' />
 				</Button>
 			</section>

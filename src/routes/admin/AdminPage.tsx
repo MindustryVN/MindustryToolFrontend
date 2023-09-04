@@ -1,11 +1,10 @@
 import './AdminPage.css';
-import 'src/styles.css';
 
 import React, { useState } from 'react';
 import VerifyPage from 'src/routes/admin/verify/VerifyPage';
 import { Trans } from 'react-i18next';
 import LogPage from 'src/routes/admin/log/LogPage';
-import ClearButton from 'src/components/button/ClearButton';
+import ClearButton from 'src/components/ClearButton';
 
 const tabs = ['verify', 'report', 'log'];
 
@@ -26,8 +25,8 @@ export default function AdminPage() {
 	}
 
 	return (
-		<main id='admin' className='flex-column h100p w100p small-gap small-padding border-box'>
-			<section className='grid-row tab-button-container'>
+		<main id='admin' className='flex flex-row h-full w-full gap-2 p-2 box-border'>
+			<section className='grid grid-auto-column grid-flow-col w-fit tab-button-container'>
 				{tabs.map((name, index) => (
 					<ClearButton
 						key={index}

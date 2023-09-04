@@ -1,20 +1,18 @@
-import 'src/styles.css';
-
 import { API } from 'src/API';
 import Map from 'src/data/Map';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/common/IfTrue';
+import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import MapContainer from 'src/components/map/MapContainer';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import { MapInfo, MapPreview } from 'src/routes/map/MapPage';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import PreviewContainer from 'src/components/PreviewContainer';
 
 interface UserMapTabProps {
 	user: User;
@@ -43,9 +41,9 @@ export default function UserMapTab(props: UserMapTabProps) {
 	}
 
 	return (
-		<main id='map-tab' className='flex-column small-gap w100p h100p scroll-y'>
-			<MapContainer children={pages} />
-			<footer className='flex-center'>
+		<main id='map-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
+			<PreviewContainer children={pages} />
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //

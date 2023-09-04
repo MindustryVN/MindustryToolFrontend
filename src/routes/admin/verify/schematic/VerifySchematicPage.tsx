@@ -1,4 +1,3 @@
-import 'src/styles.css';
 import './VerifySchematicPage.css';
 
 import React, { useEffect, useState } from 'react';
@@ -10,32 +9,32 @@ import { Trans } from 'react-i18next';
 import { Utils } from 'src/util/Utils';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import Schematic from 'src/data/Schematic';
-import Dropbox from 'src/components/dropbox/Dropbox';
+import Dropbox from 'src/components/Dropbox';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import IconButton from 'src/components/button/IconButton';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
+import IconButton from 'src/components/IconButton';
 import i18n from 'src/util/I18N';
 import TagPick from 'src/components/tag/TagPick';
 import useClipboard from 'src/hooks/UseClipboard';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
-import ColorText from 'src/components/common/ColorText';
-import DownloadButton from 'src/components/button/DownloadButton';
+import PreviewImage from 'src/components/PreviewImage';
+import ColorText from 'src/components/ColorText';
+import DownloadButton from 'src/components/DownloadButton';
 import useModel from 'src/hooks/UseModel';
-import SchematicContainer from 'src/components/schematic/SchematicContainer';
+import PreviewContainer from 'src/components/PreviewContainer';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import LoadUserName from 'src/components/LoadUserName';
-import SchematicDescription from 'src/components/schematic/SchematicDescription';
-import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
-import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
-import IfTrue from 'src/components/common/IfTrue';
-import Button from 'src/components/button/Button';
-import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
+import SchematicDescription from 'src/components/Description';
+import ItemRequirement from 'src/components/ItemRequirement';
+import InfoImage from 'src/components/InfoImage';
+import IfTrue from 'src/components/IfTrue';
+import Button from 'src/components/Button';
+import PreviewCard from 'src/components/PreviewCard';
 import useDialog from 'src/hooks/UseDialog';
-import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
-import ClearIconButton from 'src/components/button/ClearIconButton';
+import ConfirmDialog from 'src/components/ConfirmDialog';
+import ClearIconButton from 'src/components/ClearIconButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import AdminOnly from 'src/components/common/AdminOnly';
+import AdminOnly from 'src/components/AdminOnly';
 
 export default function VerifySchematicPage() {
 	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
@@ -80,12 +79,12 @@ export default function VerifySchematicPage() {
 	}
 
 	return (
-		<main id='verify-schematic' className='flex-column h100p w100p'>
-			<section className='flex-row center medium-padding'>
+		<main id='verify-schematic' className='flex flex-row h-full w-full'>
+			<section className='flex flex-row center medium-padding'>
 				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
 			</section>
-			<SchematicContainer children={pages} />
-			<footer className='flex-center'>
+			<PreviewContainer children={pages} />
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -120,17 +119,17 @@ export function SchematicUploadPreview(props: SchematicUploadPreviewProps) {
 	const { copy } = useClipboard();
 
 	return (
-		<SchematicPreviewCard>
-			<SchematicPreviewImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
-			<ColorText className='capitalize small-padding flex-center text-center' text={props.schematic.name} />
-			<section className='grid-row small-gap small-padding'>
+		<PreviewCard>
+			<PreviewImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
+			<ColorText className='capitalize p-2 flex justify-center items-center text-center' text={props.schematic.name} />
+			<section className='grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
 				<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 				<DownloadButton
 					href={Utils.getDownloadUrl(props.schematic.data)} //
 					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 			</section>
-		</SchematicPreviewCard>
+		</PreviewCard>
 	);
 }
 
@@ -161,18 +160,18 @@ export function SchematicUploadInfo(props: SchematicUploadInfoProps) {
 	}
 
 	return (
-		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<section className='flex-row medium-gap flex-wrap'>
-				<SchematicInfoImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} />
-				<section className='flex-column small-gap flex-wrap'>
+		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
+			<section className='flex flex-row gap-2 flex-wrap'>
+				<InfoImage src={`${API_BASE_URL}schematic-upload/${props.schematic.id}/image`} />
+				<section className='flex flex-row gap-2 flex-wrap'>
 					<h2 className='capitalize'>{props.schematic.name}</h2>
 					<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
 					<SchematicDescription description={props.schematic.description} />
-					<SchematicRequirement requirement={props.schematic.requirement} />
+					<ItemRequirement requirement={props.schematic.requirement} />
 					<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 				</section>
 			</section>
-			<section className='flex-column small-gap w100p'>
+			<section className='flex flex-row gap-2 w-full'>
 				<Dropbox
 					placeholder={i18n.t('add-tag').toString()}
 					value={tag}
@@ -182,15 +181,15 @@ export function SchematicUploadInfo(props: SchematicUploadInfoProps) {
 					mapper={(t, index) => <TagPick key={index} tag={t} />}
 				/>
 			</section>
-			<section className='grid-row small-gap'>
-				<IconButton icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
+			<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
+				<IconButton title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
 				<DownloadButton
 					href={Utils.getDownloadUrl(props.schematic.data)} //
 					download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
-				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
-				<AdminOnly children={<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
-				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+				<Button title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
+				<AdminOnly children={<Button title={i18n.t('verify')} children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
+				<Button title={i18n.t('back')} onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
 				<ConfirmDialog
@@ -218,14 +217,14 @@ function TypeDialog(props: TypeDialogProps) {
 	const [content, setContent] = useState('');
 
 	return (
-		<section className='flex-column'>
-			<header className='flex-row space-between small-padding'>
+		<section className='flex flex-row'>
+			<header className='flex flex-row space-between p-2'>
 				<Trans i18nKey='reject-reason' />
-				<ClearIconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+				<ClearIconButton title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
 			</header>
 			<textarea className='type-dialog' title='reason' onChange={(event) => setContent(event.target.value)} />
-			<section className='flex-row justify-end w100p small-padding border-box'>
-				<Button onClick={() => props.onSubmit(content)}>
+			<section className='flex flex-row justify-end w-full p-2 box-border'>
+				<Button title={i18n.t('reject')} onClick={() => props.onSubmit(content)}>
 					<Trans i18nKey='reject' />
 				</Button>
 			</section>

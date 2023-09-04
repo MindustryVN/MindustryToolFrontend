@@ -1,15 +1,15 @@
 import './MePage.css';
-import 'src/styles.css';
 
 import React, { useState } from 'react';
 
 import { Navigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { useMe } from 'src/context/MeProvider';
-import Button from 'src/components/button/Button';
+import Button from 'src/components/Button';
 import UserSchematicUploadTab from 'src/routes/me/MeSchematicUploadTab';
 import UserMapUploadTab from 'src/routes/me/MeMapUploadTab';
 import UserPostUploadTab from 'src/routes/me/MePostUploadTab';
+import i18n from 'src/util/I18N';
 
 const tabs = ['Schematic', 'Map', 'Post'];
 
@@ -36,21 +36,22 @@ export default function MePage() {
 	}
 
 	return (
-		<main className='flex-column h100p w100p scroll-y medium-padding border-box'>
-			<section className='flex-column small-gap align-start'>
-				<section className='flex-row small-gap'>
+		<main className='flex flex-row h-full w-full overflow-y-auto medium-padding box-border'>
+			<section className='flex flex-row gap-2 align-start'>
+				<section className='flex flex-row gap-2'>
 					<img className='avatar-image' src={me.imageUrl} alt='avatar'></img>
 					<span className='username capitalize'>{me.name}</span>
 				</section>
-				<Button className='button' onClick={() => handleLogout()}>
+				<Button className='button' title={i18n.t('logout')} onClick={() => handleLogout()}>
 					<Trans i18nKey='logout' />
 				</Button>
 			</section>
-			<section className='flex-center'>
-				<section className='grid-row small-gap small-padding'>
+			<section className='flex justify-center items-center'>
+				<section className='grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
 					{tabs.map((name, index) => (
 						<Button
 							className={currentTab === name ? 'button-active' : 'button'}
+							title={i18n.t(name)}
 							key={index} //
 							onClick={() => setCurrentTab(name)}>
 							{name}

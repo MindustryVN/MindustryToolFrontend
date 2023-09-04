@@ -1,10 +1,8 @@
 import './UploadSchematicPage.css';
-import 'src/styles.css';
-import 'src/components/schematic/SchematicInfoImage.css';
 
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import Dropbox from 'src/components/dropbox/Dropbox';
+import Dropbox from 'src/components/Dropbox';
 import { TagChoice, Tags } from 'src/components/tag/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
@@ -13,12 +11,12 @@ import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import { Link } from 'react-router-dom';
 import TagPick from 'src/components/tag/TagPick';
 import { Trans } from 'react-i18next';
-import Button from 'src/components/button/Button';
+import Button from 'src/components/Button';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
 import LoadUserName from 'src/components/LoadUserName';
-import SchematicDescription from 'src/components/schematic/SchematicDescription';
-import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
-import ColorText from 'src/components/common/ColorText';
+import SchematicDescription from 'src/components/Description';
+import ItemRequirement from 'src/components/ItemRequirement';
+import ColorText from 'src/components/ColorText';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useMe } from 'src/context/MeProvider';
 import SchematicUploadPreview from 'src/data/SchematicUploadPreview';
@@ -28,7 +26,7 @@ const tabs = ['file', 'code'];
 let notLoginMessage = (
 	<span>
 		<Trans i18nKey='recommend-login' />
-		<Link className='small-padding' to='/login'>
+		<Link className='p-2' to='/login'>
 			<Trans i18nKey='login' />
 		</Link>
 	</span>
@@ -144,7 +142,7 @@ export default function UploadSchematicPage() {
 
 			case tabs[1]:
 				return (
-					<Button onClick={() => handleCodeChange()}>
+					<Button title={i18n.t('copy-from-clipboard')} onClick={() => handleCodeChange()}>
 						<Trans i18nKey='copy-from-clipboard' />
 					</Button>
 				);
@@ -164,14 +162,15 @@ export default function UploadSchematicPage() {
 	if (isLoading) return <LoadingSpinner />;
 
 	return (
-		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<header className='flex-column medium-gap'>
-				<section className='flex-center'>
-					<section className='code-file grid-row small-gap small-padding'>
+		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
+			<header className='flex flex-row gap-2'>
+				<section className='flex justify-center items-center'>
+					<section className='code-file grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
 						{tabs.map((name, index) => (
 							<Button
 								className={'code-file-button ' + (currentTab === name ? 'active' : '')}
 								key={index}
+								title={name}
 								onClick={() => {
 									setFile(undefined);
 									setCode('');
@@ -182,21 +181,21 @@ export default function UploadSchematicPage() {
 						))}
 					</section>
 				</section>
-				<section className='flex-center'>{renderTab(currentTab)}</section>
+				<section className='flex justify-center items-center'>{renderTab(currentTab)}</section>
 			</header>
 			{preview && (
-				<section className='flex-row flex-wrap medium-gap'>
+				<section className='flex flex-row flex-wrap gap-2'>
 					<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
-					<section className='flex-column space-between'>
-						<section className='flex-column small-gap flex-wrap'>
+					<section className='flex flex-row space-between'>
+						<section className='flex flex-row gap-2 flex-wrap'>
 							<ColorText className='capitalize h2' text={preview.name} />
 							<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
 							<SchematicDescription description={preview.description} />
-							<SchematicRequirement requirement={preview.requirement} />
+							<ItemRequirement requirement={preview.requirement} />
 							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 						</section>
 					</section>
-					<section className='flex-column flex-nowrap small-gap w100p'>
+					<section className='flex flex-row flex-nowrap gap-2 w-full'>
 						<Dropbox
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
@@ -208,9 +207,9 @@ export default function UploadSchematicPage() {
 					</section>
 				</section>
 			)}
-			<footer className='flex-column center small-gap medium-padding'>
+			<footer className='flex flex-row center gap-2 medium-padding'>
 				<span children={checkUploadRequirement()} />
-				<Button onClick={() => handleSubmit()}>
+				<Button title={i18n.t('upload')} onClick={() => handleSubmit()}>
 					<Trans i18nKey='upload' />
 				</Button>
 			</footer>

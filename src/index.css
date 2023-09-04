@@ -15,6 +15,10 @@ body,
 	overflow: hidden;
 }
 
+:root {
+	--preview-image-min-size: 196px;
+}
+
 @layer base {
 	html {
 		font-family:
@@ -45,7 +49,7 @@ body,
 		-ms-user-select: none;
 		user-select: none;
 
-		@apply text-black dark:text-slate-400;
+		@apply text-black dark:text-slate-300;
 	}
 
 	ul,
@@ -86,7 +90,7 @@ body,
 @layer components {
 	.background-gradient {
 		background: rgb(3, 19, 66);
-		background: linear-gradient(43deg, rgba(17, 24, 39, 1) 47%, rgba(20, 20, 40, 1) 76%, rgba(17, 24, 39, 1) 100%);
+		background: linear-gradient(43deg, rgba(17, 17, 20, 1) 17%, rgba(40, 40, 70, 1) 76%, rgba(17, 17, 20, 1) 100%);
 	}
 	.pixelated {
 		image-rendering: pixelated;
@@ -103,6 +107,13 @@ body,
 	}
 	.error {
 		@apply bg-red-600;
+	}
+	.grid-auto-column {
+		grid-auto-columns: minmax(0, 1fr);
+	}
+
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
 	}
 
 	@keyframes timer {

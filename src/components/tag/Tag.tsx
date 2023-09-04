@@ -1,5 +1,4 @@
 import { API } from 'src/API';
-import 'src/styles.css';
 import i18n from 'src/util/I18N';
 
 import './Tag.css';
@@ -13,8 +12,8 @@ interface TagProps {
 
 export default function Tag(props: TagProps) {
 	return (
-		<span className='tag flex-row flex-nowrap small-padding center' style={{ backgroundColor: props.tag.color }}>
-			<span className='flex-column text-center'>
+		<span className='tag flex flex-row flex-nowrap p-2 justify-center items-center' style={{ backgroundColor: props.tag.color }}>
+			<span className='flex flex-row text-center'>
 				{props.tag.displayName} : {props.tag.displayValue}
 			</span>
 			{props.removeButton}

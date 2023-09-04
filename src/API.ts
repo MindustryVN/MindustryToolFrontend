@@ -85,11 +85,11 @@ export class API {
 			.then(() => API.postNotification(map.authorId, 'Your map submission has been reject', reason));
 	}
 
-	static postComment(url: string, targetId: string, message: string, contentType: string) {
+	static postComment(url: string, targetId: string, content: string, contentType: string) {
 		let form = new FormData();
 
-		form.append('message', message);
 		form.append('targetId', targetId);
+		form.append('content', content);
 		form.append('contentType', contentType);
 
 		return API.REQUEST.post(url, form);

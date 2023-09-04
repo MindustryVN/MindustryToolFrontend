@@ -1,5 +1,3 @@
-import 'src/styles.css';
-
 import { API } from 'src/API';
 import { Trans } from 'react-i18next';
 import { SchematicInfo } from 'src/routes/schematic/SchematicPage';
@@ -29,11 +27,11 @@ export default function SchematicPreviewPage() {
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
 	}
 
-	if (isLoading) return <LoadingSpinner />;
+	if (isLoading) return <LoadingSpinner className='flex justify-center items-center h-full' />;
 
 	if (isError || !schematic)
 		return (
-			<div className='flex-center w100p h100p'>
+			<div className='flex justify-center items-center w-full h-full'>
 				<Trans i18nKey='schematic-not-found' />
 			</div>
 		);

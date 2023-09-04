@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
-import Button from 'src/components/button/Button';
+import i18n from 'src/util/I18N';
+import ClearButton from 'src/components/ClearButton';
 
 export default function HomePage() {
 	const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function HomePage() {
 						</a>
 					</li>
 					<li>
-						<Link className='text-blue-600 hover:text-emerald-500' to='/forum/post/64ca803ea51a933422a49aac'>
+						<Link className='text-blue-600 hover:text-emerald-500' to='/post/post/64ca803ea51a933422a49aac'>
 							Cách tải game miễn phí
 						</Link>
 					</li>
@@ -63,18 +64,18 @@ export default function HomePage() {
 				</ul>
 			</section>
 			<footer>
-				<section className='flex flex-row justify-evenly w-full bg-gray-950 rounded-xl p-2 text-white-primary'>
-					<Button onClick={() => navigate('/')}>
-						<Trans i18nKey='Services' />
-					</Button>
-					<Button onClick={() => navigate('/info')}>
-						<Trans i18nKey='About' />
-					</Button>
+				<section className='flex flex-row items-center justify-evenly w-full bg-gray-950 rounded-xl p-2 text-white-primary'>
+					<ClearButton title={i18n.t('services')} onClick={() => navigate('/')}>
+						<Trans i18nKey='services' />
+					</ClearButton>
+					<ClearButton title={i18n.t('about')} onClick={() => navigate('/info')}>
+						<Trans i18nKey='about' />
+					</ClearButton>
 					<a href='https://discord.gg/DCX5yrRUyp'>
-						<Trans i18nKey='Contact' />
+						<Trans i18nKey='contact' />
 					</a>
 					<a href='https://discord.gg/DCX5yrRUyp'>
-						<Trans i18nKey='Community' />
+						<Trans i18nKey='community' />
 					</a>
 				</section>
 			</footer>

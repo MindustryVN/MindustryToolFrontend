@@ -1,5 +1,3 @@
-import 'src/styles.css';
-
 import React from 'react';
 import { DISCORD_AUTH_URL } from 'src/config/Config';
 import { Trans } from 'react-i18next';

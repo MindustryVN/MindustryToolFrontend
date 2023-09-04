@@ -1,14 +1,12 @@
-import './styles.css';
-
 import Loading from 'src/components/Loading';
 import NavigationPanel from 'src/components/NavigationPanel';
-import AdminRoute from 'src/components/router/AdminRoute';
-import PrivateRoute from 'src/components/router/PrivateRoute';
+import AdminRoute from 'src/components/AdminRoute';
+import PrivateRoute from 'src/components/PrivateRoute';
 import OAuth2RedirectHandler from 'src/routes/login/OAuth2RedirectHandler';
 
 import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import ErrorBoundary from 'src/components/common/ErrorBoundery';
+import ErrorBoundary from 'src/components/ErrorBoundery';
 
 const Map = React.lazy(() => import('src/routes/map/MapPage'));
 const MapView = React.lazy(() => import('src/routes/map/MapViewPage'));
@@ -19,8 +17,8 @@ const Schematic = React.lazy(() => import('src/routes/schematic/SchematicPage'))
 const SchematicView = React.lazy(() => import('src/routes/schematic/SchematicViewPage'));
 const Login = React.lazy(() => import('src/routes/login/LoginPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
-const Forum = React.lazy(() => import('src/routes/forum/ForumPage'));
-const ForumView = React.lazy(() => import('src/routes/forum/ForumViewPage'));
+const Forum = React.lazy(() => import('src/routes/post/ForumPage'));
+const ForumView = React.lazy(() => import('src/routes/post/ForumViewPage'));
 const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
@@ -31,10 +29,10 @@ const UploadPost = React.lazy(() => import('src/routes/upload/post/UploadPostPag
 
 export default function App() {
 	return (
-		<main className='w-screen h-screen background-gradient'>
+		<main className='flex flex-col w-screen h-screen background-gradient overflow-hidden'>
 			<ErrorBoundary>
 				<NavigationPanel />
-				<section className='w-screen h-[calc(100%-3rem)]'>
+				<section className='flex flex-col w-screen h-[calc(100%-3rem)] overflow-hidden'>
 					<Suspense fallback={<Loading />}>
 						<Routes>
 							<Route path='/' element={<Navigate to='/home' />} />
@@ -49,8 +47,8 @@ export default function App() {
 							<Route path='/map/:mapId' element={<MapView />} />
 							<Route path='/schematic' element={<Schematic />} />
 							<Route path='/schematic/:schematicId' element={<SchematicView />} />
-							<Route path='/forum' element={<Forum />} />
-							<Route path='/forum/post/:postId' element={<ForumView />} />
+							<Route path='/post' element={<Forum />} />
+							<Route path='/post/post/:postId' element={<ForumView />} />
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />

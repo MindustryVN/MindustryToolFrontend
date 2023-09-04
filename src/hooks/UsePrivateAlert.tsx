@@ -10,7 +10,7 @@ export default function usePrivateAlert() {
 	const loginMessage = (
 		<>
 			<Trans i18nKey='login-before-start' />
-			<Link className='small-padding' to='/login'>
+			<Link className='p-2' to='/login'>
 				<Trans i18nKey='login' />
 			</Link>
 		</>

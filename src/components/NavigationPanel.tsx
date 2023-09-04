@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Users } from 'src/data/User';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import { useMe } from 'src/context/MeProvider';
 import useNotification from 'src/hooks/UseNotification';
-import UserName from 'src/components/UserName';
-import Button from 'src/components/button/Button';
+import Button from 'src/components/Button';
 import { WEB_VERSION } from 'src/config/Config';
-import OutsideAlerter from 'src/components/common/OutsideAlerter';
+import OutsideAlerter from 'src/components/OutsideAlerter';
 import { ReactNode } from 'react-markdown/lib/ast-to-react';
-import IfTrue from 'src/components/common/IfTrue';
-import ClearButton from 'src/components/button/ClearButton';
+import IfTrue from 'src/components/IfTrue';
+import ClearButton from 'src/components/ClearButton';
+import i18n from 'src/util/I18N';
 
 interface LinkButtonProps {
 	name: string;
@@ -30,7 +30,7 @@ export default function NavigationPanel() {
 
 	const paths: LinkButtonProps[] = [
 		{
-			name: 'Home',
+			name: i18n.t('home'),
 			to: '/home',
 			admin: false,
 			icon: (
@@ -44,7 +44,7 @@ export default function NavigationPanel() {
 			),
 		},
 		{
-			name: 'User',
+			name: i18n.t('user'),
 			to: '/user',
 			admin: false,
 			icon: (
@@ -58,34 +58,7 @@ export default function NavigationPanel() {
 			),
 		},
 		{
-			name: 'Notification',
-			to: '/notification',
-			admin: false,
-			auth: true,
-			icon: (() => {
-				return (
-					<div className='relative'>
-						<IfTrue
-							condition={unreadNotifications}
-							whenTrue={
-								<span className='absolute items-center justify-center text-white text-xs bg-red-600 right-0 top-0 px-1 rounded-sm translate-x-2 translate-y-[-50%]'>
-									{(unreadNotifications <= 0 ? 0 : unreadNotifications) <= 100 ? unreadNotifications : '100+'}
-								</span>
-							}
-						/>
-						<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								d='M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0'
-							/>
-						</svg>
-					</div>
-				);
-			})(),
-		},
-		{
-			name: 'Schematic',
+			name: i18n.t('schematic'),
 			to: '/schematic',
 			admin: false,
 			icon: (
@@ -99,7 +72,7 @@ export default function NavigationPanel() {
 			),
 		},
 		{
-			name: 'Map',
+			name: i18n.t('map'),
 			to: '/map',
 			admin: false,
 			icon: (
@@ -113,7 +86,21 @@ export default function NavigationPanel() {
 			),
 		},
 		{
-			name: 'Server',
+			name: i18n.t('post'),
+			to: '/post',
+			admin: false,
+			icon: (
+				<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+					<path
+						strokeLinecap='round'
+						strokeLinejoin='round'
+						d='M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25'
+					/>
+				</svg>
+			),
+		},
+		{
+			name: i18n.t('server'),
 			to: '/server',
 			admin: false,
 			icon: (
@@ -127,7 +114,7 @@ export default function NavigationPanel() {
 			),
 		},
 		{
-			name: 'Logic',
+			name: i18n.t('logic'),
 			to: '/logic',
 			admin: false,
 			icon: (
@@ -141,7 +128,7 @@ export default function NavigationPanel() {
 			),
 		},
 		{
-			name: 'Info',
+			name: i18n.t('information'),
 			to: '/info',
 			admin: false,
 			icon: (
@@ -155,7 +142,7 @@ export default function NavigationPanel() {
 			),
 		},
 		{
-			name: 'Admin',
+			name: i18n.t('admin'),
 			to: '/admin',
 			admin: true,
 			icon: (
@@ -187,14 +174,14 @@ export default function NavigationPanel() {
 
 		if (window.location.pathname.endsWith(to))
 			return (
-				<ClearButton className='flex flex-row gap-2 bg-blue-500 dark:bg-gray-500 rounded-lg p-2' onClick={() => navigateTo(to, auth)}>
+				<ClearButton className='flex flex-row gap-2 bg-blue-500 dark:bg-gray-500 dark:text-white rounded-lg p-2' title={name} onClick={() => navigateTo(to, auth)}>
 					{icon}
 					{name}
 				</ClearButton>
 			);
 
 		return (
-			<ClearButton className='flex flex-row gap-2 dark:hover:bg-gray-500 rounded-lg p-2' onClick={() => navigateTo(to, auth)}>
+			<ClearButton className='flex flex-row gap-2 dark:hover:bg-gray-500 dark:hover:text-white rounded-lg p-2' title={name} onClick={() => navigateTo(to, auth)}>
 				{icon}
 				{name}
 			</ClearButton>
@@ -204,17 +191,17 @@ export default function NavigationPanel() {
 	function UserPanel() {
 		if (me)
 			return (
-				<section className='flex flex-row justify-between items-center gap-2'>
-					<UserName displayUser={me} />
-				</section>
+				<div className='flex flex-col justify-center items-center' onClick={() => navigateTo(`/user/${me.id}`, false)}>
+					<img className='w-16 h-16 rounded-full' src={me.imageUrl} alt='user-avatar' />
+					<section className='text-xl flex flex-col'>
+						<p className='capitalize'>{me.name}</p>
+					</section>
+				</div>
 			);
 
 		return (
-			<section className='flex flex-row justify-between items-center gap-2 p-2'>
-				<Button
-					onClick={() => {
-						navigateTo('/login', false);
-					}}>
+			<section className='flex flex-col'>
+				<Button className='flex flex-col dark:hover:bg-gray-500 dark:hover:text-white p-2' title={i18n.t('login')} onClick={() => navigateTo('/login', false)}>
 					<Trans i18nKey='login' />
 				</Button>
 			</section>
@@ -225,14 +212,35 @@ export default function NavigationPanel() {
 		if (!showNavigatePanel) return <></>;
 
 		return (
-			<div className='backdrop-blur-sm absolute w-screen h-screen top-0 left-0' onMouseLeave={() => setShowNavigatePanel(false)}>
+			<div className='backdrop-blur-sm fixed w-screen h-screen top-0 left-0 z-nav-bar'>
 				<OutsideAlerter
 					className='animate-popup flex flex-col p-2 absolute h-screen min-w-[min(300px,30%)] top-0 left-0 bg-gray-900 overflow-hidden'
 					onClickOutside={() => setShowNavigatePanel(false)}>
 					<div className='flex flex-col justify-between h-full'>
-						<div>
-							<p className='text-2xl my-1'>MINDUSTRYTOOL</p>
-							<div className='bg-gray-800 h-8 px-2 py-1 text-sm min-w-sm mb-8'>{WEB_VERSION}</div>
+						<div className='flex flex-col gap-2'>
+							<div className='flex flex-row gap-2 items-center justify-center'>
+								<Link className='text-2xl' to='/'>
+									MINDUSTRYTOOL
+								</Link>
+								<div className='relative'>
+									<IfTrue
+										condition={unreadNotifications}
+										whenTrue={
+											<span className='absolute items-center justify-center text-white text-xs bg-red-600 right-0 top-0 px-1 rounded-sm translate-x-2 translate-y-[-50%]'>
+												{(unreadNotifications <= 0 ? 0 : unreadNotifications) <= 100 ? unreadNotifications : '100+'}
+											</span>
+										}
+									/>
+									<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-5 h-5'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0'
+										/>
+									</svg>
+								</div>
+							</div>
+							<div className='bg-gray-800 h-8 px-2 py-1 text-sm min-w-sm'>{WEB_VERSION}</div>
 							<UserPanel />
 							<div className='border-b-2 my-2 border-gray-600' />
 							<section
@@ -242,19 +250,27 @@ export default function NavigationPanel() {
 								))}
 							/>
 						</div>
-						<div>
-							<div className='border-b-2 my-2 border-gray-600' />
-							<ClearButton className='flex flex-row items-center gap-2 mb-2 p-2' onClick={handleLogout}>
-								<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										d='M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75'
-									/>
-								</svg>
-								Logout
-							</ClearButton>
-						</div>
+						<IfTrue
+							condition={me !== undefined}
+							whenTrue={
+								<div className='flex flex-col'>
+									<div className='border-b-2 my-2 border-gray-600' />
+									<ClearButton
+										className='flex flex-row items-center gap-2 mb-2 p-2 dark:hover:bg-gray-500 dark:hover:text-white rounded-lg'
+										title={i18n.t('notification')}
+										onClick={handleLogout}>
+										<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+											<path
+												strokeLinecap='round'
+												strokeLinejoin='round'
+												d='M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75'
+											/>
+										</svg>
+										<Trans i18nKey='logout' />
+									</ClearButton>
+								</div>
+							}
+						/>
 					</div>
 				</OutsideAlerter>
 			</div>
@@ -263,7 +279,7 @@ export default function NavigationPanel() {
 
 	return (
 		<nav className='h-12 w-screen justify-between items-center bg-gray-950 rounded-b-lg flex flex-row p-2'>
-			<section className='flex flex-row justify-between items-center w-full gap-2'>
+			<section className='flex flex-row justify-between items-center w-full gap-4'>
 				<div className='flex flex-row items-center'>
 					<button
 						type='button'

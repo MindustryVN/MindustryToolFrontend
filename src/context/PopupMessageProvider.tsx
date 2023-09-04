@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import ClearIconButton from 'src/components/button/ClearIconButton';
+import ClearIconButton from 'src/components/ClearIconButton';
 
 import React, { ReactNode, useContext, useEffect, useRef } from 'react';
 import { API } from 'src/API';
@@ -98,7 +98,7 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 
 	return (
 		<PopupMessageContext.Provider value={{ addPopup: addMessage }}>
-			<section className='flex flex-col gap-1 absolute top-12 right-0 z-popup w-screen h-screen p-4 items-end pointer-events-none'>
+			<section className='flex flex-col gap-1 absolute top-12 right-0 z-popup w-screen h-[calc(100vh-3rem)] items-end pointer-events-none overflow-hidden'>
 				{contents.map((val) => (
 					<PopupMessage //
 						key={val.uuid}
@@ -127,23 +127,25 @@ function PopupMessage(props: PopupMessageNodeProps) {
 	useEffect(() => {
 		let id: NodeJS.Timeout = setTimeout(() => {
 			ref.current.onTimeOut();
+
+			return () => clearTimeout(id);
 		}, ref.current.duration * 1000);
 
 		return () => clearTimeout(id);
 	}, []);
 
 	return (
-		<section className={'min-w-[50%] max-w-full md:min-w-[25%] md:max-w-[50%] animate-slide-in text-white ' + props.type}>
-			<section className='relative flex-row justify-between items-start w-full p-4'>
-				{props.content}
+		<section className={'min-w-[50%] max-w-full md:min-w-[25%] md:max-w-[50%] rounded-l-lg overflow-hidden animate-slide-in text-white pointer-events-auto ' + props.type}>
+			<section className='flex flex-row justify-between items-start w-full gap-2'>
+				<section className='p-2'>{props.content}</section>
 				<ClearIconButton //
-					className='absolute top-0 right-0 m-2'
+					className='self-start align-top w-4 h-4 p-2'
 					icon='/assets/icons/quit.png'
 					title='remove'
 					onClick={() => props.onTimeOut()}
 				/>
 			</section>
-			<div className='h-1 w-full bg-blue-500 origin-top-right' style={{ animation: `timer ${props.duration}s linear forwards` }} />
+			<div className='h-1 w-full bg-blue-500 origin-top-left' style={{ animation: `timer ${props.duration}s linear forwards` }} />
 		</section>
 	);
 }

@@ -1,5 +1,3 @@
-import 'src/styles.css';
-
 import React, { ReactNode, useEffect } from 'react';
 import { Tags } from 'src/components/tag/Tag';
 

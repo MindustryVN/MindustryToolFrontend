@@ -1,6 +1,3 @@
-import 'src/styles.css';
-import './SchematicPage.css';
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Schematic from 'src/data/Schematic';
 
@@ -13,36 +10,36 @@ import { API } from 'src/API';
 import { Buffer } from 'buffer';
 import { useMe } from 'src/context/MeProvider';
 
-import SchematicPreviewImage from 'src/components/schematic/SchematicPreviewImage';
-import SchematicPreviewCard from 'src/components/schematic/SchematicPreviewCard';
-import SchematicDescription from 'src/components/schematic/SchematicDescription';
-import SchematicRequirement from 'src/components/schematic/SchematicRequirement';
-import SchematicInfoImage from 'src/components/schematic/SchematicInfoImage';
-import SchematicContainer from 'src/components/schematic/SchematicContainer';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import PreviewImage from 'src/components/PreviewImage';
+import PreviewCard from 'src/components/PreviewCard';
+import SchematicDescription from 'src/components/Description';
+import ItemRequirement from 'src/components/ItemRequirement';
+import InfoImage from 'src/components/InfoImage';
+import PreviewContainer from 'src/components/PreviewContainer';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import TagEditContainer from 'src/components/tag/TagEditContainer';
-import ClearIconButton from 'src/components/button/ClearIconButton';
+import ClearIconButton from 'src/components/ClearIconButton';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import DownloadButton from 'src/components/button/DownloadButton';
-import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
+import DownloadButton from 'src/components/DownloadButton';
+import ConfirmDialog from 'src/components/ConfirmDialog';
 import LoadUserName from 'src/components/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
 import TagContainer from 'src/components/tag/TagContainer';
-import IconButton from 'src/components/button/IconButton';
-import LikeCount from 'src/components/like/LikeCount';
-import ColorText from 'src/components/common/ColorText';
+import IconButton from 'src/components/IconButton';
+import LikeCount from 'src/components/LikeCount';
+import ColorText from 'src/components/ColorText';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import useModel from 'src/hooks/UseModel';
-import Dropbox from 'src/components/dropbox/Dropbox';
+import Dropbox from 'src/components/Dropbox';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useLike from 'src/hooks/UseLike';
 import TagPick from 'src/components/tag/TagPick';
-import Button from 'src/components/button/Button';
-import IfTrue from 'src/components/common/IfTrue';
-import Icon from 'src/components/common/Icon';
+import Button from 'src/components/Button';
+import IfTrue from 'src/components/IfTrue';
+import Icon from 'src/components/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
-import CommentContainer from 'src/components/comment/CommentContainer';
+import CommentSection from 'src/components/CommentSection';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { Users } from 'src/data/User';
 
@@ -130,9 +127,9 @@ export default function SchematicPage() {
 	}
 
 	return (
-		<main id='schematic' className='h100p w100p scroll-y flex-column small-gap'>
-			<header className='flex-column medium-gap w100p'>
-				<section className='search-container'>
+		<main id='schematic' className='h-full w-full overflow-y-auto flex flex-col gap-2 p-2'>
+			<header className='flex flex-col gap-2 w-full'>
+				<section className='flex justify-center items-center w-2/3 md:w-2/5 m-auto mt-8'>
 					<Dropbox
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
@@ -143,14 +140,13 @@ export default function SchematicPage() {
 						mapper={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
-
-				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-
-				<section className='sort-container grid-row small-gap center'>
+				<TagEditContainer tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
+				<section className='grid grid-auto-column grid-flow-col w-fit m-auto gap-2'>
 					{Tags.SORT_TAG.map((c: TagChoice) => (
 						<Button
 							className='capitalize' //
 							key={c.name + c.value}
+							title={c.name}
 							active={c === sortQuery}
 							onClick={() => handleSetSortQuery(c)}>
 							{c.displayName}
@@ -158,27 +154,22 @@ export default function SchematicPage() {
 					))}
 				</section>
 			</header>
-
-			<section className='flex-row center medium-padding'>
-				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
+			<section className='flex flex-row justify-center items-center p-2'>
+				<Trans i18nKey='total-schematic' /> : {totalSchematic > 0 ? totalSchematic : 0}
 			</section>
-
-			<section className='flex-row small-padding justify-end'>
-				<Button onClick={() => navigate('/upload/schematic')}>
+			<section className='flex flex-row p-2 justify-end'>
+				<Button title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/schematic')}>
 					<Trans i18nKey='upload-your-schematic' />
 				</Button>
 			</section>
-
-			<SchematicContainer children={pages} />
-
-			<footer className='flex-center'>
+			<PreviewContainer children={pages} />
+			<footer className='flex w-full justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 				/>
 				<ScrollToTopButton containerId='schematic' />
 			</footer>
-
 			<IfTrue
 				condition={currentSchematic}
 				whenTrue={
@@ -205,16 +196,16 @@ export function SchematicPreview(props: SchematicPreviewProps) {
 	const { copy } = useClipboard();
 
 	return (
-		<SchematicPreviewCard className='relative' key={props.schematic.id}>
+		<PreviewCard className='relative w-full h-full' key={props.schematic.id}>
 			<ClearIconButton
-				className='absolute top left small-padding'
-				title={i18n.t('copy-link').toString()}
+				className='absolute top-0 left-0 p-2'
+				title={i18n.t('copy-link')}
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}schematic/${props.schematic.id}`)}></ClearIconButton>
-			<SchematicPreviewImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
-			<ColorText className='capitalize small-padding flex-center text-center' text={props.schematic.name} />
+			<PreviewImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
+			<ColorText className='capitalize p-4 flex justify-center items-center text-center' text={props.schematic.name} />
 			<SchematicPreviewButton schematic={props.schematic} />
-		</SchematicPreviewCard>
+		</PreviewCard>
 	);
 }
 interface SchematicPreviewButtonProps {
@@ -228,7 +219,7 @@ function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
 	props.schematic.like = likeService.likes;
 
 	return (
-		<section className='grid-row small-gap small-padding'>
+		<section className='grid grid-flow-col grid-auto-column gap-2 p-2'>
 			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
 			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
@@ -248,22 +239,26 @@ export function SchematicInfo(props: SchematicInfoProps) {
 	const { copy } = useClipboard();
 
 	return (
-		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<section className='relative flex-row medium-gap flex-wrap'>
-				<SchematicInfoImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} />
+		<main className='flex flex-col space-between w-full h-full gap-4 p-8 box-border overflow-y-auto'>
+			<section className='relative flex flex-row flex-wrap gap-2'>
+				<InfoImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} />
 				<ClearIconButton
-					className='absolute top left small-padding'
+					className='absolute top-0 left-0 p-2'
 					title={i18n.t('copy-link').toString()}
 					icon='/assets/icons/copy.png'
 					onClick={() => copy(`${FRONTEND_URL}schematic/${props.schematic.id}`)}
 				/>
-				<section className='flex-column small-gap flex-wrap'>
-					<ColorText className='capitalize h2' text={props.schematic.name} />
-					<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
+				<section className='flex flex-col gap-2'>
+					<ColorText className='capitalize text-2xl' text={props.schematic.name} />
+					<section className='flex flex-row whitespace-nowrap gap-2'>
+						<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
+					</section>
 					<SchematicDescription description={props.schematic.description} />
-					<SchematicRequirement requirement={props.schematic.requirement} />
+					<ItemRequirement requirement={props.schematic.requirement} />
 					<TagContainer tags={Tags.parseArray(props.schematic.tags, Tags.SCHEMATIC_SEARCH_TAG)} />
-					<Trans i18nKey='verify-by' /> <LoadUserName userId={props.schematic.verifyAdmin} />
+					<section className='flex flex-row whitespace-nowrap gap-2'>
+						<Trans i18nKey='verify-by' /> <LoadUserName userId={props.schematic.verifyAdmin} />
+					</section>
 				</section>
 			</section>
 			<SchematicInfoButton
@@ -271,7 +266,7 @@ export function SchematicInfo(props: SchematicInfoProps) {
 				handleCloseModel={props.handleCloseModel} //
 				handleDeleteSchematic={props.handleDeleteSchematic}
 			/>
-			<CommentContainer contentType='schematic' targetId={props.schematic.id} />
+			<CommentSection contentType='schematic' targetId={props.schematic.id} />
 		</main>
 	);
 }
@@ -292,20 +287,22 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 	props.schematic.like = likeService.likes;
 
 	return (
-		<section className='grid-row small-gap'>
-			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-			<LikeCount count={likeService.likes} />
-			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<IconButton icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
-			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
-			<IfTrue
-				condition={Users.isAuthorOrAdmin(props.schematic.id, me)} //
-				whenTrue={<IconButton icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
-			/>
-			<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+		<section className='flex flex-row justify-between'>
+			<section className='flex flex-row gap-2'>
+				<IconButton title='up-vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+				<LikeCount count={likeService.likes} />
+				<IconButton title='down-vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+				<IconButton title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
+				<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
+				<IfTrue
+					condition={Users.isAuthorOrAdmin(props.schematic.id, me)} //
+					whenTrue={<IconButton title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
+				/>
+			</section>
+			<Button title={i18n.t('back')} onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
 			{dialog(
 				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => props.handleDeleteSchematic(props.schematic)}>
-					<Icon className='h1rem w1rem small-padding' icon='/assets/icons/info.png' />
+					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />
 					<Trans i18nKey='delete-schematic-dialog' />
 				</ConfirmDialog>,
 			)}

@@ -28,7 +28,7 @@ export default function NotificationProvider(props: NotificationProviderProps) {
 				.then((result) => setUnreadNotifications(result.data))
 				.catch(() => console.log('Fail to get unread notification count'));
 
-			let id: NodeJS.Timer = setInterval(() => {
+			let id : any = setInterval(() => {
 				API.getUnreadNotification() //
 					.then((result) => setUnreadNotifications(result.data))
 					.catch(() => console.log('Fail to get unread notification count'));
