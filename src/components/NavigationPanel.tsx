@@ -5,14 +5,13 @@ import { Trans } from 'react-i18next';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import { useMe } from 'src/context/MeProvider';
 import useNotification from 'src/hooks/UseNotification';
-import Button from 'src/components/Button';
 import { WEB_VERSION } from 'src/config/Config';
 import OutsideAlerter from 'src/components/OutsideAlerter';
 import { ReactNode } from 'react-markdown/lib/ast-to-react';
 import IfTrue from 'src/components/IfTrue';
 import ClearButton from 'src/components/ClearButton';
 import i18n from 'src/util/I18N';
-import { AdminIcon, BellIcon, HomeIcon, InfoIcon, LogicIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
+import { AdminIcon, BellIcon, HomeIcon, LogicIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
 import LineDivider from 'src/components/LineDivider';
 import UserRoleDisplay from 'src/components/UserRoleDisplay';
 import UserAvatar from 'src/components/UserAvatar';
@@ -76,12 +75,6 @@ export default function NavigationPanel() {
 			icon: <LogicIcon className='w-6 h-6' />,
 		},
 		{
-			name: i18n.t('information'),
-			to: '/info',
-			admin: false,
-			icon: <InfoIcon className='w-6 h-6' />,
-		},
-		{
 			name: i18n.t('admin'),
 			to: '/admin',
 			admin: true,
@@ -124,10 +117,7 @@ export default function NavigationPanel() {
 						<UserRoleDisplay roles={me.role} />
 					</section>
 				</section>
-				<ClearButton
-					className='flex flex-row justify-center items-center gap-2 p-2 dark:hover:bg-blue-500 dark:hover:text-white rounded-lg'
-					title={i18n.t('logout')}
-					onClick={handleLogout}>
+				<ClearButton className='flex flex-row justify-center items-center gap-2 p-2 dark:hover:bg-blue-500 dark:hover:text-white rounded-lg' title={i18n.t('logout')} onClick={handleLogout}>
 					<LogoutIcon className='w-6 h-6' />
 				</ClearButton>
 			</div>
@@ -137,9 +127,9 @@ export default function NavigationPanel() {
 	function LoginButton() {
 		return (
 			<section className='flex flex-col'>
-				<Button className='flex flex-col dark:hover:bg-blue-500 dark:hover:text-white p-2' title={i18n.t('login')} onClick={() => navigateTo('/login', false)}>
+				<ClearButton className='flex flex-col dark:hover:bg-blue-500 dark:hover:text-white p-2 rounded-lg' title={i18n.t('login')} onClick={() => navigateTo('/login', false)}>
 					<Trans i18nKey='login' />
-				</Button>
+				</ClearButton>
 			</section>
 		);
 	}
@@ -166,15 +156,10 @@ export default function NavigationPanel() {
 								))}
 							/>
 						</div>
-						<IfTrue
-							condition={me !== undefined}
-							whenTrue={
-								<div className='flex flex-col'>
-									<div className='border-b-2 my-2 border-gray-600' />
-									{me ? <UserDisplay me={me} /> : <LoginButton />}
-								</div>
-							}
-						/>
+						<div className='flex flex-col'>
+							<div className='border-b-2 my-2 border-gray-600' />
+							{me ? <UserDisplay me={me} /> : <LoginButton />}
+						</div>
 					</div>
 				</OutsideAlerter>
 			</div>

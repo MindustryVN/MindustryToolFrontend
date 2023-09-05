@@ -19,7 +19,6 @@ const Login = React.lazy(() => import('src/routes/login/LoginPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/post/ForumPage'));
 const ForumView = React.lazy(() => import('src/routes/post/ForumViewPage'));
-const Info = React.lazy(() => import('src/routes/info/Info'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
@@ -52,7 +51,6 @@ export default function App() {
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
-							<Route path='/info' element={<Info />} />
 							<Route path='/notification' element={<Notification />} />
 							<Route path='/server' element={<MindustryServer />} />
 						</Routes>
