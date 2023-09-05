@@ -16,7 +16,7 @@ export default function ClearIconButton({ className, icon, title, onClick }: Cle
 			type='button'
 			title={title}
 			onClick={() => onClick()}>
-			<img className='h-4 w-4 flex self-center align-middle' src={icon} alt={title} />
+			<img className='flex self-center align-middle' src={icon} alt={title} />
 		</button>
 	);
 }

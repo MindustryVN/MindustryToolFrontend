@@ -18,8 +18,8 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<div className={cn('flex flex-col border-2 border-slate-500 w-full rounded-lg box-border', className)}>
-			<section className='flex justify-center ml-2 h-full gap-2 px-1'>
+		<div className='flex flex-col w-full'>
+			<section className={cn('flex justify-center h-full gap-2 px-1 border-2 border-slate-500 rounded-lg', className)}>
 				<input
 					className='w-full h-full bg-transparent placeholder:bg-transparent shadow-none focus:border-none focus:outline-none'
 					type='text'

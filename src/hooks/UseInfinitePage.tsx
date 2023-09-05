@@ -21,6 +21,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	const [hasMore, setHasMore] = useState(false);
 
 	function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
+		
 		cancelRequest.current.abort();
 		cancelRequest.current = new AbortController();
 

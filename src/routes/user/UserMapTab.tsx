@@ -41,7 +41,7 @@ export default function UserMapTab({ user }: UserMapTabProps) {
 	}
 
 	return (
-		<main id='map-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
+		<main id='map-tab' className='flex flex-col gap-2 p-2 box-border w-full h-full overflow-y-auto'>
 			<PreviewContainer children={pages} />
 			<footer className='flex justify-center items-center'>
 				<IfTrue

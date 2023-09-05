@@ -6,9 +6,6 @@ module.exports = {
 	content: ['./src/**/*.{js,jsx,ts,tsx}'],
 	theme: {
 		extend: {
-			colors: {
-				'white-primary': 'rgb(220 220 220)',
-			},
 			zIndex: { overlay: 2, model: 3, popup: 4, 'nav-bar': 5, top: 6 },
 		},
 		keyframes: {

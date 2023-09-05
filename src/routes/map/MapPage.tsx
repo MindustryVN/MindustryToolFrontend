@@ -1,8 +1,4 @@
-import './MapPage.css';
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Map from 'src/data/Map';
-
 import { TagChoice, Tags } from 'src/components/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -26,10 +22,11 @@ import useModel from 'src/hooks/UseModel';
 import SearchBox from 'src/components/Searchbox';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useLike from 'src/hooks/UseLike';
+import Map from 'src/data/Map';
 import TagPick from 'src/components/TagPick';
 import Button from 'src/components/Button';
 import IfTrue from 'src/components/IfTrue';
-import Icon from 'src/components/Icon';
+import Icon, { AddIcon, BackIcon } from 'src/components/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 import CommentSection from 'src/components/CommentSection';
@@ -43,6 +40,8 @@ import InfoImage from 'src/components/InfoImage';
 import Description from 'src/components/Description';
 import { useTags } from 'src/context/TagProvider';
 import { getDownloadUrl } from 'src/util/Utils';
+import OptionBox from 'src/components/OptionBox';
+import ClearButton from 'src/components/ClearButton';
 
 export default function MapPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -126,44 +125,48 @@ export default function MapPage() {
 	}
 
 	return (
-		<main id='map' className='h-full w-full overflow-y-auto flex flex-row gap-2'>
-			<header className='flex flex-row gap-2 w-full'>
-				<section className='search-container'>
+		<main id='map' className='h-full w-full overflow-y-auto flex flex-col gap-2 p-2'>
+			<header className='flex flex-col gap-2 w-full'>
+				<section className='flex flex-row justify-start items-center w-3/4 md:w-3/5 m-auto mt-8 gap-2'>
 					<SearchBox
+						className='h-10 w-full bg-slate-900'
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={mapSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}>
-						<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
+						<ClearIconButton className='p-1' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
+					<OptionBox
+						className='h-10 w-40 bg-slate-900'
+						items={Tags.SORT_TAG}
+						mapper={(item, index) => (
+							<span key={index} className='whitespace-nowrap'>
+								{item.displayName}
+							</span>
+						)}
+						onChoose={(item) => handleSetSortQuery(item)}
+					/>
 				</section>
-				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-				<section className='sort-container grid grid-auto-column grid-flow-col w-fit gap-2 center'>
-					{Tags.SORT_TAG.map((c: TagChoice) => (
-						<Button className='capitalize' title={i18n.t(c.name)} key={c.name + c.value} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
-							{c.displayName}
-						</Button>
-					))}
-				</section>
+				<TagEditContainer tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 			</header>
-			<section className='flex flex-row center medium-padding'>
-				<Trans i18nKey='total-map' />:{totalMap > 0 ? totalMap : 0}
-			</section>
-			<section className='flex flex-row p-2 justify-end'>
-				<Button title={i18n.t('upload-your-map')} onClick={() => navigate('/upload/map')}>
-					<Trans i18nKey='upload-your-map' />
-				</Button>
+			<section className='flex flex-row justify-center items-center p-2'>
+				<Trans i18nKey='total-map' /> : {totalMap > 0 ? totalMap : 0}
 			</section>
 			<PreviewContainer children={pages} />
-			<footer className='flex justify-center items-center'>
+			<footer className='flex w-full justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 				/>
-				<ScrollToTopButton containerId='map' />
 			</footer>
+			<section className='fixed bottom-4 right-0 flex flex-col justify-center items-center'>
+				<ClearButton title={i18n.t('upload-your-map')} onClick={() => navigate('/upload/map')}>
+					<AddIcon className='w-10 h-10' />
+				</ClearButton>
+				<ScrollToTopButton className='w-10 h-10' containerId='map' />
+			</section>
 			<IfTrue
 				condition={currentMap}
 				whenTrue={
@@ -211,11 +214,11 @@ function MapPreviewButton({ map }: MapPreviewButtonProps) {
 	map.like = likeService.likes;
 
 	return (
-		<section className='grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
-			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-			<LikeCount count={likeService.likes} />
-			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<DownloadButton href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msav`} />
+		<section className='flex flex-row justify-center gap-2 p-2'>
+			<IconButton className='w-8 h-8' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+			<LikeCount className='w-8 h-8' count={likeService.likes} />
+			<IconButton className='w-8 h-8' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+			<DownloadButton className='w-8 h-8' href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msav`} />
 		</section>
 	);
 }
@@ -231,16 +234,20 @@ export function MapInfo({ map, handleCloseModel, handleDeleteMap }: MapInfoProps
 	const { mapSearchTag } = useTags();
 
 	return (
-		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
-			<section className='relative flex flex-row gap-2 flex-wrap'>
+		<main className='flex flex-col space-between w-full h-full gap-4 p-8 box-border overflow-y-auto'>
+			<section className='relative flex flex-row flex-wrap gap-2'>
 				<InfoImage src={`${API_BASE_URL}map/${map.id}/image`} />
 				<ClearIconButton className='absolute top-0 left-0 p-2' title={i18n.t('copy-link').toString()} icon='/assets/icons/copy.png' onClick={() => copy(`${FRONTEND_URL}map/${map.id}`)} />
-				<section className='flex flex-row gap-2 flex-wrap'>
-					<ColorText className='capitalize h2' text={map.name} />
-					<Trans i18nKey='author' /> <LoadUserName userId={map.authorId} />
+				<section className='flex flex-col gap-2'>
+					<ColorText className='capitalize text-2xl' text={map.name} />
+					<section className='flex flex-row whitespace-nowrap gap-2'>
+						<Trans i18nKey='author' /> <LoadUserName userId={map.authorId} />
+					</section>
 					<Description description={map.description} />
 					<TagContainer tags={Tags.parseArray(map.tags, mapSearchTag)} />
-					<Trans i18nKey='verify-by' /> <LoadUserName userId={map.verifyAdmin} />
+					<section className='flex flex-row whitespace-nowrap gap-2'>
+						<Trans i18nKey='verify-by' /> <LoadUserName userId={map.verifyAdmin} />
+					</section>
 				</section>
 			</section>
 			<MapInfoButton
@@ -268,16 +275,20 @@ function MapInfoButton({ map, handleCloseModel, handleDeleteMap }: MapInfoButton
 	map.like = likeService.likes;
 
 	return (
-		<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
-			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-			<LikeCount count={likeService.likes} />
-			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<DownloadButton href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msav`} />
-			<IfTrue
-				condition={Users.isAuthorOrAdmin(map.id, me)} //
-				whenTrue={<IconButton title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
-			/>
-			<Button title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
+		<section className='flex flex-row justify-between'>
+			<section className='flex flex-row gap-2'>
+				<IconButton className='w-8 h-8' title='up-vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+				<LikeCount className='w-8 h-8' count={likeService.likes} />
+				<IconButton className='w-8 h-8' title='down-vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+				<DownloadButton className='w-8 h-8' href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msch`} />
+				<IfTrue
+					condition={Users.isAuthorOrAdmin(map.id, me)} //
+					whenTrue={<IconButton className='w-8 h-8' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
+				/>
+			</section>
+			<Button className='w-8 h-8 p-1' title={i18n.t('back')} onClick={() => handleCloseModel()}>
+				<BackIcon />
+			</Button>
 			{dialog(
 				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => handleDeleteMap(map)}>
 					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />

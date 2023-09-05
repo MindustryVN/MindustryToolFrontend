@@ -12,7 +12,7 @@ export default function Icon({ className, icon }: IconProps) {
 	return <img className={cn(className)} src={icon} alt='icon' />;
 }
 
-export const EllipsisIcon = () => (
+export const EllipsisIcon = ({ className }: { className?: string }) => (
 	<svg
 		xmlns='http://www.w3.org/2000/svg'
 		fill='none'
@@ -25,8 +25,8 @@ export const EllipsisIcon = () => (
 	</svg>
 );
 
-export const HomeIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const HomeIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -35,8 +35,8 @@ export const HomeIcon = () => (
 	</svg>
 );
 
-export const UserIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const UserIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -45,8 +45,8 @@ export const UserIcon = () => (
 	</svg>
 );
 
-export const SchematicIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const SchematicIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -55,8 +55,8 @@ export const SchematicIcon = () => (
 	</svg>
 );
 
-export const MapIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const MapIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -65,8 +65,8 @@ export const MapIcon = () => (
 	</svg>
 );
 
-export const PostIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const PostIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -75,8 +75,8 @@ export const PostIcon = () => (
 	</svg>
 );
 
-export const ServerIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const ServerIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -85,8 +85,8 @@ export const ServerIcon = () => (
 	</svg>
 );
 
-export const LogicIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const LogicIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -95,8 +95,8 @@ export const LogicIcon = () => (
 	</svg>
 );
 
-export const InfoIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const InfoIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -105,8 +105,8 @@ export const InfoIcon = () => (
 	</svg>
 );
 
-export const AdminIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const AdminIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -115,8 +115,8 @@ export const AdminIcon = () => (
 	</svg>
 );
 
-export const LogoutIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const LogoutIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -125,8 +125,8 @@ export const LogoutIcon = () => (
 	</svg>
 );
 
-export const BellIcon = () => (
-	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+export const BellIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -139,14 +139,26 @@ export const WebIcon = () => (
 	<img className='w-8 h-8 rounded-lg' src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='mindustry-vn-logo' />
 );
 
-export const ArrowDown = ({ className }: { className?: string }) => (
+export const ArrowDownIcon = ({ className }: { className?: string }) => (
 	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
 	</svg>
 );
 
-export const ArrowUp = ({ className }: { className?: string }) => (
+export const ArrowUpIcon = ({ className }: { className?: string }) => (
 	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
 		<path strokeLinecap='round' strokeLinejoin='round' d='M4.5 15.75l7.5-7.5 7.5 7.5' />
+	</svg>
+);
+
+export const AddIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
+		<path strokeLinecap='round' strokeLinejoin='round' d='M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z' />
+	</svg>
+);
+
+export const BackIcon = ({ className }: { className?: string }) => (
+	<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className={cn(className)}>
+		<path strokeLinecap='round' strokeLinejoin='round' d='M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18' />
 	</svg>
 );

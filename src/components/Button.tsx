@@ -12,7 +12,7 @@ interface ButtonProps {
 export default function Button({ className, children, title, active, onClick }: ButtonProps) {
 	return (
 		<button
-			className={cn(`border-slate-500 border-2 rounded-lg px-2 py-1`, className, {
+			className={cn(`border-slate-500 border-2 rounded-lg`, className, {
 				'dark:bg-blue-500': active,
 			})}
 			title={title}

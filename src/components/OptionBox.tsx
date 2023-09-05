@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import DropboxElement from 'src/components/DropboxElement';
-import { ArrowDown, ArrowUp } from 'src/components/Icon';
+import { ArrowDownIcon, ArrowUpIcon } from 'src/components/Icon';
 import { cn } from 'src/util/Utils';
 
 interface OptionBoxProps<T> {
@@ -15,9 +15,9 @@ export default function OptionBox<T>({ className, items, mapper, onChoose }: Opt
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<div className={cn('border-2 border-slate-500 rounded-lg', className)}>
+		<div>
 			<button
-				className='w-full h-full bg-transparent flex flex-row justify-between items-center gap-2 p-2'
+				className={cn('w-full h-full bg-transparent flex flex-row justify-between items-center gap-2 p-2 border-2 border-slate-500 rounded-lg', className)}
 				type='button'
 				onClick={() => setShowDropbox((prev) => !prev)}
 				onFocus={() => () => setShowDropbox((prev) => !prev)}
@@ -25,22 +25,24 @@ export default function OptionBox<T>({ className, items, mapper, onChoose }: Opt
 					if (event.key === 'Enter') setShowDropbox((prev) => !prev);
 				}}>
 				{mapper(choice, 0)}
-				{showDropbox ? <ArrowUp className='w-4 h-4 flex items-center justify-center' /> : <ArrowDown className='w-4 h-4 flex items-center justify-center' />}
+				{showDropbox ? <ArrowUpIcon className='w-4 h-4 flex items-center justify-center' /> : <ArrowDownIcon className='w-4 h-4 flex items-center justify-center' />}
 			</button>
 			<div className='relative'>
 				{showDropbox && (
-					<section className='absolute w-full top-1 left-0 border-2 border-slate-500 rounded-lg overflow-auto bg-slate-900 no-scrollbar'>
-						{items.map((item, index) => (
-							<DropboxElement
-								key={index}
-								onClick={() => {
-									setChoice(item);
-									onChoose(item);
-									setShowDropbox(false);
-								}}>
-								{mapper(item, index)}
-							</DropboxElement>
-						))}
+					<section className='absolute w-full top-1 left-0 border-2 border-slate-500 rounded-lg overflow-x-auto bg-slate-900 no-scrollbar z-overlay'>
+						{items
+							.filter((item) => item !== choice)
+							.map((item, index) => (
+								<DropboxElement
+									key={index}
+									onClick={() => {
+										setChoice(item);
+										onChoose(item);
+										setShowDropbox(false);
+									}}>
+									{mapper(item, index)}
+								</DropboxElement>
+							))}
 					</section>
 				)}
 			</div>

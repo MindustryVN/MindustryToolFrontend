@@ -14,6 +14,8 @@ import ClearButton from 'src/components/ClearButton';
 import i18n from 'src/util/I18N';
 import { AdminIcon, BellIcon, HomeIcon, InfoIcon, LogicIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
 import LineDivider from 'src/components/LineDivider';
+import UserRoleDisplay from 'src/components/UserRoleDisplay';
+import UserAvatar from 'src/components/UserAvatar';
 
 interface LinkButton {
 	name: string;
@@ -35,55 +37,55 @@ export default function NavigationPanel() {
 			name: i18n.t('home'),
 			to: '/home',
 			admin: false,
-			icon: <HomeIcon />,
+			icon: <HomeIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('user'),
 			to: '/user',
 			admin: false,
-			icon: <UserIcon />,
+			icon: <UserIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('schematic'),
 			to: '/schematic',
 			admin: false,
-			icon: <SchematicIcon />,
+			icon: <SchematicIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('map'),
 			to: '/map',
 			admin: false,
-			icon: <MapIcon />,
+			icon: <MapIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('post'),
 			to: '/post',
 			admin: false,
-			icon: <PostIcon />,
+			icon: <PostIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('server'),
 			to: '/server',
 			admin: false,
-			icon: <ServerIcon />,
+			icon: <ServerIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('logic'),
 			to: '/logic',
 			admin: false,
-			icon: <LogicIcon />,
+			icon: <LogicIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('information'),
 			to: '/info',
 			admin: false,
-			icon: <InfoIcon />,
+			icon: <InfoIcon className='w-6 h-6' />,
 		},
 		{
 			name: i18n.t('admin'),
 			to: '/admin',
 			admin: true,
-			icon: <AdminIcon />,
+			icon: <AdminIcon className='w-6 h-6' />,
 		},
 	];
 
@@ -103,11 +105,7 @@ export default function NavigationPanel() {
 		if (admin && !Users.isAdmin(me)) return <></>;
 
 		return (
-			<ClearButton
-				className='flex flex-row gap-2 dark:text-white rounded-lg p-2 hover:bg-blue-500'
-				active={window.location.pathname.endsWith(to)}
-				title={name}
-				onClick={() => navigateTo(to, auth)}>
+			<ClearButton className='flex flex-row gap-2 rounded-lg p-2 hover:bg-blue-500' active={window.location.pathname.endsWith(to)} title={name} onClick={() => navigateTo(to, auth)}>
 				<span className='flex gap-2'>
 					{icon}
 					{name}
@@ -118,11 +116,20 @@ export default function NavigationPanel() {
 
 	function UserDisplay({ me }: { me: User }) {
 		return (
-			<div className='flex flex-col justify-center items-center cursor-pointer' onClick={() => navigateTo(`/user/${me.id}`, false)}>
-				<img className='w-16 h-16 rounded-full' src={me.imageUrl} alt='user-avatar' />
-				<section className='text-xl flex flex-col'>
-					<p className='capitalize'>{me.name}</p>
+			<div className='flex flex-row gap-2 justify-between items-center cursor-pointer' onClick={() => navigateTo(`/user/${me.id}`, false)}>
+				<section className='flex flex-row justify-center items-center gap-2'>
+					<UserAvatar className='w-12 h-12 rounded-xl' user={me} />
+					<section className='h-full text-xl flex flex-col'>
+						<p className='capitalize'>{me.name}</p>
+						<UserRoleDisplay roles={me.role} />
+					</section>
 				</section>
+				<ClearButton
+					className='flex flex-row justify-center items-center gap-2 p-2 dark:hover:bg-blue-500 dark:hover:text-white rounded-lg'
+					title={i18n.t('logout')}
+					onClick={handleLogout}>
+					<LogoutIcon className='w-6 h-6' />
+				</ClearButton>
 			</div>
 		);
 	}
@@ -151,7 +158,6 @@ export default function NavigationPanel() {
 								MINDUSTRYTOOL
 							</Link>
 							<div className='bg-gray-800 h-8 px-2 py-1 text-sm min-w-sm'>{WEB_VERSION}</div>
-							{me ? <UserDisplay me={me} /> : <LoginButton />}
 							<LineDivider />
 							<section
 								className='flex flex-col gap-2'
@@ -165,13 +171,7 @@ export default function NavigationPanel() {
 							whenTrue={
 								<div className='flex flex-col'>
 									<div className='border-b-2 my-2 border-gray-600' />
-									<ClearButton
-										className='flex flex-row items-center gap-2 mb-2 p-2 dark:hover:bg-blue-500 dark:hover:text-white rounded-lg'
-										title={i18n.t('notification')}
-										onClick={handleLogout}>
-										<LogoutIcon />
-										<Trans i18nKey='logout' />
-									</ClearButton>
+									{me ? <UserDisplay me={me} /> : <LoginButton />}
 								</div>
 							}
 						/>
@@ -203,7 +203,7 @@ export default function NavigationPanel() {
 								</span>
 							}
 						/>
-						<BellIcon />
+						<BellIcon className='w-6 h-6' />
 					</ClearButton>
 					<WebIcon />
 				</section>

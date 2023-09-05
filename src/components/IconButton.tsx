@@ -13,8 +13,8 @@ interface IconButtonProps {
 
 export default function IconButton({ className, active, icon, title, onClick }: IconButtonProps) {
 	return (
-		<Button className={cn('h-8 w-8 flex justify-center items-center', className)} active={active} title={title} onClick={() => onClick()}>
-			<img className='h-4 w-4' src={icon} alt={title} />
+		<Button className={cn('flex justify-center items-center', className)} active={active} title={title} onClick={() => onClick()}>
+			<img src={icon} alt={title} />
 		</Button>
 	);
 }
