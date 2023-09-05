@@ -7,14 +7,14 @@ interface PrivateRouteProps {
 	element: ReactElement;
 }
 
-const PrivateRoute = (props: PrivateRouteProps) => {
+function PrivateRoute({ element }: PrivateRouteProps) {
 	const { loading, me } = useMe();
 
 	if (loading) return <Loading />;
 
-	if (Users.isUser(me)) return props.element;
+	if (Users.isUser(me)) return element;
 
 	return <Navigate to='/login' />;
-};
+}
 
 export default PrivateRoute;

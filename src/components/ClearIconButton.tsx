@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconType } from 'src/data/Icons';
+import { cn } from 'src/util/Utils';
 
 interface ClearIconButtonProps {
 	className?: string;
@@ -8,14 +9,14 @@ interface ClearIconButtonProps {
 	onClick: () => void;
 }
 
-export default function ClearIconButton(props: ClearIconButtonProps) {
+export default function ClearIconButton({ className, icon, title, onClick }: ClearIconButtonProps) {
 	return (
 		<button
-			className={`flex justify-center items-center h-8 w-8 ${props.className ? props.className : ''}`} //
+			className={cn(`flex justify-center items-center`, className)} //
 			type='button'
-			title={props.title}
-			onClick={() => props.onClick()}>
-			<img className='h-4 w-4' src={props.icon} alt={props.title} />
+			title={title}
+			onClick={() => onClick()}>
+			<img className='h-4 w-4 flex self-center align-middle' src={icon} alt={title} />
 		</button>
 	);
 }

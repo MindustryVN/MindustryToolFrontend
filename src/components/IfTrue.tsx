@@ -6,7 +6,7 @@ interface IfTrueProps {
 }
 
 // Just make my code look better, no uses
-export default function IfTrue(props: IfTrueProps) {
-	if (props.condition) return <>{props.whenTrue}</>;
+export default function IfTrue({ condition, whenTrue }: IfTrueProps) {
+	if (condition) return <>{whenTrue}</>;
 	return <></>;
 }

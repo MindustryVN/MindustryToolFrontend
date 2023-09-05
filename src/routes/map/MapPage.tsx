@@ -3,31 +3,30 @@ import './MapPage.css';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Map from 'src/data/Map';
 
-import { TagChoice, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
+import TagEditContainer from 'src/components/TagEditContainer';
 import ClearIconButton from 'src/components/ClearIconButton';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import DownloadButton from 'src/components/DownloadButton';
 import ConfirmDialog from 'src/components/ConfirmDialog';
 import LoadUserName from 'src/components/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
-import TagContainer from 'src/components/tag/TagContainer';
+import TagContainer from 'src/components/TagContainer';
 import IconButton from 'src/components/IconButton';
 import LikeCount from 'src/components/LikeCount';
 import ColorText from 'src/components/ColorText';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import useModel from 'src/hooks/UseModel';
-import Dropbox from 'src/components/Dropbox';
+import SearchBox from 'src/components/Searchbox';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useLike from 'src/hooks/UseLike';
-import TagPick from 'src/components/tag/TagPick';
+import TagPick from 'src/components/TagPick';
 import Button from 'src/components/Button';
 import IfTrue from 'src/components/IfTrue';
 import Icon from 'src/components/Icon';
@@ -42,13 +41,16 @@ import PreviewCard from 'src/components/PreviewCard';
 import PreviewImage from 'src/components/PreviewImage';
 import InfoImage from 'src/components/InfoImage';
 import Description from 'src/components/Description';
+import { useTags } from 'src/context/TagProvider';
+import { getDownloadUrl } from 'src/util/Utils';
 
 export default function MapPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
 
 	const sort = Tags.parse(searchParam.get('sort'), Tags.SORT_TAG);
 	const urlTags = searchParam.get('tags');
-	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), Tags.MAP_SEARCH_TAG);
+	const { mapSearchTag } = useTags();
+	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), mapSearchTag);
 
 	const currentMap = useRef<Map>();
 	const [tag, setTag] = useState<string>('');
@@ -127,15 +129,15 @@ export default function MapPage() {
 		<main id='map' className='h-full w-full overflow-y-auto flex flex-row gap-2'>
 			<header className='flex flex-row gap-2 w-full'>
 				<section className='search-container'>
-					<Dropbox
+					<SearchBox
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
-						items={Tags.MAP_SEARCH_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
+						items={mapSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
-						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />}
-						mapper={(t, index) => <TagPick key={index} tag={t} />}
-					/>
+						mapper={(t, index) => <TagPick key={index} tag={t} />}>
+						<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
+					</SearchBox>
 				</section>
 				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 				<section className='sort-container grid grid-auto-column grid-flow-col w-fit gap-2 center'>
@@ -184,19 +186,19 @@ interface MapPreviewProps {
 	handleOpenModel: (map: Map) => void;
 }
 
-export function MapPreview(props: MapPreviewProps) {
+export function MapPreview({ map, handleOpenModel }: MapPreviewProps) {
 	const { copy } = useClipboard();
 
 	return (
-		<PreviewCard className='relative' key={props.map.id}>
+		<PreviewCard className='relative' key={map.id}>
 			<ClearIconButton
 				className='absolute top-0 left-0 p-2'
 				title={i18n.t('copy-link').toString()}
 				icon='/assets/icons/copy.png'
-				onClick={() => copy(`${FRONTEND_URL}map/${props.map.id}`)}></ClearIconButton>
-			<PreviewImage src={`${API_BASE_URL}map/${props.map.id}/image`} onClick={() => props.handleOpenModel(props.map)} />
-			<ColorText className='capitalize p-2 flex justify-center items-center text-center' text={props.map.name} />
-			<MapPreviewButton map={props.map} />
+				onClick={() => copy(`${FRONTEND_URL}map/${map.id}`)}></ClearIconButton>
+			<PreviewImage src={`${API_BASE_URL}map/${map.id}/image`} onClick={() => handleOpenModel(map)} />
+			<ColorText className='capitalize p-2 flex justify-center items-center text-center' text={map.name} />
+			<MapPreviewButton map={map} />
 		</PreviewCard>
 	);
 }
@@ -204,16 +206,16 @@ interface MapPreviewButtonProps {
 	map: Map;
 }
 
-function MapPreviewButton(props: MapPreviewButtonProps) {
-	const likeService = useLike('map', props.map.id, props.map.like);
-	props.map.like = likeService.likes;
+function MapPreviewButton({ map }: MapPreviewButtonProps) {
+	const likeService = useLike('map', map.id, map.like);
+	map.like = likeService.likes;
 
 	return (
 		<section className='grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
 			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
 			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<DownloadButton href={Utils.getDownloadUrl(props.map.data)} download={`${('map_' + props.map.name).trim().replaceAll(' ', '_')}.msav`} />
+			<DownloadButton href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msav`} />
 		</section>
 	);
 }
@@ -224,33 +226,29 @@ interface MapInfoProps {
 	handleDeleteMap: (map: Map) => void;
 }
 
-export function MapInfo(props: MapInfoProps) {
+export function MapInfo({ map, handleCloseModel, handleDeleteMap }: MapInfoProps) {
 	const { copy } = useClipboard();
+	const { mapSearchTag } = useTags();
 
 	return (
 		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
 			<section className='relative flex flex-row gap-2 flex-wrap'>
-				<InfoImage src={`${API_BASE_URL}map/${props.map.id}/image`} />
-				<ClearIconButton
-					className='absolute top-0 left-0 p-2'
-					title={i18n.t('copy-link').toString()}
-					icon='/assets/icons/copy.png'
-					onClick={() => copy(`${FRONTEND_URL}map/${props.map.id}`)}
-				/>
+				<InfoImage src={`${API_BASE_URL}map/${map.id}/image`} />
+				<ClearIconButton className='absolute top-0 left-0 p-2' title={i18n.t('copy-link').toString()} icon='/assets/icons/copy.png' onClick={() => copy(`${FRONTEND_URL}map/${map.id}`)} />
 				<section className='flex flex-row gap-2 flex-wrap'>
-					<ColorText className='capitalize h2' text={props.map.name} />
-					<Trans i18nKey='author' /> <LoadUserName userId={props.map.authorId} />
-					<Description description={props.map.description} />
-					<TagContainer tags={Tags.parseArray(props.map.tags, Tags.MAP_SEARCH_TAG)} />
-					<Trans i18nKey='verify-by' /> <LoadUserName userId={props.map.verifyAdmin} />
+					<ColorText className='capitalize h2' text={map.name} />
+					<Trans i18nKey='author' /> <LoadUserName userId={map.authorId} />
+					<Description description={map.description} />
+					<TagContainer tags={Tags.parseArray(map.tags, mapSearchTag)} />
+					<Trans i18nKey='verify-by' /> <LoadUserName userId={map.verifyAdmin} />
 				</section>
 			</section>
 			<MapInfoButton
-				map={props.map}
-				handleCloseModel={props.handleCloseModel} //
-				handleDeleteMap={props.handleDeleteMap}
+				map={map}
+				handleCloseModel={handleCloseModel} //
+				handleDeleteMap={handleDeleteMap}
 			/>
-			<CommentSection contentType='map' targetId={props.map.id} />
+			<CommentSection contentType='map' targetId={map.id} />
 		</main>
 	);
 }
@@ -261,27 +259,27 @@ interface MapInfoButtonProps {
 	handleDeleteMap: (map: Map) => void;
 }
 
-function MapInfoButton(props: MapInfoButtonProps) {
+function MapInfoButton({ map, handleCloseModel, handleDeleteMap }: MapInfoButtonProps) {
 	const { me } = useMe();
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike('map', props.map.id, props.map.like);
-	props.map.like = likeService.likes;
+	const likeService = useLike('map', map.id, map.like);
+	map.like = likeService.likes;
 
 	return (
 		<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
 			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
 			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<DownloadButton href={Utils.getDownloadUrl(props.map.data)} download={`${('map_' + props.map.name).trim().replaceAll(' ', '_')}.msav`} />
+			<DownloadButton href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msav`} />
 			<IfTrue
-				condition={Users.isAuthorOrAdmin(props.map.id, me)} //
+				condition={Users.isAuthorOrAdmin(map.id, me)} //
 				whenTrue={<IconButton title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 			/>
-			<Button title={i18n.t('back')} onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+			<Button title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
 			{dialog(
-				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => props.handleDeleteMap(props.map)}>
+				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => handleDeleteMap(map)}>
 					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />
 					<Trans i18nKey='delete-map-dialog' />
 				</ConfirmDialog>,

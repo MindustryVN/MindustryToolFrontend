@@ -7,10 +7,10 @@ interface PreviewImageProps {
 	onClick: () => void;
 }
 
-export default function PreviewImage(props: PreviewImageProps) {
+export default function PreviewImage({ src, onClick }: PreviewImageProps) {
 	return (
-		<ClearButton title='' onClick={() => props.onClick()}>
-			<img className='w-[var(--preview-image-min-size)] h-[var(--preview-image-min-size)] border-b-2 border-slate-500' src={props.src} alt='schematic' />
+		<ClearButton title='' onClick={() => onClick()}>
+			<img className='w-[var(--preview-image-min-size)] h-[var(--preview-image-min-size)] border-b-2 border-slate-500' src={src} alt='schematic' />
 		</ClearButton>
 	);
 }

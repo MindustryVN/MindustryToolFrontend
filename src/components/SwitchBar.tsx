@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import ClearButton from 'src/components/ClearButton';
 import i18n from 'src/util/I18N';
+import { cn } from 'src/util/Utils';
 
 interface Switch {
 	id: string;
@@ -29,7 +30,9 @@ export default function SwitchBar({ className, elements }: SwitchBarProps) {
 			<section className='flex flex-row gap-4 p-4 w-full overflow-x-auto no-scrollbar'>
 				{elements.map((element) => (
 					<ClearButton
-						className={`capitalize py-2 whitespace-nowrap ${currentElement.id === element.id ? 'border-b-2' : ''} `}
+						className={cn(`capitalize py-2 whitespace-nowrap`, {
+							'border-b-2': currentElement.id === element.id,
+						})}
 						title={i18n.t(element.id)}
 						key={element.id}
 						onClick={() => setCurrentElement(element)}>

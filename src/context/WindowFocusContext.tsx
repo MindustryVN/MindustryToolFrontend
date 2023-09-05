@@ -6,7 +6,7 @@ export default function useWindowFocus() {
 	return useContext(WindowContext);
 }
 
-export const WindowContextProvider = (props: { children: ReactNode }) => {
+export const WindowContextProvider = ({ children }: { children: ReactNode }) => {
 	const [windowIsFocus, setWindowIsFocus] = useState(true);
 
 	function handleActivity(forcedFlag: any) {
@@ -36,5 +36,5 @@ export const WindowContextProvider = (props: { children: ReactNode }) => {
 		};
 	}, []);
 
-	return <WindowContext.Provider value={{ windowIsFocus }}>{props.children}</WindowContext.Provider>;
+	return <WindowContext.Provider value={{ windowIsFocus }}>{children}</WindowContext.Provider>;
 };

@@ -13,32 +13,32 @@ class LoadingUserCache {
 	static users: Cache<User> = new Cache();
 }
 
-export default function LoadUserName(props: LoadUserNameProps) {
+export default function LoadUserName({ userId }: LoadUserNameProps) {
 	const [loading, setLoading] = useState(true);
 	const [displayUser, setDisplayUser] = useState<User>();
 
 	useEffect(() => {
-		if (props.userId === 'community') setLoading(false);
+		if (userId === 'community') setLoading(false);
 		else {
-			let d = LoadingUserCache.users.cache[props.userId];
+			let d = LoadingUserCache.users.cache[userId];
 			if (d) {
 				setLoading(false);
 				setDisplayUser(d);
 			} else {
-				API.getUser(props.userId)
+				API.getUser(userId)
 					.then((result) => {
 						setDisplayUser(result.data);
-						LoadingUserCache.users.cache[props.userId] = result.data;
+						LoadingUserCache.users.cache[userId] = result.data;
 					}) //
-					.catch(() => console.log(`User not found: ${props.userId}`))
+					.catch(() => console.log(`User not found: ${userId}`))
 					.finally(() => setLoading(false));
 			}
 		}
-	}, [props]);
+	}, [userId]);
 
-	if (props.userId === 'community') return <span>Community</span>;
+	if (userId === 'community') return <span>Community</span>;
 	if (loading) return <span>Loading...</span>;
-	if (displayUser) return <UserName displayUser={displayUser} />;
+	if (displayUser) return <UserName user={displayUser} />;
 	return (
 		<span className='text-red-500'>
 			<Trans i18nKey='user-not-found' />

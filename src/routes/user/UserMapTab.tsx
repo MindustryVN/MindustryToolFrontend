@@ -18,13 +18,13 @@ interface UserMapTabProps {
 	user: User;
 }
 
-export default function UserMapTab(props: UserMapTabProps) {
+export default function UserMapTab({ user }: UserMapTabProps) {
 	const currentMap = useRef<Map>();
 
 	const { addPopup } = usePopup();
 
 	const { model, setVisibility } = useModel();
-	const usePage = useInfinitePage<Map>(`user/${props.user.id}/map`, 20);
+	const usePage = useInfinitePage<Map>(`user/${user.id}/map`, 20);
 	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} key={v.id} handleOpenModel={handleOpenMapInfo} />);
 
 	function handleDeleteMap(map: Map) {

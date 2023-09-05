@@ -6,13 +6,13 @@ import ClearIconButton from 'src/components/ClearIconButton';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import IfTrue from 'src/components/IfTrue';
 import ConfirmDialog from 'src/components/ConfirmDialog';
-import Dropbox from 'src/components/Dropbox';
+import SearchBox from 'src/components/Searchbox';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import PostPreview from 'src/components/post/PostPreview';
-import PostView from 'src/components/post/PostView';
-import { TagChoice, Tags } from 'src/components/tag/Tag';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
-import TagPick from 'src/components/tag/TagPick';
+import PostPreview from 'src/components/PostPreview';
+import PostView from 'src/components/PostView';
+import { TagChoice, Tags } from 'src/components/Tag';
+import TagEditContainer from 'src/components/TagEditContainer';
+import TagPick from 'src/components/TagPick';
 import useDialog from 'src/hooks/UseDialog';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import useModel from 'src/hooks/UseModel';
@@ -20,6 +20,7 @@ import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import AdminOnly from 'src/components/AdminOnly';
+import { useTags } from 'src/context/TagProvider';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
@@ -86,10 +87,10 @@ interface PostUploadPreviewProps {
 	handleOpenModel: (post: Post) => void;
 }
 
-export function PostUploadPreview(props: PostUploadPreviewProps) {
+export function PostUploadPreview({ post, handleOpenModel }: PostUploadPreviewProps) {
 	return (
-		<section role='button' onClick={() => props.handleOpenModel(props.post)}>
-			<PostPreview post={props.post} />
+		<section role='button' onClick={() => handleOpenModel(post)}>
+			<PostPreview post={post} />
 		</section>
 	);
 }
@@ -101,8 +102,9 @@ interface PostUploadInfoProps {
 	handleCloseModel: () => void;
 }
 
-export function PostUploadInfo(props: PostUploadInfoProps) {
-	const [tags, setTags] = useState<TagChoice[]>(Tags.parseArray(props.post.tags, Tags.POST_UPLOAD_TAG));
+export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handleRejectPost }: PostUploadInfoProps) {
+	const { postUploadTag } = useTags();
+	const [tags, setTags] = useState<TagChoice[]>(Tags.parseArray(post.tags, postUploadTag));
 	const [tag, setTag] = useState('');
 
 	const verifyDialog = useDialog();
@@ -124,18 +126,18 @@ export function PostUploadInfo(props: PostUploadInfoProps) {
 		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
 			<section className='editor-background relative flex flex-row w-full h-full gap-2 p-8 box-border'>
 				<section className='flex flex-row gap-2 w-full align-end'>
-					<input className='title-editor w-full box-border' type='text' value={props.post.header} placeholder={i18n.t('title').toString()} disabled={true} />
-					<Dropbox
+					<input className='title-editor w-full box-border' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
+					<SearchBox
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
-						items={Tags.POST_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+						items={postUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
 				<TagEditContainer tags={tags} onRemove={handleRemoveTag} />
-				<textarea className='content-editor w-full h-full' value={props.post.content} disabled={true} />
+				<textarea className='content-editor w-full h-full' value={post.content} disabled={true} />
 				<section className='flex flex-row absolute top-0 right medium-margin gap-2'>
 					<a className='button' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 						<Trans i18nKey='how-to-write-markdown' />
@@ -149,24 +151,24 @@ export function PostUploadInfo(props: PostUploadInfoProps) {
 			<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
 				<Button title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
 				<AdminOnly children={<Button title={i18n.t('verify')} children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
-				<Button title={i18n.t('back')} onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+				<Button title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
 				<ConfirmDialog
-					onConfirm={() => props.handleVerifyPost(props.post, tags)} //
+					onConfirm={() => handleVerifyPost(post, tags)} //
 					onClose={() => verifyDialog.setVisibility(false)}>
 					<Trans i18nKey='verify' />
 				</ConfirmDialog>,
 			)}
 			{rejectDialog.dialog(
 				<TypeDialog
-					onSubmit={(reason) => props.handleRejectPost(props.post, reason)} //
+					onSubmit={(reason) => handleRejectPost(post, reason)} //
 					onClose={() => rejectDialog.setVisibility(false)}
 				/>,
 			)}
 			{model(
 				<section className='relative w-full h-full overflow-y-auto'>
-					<PostView post={props.post} />
+					<PostView post={post} />
 					<Button title={i18n.t('hide-preview')} className='absolute top-0 right medium-margin' onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>
@@ -181,18 +183,18 @@ interface TypeDialogProps {
 	onClose: () => void;
 }
 
-function TypeDialog(props: TypeDialogProps) {
+function TypeDialog({ onSubmit, onClose }: TypeDialogProps) {
 	const [content, setContent] = useState('');
 
 	return (
 		<section className='flex flex-row'>
 			<header className='flex flex-row space-between p-2'>
 				<Trans i18nKey='reject-reason' />
-				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
 			</header>
 			<textarea className='type-dialog' title='reason' onChange={(event) => setContent(event.target.value)} />
 			<section className='flex flex-row justify-end w-full p-2 box-border'>
-				<Button title={i18n.t('reject')} onClick={() => props.onSubmit(content)}>
+				<Button title={i18n.t('reject')} onClick={() => onSubmit(content)}>
 					<Trans i18nKey='reject' />
 				</Button>
 			</section>

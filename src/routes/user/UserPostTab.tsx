@@ -6,14 +6,14 @@ import User from 'src/data/User';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import PostPreview from 'src/components/post/PostPreview';
+import PostPreview from 'src/components/PostPreview';
 
 interface UserPostTabProps {
 	user: User;
 }
 
-export default function UserPostTab(props: UserPostTabProps) {
-	const usePage = useInfinitePage<Post>(`user/${props.user.id}/post`, 20);
+export default function UserPostTab({ user }: UserPostTabProps) {
+	const usePage = useInfinitePage<Post>(`user/${user.id}/post`, 20);
 	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostPreview key={v.id} post={v} />);
 
 	return (

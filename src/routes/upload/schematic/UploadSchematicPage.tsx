@@ -2,17 +2,17 @@ import './UploadSchematicPage.css';
 
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import Dropbox from 'src/components/Dropbox';
-import { TagChoice, Tags } from 'src/components/tag/Tag';
+import SearchBox from 'src/components/Searchbox';
+import { TagChoice } from 'src/components/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
 import { getFileExtension } from 'src/util/StringUtils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import { Link } from 'react-router-dom';
-import TagPick from 'src/components/tag/TagPick';
+import TagPick from 'src/components/TagPick';
 import { Trans } from 'react-i18next';
 import Button from 'src/components/Button';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
+import TagEditContainer from 'src/components/TagEditContainer';
 import LoadUserName from 'src/components/LoadUserName';
 import SchematicDescription from 'src/components/Description';
 import ItemRequirement from 'src/components/ItemRequirement';
@@ -20,6 +20,7 @@ import ColorText from 'src/components/ColorText';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useMe } from 'src/context/MeProvider';
 import SchematicUploadPreview from 'src/data/SchematicUploadPreview';
+import { useTags } from 'src/context/TagProvider';
 
 const tabs = ['file', 'code'];
 
@@ -41,6 +42,8 @@ export default function UploadSchematicPage() {
 	const [tags, setTags] = useState<TagChoice[]>([]);
 
 	const [isLoading, setIsLoading] = useState(false);
+
+	const { schematicUploadTag } = useTags();
 
 	const { me, loading } = useMe();
 	const popup = useRef(useContext(PopupMessageContext));
@@ -196,10 +199,10 @@ export default function UploadSchematicPage() {
 						</section>
 					</section>
 					<section className='flex flex-row flex-nowrap gap-2 w-full'>
-						<Dropbox
+						<SearchBox
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
-							items={Tags.SCHEMATIC_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+							items={schematicUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 							onChange={(event) => setTag(event.target.value)}
 							onChoose={(item) => handleAddTag(item)}
 							mapper={(t, index) => <TagPick key={index} tag={t} />}

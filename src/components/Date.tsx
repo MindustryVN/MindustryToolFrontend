@@ -5,6 +5,6 @@ interface DateDisplayProps {
 	time: string;
 }
 
-export default function DateDisplay(props: DateDisplayProps) {
-	return <span className={props.className ? props.className : ''}>{new Date(props.time).toLocaleString('en-GB')}</span>;
+export default function DateDisplay({ className, time }: DateDisplayProps) {
+	return <span className={className ? className : ''}>{new Date(time).toLocaleString('en-GB')}</span>;
 }

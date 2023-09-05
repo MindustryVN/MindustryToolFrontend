@@ -7,14 +7,14 @@ interface AdminRouteProps {
 	element: ReactElement;
 }
 
-const AdminRoute = (props: AdminRouteProps) => {
+const AdminRoute = ({ element }: AdminRouteProps) => {
 	const { loading, me } = useMe();
 
 	if (loading) return <Loading />;
 
 	if (!me) return <Navigate to='/login' />;
 
-	if (Users.isAdmin(me)) return props.element;
+	if (Users.isAdmin(me)) return element;
 	return <Navigate to='/home' />;
 };
 

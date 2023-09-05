@@ -5,8 +5,8 @@ interface DescriptionProps {
 	description: string;
 }
 
-export default function Description(props: DescriptionProps) {
-	if (!props.description) return <></>;
+export default function Description({ description }: DescriptionProps) {
+	if (!description) return <></>;
 
-	return <ColorText text={props.description} />;
+	return <ColorText text={description} />;
 }

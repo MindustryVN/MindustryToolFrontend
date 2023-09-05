@@ -116,8 +116,7 @@ interface MindustryServerTableRowProps {
 	handleRemoveServer: (id: string) => void;
 }
 
-function MindustryServerTableRow(props: MindustryServerTableRowProps) {
-	const { server } = props;
+function MindustryServerTableRow({ server, handleRemoveServer }: MindustryServerTableRowProps) {
 	const { me } = useMe();
 
 	const { copy } = useClipboard();
@@ -160,7 +159,7 @@ function MindustryServerTableRow(props: MindustryServerTableRowProps) {
 						<ClearIconButton
 							title={i18n.t('delete')}
 							icon='/assets/icons/trash-16.png' //
-							onClick={() => props.handleRemoveServer(props.server.address)}
+							onClick={() => handleRemoveServer(server.address)}
 						/>
 					</td>
 				}
@@ -174,8 +173,7 @@ interface MindustryServerCardProps {
 	handleRemoveServer: (id: string) => void;
 }
 
-function MindustryServerCard(props: MindustryServerCardProps) {
-	const { server } = props;
+function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCardProps) {
 	const { me } = useMe();
 
 	const { copy } = useClipboard();
@@ -196,7 +194,7 @@ function MindustryServerCard(props: MindustryServerCardProps) {
 							<ClearIconButton
 								title={i18n.t('delete')}
 								icon='/assets/icons/trash-16.png' //
-								onClick={() => props.handleRemoveServer(props.server.address)}
+								onClick={() => handleRemoveServer(server.address)}
 							/>
 						</section>
 					}
@@ -229,18 +227,18 @@ interface InputAddressDialogProps {
 	onClose: () => void;
 }
 
-function InputAddressDialog(props: InputAddressDialogProps) {
+function InputAddressDialog({ onClose, onSubmit }: InputAddressDialogProps) {
 	const [content, setContent] = useState<string>('');
 
 	return (
 		<section className='input-address-dialog flex flex-row gap-2 medium-padding'>
 			<header className='flex flex-row space-between p-2'>
 				<Trans i18nKey='type-ip-address' />
-				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
 			</header>
 			<input className='input-address' type='text' title='address' onChange={(event) => setContent(event.target.value)} />
 			<section className='flex flex-row justify-end w-full p-2 box-border'>
-				<Button title={i18n.t('submit')} onClick={() => props.onSubmit(content)}>
+				<Button title={i18n.t('submit')} onClick={() => onSubmit(content)}>
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>

@@ -4,12 +4,12 @@ import { ACCESS_TOKEN } from 'src/config/Config';
 import { Navigate } from 'react-router-dom';
 import i18n from 'src/util/I18N';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import { Utils } from 'src/util/Utils';
+import { getUrlParam } from 'src/util/Utils';
 
 export default function OAuth2RedirectHandler() {
 	const { addPopup } = usePopup();
 
-	const token = Utils.getUrlParam('token');
+	const token = getUrlParam('token');
 
 	if (token) {
 		localStorage.setItem(ACCESS_TOKEN, token);

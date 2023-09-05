@@ -1,17 +1,16 @@
-
 import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
-import { TagChoice, Tags } from 'src/components/tag/Tag';
+import { TagChoice } from 'src/components/Tag';
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX } from 'src/config/Config';
 import { getFileExtension } from 'src/util/StringUtils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import Dropbox from 'src/components/Dropbox';
+import SearchBox from 'src/components/Searchbox';
 import i18n from 'src/util/I18N';
-import TagPick from 'src/components/tag/TagPick';
+import TagPick from 'src/components/TagPick';
 import Button from 'src/components/Button';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
+import TagEditContainer from 'src/components/TagEditContainer';
 import LoadUserName from 'src/components/LoadUserName';
 import ColorText from 'src/components/ColorText';
 import LoadingSpinner from 'src/components/LoadingSpinner';
@@ -19,6 +18,7 @@ import { useMe } from 'src/context/MeProvider';
 import MapUploadPreview from 'src/data/MapUploadPreview';
 import InfoImage from 'src/components/InfoImage';
 import Description from 'src/components/Description';
+import { useTags } from 'src/context/TagProvider';
 
 let notLoginMessage = (
 	<span>
@@ -29,7 +29,7 @@ let notLoginMessage = (
 	</span>
 );
 
-export default function UploadNextPage() {
+export default function UploadMapPage() {
 	const [file, setFile] = useState<File>();
 	const [preview, setPreview] = useState<MapUploadPreview>();
 	const [tag, setTag] = useState<string>('');
@@ -39,6 +39,7 @@ export default function UploadNextPage() {
 
 	const { me, loading } = useMe();
 	const popup = useRef(useContext(PopupMessageContext));
+	const { mapUploadTag } = useTags();
 
 	useEffect(() => {
 		if (!loading && !me) popup.current.addPopup(notLoginMessage, 20, 'warning');
@@ -133,10 +134,10 @@ export default function UploadNextPage() {
 						</section>
 					</section>
 					<section className='flex flex-row flex-nowrap gap-2 w-full'>
-						<Dropbox
+						<SearchBox
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
-							items={Tags.MAP_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+							items={mapUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 							onChange={(event) => setTag(event.target.value)}
 							onChoose={(item) => handleAddTag(item)}
 							mapper={(t, index) => <TagPick key={index} tag={t} />}

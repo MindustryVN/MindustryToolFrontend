@@ -7,15 +7,13 @@ interface ColorTextProps {
 	className?: string;
 }
 
-export default function ColorText(props: ColorTextProps) {
-	let text = props.text;
-
+export default function ColorText({ text, className }: ColorTextProps) {
 	if (!text) return <></>;
 
 	let index = text.search(COLOR_REGEX);
 	let key = 0;
 
-	if (index < 0) return <div className={props.className ? props.className : ''}>{text}</div>;
+	if (index < 0) return <div className={className ? className : ''}>{text}</div>;
 
 	let result: ReactNode[] = [];
 
@@ -26,7 +24,7 @@ export default function ColorText(props: ColorTextProps) {
 
 	let arr = text.match(COLOR_REGEX);
 
-	if (!arr) return <div className={props.className ? props.className : ''}>{text}</div>;
+	if (!arr) return <div className={className ? className : ''}>{text}</div>;
 
 	const s = new Option().style;
 
@@ -82,5 +80,5 @@ export default function ColorText(props: ColorTextProps) {
 		return r;
 	}
 
-	return <span className={props.className ? props.className : ''}>{result}</span>;
+	return <span className={className ? className : ''}>{result}</span>;
 }

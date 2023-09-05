@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { cn } from 'src/util/Utils';
 
 interface ButtonProps {
 	className?: string;
@@ -8,14 +9,16 @@ interface ButtonProps {
 	onClick: () => void;
 }
 
-export default function Button(props: ButtonProps) {
+export default function Button({ className, children, title, active, onClick }: ButtonProps) {
 	return (
 		<button
-			className={`${props.active ? 'dark:bg-blue-500' : ''} border-slate-500 border-2 rounded-lg px-2 py-1 ${props.className ? props.className : ''} `}
-			title={props.title}
+			className={cn(`border-slate-500 border-2 rounded-lg px-2 py-1`, className, {
+				'dark:bg-blue-500': active,
+			})}
+			title={title}
 			type='button'
-			onClick={() => props.onClick()}>
-			{props.children}
+			onClick={() => onClick()}>
+			{children}
 		</button>
 	);
 }

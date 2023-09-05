@@ -17,13 +17,13 @@ interface UserSchematicTabProps {
 	user: User;
 }
 
-export default function UserSchematicTab(props: UserSchematicTabProps) {
+export default function UserSchematicTab({ user }: UserSchematicTabProps) {
 	const currentSchematic = useRef<Schematic>();
 
 	const { addPopup } = usePopup();
 
 	const { model, setVisibility } = useModel();
-	const usePage = useInfinitePage<Schematic>(`user/${props.user.id}/schematic`, 20);
+	const usePage = useInfinitePage<Schematic>(`user/${user.id}/schematic`, 20);
 	const { pages } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function handleDeleteSchematic(schematic: Schematic) {

@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import { Utils } from 'src/util/Utils';
+import { array2dToArray1d } from 'src/util/Utils';
 
 export interface UseInfinitePage<T> {
 	pages: T[];
@@ -77,7 +77,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	);
 
 	return {
-		pages: Utils.array2dToArray1d(pages),
+		pages: array2dToArray1d(pages),
 		isLoading: isLoading,
 		isError: isError,
 		hasMore: hasMore,

@@ -11,16 +11,16 @@ interface ConfirmDialogProps {
 	onConfirm: () => void;
 }
 
-export default function ConfirmDialog(props: ConfirmDialogProps) {
+export default function ConfirmDialog({ className, children, onClose, onConfirm }: ConfirmDialogProps) {
 	return (
-		<Dialog className={props.className}>
+		<Dialog className={className}>
 			<section className='flex flex-col center border-slate-500 rounded-lg border-2 p-2 bg-slate-900 w-[50vw] md:w-[30vw]'>
-				<section className='flex flex-row w-full py-4 box-border'>{props.children}</section>
+				<section className='flex flex-row w-full py-4 box-border'>{children}</section>
 				<section className='flex flex-row justify-end gap-4 w-full px-2 box-border'>
-					<Button className='bg-slate-950 flex-1' title={i18n.t('cancel').toString()} onClick={() => props.onClose()}>
+					<Button className='bg-slate-950 flex-1' title={i18n.t('cancel').toString()} onClick={() => onClose()}>
 						<Trans i18nKey='cancel' />
 					</Button>
-					<Button className='bg-slate-950 flex-1' title={i18n.t('confirm').toString()} onClick={() => props.onConfirm()}>
+					<Button className='bg-slate-950 flex-1' title={i18n.t('confirm').toString()} onClick={() => onConfirm()}>
 						<Trans i18nKey='confirm' />
 					</Button>
 				</section>

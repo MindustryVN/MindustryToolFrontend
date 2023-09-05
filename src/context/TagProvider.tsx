@@ -1,19 +1,74 @@
-import React, { ReactNode, useEffect } from 'react';
-import { Tags } from 'src/components/tag/Tag';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import { TagChoice, Tags } from 'src/components/Tag';
 
-interface TagProviderProps {
+interface TagProvider {
 	children: ReactNode;
 }
 
-export default function TagProvider(props: TagProviderProps) {
+interface TagContext {
+	schematicUploadTag: TagChoice[];
+	schematicSearchTag: TagChoice[];
+	mapUploadTag: TagChoice[];
+	mapSearchTag: TagChoice[];
+	postUploadTag: TagChoice[];
+	postSearchTag: TagChoice[];
+}
+
+const TagContext = React.createContext<TagContext>({
+	schematicUploadTag: [],
+	schematicSearchTag: [],
+	mapUploadTag: [],
+	mapSearchTag: [],
+	postUploadTag: [],
+	postSearchTag: [],
+});
+
+export function useTags() {
+	return useContext(TagContext);
+}
+
+export default function TagProvider({ children }: TagProvider) {
+	const [tags, setTags] = useState<TagContext>({
+		schematicUploadTag: [],
+		schematicSearchTag: [],
+		mapUploadTag: [],
+		mapSearchTag: [],
+		postUploadTag: [],
+		postSearchTag: [],
+	});
+
 	useEffect(() => {
-		Tags.getTag('schematic-upload-tag', Tags.SCHEMATIC_UPLOAD_TAG);
-		Tags.getTag('schematic-search-tag', Tags.SCHEMATIC_SEARCH_TAG);
-		Tags.getTag('map-upload-tag', Tags.MAP_UPLOAD_TAG);
-		Tags.getTag('map-search-tag', Tags.MAP_SEARCH_TAG);
-		Tags.getTag('post-upload-tag', Tags.POST_UPLOAD_TAG);
-		Tags.getTag('post-search-tag', Tags.POST_SEARCH_TAG);
+		Tags.getTag('schematic-upload-tag', (data) =>
+			setTags((prev) => {
+				return { ...prev, schematicUploadTag: data };
+			}),
+		);
+		Tags.getTag('schematic-search-tag', (data) =>
+			setTags((prev) => {
+				return { ...prev, schematicSearchTag: data };
+			}),
+		);
+		Tags.getTag('map-upload-tag', (data) =>
+			setTags((prev) => {
+				return { ...prev, mapUploadTag: data };
+			}),
+		);
+		Tags.getTag('map-search-tag', (data) =>
+			setTags((prev) => {
+				return { ...prev, mapSearchTag: data };
+			}),
+		);
+		Tags.getTag('post-upload-tag', (data) =>
+			setTags((prev) => {
+				return { ...prev, postUploadTag: data };
+			}),
+		);
+		Tags.getTag('post-search-tag', (data) =>
+			setTags((prev) => {
+				return { ...prev, postSearchTag: data };
+			}),
+		);
 	}, []);
 
-	return <>{props.children}</>;
+	return <TagContext.Provider value={tags}>{children}</TagContext.Provider>;
 }

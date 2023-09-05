@@ -2,13 +2,13 @@ import './ForumPage.css';
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
-import { TagChoice, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/Tag';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import Dropbox from 'src/components/Dropbox';
+import SearchBox from 'src/components/Searchbox';
 import i18n from 'src/util/I18N';
 import ClearIconButton from 'src/components/ClearIconButton';
-import TagPick from 'src/components/tag/TagPick';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
+import TagPick from 'src/components/TagPick';
+import TagEditContainer from 'src/components/TagEditContainer';
 import Button from 'src/components/Button';
 import { FRONTEND_URL } from 'src/config/Config';
 import useClipboard from 'src/hooks/UseClipboard';
@@ -20,16 +20,18 @@ import { Trans } from 'react-i18next';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import DateDisplay from 'src/components/Date';
 import LoadUserName from 'src/components/LoadUserName';
-import TagContainer from 'src/components/tag/TagContainer';
+import TagContainer from 'src/components/TagContainer';
 import IfTrue from 'src/components/IfTrue';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import { useTags } from 'src/context/TagProvider';
 
 export default function ForumPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
 
 	const sort = Tags.parse(searchParam.get('sort'), Tags.SORT_TAG);
 	const urlTags = searchParam.get('tags');
-	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), Tags.POST_SEARCH_TAG);
+	const { postSearchTag } = useTags();
+	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), postSearchTag);
 
 	const [tag, setTag] = useState<string>('');
 
@@ -80,15 +82,15 @@ export default function ForumPage() {
 		<main className='h-full w-full overflow-y-auto flex flex-row gap-2 p-2'>
 			<header className='flex flex-row gap-2 w-full'>
 				<section className='search-container'>
-					<Dropbox
+					<SearchBox
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
-						items={Tags.POST_SEARCH_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
+						items={postSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
-						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />}
-						mapper={(t, index) => <TagPick key={index} tag={t} />}
-					/>
+						mapper={(t, index) => <TagPick key={index} tag={t} />}>
+						<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
+					</SearchBox>
 				</section>
 				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 				<section className='sort-container grid grid-auto-column grid-flow-col w-fit gap-2 center'>
@@ -120,19 +122,20 @@ interface PostPreviewProps {
 	post: Post;
 }
 
-function PostPreview(props: PostPreviewProps) {
+function PostPreview({ post }: PostPreviewProps) {
 	const { copy } = useClipboard();
 	const navigate = useNavigate();
+	const { postSearchTag } = useTags();
 
-	const likeService = useLike('post', props.post.id, props.post.like);
-	props.post.like = likeService.likes;
+	const likeService = useLike('post', post.id, post.like);
+	post.like = likeService.likes;
 
 	return (
-		<section role='button' className='post-preview-card relative flex flex-row gap-2 medium-padding space-between' onClick={() => navigate(`post/${props.post.id}`)}>
+		<section role='button' className='post-preview-card relative flex flex-row gap-2 medium-padding space-between' onClick={() => navigate(`post/${post.id}`)}>
 			<header className='flex flex-row gap-2'>
-				<span className='title'>{props.post.header}</span>
-				<LoadUserName userId={props.post.authorId} />
-				<TagContainer tags={Tags.parseArray(props.post.tags, Tags.POST_SEARCH_TAG)} />
+				<span className='title'>{post.header}</span>
+				<LoadUserName userId={post.authorId} />
+				<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
 			</header>
 			<section className='flex flex-row'>
 				<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
@@ -141,12 +144,12 @@ function PostPreview(props: PostPreviewProps) {
 					<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
 				</section>
 			</section>
-			<DateDisplay className='absolute bottom right small-margin align-self-end' time={props.post.time} />
+			<DateDisplay className='absolute bottom right small-margin align-self-end' time={post.time} />
 			<ClearIconButton
 				className='absolute top-0 right p-2 small-margin'
 				title={i18n.t('copy-link').toString()}
 				icon='/assets/icons/copy.png'
-				onClick={() => copy(`${FRONTEND_URL}post/post/${props.post.id}`)}
+				onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
 			/>
 		</section>
 	);

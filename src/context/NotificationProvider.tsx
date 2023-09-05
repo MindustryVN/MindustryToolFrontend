@@ -12,12 +12,11 @@ export const NotificationContext = React.createContext<NotificationContextProps>
 	setUnreadNotifications: (_: (number: number) => number) => {},
 });
 
-
 interface NotificationProviderProps {
 	children: React.ReactNode;
 }
 
-export default function NotificationProvider(props: NotificationProviderProps) {
+export default function NotificationProvider({ children }: NotificationProviderProps) {
 	const { me } = useMe();
 
 	const [unreadNotifications, setUnreadNotifications] = useState(0);
@@ -28,7 +27,7 @@ export default function NotificationProvider(props: NotificationProviderProps) {
 				.then((result) => setUnreadNotifications(result.data))
 				.catch(() => console.log('Fail to get unread notification count'));
 
-			let id : any = setInterval(() => {
+			let id: any = setInterval(() => {
 				API.getUnreadNotification() //
 					.then((result) => setUnreadNotifications(result.data))
 					.catch(() => console.log('Fail to get unread notification count'));
@@ -44,7 +43,7 @@ export default function NotificationProvider(props: NotificationProviderProps) {
 				unreadNotifications: unreadNotifications, //
 				setUnreadNotifications: setUnreadNotifications,
 			}}>
-			{props.children}
+			{children}
 		</NotificationContext.Provider>
 	);
 }

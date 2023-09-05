@@ -1,22 +1,20 @@
 import { API } from 'src/API';
 import i18n from 'src/util/I18N';
 
-import './Tag.css';
-
 import React, { ReactElement } from 'react';
 
 interface TagProps {
 	tag: TagChoice;
-	removeButton?: ReactElement;
+	children?: ReactElement;
 }
 
-export default function Tag(props: TagProps) {
+export default function Tag({ tag, children }: TagProps) {
 	return (
-		<span className='tag flex flex-row flex-nowrap p-2 justify-center items-center' style={{ backgroundColor: props.tag.color }}>
+		<span className='flex flex-row flex-nowrap p-2 justify-start items-center text-start' style={{ backgroundColor: tag.color }}>
 			<span className='flex flex-row text-center'>
-				{props.tag.displayName} : {props.tag.displayValue}
+				{tag.displayName} : {tag.displayValue}
 			</span>
-			{props.removeButton}
+			{children}
 		</span>
 	);
 }
@@ -52,15 +50,6 @@ export class TagChoice {
 }
 
 export class Tags {
-	static SCHEMATIC_UPLOAD_TAG: TagChoice[] = [];
-	static SCHEMATIC_SEARCH_TAG: TagChoice[] = [];
-
-	static POST_UPLOAD_TAG: TagChoice[] = [];
-	static POST_SEARCH_TAG: TagChoice[] = [];
-
-	static MAP_UPLOAD_TAG: TagChoice[] = [];
-	static MAP_SEARCH_TAG: TagChoice[] = [];
-
 	static TAG_SEPARATOR = '_';
 
 	static SORT_TAG: TagChoice[] = [
@@ -69,15 +58,16 @@ export class Tags {
 		new TagChoice('like', i18n.t('tag.most-liked'), '1', `like${this.TAG_SEPARATOR}1`, 'green'),
 	];
 
-	static getTag(tag: string, result: TagChoice[]) {
+	static getTag(tag: string, callback: (data: TagChoice[]) => void) {
 		API.getTagByName(tag) //
 			.then((r) => {
-				result.length = 0;
+				let result: TagChoice[] = [];
 				let customTagList: Array<CustomTag> = r.data;
 				let temp = customTagList.map((customTag) =>
 					customTag.value.map((value) => new TagChoice(customTag.name, i18n.t(`tag.${customTag.name}.name`), value, i18n.t(`tag.${customTag.name}.value.${value}`), customTag.color)),
 				);
 				temp.forEach((t) => t.forEach((m) => result.push(m)));
+				callback(result);
 			}) //
 			.catch(() => console.log(`Fail to load tag: ${tag}`));
 	}

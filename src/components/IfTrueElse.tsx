@@ -5,8 +5,8 @@ interface IfTrueElseProps {
 	whenTrue: ReactNode;
 	whenFalse: ReactNode;
 }
-export default function IfTrueElse(props: IfTrueElseProps) {
-	if (props.condition) return <>{props.whenTrue}</>;
+export default function IfTrueElse({ condition, whenTrue, whenFalse }: IfTrueElseProps) {
+	if (condition) return <>{whenTrue}</>;
 
-	return <>{props.whenFalse}</>;
+	return <>{whenFalse}</>;
 }

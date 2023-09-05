@@ -64,8 +64,8 @@ interface LogCardProps {
 	handleDeleteLog: (id: string) => void;
 }
 
-function LogCard(props: LogCardProps) {
-	const content: string[] = props.log.content.split('\n');
+function LogCard({ log, handleDeleteLog }: LogCardProps) {
+	const content: string[] = log.content.split('\n');
 	const header = content[0];
 	let detail: string[] = content.slice(1);
 	detail = detail ? detail : ['No content'];
@@ -73,17 +73,17 @@ function LogCard(props: LogCardProps) {
 	return (
 		<details className='log-card relative medium-padding'>
 			<summary>
-				<p>ID: {props.log.id}</p>
-				<p>Environment: {props.log.environment}</p>
+				<p>ID: {log.id}</p>
+				<p>Environment: {log.environment}</p>
 				<p>
-					Time: <DateDisplay time={props.log.time} />
+					Time: <DateDisplay time={log.time} />
 				</p>
 				<p>Message: {header}</p>
 				<ClearIconButton
 					className='absolute top-0 right small-margin ' //
 					icon='/assets/icons/trash-16.png'
 					title='delete'
-					onClick={() => props.handleDeleteLog(props.log.id)}
+					onClick={() => handleDeleteLog(log.id)}
 				/>
 			</summary>
 			<div>

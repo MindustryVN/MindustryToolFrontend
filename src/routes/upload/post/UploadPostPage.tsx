@@ -2,22 +2,21 @@ import './UploadPostPage.css';
 
 import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
-import { TagChoice, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/Tag';
 import useModel from 'src/hooks/UseModel';
 import Button from 'src/components/Button';
 import i18n from 'src/util/I18N';
-import Dropbox from 'src/components/Dropbox';
-import TagPick from 'src/components/tag/TagPick';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
-import PostView from 'src/components/post/PostView';
+import SearchBox from 'src/components/Searchbox';
+import TagPick from 'src/components/TagPick';
+import TagEditContainer from 'src/components/TagEditContainer';
+import PostView from 'src/components/PostView';
 import { useMe } from 'src/context/MeProvider';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import { API } from 'src/API';
 import LoadingSpinner from 'src/components/LoadingSpinner';
+import { useTags } from 'src/context/TagProvider';
 
-export default function UploadPostPage() {
-	const [title, setTitle] = useState('');
-	const [content, setContent] = useState(`> ## Cách để tải mindustry free
+const defaultContent = `> ## Cách để tải mindustry free
 - Ấn vào link bên dưới để đến trang tải xuống (Itch.io) [Link tải Mindustry free cho Window, Linux, MacOS, Android (Và tất nhiên là không có IOS)](https://anuke.itch.io/mindustry?fbclid=IwAR2HgdkixMrQEDhcj1an_qtWnnq6YmOlm-c8VoyPsNp5bMtu5aWq_ff7K2M)
 - Kéo xuống dưới và ấn vào nút "Download Now" 
 
@@ -27,7 +26,11 @@ export default function UploadPostPage() {
 
 - ![](/assets/images/post/no-thank.jpg)
 
-- Chọn phiên bản cần tải và tải thôi`);
+- Chọn phiên bản cần tải và tải thôi`;
+
+export default function UploadPostPage() {
+	const [title, setTitle] = useState('');
+	const [content, setContent] = useState(defaultContent);
 
 	const { model, setVisibility } = useModel();
 
@@ -37,6 +40,7 @@ export default function UploadPostPage() {
 	const { me } = useMe();
 
 	const [isLoading, setIsLoading] = useState(false);
+	const { postUploadTag } = useTags();
 
 	const { addPopup } = usePopup();
 
@@ -91,10 +95,10 @@ export default function UploadPostPage() {
 			<section className='editor-background relative flex flex-row w-full h-full gap-2 p-8 box-border'>
 				<section className='flex flex-row gap-2 w-full align-end'>
 					<input className='title-editor w-full box-border' type='text' placeholder={i18n.t('title').toString()} value={title} onChange={(event) => setTitle(event.target.value)} />
-					<Dropbox
+					<SearchBox
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
-						items={Tags.POST_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+						items={postUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}

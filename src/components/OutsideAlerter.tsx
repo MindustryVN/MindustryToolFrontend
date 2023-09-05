@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ReactNode } from 'react-markdown/lib/ast-to-react';
+import { cn } from 'src/util/Utils';
 
 interface OutsideAlerterProps {
 	className?: string;
@@ -23,5 +24,9 @@ export default function OutsideAlerter({ className, children, onClickOutside }: 
 		};
 	}, [wrapperRef, onClickOutside]);
 
-	return <div ref={wrapperRef} className={className ? className : ''}>{children}</div>;
+	return (
+		<div ref={wrapperRef} className={cn(className)}>
+			{children}
+		</div>
+	);
 }

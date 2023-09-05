@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Schematic from 'src/data/Schematic';
 
-import { TagChoice, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/Tag';
 import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Utils } from 'src/util/Utils';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import { Buffer } from 'buffer';
@@ -17,23 +16,23 @@ import ItemRequirement from 'src/components/ItemRequirement';
 import InfoImage from 'src/components/InfoImage';
 import PreviewContainer from 'src/components/PreviewContainer';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
+import TagEditContainer from 'src/components/TagEditContainer';
 import ClearIconButton from 'src/components/ClearIconButton';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import DownloadButton from 'src/components/DownloadButton';
 import ConfirmDialog from 'src/components/ConfirmDialog';
 import LoadUserName from 'src/components/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
-import TagContainer from 'src/components/tag/TagContainer';
+import TagContainer from 'src/components/TagContainer';
 import IconButton from 'src/components/IconButton';
 import LikeCount from 'src/components/LikeCount';
 import ColorText from 'src/components/ColorText';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import useModel from 'src/hooks/UseModel';
-import Dropbox from 'src/components/Dropbox';
+import SearchBox from 'src/components/Searchbox';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useLike from 'src/hooks/UseLike';
-import TagPick from 'src/components/tag/TagPick';
+import TagPick from 'src/components/TagPick';
 import Button from 'src/components/Button';
 import IfTrue from 'src/components/IfTrue';
 import Icon from 'src/components/Icon';
@@ -42,13 +41,17 @@ import useDialog from 'src/hooks/UseDialog';
 import CommentSection from 'src/components/CommentSection';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { Users } from 'src/data/User';
+import { useTags } from 'src/context/TagProvider';
+import { getDownloadUrl } from 'src/util/Utils';
+import OptionBox from 'src/components/OptionBox';
 
 export default function SchematicPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
 
 	const sort = Tags.parse(searchParam.get('sort'), Tags.SORT_TAG);
 	const urlTags = searchParam.get('tags');
-	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), Tags.SCHEMATIC_SEARCH_TAG);
+	const { schematicSearchTag } = useTags();
+	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), schematicSearchTag);
 
 	const currentSchematic = useRef<Schematic>();
 	const [tag, setTag] = useState<string>('');
@@ -129,30 +132,25 @@ export default function SchematicPage() {
 	return (
 		<main id='schematic' className='h-full w-full overflow-y-auto flex flex-col gap-2 p-2'>
 			<header className='flex flex-col gap-2 w-full'>
-				<section className='flex justify-center items-center w-2/3 md:w-2/5 m-auto mt-8'>
-					<Dropbox
+				<section className='flex flex-row justify-center items-center w-3/4 md:w-3/5 m-auto mt-8 gap-2'>
+					<SearchBox
+						className='h-10 w-full'
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
-						items={Tags.SCHEMATIC_SEARCH_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
+						items={schematicSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
-						insideChildren={<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />}
-						mapper={(t, index) => <TagPick key={index} tag={t} />}
+						mapper={(t, index) => <TagPick key={index} tag={t} />}>
+						<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
+					</SearchBox>
+					<OptionBox
+						className='h-10 w-40'
+						items={Tags.SORT_TAG}
+						mapper={(item, index) => <span key={index} className='whitespace-nowrap'>{item.displayName}</span>}
+						onChoose={(item) => handleSetSortQuery(item)}
 					/>
 				</section>
 				<TagEditContainer tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-				<section className='grid grid-auto-column grid-flow-col w-fit m-auto gap-2'>
-					{Tags.SORT_TAG.map((c: TagChoice) => (
-						<Button
-							className='capitalize' //
-							key={c.name + c.value}
-							title={c.name}
-							active={c === sortQuery}
-							onClick={() => handleSetSortQuery(c)}>
-							{c.displayName}
-						</Button>
-					))}
-				</section>
 			</header>
 			<section className='flex flex-row justify-center items-center p-2'>
 				<Trans i18nKey='total-schematic' /> : {totalSchematic > 0 ? totalSchematic : 0}
@@ -192,19 +190,19 @@ interface SchematicPreviewProps {
 	handleOpenModel: (schematic: Schematic) => void;
 }
 
-export function SchematicPreview(props: SchematicPreviewProps) {
+export function SchematicPreview({ schematic, handleOpenModel }: SchematicPreviewProps) {
 	const { copy } = useClipboard();
 
 	return (
-		<PreviewCard className='relative w-full h-full' key={props.schematic.id}>
+		<PreviewCard className='relative w-full h-full' key={schematic.id}>
 			<ClearIconButton
 				className='absolute top-0 left-0 p-2'
 				title={i18n.t('copy-link')}
 				icon='/assets/icons/copy.png'
-				onClick={() => copy(`${FRONTEND_URL}schematic/${props.schematic.id}`)}></ClearIconButton>
-			<PreviewImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} onClick={() => props.handleOpenModel(props.schematic)} />
-			<ColorText className='capitalize p-4 flex justify-center items-center text-center' text={props.schematic.name} />
-			<SchematicPreviewButton schematic={props.schematic} />
+				onClick={() => copy(`${FRONTEND_URL}schematic/${schematic.id}`)}></ClearIconButton>
+			<PreviewImage src={`${API_BASE_URL}schematic/${schematic.id}/image`} onClick={() => handleOpenModel(schematic)} />
+			<ColorText className='capitalize p-4 flex justify-center items-center text-center' text={schematic.name} />
+			<SchematicPreviewButton schematic={schematic} />
 		</PreviewCard>
 	);
 }
@@ -212,19 +210,19 @@ interface SchematicPreviewButtonProps {
 	schematic: Schematic;
 }
 
-function SchematicPreviewButton(props: SchematicPreviewButtonProps) {
+function SchematicPreviewButton({ schematic }: SchematicPreviewButtonProps) {
 	const { copy } = useClipboard();
 
-	const likeService = useLike('schematic', props.schematic.id, props.schematic.like);
-	props.schematic.like = likeService.likes;
+	const likeService = useLike('schematic', schematic.id, schematic.like);
+	schematic.like = likeService.likes;
 
 	return (
 		<section className='grid grid-flow-col grid-auto-column gap-2 p-2'>
 			<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount count={likeService.likes} />
 			<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
-			<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
+			<IconButton title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
+			<DownloadButton href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 		</section>
 	);
 }
@@ -235,38 +233,40 @@ interface SchematicInfoProps {
 	handleDeleteSchematic: (schematic: Schematic) => void;
 }
 
-export function SchematicInfo(props: SchematicInfoProps) {
+export function SchematicInfo({ schematic, handleCloseModel, handleDeleteSchematic }: SchematicInfoProps) {
 	const { copy } = useClipboard();
+
+	const { schematicSearchTag } = useTags();
 
 	return (
 		<main className='flex flex-col space-between w-full h-full gap-4 p-8 box-border overflow-y-auto'>
 			<section className='relative flex flex-row flex-wrap gap-2'>
-				<InfoImage src={`${API_BASE_URL}schematic/${props.schematic.id}/image`} />
+				<InfoImage src={`${API_BASE_URL}schematic/${schematic.id}/image`} />
 				<ClearIconButton
 					className='absolute top-0 left-0 p-2'
 					title={i18n.t('copy-link').toString()}
 					icon='/assets/icons/copy.png'
-					onClick={() => copy(`${FRONTEND_URL}schematic/${props.schematic.id}`)}
+					onClick={() => copy(`${FRONTEND_URL}schematic/${schematic.id}`)}
 				/>
 				<section className='flex flex-col gap-2'>
-					<ColorText className='capitalize text-2xl' text={props.schematic.name} />
+					<ColorText className='capitalize text-2xl' text={schematic.name} />
 					<section className='flex flex-row whitespace-nowrap gap-2'>
-						<Trans i18nKey='author' /> <LoadUserName userId={props.schematic.authorId} />
+						<Trans i18nKey='author' /> <LoadUserName userId={schematic.authorId} />
 					</section>
-					<SchematicDescription description={props.schematic.description} />
-					<ItemRequirement requirement={props.schematic.requirement} />
-					<TagContainer tags={Tags.parseArray(props.schematic.tags, Tags.SCHEMATIC_SEARCH_TAG)} />
+					<SchematicDescription description={schematic.description} />
+					<ItemRequirement requirement={schematic.requirement} />
+					<TagContainer tags={Tags.parseArray(schematic.tags, schematicSearchTag)} />
 					<section className='flex flex-row whitespace-nowrap gap-2'>
-						<Trans i18nKey='verify-by' /> <LoadUserName userId={props.schematic.verifyAdmin} />
+						<Trans i18nKey='verify-by' /> <LoadUserName userId={schematic.verifyAdmin} />
 					</section>
 				</section>
 			</section>
 			<SchematicInfoButton
-				schematic={props.schematic}
-				handleCloseModel={props.handleCloseModel} //
-				handleDeleteSchematic={props.handleDeleteSchematic}
+				schematic={schematic}
+				handleCloseModel={handleCloseModel} //
+				handleDeleteSchematic={handleDeleteSchematic}
 			/>
-			<CommentSection contentType='schematic' targetId={props.schematic.id} />
+			<CommentSection contentType='schematic' targetId={schematic.id} />
 		</main>
 	);
 }
@@ -277,14 +277,14 @@ interface SchematicInfoButtonProps {
 	handleDeleteSchematic: (schematic: Schematic) => void;
 }
 
-function SchematicInfoButton(props: SchematicInfoButtonProps) {
+function SchematicInfoButton({ schematic, handleCloseModel, handleDeleteSchematic }: SchematicInfoButtonProps) {
 	const { me } = useMe();
 	const { copy } = useClipboard();
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike('schematic', props.schematic.id, props.schematic.like);
-	props.schematic.like = likeService.likes;
+	const likeService = useLike('schematic', schematic.id, schematic.like);
+	schematic.like = likeService.likes;
 
 	return (
 		<section className='flex flex-row justify-between'>
@@ -292,16 +292,16 @@ function SchematicInfoButton(props: SchematicInfoButtonProps) {
 				<IconButton title='up-vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 				<LikeCount count={likeService.likes} />
 				<IconButton title='down-vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-				<IconButton title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(props.schematic.data, 'base64').toString())} />
-				<DownloadButton href={Utils.getDownloadUrl(props.schematic.data)} download={`${('schematic_' + props.schematic.name).trim().replaceAll(' ', '_')}.msch`} />
+				<IconButton title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
+				<DownloadButton href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 				<IfTrue
-					condition={Users.isAuthorOrAdmin(props.schematic.id, me)} //
+					condition={Users.isAuthorOrAdmin(schematic.id, me)} //
 					whenTrue={<IconButton title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 				/>
 			</section>
-			<Button title={i18n.t('back')} onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+			<Button title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
 			{dialog(
-				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => props.handleDeleteSchematic(props.schematic)}>
+				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => handleDeleteSchematic(schematic)}>
 					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />
 					<Trans i18nKey='delete-schematic-dialog' />
 				</ConfirmDialog>,

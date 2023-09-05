@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { API_BASE_URL } from './config/Config';
 import Schematic from 'src/data/Schematic';
 import Map from 'src/data/Map';
-import { TagChoice, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/Tag';
 
 export class API {
 	static REQUEST = axios.create({

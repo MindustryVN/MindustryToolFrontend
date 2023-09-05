@@ -32,23 +32,23 @@ export const PopupMessageContext = React.createContext<PopupMessageContextProps>
 	addPopup: (_: ReactNode, __: number, ___: PopupMessageType) => {},
 });
 
-interface PopupMessageProviderProps {
+interface PopupMessageProvider {
 	children: ReactNode;
 }
 
-export default function AlertProvider(props: PopupMessageProviderProps) {
+export default function AlertProvider({ children }: PopupMessageProvider) {
 	const [contents, setMessages] = React.useState<PopupMessageData[]>([]);
 
 	useEffect(() => {
 		const start = Date.now();
 
-		function addMessage(props: PopupMessageProps) {
+		function addMessage({ content, duration, type }: PopupMessageProps) {
 			let uuid: string = v4();
 			let val: PopupMessageData = {
-				content: props.content,
-				duration: props.duration,
+				content: content,
+				duration: duration,
 				uuid: uuid,
-				type: props.type,
+				type: type,
 			};
 			setMessages((prev) => [val, ...prev]);
 		}
@@ -109,20 +109,20 @@ export default function AlertProvider(props: PopupMessageProviderProps) {
 					/>
 				))}
 			</section>
-			{props.children}
+			{children}
 		</PopupMessageContext.Provider>
 	);
 }
 
-interface PopupMessageNodeProps {
+interface PopupMessageNode {
 	content: ReactNode;
 	duration: number;
 	type: PopupMessageType;
 	onTimeOut: () => void;
 }
 
-function PopupMessage(props: PopupMessageNodeProps) {
-	const ref = useRef(props);
+function PopupMessage({ content, duration, type, onTimeOut }: PopupMessageNode) {
+	const ref = useRef({ duration, onTimeOut });
 
 	useEffect(() => {
 		let id: NodeJS.Timeout = setTimeout(() => {
@@ -135,17 +135,17 @@ function PopupMessage(props: PopupMessageNodeProps) {
 	}, []);
 
 	return (
-		<section className={'min-w-[50%] max-w-full md:min-w-[25%] md:max-w-[50%] rounded-l-lg overflow-hidden animate-slide-in text-white pointer-events-auto ' + props.type}>
-			<section className='flex flex-row justify-between items-start w-full gap-2'>
-				<section className='p-2'>{props.content}</section>
+		<section className={'min-w-[50%] max-w-full md:min-w-[25%] md:max-w-[50%] rounded-l-lg overflow-hidden animate-slide-in text-white pointer-events-auto ' + type}>
+			<section className='flex flex-row justify-between items-start w-full gap-1 p-2'>
+				<section className='p-2'>{content}</section>
 				<ClearIconButton //
-					className='self-start align-top w-4 h-4 p-2'
+					className='self-start align-top w-4 h-4'
 					icon='/assets/icons/quit.png'
 					title='remove'
-					onClick={() => props.onTimeOut()}
+					onClick={() => onTimeOut()}
 				/>
 			</section>
-			<div className='h-1 w-full bg-blue-500 origin-top-left' style={{ animation: `timer ${props.duration}s linear forwards` }} />
+			<div className='h-1 w-full bg-blue-500 origin-top-left' style={{ animation: `timer ${duration}s linear forwards` }} />
 		</section>
 	);
 }

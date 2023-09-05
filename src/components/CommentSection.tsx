@@ -11,7 +11,7 @@ import { Trans } from 'react-i18next';
 import IfTrueElse from 'src/components/IfTrueElse';
 import ClearIconButton from 'src/components/ClearIconButton';
 import ClearButton from 'src/components/ClearButton';
-import { Ellipsis } from 'src/components/Icon';
+import { EllipsisIcon } from 'src/components/Icon';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
@@ -21,11 +21,11 @@ interface CommentSectionProps {
 	targetId: string;
 }
 
-export default function CommentSection(props: CommentSectionProps) {
-	const commentUrl = useRef(`comment/${props.contentType}/${props.targetId}`);
+export default function CommentSection({ contentType, targetId }: CommentSectionProps) {
+	const commentUrl = useRef(`comment/${contentType}/${targetId}`);
 	const usePage = useInfinitePage<Comment>(commentUrl.current, 20);
 
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType + '_reply'} comment={v} nestLevel={0} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={contentType + '_reply'} comment={v} nestLevel={0} />);
 
 	const { addPopup } = usePopup();
 
@@ -33,7 +33,7 @@ export default function CommentSection(props: CommentSectionProps) {
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
-		API.postComment(`comment/${props.contentType}`, targetId, content, props.contentType)
+		API.postComment(`comment/${contentType}`, targetId, content, contentType)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
 			.finally(() => setLoading(false));
@@ -43,7 +43,7 @@ export default function CommentSection(props: CommentSectionProps) {
 
 	return (
 		<section className='flex flex-col gap-4 w-full'>
-			<CommentInputArea targetId={props.targetId} handleAddComment={handleAddComment} />
+			<CommentInputArea targetId={targetId} handleAddComment={handleAddComment} />
 			{pages}
 		</section>
 	);
@@ -55,7 +55,7 @@ interface ReplyProps {
 	nestLevel: number;
 }
 
-function Reply(props: ReplyProps) {
+function Reply({ contentType, comment, nestLevel }: ReplyProps) {
 	const [showInput, setShowInput] = useState(false);
 	const [showReply, setShowReply] = useState(false);
 	const [showDropdown, setShowDropdown] = useState(false);
@@ -65,14 +65,14 @@ function Reply(props: ReplyProps) {
 
 	const { addPopup } = usePopup();
 
-	const replyUrl = useRef(`comment/${props.contentType}/${props.comment.id}`);
+	const replyUrl = useRef(`comment/${contentType}/${comment.id}`);
 
 	const usePage = useInfinitePage<Comment>(replyUrl.current, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={props.contentType} comment={v} nestLevel={props.nestLevel + 1} />);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={contentType} comment={v} nestLevel={nestLevel + 1} />);
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
-		API.postComment(`comment/${props.contentType}`, targetId, content, props.contentType)
+		API.postComment(`comment/${contentType}`, targetId, content, contentType)
 			.then(() => addPopup(i18n.t('comment-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('comment-fail'), 5, 'warning'))
 			.finally(() => setLoading(false));
@@ -80,7 +80,7 @@ function Reply(props: ReplyProps) {
 
 	function handleRemoveComment(comment: Comment) {
 		setLoading(true);
-		API.deleteComment(props.contentType, comment.id)
+		API.deleteComment(contentType, comment.id)
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'warning'))
 			.finally(() => setLoading(false))
@@ -92,8 +92,8 @@ function Reply(props: ReplyProps) {
 	return (
 		<section className='relative flex flex-col'>
 			<div className='flex flex-row gap-2 p-2 flex-wrap bg-slate-700'>
-				<LoadUserName userId={props.comment.authorId} />
-				<p>{props.comment.content}</p>
+				<LoadUserName userId={comment.authorId} />
+				<p>{comment.content}</p>
 			</div>
 			<section className='flex flex-row gap-2 justify-center items-center self-end align-bottom h-8'>
 				<ClearButton className='flex flex-row gap-2' title={i18n.t('reply')} onClick={() => setShowInput((prev) => !prev)}>
@@ -107,7 +107,7 @@ function Reply(props: ReplyProps) {
 					<Trans i18nKey='reply' />
 				</ClearButton>
 				<IfTrue
-					condition={props.nestLevel < 3}
+					condition={nestLevel < 3}
 					whenTrue={
 						<section className='flex flex-row justify-end gap-2'>
 							<IfTrue
@@ -128,7 +128,7 @@ function Reply(props: ReplyProps) {
 				condition={showInput}
 				whenTrue={
 					<ReplyInputArea
-						targetId={props.comment.id}
+						targetId={comment.id}
 						handleAddComment={handleAddComment} //
 						onClose={() => setShowInput(false)}
 					/>
@@ -145,15 +145,15 @@ function Reply(props: ReplyProps) {
 				}
 			/>
 			<IfTrue
-				condition={Users.isAuthorOrAdmin(props.comment.id, me)}
+				condition={Users.isAuthorOrAdmin(comment.id, me)}
 				whenTrue={
 					<section className='absolute top-0 right-0 flex flex-col center p-2'>
 						<ClearButton title={i18n.t('option')} onClick={() => setShowDropdown((prev) => !prev)}>
-							<Ellipsis />
+							<EllipsisIcon />
 						</ClearButton>
 						<IfTrue
 							condition={showDropdown}
-							whenTrue={<ClearIconButton className='absolute' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => handleRemoveComment(props.comment)} />}
+							whenTrue={<ClearIconButton className='absolute' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => handleRemoveComment(comment)} />}
 						/>
 					</section>
 				}
@@ -167,14 +167,14 @@ interface CommentInputProps {
 	onChange: (value: string) => void;
 }
 
-function CommentInput(props: CommentInputProps) {
+function CommentInput({ content, onChange }: CommentInputProps) {
 	return (
 		<textarea
 			className='bg-transparent outline-none w-full box-border resize-none' //
 			placeholder={i18n.t('write-a-comment').toString()}
 			maxLength={200}
-			value={props.content}
-			onChange={(event) => props.onChange(event.target.value)}
+			value={content}
+			onChange={(event) => onChange(event.target.value)}
 		/>
 	);
 }
@@ -184,14 +184,14 @@ interface CommentInputAreaProps {
 	handleAddComment: (content: string, targetId: string) => void;
 }
 
-function CommentInputArea(props: CommentInputAreaProps) {
+function CommentInputArea({ targetId, handleAddComment }: CommentInputAreaProps) {
 	const [content, setMessage] = useState('');
 
 	return (
 		<section className='w-full flex flex-row border-b-2 border-slate-500'>
 			<CommentInput content={content} onChange={(value) => setMessage(value)} />
 			<section className='flex flex-row justify-end'>
-				<ClearIconButton title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => props.handleAddComment(content, props.targetId)} />
+				<ClearIconButton title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
 			</section>
 		</section>
 	);
@@ -203,7 +203,7 @@ interface ReplyInputProps {
 	onClose: () => void;
 }
 
-function ReplyInputArea(props: ReplyInputProps) {
+function ReplyInputArea({ targetId, handleAddComment, onClose }: ReplyInputProps) {
 	const [content, setMessage] = useState('');
 
 	return (
@@ -211,8 +211,8 @@ function ReplyInputArea(props: ReplyInputProps) {
 			<CommentInput content={content} onChange={(value) => setMessage(value)} />
 			<section className='flex flex-row justify-end'>
 				<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
-					<ClearIconButton title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
-					<ClearIconButton title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => props.handleAddComment(content, props.targetId)} />
+					<ClearIconButton title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
+					<ClearIconButton title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
 				</section>
 			</section>
 		</section>

@@ -7,11 +7,11 @@ interface ScrollToTopButtonProps {
 	containerId: string;
 }
 
-export default function ScrollToTopButton(props: ScrollToTopButtonProps) {
+export default function ScrollToTopButton({ containerId }: ScrollToTopButtonProps) {
 	function scrollToTop() {
-		let container = document.getElementById(props.containerId);
+		let container = document.getElementById(containerId);
 		if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
-		else console.log(`Container element is not found with id ${props}`);
+		else console.log(`Container element is not found with id ${containerId}`);
 	}
 
 	return (

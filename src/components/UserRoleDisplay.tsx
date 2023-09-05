@@ -1,15 +1,15 @@
 import { UserRole } from 'src/data/UserRole';
 import React, { ReactNode } from 'react';
 
-interface UserRoleProps {
+interface UserRoleDisplayProps {
 	roles: UserRole[];
 }
 
-export default function UserRoleDisplay(props: UserRoleProps) {
+export default function UserRoleDisplay({ roles }: UserRoleDisplayProps) {
 	let arr: ReactNode[] = [];
 
-	for (let i = 0; i < props.roles.length; i++) {
-		arr.push(<Role key={i} role={props.roles[i]} />);
+	for (let i = 0; i < roles.length; i++) {
+		arr.push(<Role key={i} role={roles[i]} />);
 	}
 
 	return <section className='flex gap-1'>{arr}</section>;

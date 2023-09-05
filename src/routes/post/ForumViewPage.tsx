@@ -6,15 +6,16 @@ import { API } from 'src/API';
 import i18n from 'src/util/I18N';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import { Trans } from 'react-i18next';
-import { Tags } from 'src/components/tag/Tag';
+import { Tags } from 'src/components/Tag';
 import LoadUserName from 'src/components/LoadUserName';
-import TagContainer from 'src/components/tag/TagContainer';
-import Markdown from 'src/components/markdown/Markdown';
+import TagContainer from 'src/components/TagContainer';
+import Markdown from 'src/components/Markdown';
 import DateDisplay from 'src/components/Date';
 import IconButton from 'src/components/IconButton';
 import IfTrue from 'src/components/IfTrue';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
+import { useTags } from 'src/context/TagProvider';
 
 export default function ForumViewPage() {
 	const { postId } = useParams();
@@ -25,6 +26,8 @@ export default function ForumViewPage() {
 	const { addPopup } = usePopup();
 
 	const { me } = useMe();
+
+	const { postSearchTag } = useTags();
 
 	function handleDeletePost(post: Post) {
 		API.deletePost(post.id) //
@@ -47,7 +50,7 @@ export default function ForumViewPage() {
 			<header className='flex flex-row p-8 gap-2'>
 				<span className='title'>{data.header}</span>
 				<LoadUserName userId={data.authorId} />
-				<TagContainer tags={Tags.parseArray(data.tags, Tags.POST_SEARCH_TAG)} />
+				<TagContainer tags={Tags.parseArray(data.tags, postSearchTag)} />
 			</header>
 			<Markdown children={data.content} />
 			<footer className='flex flex-row justify-end gap-2 align-end'>
