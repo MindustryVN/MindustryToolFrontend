@@ -1,11 +1,11 @@
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { TagChoice, Tags } from 'src/components/Tag';
 
-interface TagProvider {
+interface TagProviderProps {
 	children: ReactNode;
 }
 
-interface TagContext {
+interface TagContextProps {
 	schematicUploadTag: TagChoice[];
 	schematicSearchTag: TagChoice[];
 	mapUploadTag: TagChoice[];
@@ -14,7 +14,7 @@ interface TagContext {
 	postSearchTag: TagChoice[];
 }
 
-const TagContext = React.createContext<TagContext>({
+const TagContext = React.createContext<TagContextProps>({
 	schematicUploadTag: [],
 	schematicSearchTag: [],
 	mapUploadTag: [],
@@ -27,8 +27,8 @@ export function useTags() {
 	return useContext(TagContext);
 }
 
-export default function TagProvider({ children }: TagProvider) {
-	const [tags, setTags] = useState<TagContext>({
+export default function TagProvider({ children }: TagProviderProps) {
+	const [tags, setTags] = useState<TagContextProps>({
 		schematicUploadTag: [],
 		schematicSearchTag: [],
 		mapUploadTag: [],
