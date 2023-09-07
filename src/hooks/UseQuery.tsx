@@ -2,9 +2,8 @@ import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 import { API } from 'src/API';
 
-
 export default function useQuery<T>(url: string, initialValue?: T, searchConfig?: AxiosRequestConfig<any>) {
-	const [data, setData] = useState<T | undefined>(initialValue);
+	const [data, setData] = useState(initialValue);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 
@@ -21,5 +20,5 @@ export default function useQuery<T>(url: string, initialValue?: T, searchConfig?
 			.finally(() => setIsLoading(false)); //
 	}, [searchConfig, url]);
 
-	return { data: data, isLoading: isLoading, isError: isError };
+	return { data, isLoading, isError, setData };
 }

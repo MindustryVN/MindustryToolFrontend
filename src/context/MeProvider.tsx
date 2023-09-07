@@ -25,7 +25,7 @@ interface MeProviderProps {
 	children: ReactNode;
 }
 
-export default function MeProvider(props: MeProviderProps) {
+export default function MeProvider({ children }: MeProviderProps) {
 	const [me, setMe] = useState<User>();
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -55,5 +55,5 @@ export default function MeProvider(props: MeProviderProps) {
 		localStorage.removeItem(ACCESS_TOKEN);
 	}
 
-	return <MeContext.Provider value={{ me: me, loading: loading, handleLogout: handleLogOut }}>{props.children}</MeContext.Provider>;
+	return <MeContext.Provider value={{ me: me, loading: loading, handleLogout: handleLogOut }}>{children}</MeContext.Provider>;
 }

@@ -66,7 +66,8 @@
 		"@types/react-virtualized": "^9.21.22",
 		"@types/uuid": "^9.0.2",
 		"hint": "^2.0.0",
-		"prettier": "^3.0.0",
+		"prettier": "^3.0.3",
+		"prettier-plugin-tailwindcss": "^0.5.4",
 		"tailwindcss": "^3.3.3"
 	}
 }

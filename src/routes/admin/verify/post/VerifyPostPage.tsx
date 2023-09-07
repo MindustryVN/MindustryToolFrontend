@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
-import Button from 'src/components/button/Button';
-import ClearIconButton from 'src/components/button/ClearIconButton';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import IfTrue from 'src/components/common/IfTrue';
-import ConfirmDialog from 'src/components/dialog/ConfirmDialog';
-import Dropbox from 'src/components/dropbox/Dropbox';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import PostPreview from 'src/components/post/PostPreview';
-import PostView from 'src/components/post/PostView';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
-import TagPick from 'src/components/tag/TagPick';
+import Button from 'src/components/Button';
+import ClearIconButton from 'src/components/ClearIconButton';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
+import IfTrue from 'src/components/IfTrue';
+import ConfirmDialog from 'src/components/ConfirmDialog';
+import SearchBox from 'src/components/Searchbox';
+import LoadingSpinner from 'src/components/LoadingSpinner';
+import PostPreview from 'src/components/PostPreview';
+import PostView from 'src/components/PostView';
+import { TagChoice, Tags } from 'src/components/Tag';
+import TagEditContainer from 'src/components/TagEditContainer';
+import TagPick from 'src/components/TagPick';
 import useDialog from 'src/hooks/UseDialog';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import useModel from 'src/hooks/UseModel';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
-import AdminOnly from 'src/components/common/AdminOnly';
+import AdminOnly from 'src/components/AdminOnly';
+import { useTags } from 'src/context/TagProvider';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
@@ -44,7 +45,7 @@ export default function VerifyPostPage() {
 			.finally(() => usePage.filter((p) => p !== post));
 	}
 
-	function verifyPost(post: Post, tags: TagChoiceLocal[]) {
+	function verifyPost(post: Post, tags: TagChoice[]) {
 		setVisibility(false);
 		API.verifyPost(post, tags) //
 			.then(() => API.postNotification(post.authorId, 'Your post submission has be accept', 'Post post success'))
@@ -54,9 +55,9 @@ export default function VerifyPostPage() {
 	}
 
 	return (
-		<main id='verify-post' className='flex-column h100p w100p'>
-			<section className='flex-column medium-gap' children={pages} />
-			<footer className='flex-center'>
+		<main id='verify-post' className='flex flex-row h-full w-full'>
+			<section className='flex flex-row gap-2' children={pages} />
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -86,23 +87,24 @@ interface PostUploadPreviewProps {
 	handleOpenModel: (post: Post) => void;
 }
 
-export function PostUploadPreview(props: PostUploadPreviewProps) {
+export function PostUploadPreview({ post, handleOpenModel }: PostUploadPreviewProps) {
 	return (
-		<section role='button' onClick={() => props.handleOpenModel(props.post)}>
-			<PostPreview post={props.post} />
+		<section role='button' onClick={() => handleOpenModel(post)}>
+			<PostPreview post={post} />
 		</section>
 	);
 }
 
 interface PostUploadInfoProps {
 	post: Post;
-	handleVerifyPost: (post: Post, tags: TagChoiceLocal[]) => void;
+	handleVerifyPost: (post: Post, tags: TagChoice[]) => void;
 	handleRejectPost: (post: Post, reason: string) => void;
 	handleCloseModel: () => void;
 }
 
-export function PostUploadInfo(props: PostUploadInfoProps) {
-	const [tags, setTags] = useState<TagChoiceLocal[]>(Tags.parseArray(props.post.tags, Tags.POST_UPLOAD_TAG));
+export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handleRejectPost }: PostUploadInfoProps) {
+	const { postUploadTag } = useTags();
+	const [tags, setTags] = useState<TagChoice[]>(Tags.parseArray(post.tags, postUploadTag));
 	const [tag, setTag] = useState('');
 
 	const verifyDialog = useDialog();
@@ -110,7 +112,7 @@ export function PostUploadInfo(props: PostUploadInfoProps) {
 
 	const { model, setVisibility } = useModel();
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		tags.filter((q) => q !== tag);
 		setTags((prev) => [...prev, tag]);
 		setTag('');
@@ -121,53 +123,53 @@ export function PostUploadInfo(props: PostUploadInfoProps) {
 	}
 
 	return (
-		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<section className='editor-background relative flex-column w100p h100p small-gap massive-padding border-box'>
-				<section className='flex-row small-gap w100p align-end'>
-					<input className='title-editor w100p border-box' type='text' value={props.post.header} placeholder={i18n.t('title').toString()} disabled={true} />
-					<Dropbox
+		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
+			<section className='editor-background relative flex flex-row w-full h-full gap-2 p-8 box-border'>
+				<section className='flex flex-row gap-2 w-full align-end'>
+					<input className='title-editor w-full box-border' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
+					<SearchBox
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
-						items={Tags.POST_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+						items={postUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
 				<TagEditContainer tags={tags} onRemove={handleRemoveTag} />
-				<textarea className='content-editor w100p h100p' value={props.post.content} disabled={true} />
-				<section className='flex-row absolute top right medium-margin small-gap'>
+				<textarea className='content-editor w-full h-full' value={post.content} disabled={true} />
+				<section className='flex flex-row absolute top-0 right medium-margin gap-2'>
 					<a className='button' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 						<Trans i18nKey='how-to-write-markdown' />
 					</a>
-					<Button onClick={() => setVisibility(true)}>
+					<Button title={i18n.t('show-preview')} onClick={() => setVisibility(true)}>
 						<Trans i18nKey='show-preview' />
 					</Button>
 				</section>
 			</section>
 
-			<section className='grid-row small-gap'>
-				<Button children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
-				<AdminOnly children={<Button children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
-				<Button onClick={() => props.handleCloseModel()} children={<Trans i18nKey='back' />} />
+			<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
+				<Button title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
+				<AdminOnly children={<Button title={i18n.t('verify')} children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
+				<Button title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
 				<ConfirmDialog
-					onConfirm={() => props.handleVerifyPost(props.post, tags)} //
+					onConfirm={() => handleVerifyPost(post, tags)} //
 					onClose={() => verifyDialog.setVisibility(false)}>
 					<Trans i18nKey='verify' />
 				</ConfirmDialog>,
 			)}
 			{rejectDialog.dialog(
 				<TypeDialog
-					onSubmit={(reason) => props.handleRejectPost(props.post, reason)} //
+					onSubmit={(reason) => handleRejectPost(post, reason)} //
 					onClose={() => rejectDialog.setVisibility(false)}
 				/>,
 			)}
 			{model(
-				<section className='relative w100p h100p scroll-y'>
-					<PostView post={props.post} />
-					<Button className='absolute top right medium-margin' onClick={() => setVisibility(false)}>
+				<section className='relative w-full h-full overflow-y-auto'>
+					<PostView post={post} />
+					<Button title={i18n.t('hide-preview')} className='absolute top-0 right medium-margin' onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>
 				</section>,
@@ -181,18 +183,18 @@ interface TypeDialogProps {
 	onClose: () => void;
 }
 
-function TypeDialog(props: TypeDialogProps) {
+function TypeDialog({ onSubmit, onClose }: TypeDialogProps) {
 	const [content, setContent] = useState('');
 
 	return (
-		<section className='flex-column'>
-			<header className='flex-row space-between small-padding'>
+		<section className='flex flex-row'>
+			<header className='flex flex-row space-between p-2'>
 				<Trans i18nKey='reject-reason' />
-				<ClearIconButton icon='/assets/icons/quit.png' onClick={() => props.onClose()} />
+				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
 			</header>
 			<textarea className='type-dialog' title='reason' onChange={(event) => setContent(event.target.value)} />
-			<section className='flex-row justify-end w100p small-padding border-box'>
-				<Button onClick={() => props.onSubmit(content)}>
+			<section className='flex flex-row justify-end w-full p-2 box-border'>
+				<Button title={i18n.t('reject')} onClick={() => onSubmit(content)}>
 					<Trans i18nKey='reject' />
 				</Button>
 			</section>

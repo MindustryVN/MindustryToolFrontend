@@ -1,15 +1,13 @@
-import 'src/styles.css';
-
 import { API } from 'src/API';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/common/IfTrue';
+import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
+import LoadingSpinner from 'src/components/LoadingSpinner';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { PostUploadInfo, PostUploadPreview } from 'src/routes/admin/verify/post/VerifyPostPage';
 
@@ -36,9 +34,9 @@ export default function UserPostUploadTab() {
 	}
 
 	return (
-		<main id='post-tab' className='flex-column small-gap w100p h100p scroll-y'>
+		<main id='post-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
 			<section children={pages} />
-			<footer className='flex-center'>
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //

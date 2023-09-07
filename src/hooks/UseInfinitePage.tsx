@@ -1,9 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
-import { Utils } from 'src/util/Utils';
-
-var cancelRequest: AbortController;
+import { array2dToArray1d } from 'src/util/Utils';
 
 export interface UseInfinitePage<T> {
 	pages: T[];
@@ -16,15 +14,16 @@ export interface UseInfinitePage<T> {
 }
 
 export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>): UseInfinitePage<T> {
+	const cancelRequest = useRef<AbortController>(new AbortController());
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
 
 	function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
-		if (cancelRequest) cancelRequest.abort();
-
-		cancelRequest = new AbortController();
+		
+		cancelRequest.current.abort();
+		cancelRequest.current = new AbortController();
 
 		setIsLoading(true);
 
@@ -37,9 +36,8 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			};
 		}
 
-		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.signal };
+		searchConfig = { params: { ...searchConfig.params, page: page, items: itemPerPage }, signal: cancelRequest.current.signal };
 
-		console.log({ method: 'Get', url, searchConfig });
 		return API.get(url, searchConfig);
 	}
 
@@ -58,6 +56,8 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			)
 			.catch(() => setIsError(true))
 			.finally(() => setIsLoading(false)); //
+
+		return () => cancelRequest.current.abort();
 	}, [searchConfig, itemPerPage, url]);
 
 	const handleSetPage = useCallback(
@@ -78,7 +78,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	);
 
 	return {
-		pages: Utils.array2dToArray1d(pages),
+		pages: array2dToArray1d(pages),
 		isLoading: isLoading,
 		isError: isError,
 		hasMore: hasMore,
@@ -93,10 +93,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
 
 			getPage(url, requestPage, itemPerPage, searchConfig)
-				.then((result) => {
-					let data: T[] = result.data;
-					handleSetPage(requestPage, data);
-				})
+				.then((result) => handleSetPage(requestPage, result.data))
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
 		}, [handleSetPage, isLoading, itemPerPage, url, searchConfig, pages]),
@@ -107,10 +104,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			setIsError(false);
 			setPages([]);
 			getPage(url, 0, itemPerPage, searchConfig)
-				.then((result) => {
-					let data: T[] = result.data;
-					handleSetPage(0, data);
-				})
+				.then((result) => handleSetPage(0, result.data))
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
 		},

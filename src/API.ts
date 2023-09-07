@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { API_BASE_URL } from './config/Config';
 import Schematic from 'src/data/Schematic';
 import Map from 'src/data/Map';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice, Tags } from 'src/components/Tag';
 
 export class API {
 	static REQUEST = axios.create({
@@ -21,16 +21,16 @@ export class API {
 		});
 	}
 
-	static getTotalSchematic() {
-		return API.REQUEST.get('schematic/total');
+	static getTotalSchematic(searchConfig?: AxiosRequestConfig<any>) {
+		return API.REQUEST.get('schematic/total', searchConfig);
 	}
 
 	static getTotalSchematicUpload() {
 		return API.REQUEST.get('schematic-upload/total');
 	}
 
-	static getTotalMap() {
-		return API.REQUEST.get('map/total');
+	static getTotalMap(searchConfig?: AxiosRequestConfig<any>) {
+		return API.REQUEST.get('map/total', searchConfig);
 	}
 
 	static getTotalMapUpload() {
@@ -53,7 +53,7 @@ export class API {
 		return API.REQUEST.delete('notification/all');
 	}
 
-	static verifySchematic(schematic: Schematic, tags: TagChoiceLocal[]) {
+	static verifySchematic(schematic: Schematic, tags: TagChoice[]) {
 		let form = new FormData();
 
 		const tagString = Tags.toString(tags);
@@ -69,7 +69,7 @@ export class API {
 			.then(() => API.postNotification(schematic.authorId, 'Your map submission has been reject', reason));
 	}
 
-	static verifyMap(map: Map, tags: TagChoiceLocal[]) {
+	static verifyMap(map: Map, tags: TagChoice[]) {
 		let form = new FormData();
 
 		const tagString = Tags.toString(tags);
@@ -85,11 +85,11 @@ export class API {
 			.then(() => API.postNotification(map.authorId, 'Your map submission has been reject', reason));
 	}
 
-	static postComment(url: string, targetId: string, message: string, contentType: string) {
+	static postComment(url: string, targetId: string, content: string, contentType: string) {
 		let form = new FormData();
 
-		form.append('message', message);
 		form.append('targetId', targetId);
+		form.append('content', content);
 		form.append('contentType', contentType);
 
 		return API.REQUEST.post(url, form);
@@ -170,7 +170,7 @@ export class API {
 		return API.REQUEST.post('map-upload/preview', form);
 	}
 
-	static postSchematicUpload(code: string, file: File | undefined, tags: TagChoiceLocal[]) {
+	static postSchematicUpload(code: string, file: File | undefined, tags: TagChoice[]) {
 		const formData = new FormData();
 
 		const tagString = Tags.toString(tags);
@@ -184,7 +184,7 @@ export class API {
 		return API.REQUEST.post('schematic-upload', formData);
 	}
 
-	static postMapUpload(file: File, tags: TagChoiceLocal[]) {
+	static postMapUpload(file: File, tags: TagChoice[]) {
 		const formData = new FormData();
 
 		const tagString = Tags.toString(tags);
@@ -207,7 +207,7 @@ export class API {
 		return this.REQUEST.delete(`mindustry-server/${address}`);
 	}
 
-	static postPost(title: string, content: string, tags: TagChoiceLocal[]) {
+	static postPost(title: string, content: string, tags: TagChoice[]) {
 		const form = new FormData();
 		form.append('header', title);
 		form.append('content', content);
@@ -219,7 +219,7 @@ export class API {
 		return this.REQUEST.post('post-upload', form);
 	}
 
-	static verifyPost(post: Post, tags: TagChoiceLocal[]) {
+	static verifyPost(post: Post, tags: TagChoice[]) {
 		let form = new FormData();
 
 		const tagString = Tags.toString(tags);

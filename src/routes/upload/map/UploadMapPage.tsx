@@ -1,47 +1,45 @@
-import './UploadMapPage.css';
-import 'src/styles.css';
-import 'src/components/map/MapInfoImage.css';
-
 import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
-import { TagChoiceLocal, Tags } from 'src/components/tag/Tag';
+import { TagChoice } from 'src/components/Tag';
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX } from 'src/config/Config';
 import { getFileExtension } from 'src/util/StringUtils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import Dropbox from 'src/components/dropbox/Dropbox';
+import SearchBox from 'src/components/Searchbox';
 import i18n from 'src/util/I18N';
-import TagPick from 'src/components/tag/TagPick';
-import Button from 'src/components/button/Button';
-import TagEditContainer from 'src/components/tag/TagEditContainer';
-import LoadUserName from 'src/components/user/LoadUserName';
-import MapDescription from 'src/components/map/MapDescription';
-import ColorText from 'src/components/common/ColorText';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import TagPick from 'src/components/TagPick';
+import Button from 'src/components/Button';
+import TagEditContainer from 'src/components/TagEditContainer';
+import LoadUserName from 'src/components/LoadUserName';
+import ColorText from 'src/components/ColorText';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useMe } from 'src/context/MeProvider';
-import MapInfoImage from 'src/components/map/MapInfoImage';
 import MapUploadPreview from 'src/data/MapUploadPreview';
+import InfoImage from 'src/components/InfoImage';
+import Description from 'src/components/Description';
+import { useTags } from 'src/context/TagProvider';
 
 let notLoginMessage = (
 	<span>
 		<Trans i18nKey='recommend-login' />
-		<Link className='small-padding' to='/login'>
+		<Link className='p-2' to='/login'>
 			<Trans i18nKey='login' />
 		</Link>
 	</span>
 );
 
-export default function UploadNextPage() {
+export default function UploadMapPage() {
 	const [file, setFile] = useState<File>();
 	const [preview, setPreview] = useState<MapUploadPreview>();
 	const [tag, setTag] = useState<string>('');
-	const [tags, setTags] = useState<TagChoiceLocal[]>([]);
+	const [tags, setTags] = useState<TagChoice[]>([]);
 
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { me, loading } = useMe();
 	const popup = useRef(useContext(PopupMessageContext));
+	const { mapUploadTag } = useTags();
 
 	useEffect(() => {
 		if (!loading && !me) popup.current.addPopup(notLoginMessage, 20, 'warning');
@@ -99,7 +97,7 @@ export default function UploadNextPage() {
 		setTags((prev) => [...prev.filter((_, i) => i !== index)]);
 	}
 
-	function handleAddTag(tag: TagChoiceLocal) {
+	function handleAddTag(tag: TagChoice) {
 		setTags((prev) => {
 			let tags = prev.filter((q) => q !== tag);
 			return [...tags, tag];
@@ -117,29 +115,29 @@ export default function UploadNextPage() {
 	if (isLoading) return <LoadingSpinner />;
 
 	return (
-		<main className='flex-column space-between w100p h100p small-gap massive-padding border-box scroll-y'>
-			<header className='flex-center'>
+		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
+			<header className='flex justify-center items-center'>
 				<label className='button' htmlFor='ufb'>
 					<Trans i18nKey='upload-a-file' />
 				</label>
 				<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
 			</header>
 			{preview && (
-				<section className='flex-row flex-wrap medium-gap'>
-					<MapInfoImage src={PNG_IMAGE_PREFIX + preview.image} />
-					<section className='flex-column space-between'>
-						<section className='flex-column small-gap flex-wrap'>
+				<section className='flex flex-row flex-wrap gap-2'>
+					<InfoImage src={PNG_IMAGE_PREFIX + preview.image} />
+					<section className='flex flex-row space-between'>
+						<section className='flex flex-row gap-2 flex-wrap'>
 							<ColorText className='capitalize h2' text={preview.name} />
 							<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
-							<MapDescription description={preview.description} />
+							<Description description={preview.description} />
 							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 						</section>
 					</section>
-					<section className='flex-column flex-nowrap small-gap w100p'>
-						<Dropbox
+					<section className='flex flex-row flex-nowrap gap-2 w-full'>
+						<SearchBox
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
-							items={Tags.MAP_UPLOAD_TAG.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
+							items={mapUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
 							onChange={(event) => setTag(event.target.value)}
 							onChoose={(item) => handleAddTag(item)}
 							mapper={(t, index) => <TagPick key={index} tag={t} />}
@@ -148,9 +146,9 @@ export default function UploadNextPage() {
 				</section>
 			)}
 
-			<footer className='flex-column center small-gap medium-padding'>
+			<footer className='flex flex-row center gap-2 medium-padding'>
 				<span children={checkUploadRequirement()} />
-				<Button onClick={() => handleSubmit()}>
+				<Button title={i18n.t('upload')} onClick={() => handleSubmit()}>
 					<Trans i18nKey='upload' />
 				</Button>
 			</footer>

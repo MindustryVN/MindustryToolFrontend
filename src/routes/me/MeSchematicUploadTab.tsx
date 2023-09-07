@@ -1,17 +1,15 @@
-import 'src/styles.css';
-
 import { API } from 'src/API';
 import Schematic from 'src/data/Schematic';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/common/IfTrue';
+import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import SchematicContainer from 'src/components/schematic/SchematicContainer';
+import LoadingSpinner from 'src/components/LoadingSpinner';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
+import PreviewContainer from 'src/components/PreviewContainer';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { SchematicUploadInfo, SchematicUploadPreview } from 'src/routes/admin/verify/schematic/VerifySchematicPage';
 
@@ -38,9 +36,9 @@ export default function UserSchematicUploadTab() {
 	}
 
 	return (
-		<main id='schematic-tab' className='flex-column small-gap w100p h100p scroll-y'>
-			<SchematicContainer children={pages} />
-			<footer className='flex-center'>
+		<main id='schematic-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
+			<PreviewContainer children={pages} />
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //

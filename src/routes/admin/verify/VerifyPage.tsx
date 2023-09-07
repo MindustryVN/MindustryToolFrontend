@@ -1,10 +1,9 @@
-import 'src/styles.css';
-
 import React, { useState } from 'react';
-import Button from 'src/components/button/Button';
+import Button from 'src/components/Button';
 import VerifySchematicPage from 'src/routes/admin/verify/schematic/VerifySchematicPage';
 import VerifyMapPage from 'src/routes/admin/verify/map/VerifyMapPage';
 import VerifyPostPage from 'src/routes/admin/verify/post/VerifyPostPage';
+import i18n from 'src/util/I18N';
 
 const tabs = ['Schematic', 'Map', 'Post'];
 
@@ -28,11 +27,12 @@ export default function VerifyPage() {
 	}
 
 	return (
-		<main className='flex-column h100p w100p scroll-y'>
-			<section className='flex-center'>
-				<section className='tab-button-container grid-row small-gap small-padding'>
+		<main className='flex flex-row h-full w-full overflow-y-auto'>
+			<section className='flex justify-center items-center'>
+				<section className='tab-button-container grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
 					{tabs.map((name, index) => (
 						<Button
+							title={i18n.t(name)}
 							active={currentTab === name} //
 							key={index}
 							onClick={() => setCurrentTab(name)}>

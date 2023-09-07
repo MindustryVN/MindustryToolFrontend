@@ -1,20 +1,20 @@
 import './LogPage.css';
-import 'src/styles.css';
 
 import React, { useState } from 'react';
 import { API } from 'src/API';
 import { Log } from 'src/data/Log';
 
-import Button from 'src/components/button/Button';
-import ScrollToTopButton from 'src/components/button/ScrollToTopButton';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import Button from 'src/components/Button';
+import ScrollToTopButton from 'src/components/ScrollToTopButton';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import ClearIconButton from 'src/components/button/ClearIconButton';
-import DateDisplay from 'src/components/common/Date';
+import ClearIconButton from 'src/components/ClearIconButton';
+import DateDisplay from 'src/components/Date';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import IfTrue from 'src/components/common/IfTrue';
+import IfTrue from 'src/components/IfTrue';
 import useQuery from 'src/hooks/UseQuery';
+import i18n from 'src/util/I18N';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
@@ -35,10 +35,11 @@ export default function LogPage() {
 	if (!logTypes.data) return <LoadingSpinner />;
 
 	return (
-		<main className='flex-column h100p w100p small-gap'>
-			<section className='grid-row small-gap'>
+		<main className='flex flex-row h-full w-full overflow-y-auto gap-1'>
+			<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
 				{logTypes.data.map((item, index) => (
 					<Button
+						title={i18n.t(item)}
 						key={index}
 						active={item === contentType} //
 						onClick={() => setContentType(item)}>
@@ -46,8 +47,8 @@ export default function LogPage() {
 					</Button>
 				))}
 			</section>
-			<section id='log' className='flex-column medium-gap  scroll-y' children={pages} />
-			<footer className='flex-center'>
+			<section id='log' className='flex flex-row gap-2 ' children={pages} />
+			<footer className='flex justify-center items-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -63,8 +64,8 @@ interface LogCardProps {
 	handleDeleteLog: (id: string) => void;
 }
 
-function LogCard(props: LogCardProps) {
-	const content: string[] = props.log.content.split('\n');
+function LogCard({ log, handleDeleteLog }: LogCardProps) {
+	const content: string[] = log.content.split('\n');
 	const header = content[0];
 	let detail: string[] = content.slice(1);
 	detail = detail ? detail : ['No content'];
@@ -72,22 +73,22 @@ function LogCard(props: LogCardProps) {
 	return (
 		<details className='log-card relative medium-padding'>
 			<summary>
-				<p>ID: {props.log.id}</p>
-				<p>Environment: {props.log.environment}</p>
+				<p>ID: {log.id}</p>
+				<p>Environment: {log.environment}</p>
 				<p>
-					Time: <DateDisplay time={props.log.time} />
+					Time: <DateDisplay time={log.time} />
 				</p>
 				<p>Message: {header}</p>
 				<ClearIconButton
-					className='absolute top right small-margin ' //
+					className='absolute top-0 right small-margin ' //
 					icon='/assets/icons/trash-16.png'
 					title='delete'
-					onClick={() => props.handleDeleteLog(props.log.id)}
+					onClick={() => handleDeleteLog(log.id)}
 				/>
 			</summary>
 			<div>
 				Detail:
-				<div className='medium-padding border-box'>
+				<div className='medium-padding box-border'>
 					{detail.map((t, index) => (
 						<p key={index}>
 							{t}

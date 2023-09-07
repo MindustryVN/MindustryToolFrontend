@@ -1,5 +1,3 @@
-import 'src/styles.css';
-
 import { API } from 'src/API';
 import { Trans } from 'react-i18next';
 import { MapInfo } from 'src/routes/map/MapPage';
@@ -10,7 +8,7 @@ import React from 'react';
 import useQuery from 'src/hooks/UseQuery';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import Map from 'src/data/Map';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 
 export default function MapPreviewPage() {
 	const { mapId } = useParams();
@@ -33,7 +31,7 @@ export default function MapPreviewPage() {
 
 	if (isError || !map)
 		return (
-			<div className='flex-center w100p h100p'>
+			<div className='flex justify-center items-center w-full h-full'>
 				<Trans i18nKey='map-not-found' />
 			</div>
 		);

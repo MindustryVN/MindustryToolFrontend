@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import Model from 'src/components/model/Model';
+import Model from 'src/components/Model';
 
 export default function useModel() {
 	const [visibility, setVisibility] = useState(false);

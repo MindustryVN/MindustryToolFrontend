@@ -1,20 +1,18 @@
-import 'src/styles.css';
-import './UserPage.css';
-
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { API } from 'src/API';
 import User from 'src/data/User';
-import LoadingSpinner from 'src/components/loader/LoadingSpinner';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import { Trans } from 'react-i18next';
-import UserSchematicTab from './UserSchematicTab';
+import MessageScreen from 'src/components/MessageScreen';
+import SwitchBar from 'src/components/SwitchBar';
+import UserSchematicTab from 'src/routes/user/UserSchematicTab';
 import UserMapTab from 'src/routes/user/UserMapTab';
 import UserPostTab from 'src/routes/user/UserPostTab';
-import Button from 'src/components/button/Button';
-
-const tabs = ['Schematic', 'Map', 'Post'];
+import UserInfoTab from 'src/routes/user/UserInfoTab';
+import { InfoIcon, MapIcon, PostIcon, SchematicIcon } from 'src/components/Icon';
 
 export default function UserPage() {
 	const { userId } = useParams();
@@ -23,84 +21,79 @@ export default function UserPage() {
 
 	const [user, setUser] = React.useState<User>();
 
-	const popup = useRef(useContext(PopupMessageContext));
-
-	const [currentTab, setCurrentTab] = useState<string>(tabs[0]);
+	const popup = useContext(PopupMessageContext);
 
 	useEffect(() => {
 		if (userId)
 			API.getUser(userId) //
 				.then((result) => setUser(result.data)) //
-				.catch(() => popup.current.addPopup(i18n.t('user.load-fail'), 5, 'error'))
+				.catch(() => popup.addPopup(i18n.t('user.load-fail'), 5, 'error'))
 				.finally(() => setLoading(false));
-	}, [userId]);
-
-	function renderTab(currentTab: string) {
-		if (!user) return <Trans i18nKey='user.not-found' />;
-
-		switch (currentTab) {
-			case tabs[0]:
-				return <UserSchematicTab user={user} />;
-
-			case tabs[1]:
-				return <UserMapTab user={user} />;
-			case tabs[2]:
-				return <UserPostTab user={user} />;
-
-			default:
-				return <>Oh no</>;
-		}
-	}
+	}, [userId, popup]);
 
 	if (!userId)
 		return (
-			<main className='flex-center h100p w100p'>
-				<Trans i18nKey='user.invalid-id' />
-			</main>
+			<MessageScreen>
+				<Trans i18nKey='user-invalid-id' />
+			</MessageScreen>
 		);
 
-	if (loading)
-		return (
-			<main className='flex-center h100p w100p'>
-				<LoadingSpinner />
-			</main>
-		);
+	if (loading) return <LoadingSpinner className='flex justify-center items-center h-full' />;
 
 	if (!user)
 		return (
-			<main className='flex-center h100p w100p'>
-				<Trans i18nKey='user.not-found' />
-			</main>
+			<MessageScreen>
+				<Trans i18nKey='user-not-found' />
+			</MessageScreen>
 		);
 
 	return (
-		<main className='flex-column h100p w100p scroll-y medium-padding border-box'>
-			<section className='user-card flex-row small-gap flex-nowrap'>
-				<img className='avatar-image' src={user.imageUrl} alt='avatar'></img>
-				<section className='info-card small-gap small-padding'>
-					<span className='capitalize username'>{user.name}</span>
-					<span className='flex-row small-gap'>
-						{user.role.map((r, index) => (
-							<span key={index} className='capitalize'>
-								{r}
-							</span>
-						))}
-					</span>
-				</section>
-			</section>
-			<section className='flex-center'>
-				<section className='grid-row small-gap small-padding'>
-					{tabs.map((name, index) => (
-						<Button
-							className={currentTab === name ? 'button-active' : 'button'}
-							key={index} //
-							onClick={() => setCurrentTab(name)}>
-							{name}
-						</Button>
-					))}
-				</section>
-			</section>
-			{renderTab(currentTab)}
+		<main className='flex flex-col w-full h-full'>
+			<SwitchBar
+				className='flex flex-col w-full h-full'
+				elements={[
+					{
+						id: 'info',
+						name: (
+							<div className='flex flex-row justify-end items-center gap-1'>
+								<InfoIcon className='w-6 h-6' />
+								<Trans i18nKey='information' />
+							</div>
+						),
+						element: <UserInfoTab user={user} />,
+					},
+					{
+						id: 'schematic',
+						name: (
+							<div className='flex flex-row justify-end items-center gap-1'>
+								<SchematicIcon className='w-6 h-6' />
+								<Trans i18nKey='schematic' />
+							</div>
+						),
+						element: <UserSchematicTab user={user} />,
+					},
+					{
+						id: 'map',
+						name: (
+							<div className='flex flex-row justify-end items-center gap-1'>
+								<MapIcon className='w-6 h-6' />
+								<Trans i18nKey='map' />
+							</div>
+						),
+						element: <UserMapTab user={user} />,
+					},
+					{
+						id: 'post',
+						name: (
+							<div className='flex flex-row justify-end items-center gap-1'>
+								<PostIcon className='w-6 h-6' />
+								<Trans i18nKey='post' />
+							</div>
+						),
+						element: <UserPostTab user={user} />,
+					},
+				]}
+			/>
 		</main>
 	);
 }
