@@ -21,7 +21,6 @@ interface LinkButton {
 	to: string;
 	admin: boolean;
 	icon: ReactNode;
-	auth?: boolean;
 }
 
 export default function NavigationPanel() {
@@ -94,11 +93,11 @@ export default function NavigationPanel() {
 		});
 	}
 
-	function LinkButton({ name, to, admin, icon, auth }: LinkButton) {
+	function LinkButton({ name, to, admin, icon }: LinkButton) {
 		if (admin && !Users.isAdmin(me)) return <></>;
 
 		return (
-			<ClearButton className='flex flex-row gap-2 rounded-lg p-2 hover:bg-blue-500' active={window.location.pathname.endsWith(to)} title={name} onClick={() => navigateTo(to, auth)}>
+			<ClearButton className='flex flex-row gap-2 rounded-lg p-2 hover:bg-blue-500' active={window.location.pathname.endsWith(to)} title={name} onClick={() => navigateTo(to, admin)}>
 				<span className='flex gap-2'>
 					{icon}
 					{name}
