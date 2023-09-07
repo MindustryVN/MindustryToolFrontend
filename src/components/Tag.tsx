@@ -10,7 +10,7 @@ interface TagProps {
 
 export default function Tag({ tag, children }: TagProps) {
 	return (
-		<span className='flex flex-row flex-nowrap rounded-lg h-10 p-2 justify-start items-center text-start' style={{ backgroundColor: tag.color }}>
+		<span className='flex flex-row items-center justify-start h-10 gap-2 p-2 rounded-lg flex-nowrap text-start' style={{ backgroundColor: tag.color }}>
 			<span className='flex flex-row text-center'>
 				{tag.displayName} : {tag.displayValue}
 			</span>
