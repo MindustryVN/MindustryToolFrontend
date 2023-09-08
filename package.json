@@ -41,8 +41,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
-		"sitemap": "babel-node src/SitemapGenerator.tsx"
+		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
 	},
 	"eslintConfig": {
 		"extends": [
