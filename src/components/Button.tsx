@@ -12,7 +12,7 @@ interface ButtonProps {
 export default function Button({ className, children, title, active, onClick }: ButtonProps) {
 	return (
 		<button
-			className={cn(`rounded-lg border-2 border-slate-500 hover:dark:bg-blue-500`, className, {
+			className={cn(`flex items-center justify-center rounded-lg border-2 border-slate-500 hover:dark:bg-blue-500`, className, {
 				'dark:bg-blue-500': active,
 			})}
 			title={title}

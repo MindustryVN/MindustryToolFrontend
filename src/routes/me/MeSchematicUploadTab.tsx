@@ -11,7 +11,8 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import PreviewContainer from 'src/components/PreviewContainer';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import { SchematicUploadInfo, SchematicUploadPreview } from 'src/routes/admin/verify/schematic/VerifySchematicPage';
+import { SchematicUploadPreview } from 'src/routes/admin/verify/VerifySchematicPage';
+import { SchematicUploadInfo } from '../admin/verify/VerifySchematicPage';
 
 export default function UserSchematicUploadTab() {
 	const currentSchematic = useRef<Schematic>();
@@ -36,9 +37,9 @@ export default function UserSchematicUploadTab() {
 	}
 
 	return (
-		<main id='schematic-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
+		<main id='schematic-tab' className='flex h-full w-full flex-row gap-2 overflow-y-auto'>
 			<PreviewContainer children={pages} />
-			<footer className='flex justify-center items-center'>
+			<footer className='flex items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //

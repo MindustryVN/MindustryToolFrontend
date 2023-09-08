@@ -65,7 +65,10 @@ export default function UploadMapPage() {
 
 		API.getMapPreview(files[0]) //
 			.then((result) => setPreview(result.data)) //
-			.catch(() => popup.current.addPopup(i18n.t(`invalid-map`), 10, 'error')) //
+			.catch((error) => {
+				popup.current.addPopup(i18n.t(`invalid-map`) + error.response.data, 10, 'error');
+				console.log(error);
+			})
 			.finally(() => setIsLoading(false));
 	}
 
@@ -89,7 +92,10 @@ export default function UploadMapPage() {
 				setTags([]);
 				popup.current.addPopup(i18n.t('upload-success'), 10, 'info');
 			})
-			.catch((error) => popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error')) //
+			.catch((error) => {
+				popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error');
+				console.log(error);
+			}) //
 			.finally(() => setIsLoading(false));
 	}
 
@@ -112,28 +118,30 @@ export default function UploadMapPage() {
 		return <Trans i18nKey='ok' />;
 	}
 
-	if (isLoading) return <LoadingSpinner />;
+	if (isLoading) return <LoadingSpinner className='flex h-full w-full items-center justify-center' />;
 
 	return (
-		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
-			<header className='flex justify-center items-center'>
-				<label className='button' htmlFor='ufb'>
-					<Trans i18nKey='upload-a-file' />
-				</label>
-				<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
+		<main className='box-border flex h-full w-full flex-col justify-between gap-2 overflow-y-auto p-8'>
+			<header className='flex items-center justify-center'>
+				<Button className='p-1' title={i18n.t('upload-a-file')} onClick={() => {}}>
+					<label className='button' htmlFor='file'>
+						<Trans i18nKey='upload-a-file' />
+					</label>
+				</Button>
+				<input className='hidden' id='file' type='file' onChange={(event) => handleFileChange(event)} />
 			</header>
 			{preview && (
 				<section className='flex flex-row flex-wrap gap-2'>
 					<InfoImage src={PNG_IMAGE_PREFIX + preview.image} />
-					<section className='flex flex-row space-between'>
-						<section className='flex flex-row gap-2 flex-wrap'>
-							<ColorText className='capitalize h2' text={preview.name} />
+					<section className='space-between flex flex-row'>
+						<section className='flex flex-row flex-wrap gap-2'>
+							<ColorText className='h2 capitalize' text={preview.name} />
 							<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
 							<Description description={preview.description} />
 							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 						</section>
 					</section>
-					<section className='flex flex-row flex-nowrap gap-2 w-full'>
+					<section className='flex w-full flex-row flex-nowrap gap-2'>
 						<SearchBox
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
@@ -146,11 +154,13 @@ export default function UploadMapPage() {
 				</section>
 			)}
 
-			<footer className='flex flex-row center gap-2 medium-padding'>
+			<footer className='flex flex-col items-center justify-center gap-2 p-2'>
 				<span children={checkUploadRequirement()} />
-				<Button title={i18n.t('upload')} onClick={() => handleSubmit()}>
-					<Trans i18nKey='upload' />
-				</Button>
+				{preview && (
+					<Button title={i18n.t('upload')} onClick={() => handleSubmit()}>
+						<Trans i18nKey='upload' />
+					</Button>
+				)}
 			</footer>
 		</main>
 	);

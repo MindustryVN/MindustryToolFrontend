@@ -14,7 +14,9 @@ export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>
 	});
 
 	useEffect(() => {
-		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading && windowIsFocus) useInfinitePage.loadNextPage();
+		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading && windowIsFocus) {
+			useInfinitePage.loadNextPage();
+		}
 	}, [entry, useInfinitePage, windowIsFocus]);
 
 	const pages = useInfinitePage.pages.map((m, index) => mapper(m, index));

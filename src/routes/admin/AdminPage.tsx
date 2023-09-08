@@ -1,43 +1,46 @@
-import './AdminPage.css';
-
-import React, { useState } from 'react';
-import VerifyPage from 'src/routes/admin/verify/VerifyPage';
+import React from 'react';
 import { Trans } from 'react-i18next';
-import LogPage from 'src/routes/admin/log/LogPage';
-import ClearButton from 'src/components/ClearButton';
-
-const tabs = ['verify', 'report', 'log'];
+import SwitchBar from 'src/components/SwitchBar';
+import SwitchName from 'src/components/SwitchName';
+import VerifyMapPage from 'src/routes/admin/verify/VerifyMapPage';
+import VerifyPostPage from 'src/routes/admin/verify/VerifyPostPage';
+import VerifySchematicPage from 'src/routes/admin/verify/VerifySchematicPage';
 
 export default function AdminPage() {
-	const [selectedTab, setSelectedTab] = useState(tabs[0]);
-
-	function renderTab() {
-		switch (selectedTab) {
-			case tabs[0]:
-				return <VerifyPage />;
-
-			case tabs[1]:
-				return <>No</>;
-
-			case tabs[2]:
-				return <LogPage />;
-		}
-	}
-
 	return (
-		<main id='admin' className='flex flex-row h-full w-full gap-2 p-2 box-border'>
-			<section className='grid grid-auto-column grid-flow-col w-fit tab-button-container'>
-				{tabs.map((name, index) => (
-					<ClearButton
-						key={index}
-						title={name}
-						className={name === selectedTab ? 'tab-button-selected' : 'tab-button'} //
-						onClick={() => setSelectedTab(name)}>
-						<Trans i18nKey={name} />
-					</ClearButton>
-				))}
-			</section>
-			{renderTab()}
+		<main id='admin' className='box-border flex h-full w-full flex-row gap-2 p-2'>
+			<SwitchBar
+				className='h-full w-full'
+				elements={[
+					{
+						id: 'verify-schematic',
+						name: (
+							<SwitchName>
+								<Trans i18nKey='verify-schematic' />
+							</SwitchName>
+						),
+						element: <VerifySchematicPage />,
+					},
+					{
+						id: 'verify-map',
+						name: (
+							<SwitchName>
+								<Trans i18nKey='verify-map' />
+							</SwitchName>
+						),
+						element: <VerifyMapPage />,
+					},
+					{
+						id: 'verify-post',
+						name: (
+							<SwitchName>
+								<Trans i18nKey='verify-post' />
+							</SwitchName>
+						),
+						element: <VerifyPostPage />,
+					},
+				]}
+			/>
 		</main>
 	);
 }
