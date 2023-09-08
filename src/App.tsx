@@ -28,7 +28,7 @@ const UploadPost = React.lazy(() => import('src/routes/upload/post/UploadPostPag
 
 export default function App() {
 	return (
-		<main className='flex flex-col w-screen h-screen background-gradient overflow-hidden'>
+		<main className='flex flex-col w-full h-full overflow-hidden background-gradient'>
 			<ErrorBoundary>
 				<NavigationPanel />
 				<section className='flex flex-col w-screen h-[calc(100%-3rem)] overflow-hidden'>

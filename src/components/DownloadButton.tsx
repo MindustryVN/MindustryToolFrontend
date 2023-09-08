@@ -9,7 +9,7 @@ interface DownloadButtonProps {
 
 export default function DownloadButton({ className, href, download }: DownloadButtonProps) {
 	return (
-		<a className={cn('flex items-center justify-center border-slate-500 border-2 rounded-lg', className)} href={href} download={download}>
+		<a className={cn('flex items-center justify-center border-slate-500 border-2 rounded-lg hover:dark:bg-blue-500', className)} href={href} download={download}>
 			<img src='/assets/icons/download.png' alt='download' />
 		</a>
 	);

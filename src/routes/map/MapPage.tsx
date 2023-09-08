@@ -125,11 +125,11 @@ export default function MapPage() {
 	}
 
 	return (
-		<main id='map' className='h-full w-full overflow-y-auto flex flex-col gap-2 p-2'>
-			<header className='flex flex-col gap-2 w-full'>
-				<section className='flex flex-row justify-start items-center w-3/4 md:w-3/5 m-auto mt-8 gap-2'>
+		<main id='map' className='flex flex-col w-full h-full gap-2 p-2 overflow-y-auto'>
+			<header className='flex flex-col w-full gap-2'>
+				<section className='flex flex-row items-center justify-start w-3/4 gap-2 m-auto mt-8 md:w-3/5'>
 					<SearchBox
-						className='h-10 w-full bg-slate-900'
+						className='w-full h-10 bg-slate-900'
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={mapSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
@@ -139,7 +139,7 @@ export default function MapPage() {
 						<ClearIconButton className='p-1' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 					<OptionBox
-						className='h-10 w-40 bg-slate-900'
+						className='w-40 h-10 bg-slate-900'
 						items={Tags.SORT_TAG}
 						mapper={(item, index) => (
 							<span key={index} className='whitespace-nowrap'>
@@ -149,19 +149,19 @@ export default function MapPage() {
 						onChoose={(item) => handleSetSortQuery(item)}
 					/>
 				</section>
-				<TagEditContainer tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
+				<TagEditContainer className='flex items-center justify-center w-3/4 m-auto' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 			</header>
-			<section className='flex flex-row justify-center items-center p-2'>
+			<section className='flex flex-row items-center justify-center p-2'>
 				<Trans i18nKey='total-map' /> : {totalMap > 0 ? totalMap : 0}
 			</section>
 			<PreviewContainer children={pages} />
-			<footer className='flex w-full justify-center items-center'>
+			<footer className='flex items-center justify-center w-full'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 				/>
 			</footer>
-			<section className='fixed bottom-4 right-0 flex flex-col justify-center items-center'>
+			<section className='fixed right-0 flex flex-col items-center justify-center bottom-4'>
 				<ClearButton title={i18n.t('upload-your-map')} onClick={() => navigate('/upload/map')}>
 					<AddIcon className='w-10 h-10' />
 				</ClearButton>
@@ -200,7 +200,7 @@ export function MapPreview({ map, handleOpenModel }: MapPreviewProps) {
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}map/${map.id}`)}></ClearIconButton>
 			<PreviewImage src={`${API_BASE_URL}map/${map.id}/image`} onClick={() => handleOpenModel(map)} />
-			<ColorText className='capitalize p-2 flex justify-center items-center text-center' text={map.name} />
+			<ColorText className='flex items-center justify-center p-2 text-center capitalize' text={map.name} />
 			<MapPreviewButton map={map} />
 		</PreviewCard>
 	);
@@ -234,18 +234,18 @@ export function MapInfo({ map, handleCloseModel, handleDeleteMap }: MapInfoProps
 	const { mapSearchTag } = useTags();
 
 	return (
-		<main className='flex flex-col space-between w-full h-full gap-4 p-8 box-border overflow-y-auto'>
+		<main className='box-border flex flex-col w-full h-full gap-4 p-8 overflow-y-auto space-between'>
 			<section className='relative flex flex-row flex-wrap gap-2'>
 				<InfoImage src={`${API_BASE_URL}map/${map.id}/image`} />
 				<ClearIconButton className='absolute top-0 left-0 p-2' title={i18n.t('copy-link').toString()} icon='/assets/icons/copy.png' onClick={() => copy(`${FRONTEND_URL}map/${map.id}`)} />
 				<section className='flex flex-col gap-2'>
-					<ColorText className='capitalize text-2xl' text={map.name} />
-					<section className='flex flex-row whitespace-nowrap gap-2'>
+					<ColorText className='text-2xl capitalize' text={map.name} />
+					<section className='flex flex-row gap-2 whitespace-nowrap'>
 						<Trans i18nKey='author' /> <LoadUserName userId={map.authorId} />
 					</section>
 					<Description description={map.description} />
 					<TagContainer tags={Tags.parseArray(map.tags, mapSearchTag)} />
-					<section className='flex flex-row whitespace-nowrap gap-2'>
+					<section className='flex flex-row gap-2 whitespace-nowrap'>
 						<Trans i18nKey='verify-by' /> <LoadUserName userId={map.verifyAdmin} />
 					</section>
 				</section>
@@ -291,7 +291,7 @@ function MapInfoButton({ map, handleCloseModel, handleDeleteMap }: MapInfoButton
 			</Button>
 			{dialog(
 				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => handleDeleteMap(map)}>
-					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />
+					<Icon className='w-4 h-4 p-2' icon='/assets/icons/info.png' />
 					<Trans i18nKey='delete-map-dialog' />
 				</ConfirmDialog>,
 			)}

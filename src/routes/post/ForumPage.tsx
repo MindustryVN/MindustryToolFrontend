@@ -79,8 +79,8 @@ export default function ForumPage() {
 	}
 
 	return (
-		<main className='h-full w-full overflow-y-auto flex flex-row gap-2 p-2'>
-			<header className='flex flex-row gap-2 w-full'>
+		<main className='flex flex-row w-full h-full gap-2 p-2 overflow-y-auto'>
+			<header className='flex flex-row w-full gap-2'>
 				<section className='search-container'>
 					<SearchBox
 						placeholder={i18n.t('search-with-tag').toString()}
@@ -92,22 +92,22 @@ export default function ForumPage() {
 						<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 				</section>
-				<TagEditContainer className='center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-				<section className='sort-container grid grid-auto-column grid-flow-col w-fit gap-2 center'>
+				<TagEditContainer className='flex items-center justify-center w-3/4 m-auto' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
+				<section className='grid grid-flow-col gap-2 sort-container grid-auto-column w-fit center'>
 					{Tags.SORT_TAG.map((c: TagChoice) => (
 						<Button className='capitalize' key={c.name + c.value} title={i18n.t(c.name)} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
 							{c.displayName}
 						</Button>
 					))}
 				</section>
-				<section className='flex flex-row p-2 justify-end'>
+				<section className='flex flex-row justify-end p-2'>
 					<Button title={i18n.t('write-a-post')} onClick={() => navigate('/upload/post')}>
 						<Trans i18nKey='write-a-post' />
 					</Button>
 				</section>
 			</header>
 			<section className='flex flex-row gap-2' children={pages} />
-			<footer className='flex justify-center items-center'>
+			<footer className='flex items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -131,14 +131,14 @@ function PostPreview({ post }: PostPreviewProps) {
 	post.like = likeService.likes;
 
 	return (
-		<section role='button' className='post-preview-card relative flex flex-row gap-2 medium-padding space-between' onClick={() => navigate(`post/${post.id}`)}>
+		<section role='button' className='relative flex flex-row gap-2 post-preview-card medium-padding space-between' onClick={() => navigate(`post/${post.id}`)}>
 			<header className='flex flex-row gap-2'>
 				<span className='title'>{post.header}</span>
 				<LoadUserName userId={post.authorId} />
 				<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
 			</header>
 			<section className='flex flex-row'>
-				<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
+				<section className='grid grid-flow-col gap-2 grid-auto-column w-fit'>
 					<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 					<LikeCount count={likeService.likes} />
 					<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
@@ -146,7 +146,7 @@ function PostPreview({ post }: PostPreviewProps) {
 			</section>
 			<DateDisplay className='absolute bottom right small-margin align-self-end' time={post.time} />
 			<ClearIconButton
-				className='absolute top-0 right p-2 small-margin'
+				className='absolute top-0 p-2 right small-margin'
 				title={i18n.t('copy-link').toString()}
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
