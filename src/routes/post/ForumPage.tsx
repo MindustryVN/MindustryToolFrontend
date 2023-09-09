@@ -79,8 +79,8 @@ export default function ForumPage() {
 	}
 
 	return (
-		<main className='flex flex-row w-full h-full gap-2 p-2 overflow-y-auto'>
-			<header className='flex flex-row w-full gap-2'>
+		<main className='flex h-full w-full flex-row gap-2 overflow-y-auto p-2'>
+			<header className='flex w-full flex-row gap-2'>
 				<section className='search-container'>
 					<SearchBox
 						placeholder={i18n.t('search-with-tag').toString()}
@@ -92,8 +92,8 @@ export default function ForumPage() {
 						<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 				</section>
-				<TagEditContainer className='flex items-center justify-center w-3/4 m-auto' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-				<section className='grid grid-flow-col gap-2 sort-container grid-auto-column w-fit center'>
+				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
+				<section className='sort-container grid-auto-column center grid w-fit grid-flow-col gap-2'>
 					{Tags.SORT_TAG.map((c: TagChoice) => (
 						<Button className='capitalize' key={c.name + c.value} title={i18n.t(c.name)} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
 							{c.displayName}
@@ -131,22 +131,22 @@ function PostPreview({ post }: PostPreviewProps) {
 	post.like = likeService.likes;
 
 	return (
-		<section role='button' className='relative flex flex-row gap-2 post-preview-card medium-padding space-between' onClick={() => navigate(`post/${post.id}`)}>
+		<section role='button' className='post-preview-card medium-padding relative flex flex-row justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
 			<header className='flex flex-row gap-2'>
 				<span className='title'>{post.header}</span>
 				<LoadUserName userId={post.authorId} />
 				<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
 			</header>
 			<section className='flex flex-row'>
-				<section className='grid grid-flow-col gap-2 grid-auto-column w-fit'>
+				<section className='grid-auto-column grid w-fit grid-flow-col gap-2'>
 					<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 					<LikeCount count={likeService.likes} />
 					<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
 				</section>
 			</section>
-			<DateDisplay className='absolute bottom right small-margin align-self-end' time={post.time} />
+			<DateDisplay className='bottom right small-margin align-self-end absolute' time={post.time} />
 			<ClearIconButton
-				className='absolute top-0 p-2 right small-margin'
+				className='right small-margin absolute top-0 p-2'
 				title={i18n.t('copy-link').toString()}
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}

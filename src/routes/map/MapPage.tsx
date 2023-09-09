@@ -235,7 +235,7 @@ export function MapInfo({ map, handleCloseModel, handleDeleteMap }: MapInfoProps
 	const { mapSearchTag } = useTags();
 
 	return (
-		<main className='space-between box-border flex h-full w-full flex-col gap-4 overflow-y-auto p-8'>
+		<main className='box-border flex h-full w-full flex-col justify-between gap-4 overflow-y-auto p-8'>
 			<section className='relative flex flex-row flex-wrap gap-2'>
 				<InfoImage src={`${API_BASE_URL}map/${map.id}/image`} />
 				<ClearIconButton className='absolute left-0 top-0 p-2' title={i18n.t('copy-link').toString()} icon='/assets/icons/copy.png' onClick={() => copy(`${FRONTEND_URL}map/${map.id}`)} />

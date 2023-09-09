@@ -245,7 +245,7 @@ export function SchematicInfo({ schematic, handleCloseModel, handleDeleteSchemat
 	const { schematicSearchTag } = useTags();
 
 	return (
-		<main className='space-between box-border flex h-full w-full flex-col gap-4 overflow-y-auto p-8'>
+		<main className='box-border flex h-full w-full flex-col justify-between gap-4 overflow-y-auto p-8'>
 			<section className='relative flex flex-row flex-wrap gap-2'>
 				<InfoImage src={`${API_BASE_URL}schematic/${schematic.id}/image`} />
 				<ClearIconButton

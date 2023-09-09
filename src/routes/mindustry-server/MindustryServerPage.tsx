@@ -41,7 +41,7 @@ export default function MindustryServerPage() {
 	pages.sort((a, b) => (b.name ? 1 : 0) - (a.name ? 1 : 0));
 
 	return (
-		<main className='flex flex-row gap-2 h-full w-full overflow-y-auto big-padding box-border'>
+		<main className='big-padding box-border flex h-full w-full flex-row gap-2 overflow-y-auto'>
 			<section className='flex flex-row justify-end'>
 				<Button title={i18n.t('submit')} onClick={() => setVisibility(true)}>
 					<Trans i18nKey='submit' />
@@ -86,12 +86,12 @@ export default function MindustryServerPage() {
 					))}
 				</tbody>
 			</table>
-			<section className='server-card-container flex flex-row flex-wrap space-evenly gap-2'>
+			<section className='server-card-container space-evenly flex flex-row flex-wrap gap-2'>
 				{pages.map((server) => (
 					<MindustryServerCard key={server.address} server={server} handleRemoveServer={handleRemoveServer} />
 				))}
 			</section>
-			<footer className='flex justify-center items-center'>
+			<footer className='flex items-center justify-center'>
 				<IfTrueElse
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -180,8 +180,8 @@ function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCard
 
 	return (
 		<section className='server-card flex flex-row'>
-			<header className='flex flex-row space-between'>
-				<section className='flex flex-row gap-2 center'>
+			<header className='flex flex-row justify-between'>
+				<section className='center flex flex-row gap-2'>
 					<span className='flex flex-row gap-2'>
 						<ColorText text={server.name ? server.name : server.address} /> | <span className='capitalize'>{server.modeName ? server.mapname : server.mode}</span>
 					</span>
@@ -231,13 +231,13 @@ function InputAddressDialog({ onClose, onSubmit }: InputAddressDialogProps) {
 	const [content, setContent] = useState<string>('');
 
 	return (
-		<section className='input-address-dialog flex flex-row gap-2 medium-padding'>
-			<header className='flex flex-row space-between p-2'>
+		<section className='input-address-dialog medium-padding flex flex-row gap-2'>
+			<header className='flex flex-row justify-between p-2'>
 				<Trans i18nKey='type-ip-address' />
 				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
 			</header>
 			<input className='input-address' type='text' title='address' onChange={(event) => setContent(event.target.value)} />
-			<section className='flex flex-row justify-end w-full p-2 box-border'>
+			<section className='box-border flex w-full flex-row justify-end p-2'>
 				<Button title={i18n.t('submit')} onClick={() => onSubmit(content)}>
 					<Trans i18nKey='submit' />
 				</Button>

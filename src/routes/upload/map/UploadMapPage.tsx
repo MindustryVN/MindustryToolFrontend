@@ -19,6 +19,7 @@ import MapUploadPreview from 'src/data/MapUploadPreview';
 import InfoImage from 'src/components/InfoImage';
 import Description from 'src/components/Description';
 import { useTags } from 'src/context/TagProvider';
+import Author from 'src/components/Author';
 
 let notLoginMessage = (
 	<span>
@@ -133,16 +134,17 @@ export default function UploadMapPage() {
 			{preview && (
 				<section className='flex flex-row flex-wrap gap-2'>
 					<InfoImage src={PNG_IMAGE_PREFIX + preview.image} />
-					<section className='space-between flex flex-row'>
-						<section className='flex flex-row flex-wrap gap-2'>
+					<section className='flex flex-row justify-between'>
+						<section className='flex flex-col flex-wrap gap-2'>
 							<ColorText className='h2 capitalize' text={preview.name} />
-							<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
+							<Author authorId={me ? me.id : 'community'} />
 							<Description description={preview.description} />
 							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 						</section>
 					</section>
 					<section className='flex w-full flex-row flex-nowrap gap-2'>
 						<SearchBox
+							className='h-10 w-full'
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
 							items={mapUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
@@ -157,7 +159,7 @@ export default function UploadMapPage() {
 			<footer className='flex flex-col items-center justify-center gap-2 p-2'>
 				<span children={checkUploadRequirement()} />
 				{preview && (
-					<Button title={i18n.t('upload')} onClick={() => handleSubmit()}>
+					<Button className='p-1' title={i18n.t('upload')} onClick={() => handleSubmit()}>
 						<Trans i18nKey='upload' />
 					</Button>
 				)}

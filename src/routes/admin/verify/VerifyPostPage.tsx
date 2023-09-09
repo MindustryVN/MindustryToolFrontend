@@ -123,7 +123,7 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 	}
 
 	return (
-		<main className='space-between box-border flex h-full w-full flex-row gap-2 overflow-y-auto p-8'>
+		<main className='box-border flex h-full w-full flex-row justify-between gap-2 overflow-y-auto p-8'>
 			<section className='editor-background relative box-border flex h-full w-full flex-row gap-2 p-8'>
 				<section className='align-end flex w-full flex-row gap-2'>
 					<input className='title-editor box-border w-full' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
