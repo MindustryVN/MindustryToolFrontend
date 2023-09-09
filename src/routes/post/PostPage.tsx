@@ -125,26 +125,30 @@ function PostPreview({ post }: PostPreviewProps) {
 	post.like = likeService.likes;
 
 	return (
-		<section role='button' className='relative flex w-full flex-col justify-between gap-2 rounded-lg bg-slate-900 p-2' onClick={() => navigate(`post/${post.id}`)}>
-			<header className='flex flex-col gap-2'>
-				<span className='title text-2xl'>{post.header}</span>
-				<Author authorId={post.authorId} />
-				<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
-			</header>
-			<section className='flex flex-col'>
-				<section className='flex w-full flex-row gap-2'>
-					<IconButton className='px-2 py-1' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-					<LikeCount className='h-8 w-8 p-2' count={likeService.likes} />
-					<IconButton className='px-2 py-1' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+		<section role='button' className='flex w-full flex-row justify-between rounded-lg bg-slate-900 p-2'>
+			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
+				<header className='flex flex-col gap-2'>
+					<span className='title text-2xl'>{post.header}</span>
+					<Author authorId={post.authorId} />
+					<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
+				</header>
+				<section className='flex flex-col'>
+					<section className='flex w-full flex-row gap-2'>
+						<IconButton className='px-2 py-1' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+						<LikeCount className='h-8 w-8 p-2' count={likeService.likes} />
+						<IconButton className='px-2 py-1' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+					</section>
 				</section>
-			</section>
-			<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />
-			<ClearIconButton
-				className='absolute right-0 top-0 m-2 h-8 w-8 p-2'
-				title={i18n.t('copy-link').toString()}
-				icon='/assets/icons/copy.png'
-				onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
-			/>
+				<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />
+			</div>
+			<div>
+				<ClearIconButton
+					className='flex h-8 w-8 flex-col justify-start p-2 align-top'
+					title={i18n.t('copy-link').toString()}
+					icon='/assets/icons/copy.png'
+					onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
+				/>
+			</div>
 		</section>
 	);
 }
