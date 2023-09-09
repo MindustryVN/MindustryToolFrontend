@@ -46,8 +46,6 @@ export default function PostPage() {
 
 	const { pages, isLoading, loadNextPage } = useInfiniteScroll(usePage, (v) => <PostPreview key={v.id} post={v} />);
 
-	const navigate = useNavigate();
-
 	function setSearchConfig(sort: TagChoice, tags: TagChoice[]) {
 		searchConfig.current = {
 			params: {
@@ -142,7 +140,7 @@ function PostPreview({ post }: PostPreviewProps) {
 			</section>
 			<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />
 			<ClearIconButton
-				className='absolute right-0 top-0 m-2 p-2 w-8 h-8'
+				className='absolute right-0 top-0 m-2 h-8 w-8 p-2'
 				title={i18n.t('copy-link').toString()}
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}

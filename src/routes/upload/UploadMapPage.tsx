@@ -11,7 +11,6 @@ import i18n from 'src/util/I18N';
 import TagPick from 'src/components/TagPick';
 import Button from 'src/components/Button';
 import TagEditContainer from 'src/components/TagEditContainer';
-import LoadUserName from 'src/components/LoadUserName';
 import ColorText from 'src/components/ColorText';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useMe } from 'src/context/MeProvider';
