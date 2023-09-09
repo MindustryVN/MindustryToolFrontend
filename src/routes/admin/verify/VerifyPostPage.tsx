@@ -126,7 +126,7 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 		<main className='box-border flex h-full w-full flex-row justify-between gap-2 overflow-y-auto p-8'>
 			<section className='editor-background relative box-border flex h-full w-full flex-row gap-2 p-8'>
 				<section className='align-end flex w-full flex-row gap-2'>
-					<input className='title-editor box-border w-full' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
+					<input className='box-border w-full' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
 					<SearchBox
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
@@ -137,8 +137,8 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 					/>
 				</section>
 				<TagEditContainer tags={tags} onRemove={handleRemoveTag} />
-				<textarea className='content-editor h-full w-full' value={post.content} disabled={true} />
-				<section className='right medium-margin absolute top-0 flex flex-row gap-2'>
+				<textarea className=' h-full w-full' value={post.content} disabled={true} />
+				<section className='right absolute top-0 m-2 flex flex-row gap-2'>
 					<a className='button' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 						<Trans i18nKey='how-to-write-markdown' />
 					</a>
@@ -170,7 +170,7 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 			{model(
 				<section className='relative h-full w-full overflow-y-auto'>
 					<PostView post={post} />
-					<Button title={i18n.t('hide-preview')} className='right medium-margin absolute top-0' onClick={() => setVisibility(false)}>
+					<Button title={i18n.t('hide-preview')} className='right absolute top-0 m-2' onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>
 				</section>,

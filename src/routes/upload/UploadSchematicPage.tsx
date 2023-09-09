@@ -11,7 +11,6 @@ import TagPick from 'src/components/TagPick';
 import { Trans } from 'react-i18next';
 import Button from 'src/components/Button';
 import TagEditContainer from 'src/components/TagEditContainer';
-import LoadUserName from 'src/components/LoadUserName';
 import Description from 'src/components/Description';
 import ItemRequirement from 'src/components/ItemRequirement';
 import ColorText from 'src/components/ColorText';

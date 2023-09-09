@@ -1,5 +1,3 @@
-import './ForumPage.css';
-
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
 import { TagChoice, Tags } from 'src/components/Tag';
@@ -9,23 +7,22 @@ import i18n from 'src/util/I18N';
 import ClearIconButton from 'src/components/ClearIconButton';
 import TagPick from 'src/components/TagPick';
 import TagEditContainer from 'src/components/TagEditContainer';
-import Button from 'src/components/Button';
 import { FRONTEND_URL } from 'src/config/Config';
 import useClipboard from 'src/hooks/UseClipboard';
 import LikeCount from 'src/components/LikeCount';
 import IconButton from 'src/components/IconButton';
 import useLike from 'src/hooks/UseLike';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import { Trans } from 'react-i18next';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import DateDisplay from 'src/components/Date';
-import LoadUserName from 'src/components/LoadUserName';
 import TagContainer from 'src/components/TagContainer';
 import IfTrue from 'src/components/IfTrue';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { useTags } from 'src/context/TagProvider';
+import OptionBox from 'src/components/OptionBox';
+import Author from 'src/components/Author';
 
-export default function ForumPage() {
+export default function PostPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
 
 	const sort = Tags.parse(searchParam.get('sort'), Tags.SORT_TAG);
@@ -79,35 +76,34 @@ export default function ForumPage() {
 	}
 
 	return (
-		<main className='flex h-full w-full flex-row gap-2 overflow-y-auto p-2'>
-			<header className='flex w-full flex-row gap-2'>
-				<section className='search-container'>
+		<main className='flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
+			<header className='flex w-full flex-col gap-2'>
+				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
+						className='h-10 w-full bg-slate-900'
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={postSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}>
-						<ClearIconButton icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
+						<ClearIconButton className='h-5' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
+					<OptionBox
+						className='h-10 w-full max-w-[10rem] bg-slate-900'
+						items={Tags.SORT_TAG}
+						mapper={(item, index) => (
+							<span key={index} className='whitespace-nowrap'>
+								{item.displayName}
+							</span>
+						)}
+						onChoose={(item) => handleSetSortQuery(item)}
+					/>
 				</section>
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-				<section className='sort-container grid-auto-column center grid w-fit grid-flow-col gap-2'>
-					{Tags.SORT_TAG.map((c: TagChoice) => (
-						<Button className='capitalize' key={c.name + c.value} title={i18n.t(c.name)} active={c === sortQuery} onClick={() => handleSetSortQuery(c)}>
-							{c.displayName}
-						</Button>
-					))}
-				</section>
-				<section className='flex flex-row justify-end p-2'>
-					<Button title={i18n.t('write-a-post')} onClick={() => navigate('/upload/post')}>
-						<Trans i18nKey='write-a-post' />
-					</Button>
-				</section>
 			</header>
-			<section className='flex flex-row gap-2' children={pages} />
-			<footer className='flex items-center justify-center'>
+			<section className='flex flex-col gap-2 p-4' children={pages} />
+			<footer className='flex w-full items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -131,22 +127,22 @@ function PostPreview({ post }: PostPreviewProps) {
 	post.like = likeService.likes;
 
 	return (
-		<section role='button' className='post-preview-card medium-padding relative flex flex-row justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
-			<header className='flex flex-row gap-2'>
-				<span className='title'>{post.header}</span>
-				<LoadUserName userId={post.authorId} />
+		<section role='button' className='relative flex w-full flex-col justify-between gap-2 rounded-lg bg-slate-900 p-2' onClick={() => navigate(`post/${post.id}`)}>
+			<header className='flex flex-col gap-2'>
+				<span className='title text-2xl'>{post.header}</span>
+				<Author authorId={post.authorId} />
 				<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
 			</header>
-			<section className='flex flex-row'>
-				<section className='grid-auto-column grid w-fit grid-flow-col gap-2'>
-					<IconButton title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-					<LikeCount count={likeService.likes} />
-					<IconButton title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+			<section className='flex flex-col'>
+				<section className='flex w-full flex-row gap-2'>
+					<IconButton className='px-2 py-1' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+					<LikeCount className='h-8 w-8 p-2' count={likeService.likes} />
+					<IconButton className='px-2 py-1' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
 				</section>
 			</section>
-			<DateDisplay className='bottom right small-margin align-self-end absolute' time={post.time} />
+			<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />
 			<ClearIconButton
-				className='right small-margin absolute top-0 p-2'
+				className='absolute right-0 top-0 m-2 p-2 w-8 h-8'
 				title={i18n.t('copy-link').toString()}
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}

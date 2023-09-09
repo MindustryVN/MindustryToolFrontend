@@ -17,14 +17,14 @@ const Schematic = React.lazy(() => import('src/routes/schematic/SchematicPage'))
 const SchematicView = React.lazy(() => import('src/routes/schematic/SchematicViewPage'));
 const Login = React.lazy(() => import('src/routes/login/LoginPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
-const Forum = React.lazy(() => import('src/routes/post/ForumPage'));
-const ForumView = React.lazy(() => import('src/routes/post/ForumViewPage'));
+const Forum = React.lazy(() => import('src/routes/post/PostPage'));
+const ForumView = React.lazy(() => import('src/routes/post/PostViewPage'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
-const UploadSchematic = React.lazy(() => import('src/routes/upload/schematic/UploadSchematicPage'));
-const UploadMap = React.lazy(() => import('src/routes/upload/map/UploadMapPage'));
-const UploadPost = React.lazy(() => import('src/routes/upload/post/UploadPostPage'));
+const UploadSchematic = React.lazy(() => import('src/routes/upload/UploadSchematicPage'));
+const UploadMap = React.lazy(() => import('src/routes/upload/UploadMapPage'));
+const UploadPost = React.lazy(() => import('src/routes/upload/UploadPostPage'));
 
 export default function App() {
 	return (

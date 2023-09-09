@@ -25,7 +25,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 	public render() {
 		if (this.state.hasError) {
 			return (
-				<h1>
+				<h1 className='flex h-full w-full items-center justify-center'>
 					<Trans i18nKey='error' />
 				</h1>
 			);
