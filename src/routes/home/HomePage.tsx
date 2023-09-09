@@ -9,7 +9,7 @@ export default function HomePage() {
 	const navigate = useNavigate();
 
 	return (
-		<main className='flex flex-col justify-between h-full overflow-y-auto p-8 pt-8'>
+		<main className='flex h-full flex-col justify-between overflow-y-auto p-8 pt-8'>
 			<section className='flex flex-col gap-3'>
 				<h2>Bạn đang tìm kiếm thứ gì?</h2>
 				<b className='text-white'>Tải game miễn phí?</b>
@@ -65,7 +65,7 @@ export default function HomePage() {
 				</ul>
 			</section>
 
-			<section className='grid grid-cols-2 p-2 rounded-lg gap-4 w-fit'>
+			<section className='grid w-fit grid-cols-2 gap-4 rounded-lg p-2'>
 				<p className='flex flex-row gap-2 whitespace-nowrap'>
 					<Trans i18nKey='page-owner' />
 				</p>
@@ -85,7 +85,7 @@ export default function HomePage() {
 			</section>
 
 			<footer>
-				<section className='flex flex-row items-center justify-evenly w-full bg-gray-950 rounded-xl p-2 text-white'>
+				<section className='flex w-full flex-row items-center justify-evenly rounded-xl bg-gray-950 p-2 text-white'>
 					<ClearButton title={i18n.t('services')} onClick={() => navigate('/')}>
 						<Trans i18nKey='services' />
 					</ClearButton>
