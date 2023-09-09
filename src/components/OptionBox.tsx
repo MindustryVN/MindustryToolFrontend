@@ -16,8 +16,8 @@ export default function OptionBox<T>({ className, items, children, mapper, onCho
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<button
-			type='button'
+		<div
+			role='button'
 			className={cn('flex h-full flex-col justify-center rounded-lg outline outline-2 outline-slate-500', className)}
 			onClick={() => setShowDropbox((prev) => !prev)}
 			onFocus={() => () => setShowDropbox((prev) => !prev)}
@@ -48,6 +48,6 @@ export default function OptionBox<T>({ className, items, children, mapper, onCho
 					</section>
 				)}
 			</div>
-		</button>
+		</div>
 	);
 }

@@ -1,7 +1,5 @@
-import './LogicPage.css';
-
 import React from 'react';
 
 export default function LogicPage() {
-	return <main className='flex flex-row h-full w-full overflow-y-auto'></main>;
+	return <main className='flex h-full w-full flex-row items-center justify-center overflow-y-auto text-4xl'>NOTHING HERE TO SEE</main>;
 }

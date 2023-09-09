@@ -229,6 +229,7 @@ export class API {
 		const tagString = Tags.toString(tags);
 
 		form.append('id', post.id);
+		form.append('content', post.content);
 		form.append('tags', tagString);
 
 		return API.REQUEST.post('post', form);

@@ -10,7 +10,7 @@ export default function HomePage() {
 
 	return (
 		<main className='flex h-full flex-col justify-between overflow-y-auto p-8 pt-8'>
-			<section className='flex flex-col gap-3'>
+			<section className='flex flex-col gap-4'>
 				<h2>Bạn đang tìm kiếm thứ gì?</h2>
 				<b className='text-white'>Tải game miễn phí?</b>
 				<ul>

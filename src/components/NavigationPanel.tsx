@@ -19,7 +19,7 @@ import UserAvatar from 'src/components/UserAvatar';
 interface LinkButton {
 	name: string;
 	to: string;
-	admin: boolean;
+	admin?: boolean;
 	icon: ReactNode;
 }
 
@@ -34,44 +34,54 @@ export default function NavigationPanel() {
 		{
 			name: i18n.t('home'),
 			to: '/home',
-			admin: false,
 			icon: <HomeIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('user'),
 			to: '/user',
-			admin: false,
 			icon: <UserIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('schematic'),
 			to: '/schematic',
-			admin: false,
 			icon: <SchematicIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('map'),
 			to: '/map',
-			admin: false,
 			icon: <MapIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('post'),
 			to: '/post',
-			admin: false,
 			icon: <PostIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('server'),
 			to: '/server',
-			admin: false,
 			icon: <ServerIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('logic'),
 			to: '/logic',
-			admin: false,
 			icon: <LogicIcon className='h-6 w-6' />,
+		},
+		{
+			name: i18n.t('notification'),
+			to: '/notification',
+			icon: (
+				<div className='relative cursor-pointer' onClick={() => navigate('notification')} title=''>
+					<IfTrue
+						condition={unreadNotifications}
+						whenTrue={
+							<span className='absolute right-0 top-0 translate-x-2 translate-y-[-50%] items-center justify-center rounded-sm bg-red-600 px-1 text-xs text-white'>
+								{(unreadNotifications <= 0 ? 0 : unreadNotifications) <= 100 ? unreadNotifications : '100+'}
+							</span>
+						}
+					/>
+					<BellIcon className='h-6 w-6' />
+				</div>
+			),
 		},
 		{
 			name: i18n.t('admin'),
@@ -142,7 +152,7 @@ export default function NavigationPanel() {
 					onClickOutside={() => setShowNavigatePanel(false)}>
 					<div className='flex h-full flex-col justify-between'>
 						<div className='flex w-full flex-col gap-2'>
-							<Link className='text-2xl' to='/'>
+							<Link className='text-2xl text-emerald-500' to='/'>
 								MINDUSTRYTOOL
 							</Link>
 							<div className='min-w-sm h-8 bg-gray-800 px-2 py-1 text-sm'>{WEB_VERSION}</div>
@@ -176,20 +186,7 @@ export default function NavigationPanel() {
 						<img className='pixelated h-8 w-8' src='/assets/icons/dots.png' alt='menu' />
 					</button>
 				</div>
-				<section className='flex flex-row items-center gap-2'>
-					<ClearButton className='relative cursor-pointer' onClick={() => navigate('notification')} title=''>
-						<IfTrue
-							condition={unreadNotifications}
-							whenTrue={
-								<span className='absolute right-0 top-0 translate-x-2 translate-y-[-50%] items-center justify-center rounded-sm bg-red-600 px-1 text-xs text-white'>
-									{(unreadNotifications <= 0 ? 0 : unreadNotifications) <= 100 ? unreadNotifications : '100+'}
-								</span>
-							}
-						/>
-						<BellIcon className='h-6 w-6' />
-					</ClearButton>
-					<WebIcon />
-				</section>
+				<WebIcon />
 				<NavigationPanel />
 			</section>
 		</nav>

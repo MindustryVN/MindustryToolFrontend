@@ -98,7 +98,7 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 
 	return (
 		<PopupMessageContext.Provider value={{ addPopup: addMessage }}>
-			<section className='flex flex-col gap-1 absolute top-12 right-0 z-popup w-screen h-[calc(100vh-3rem)] items-end pointer-events-none overflow-hidden'>
+			<section className='pointer-events-none absolute right-0 top-12 z-popup flex h-[calc(100vh-3rem)] w-screen flex-col items-end gap-1 overflow-hidden'>
 				{contents.map((val) => (
 					<PopupMessage //
 						key={val.uuid}
@@ -135,17 +135,17 @@ function PopupMessage({ content, duration, type, onTimeOut }: PopupMessageNode) 
 	}, []);
 
 	return (
-		<section className={'min-w-[50%] max-w-full md:min-w-[25%] md:max-w-[50%] rounded-l-lg overflow-hidden animate-slide-in text-white pointer-events-auto ' + type}>
-			<section className='flex flex-row justify-between items-start w-full gap-1 p-2'>
+		<section className={'pointer-events-auto min-w-[50%] max-w-full animate-slide-in overflow-hidden rounded-l-lg text-white md:min-w-[25%] md:max-w-[50%] ' + type}>
+			<section className='flex w-full flex-row items-start justify-between gap-1 p-2'>
 				<section className='p-2'>{content}</section>
 				<ClearIconButton //
-					className='self-start align-top w-4 h-4'
+					className='aspect-square h-4 w-4 self-start align-top'
 					icon='/assets/icons/quit.png'
 					title='remove'
 					onClick={() => onTimeOut()}
 				/>
 			</section>
-			<div className='h-1 w-full bg-blue-500 origin-top-left' style={{ animation: `timer ${duration}s linear forwards` }} />
+			<div className='h-1 w-full origin-top-left bg-blue-500' style={{ animation: `timer ${duration}s linear forwards` }} />
 		</section>
 	);
 }

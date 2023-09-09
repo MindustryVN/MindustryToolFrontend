@@ -1,5 +1,3 @@
-import './LogPage.css';
-
 import React, { useState } from 'react';
 import { API } from 'src/API';
 import { Log } from 'src/data/Log';
@@ -35,10 +33,11 @@ export default function LogPage() {
 	if (!logTypes.data) return <LoadingSpinner />;
 
 	return (
-		<main className='flex flex-row h-full w-full overflow-y-auto gap-1'>
-			<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
+		<main className='flex h-full w-full flex-col gap-1 overflow-y-auto'>
+			<section className='flex flex-row gap-2'>
 				{logTypes.data.map((item, index) => (
 					<Button
+						className='flex-1 px-2 py-1'
 						title={i18n.t(item)}
 						key={index}
 						active={item === contentType} //
@@ -47,8 +46,8 @@ export default function LogPage() {
 					</Button>
 				))}
 			</section>
-			<section id='log' className='flex flex-row gap-2 ' children={pages} />
-			<footer className='flex justify-center items-center'>
+			<section id='log' className='flex flex-col gap-2 ' children={pages} />
+			<footer className='flex items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -71,7 +70,7 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 	detail = detail ? detail : ['No content'];
 
 	return (
-		<details className='log-card relative medium-padding'>
+		<details className='relative overflow-auto bg-slate-900 p-2'>
 			<summary>
 				<p>ID: {log.id}</p>
 				<p>Environment: {log.environment}</p>
@@ -80,7 +79,7 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 				</p>
 				<p>Message: {header}</p>
 				<ClearIconButton
-					className='absolute top-0 right small-margin ' //
+					className='absolute right-0 top-0 m-2' //
 					icon='/assets/icons/trash-16.png'
 					title='delete'
 					onClick={() => handleDeleteLog(log.id)}
@@ -88,7 +87,7 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 			</summary>
 			<div>
 				Detail:
-				<div className='medium-padding box-border'>
+				<div className='box-border p-2'>
 					{detail.map((t, index) => (
 						<p key={index}>
 							{t}

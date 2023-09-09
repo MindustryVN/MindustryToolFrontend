@@ -12,7 +12,7 @@ interface MarkdownProps {
 
 function RouterLink({ href, children }: any) {
 	return href.match(/^(https?:)?\/\//) ? (
-		<a href={href} target='_blank' rel='noreferrer'>
+		<a className='text-emerald-500' href={href} target='_blank' rel='noreferrer'>
 			{children}
 		</a>
 	) : (
@@ -21,12 +21,12 @@ function RouterLink({ href, children }: any) {
 }
 
 function MarkdownImage({ src, alt }: any) {
-	return <img className='markdown-image' src={src} alt={alt} />;
+	return <img className='markdown-image h-full w-full' src={src} alt={alt} />;
 }
 
 export default function Markdown({ className, children }: MarkdownProps) {
 	return (
-		<ReactMarkdown className={cn(className)} components={{ link: RouterLink, img: MarkdownImage }}>
+		<ReactMarkdown className={cn('prose lg:prose-xl', className)} components={{ a: RouterLink, img: MarkdownImage }}>
 			{children}
 		</ReactMarkdown>
 	);

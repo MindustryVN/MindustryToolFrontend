@@ -21,6 +21,8 @@ import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { useTags } from 'src/context/TagProvider';
 import OptionBox from 'src/components/OptionBox';
 import Author from 'src/components/Author';
+import ClearButton from 'src/components/ClearButton';
+import { AddIcon } from 'src/components/Icon';
 
 export default function PostPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -31,6 +33,8 @@ export default function PostPage() {
 	const tags = Tags.parseArray((urlTags ? urlTags : '').split(','), postSearchTag);
 
 	const [tag, setTag] = useState<string>('');
+
+	const navigate = useNavigate();
 
 	const sortQuery = sort ? sort : Tags.SORT_TAG[0];
 	const tagQuery = tags;
@@ -101,6 +105,12 @@ export default function PostPage() {
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 			</header>
 			<section className='flex flex-col gap-2 p-4' children={pages} />
+			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
+				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/post')}>
+					<AddIcon className='h-10 w-10' />
+				</ClearButton>
+				<ScrollToTopButton className='h-10 w-10 ' containerId='schematic' />
+			</section>
 			<footer className='flex w-full items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
@@ -125,26 +135,30 @@ function PostPreview({ post }: PostPreviewProps) {
 	post.like = likeService.likes;
 
 	return (
-		<section role='button' className='relative flex w-full flex-col justify-between gap-2 rounded-lg bg-slate-900 p-2' onClick={() => navigate(`post/${post.id}`)}>
-			<header className='flex flex-col gap-2'>
-				<span className='title text-2xl'>{post.header}</span>
-				<Author authorId={post.authorId} />
-				<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
-			</header>
-			<section className='flex flex-col'>
-				<section className='flex w-full flex-row gap-2'>
-					<IconButton className='px-2 py-1' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-					<LikeCount className='h-8 w-8 p-2' count={likeService.likes} />
-					<IconButton className='px-2 py-1' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+		<section role='button' className='relative flex w-full flex-row justify-between rounded-lg bg-slate-900 p-4'>
+			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
+				<header className='flex flex-col gap-2'>
+					<span className='title text-2xl'>{post.header}</span>
+					<Author authorId={post.authorId} />
+					<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
+				</header>
+				<section className='flex flex-col'>
+					<section className='flex w-full flex-row gap-2'>
+						<IconButton className='px-2 py-1' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+						<LikeCount className='h-8 w-8 p-2' count={likeService.likes} />
+						<IconButton className='px-2 py-1' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+					</section>
 				</section>
-			</section>
+			</div>
+			<div>
+				<ClearIconButton
+					className='flex h-8 w-8 flex-col justify-start p-2 align-top'
+					title={i18n.t('copy-link').toString()}
+					icon='/assets/icons/copy.png'
+					onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
+				/>
+			</div>
 			<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />
-			<ClearIconButton
-				className='absolute right-0 top-0 m-2 h-8 w-8 p-2'
-				title={i18n.t('copy-link').toString()}
-				icon='/assets/icons/copy.png'
-				onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
-			/>
 		</section>
 	);
 }

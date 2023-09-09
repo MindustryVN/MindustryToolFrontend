@@ -5,5 +5,5 @@ interface PostCardProps {
 }
 
 export default function PostCard({ children }: PostCardProps) {
-	return <section className='flex flex-row big-padding gap-2'>{children}</section>;
+	return <section className='flex flex-row justify-between gap-2 p-2'>{children}</section>;
 }

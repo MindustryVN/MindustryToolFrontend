@@ -70,7 +70,7 @@ export default function VerifySchematicPage() {
 	function verifySchematic(schematic: Schematic, tags: TagChoice[]) {
 		setVisibility(false);
 		API.verifySchematic(schematic, tags) //
-			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has be accept', 'Post schematic success'))
+			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has been accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))

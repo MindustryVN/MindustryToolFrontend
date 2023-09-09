@@ -37,11 +37,6 @@ module.exports = {
 			'slide-in': 'slide-in 0.5s forwards',
 		},
 
-		plugins: [
-			function ({ addVariant }) {
-				addVariant('child', '&>*');
-				addVariant('child-hover', '&>*:hover');
-			},
-		],
+		plugins: [require('@tailwindcss/typography')],
 	},
 };
