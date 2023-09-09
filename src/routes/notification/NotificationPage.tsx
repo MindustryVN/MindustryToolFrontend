@@ -1,5 +1,3 @@
-import './NotificationPage.css';
-
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 
@@ -57,7 +55,7 @@ function NotificationContainer() {
 			.finally(() => reloadPage());
 	}
 
-	if (isLoading) return <LoadingSpinner />;
+	if (isLoading) return <LoadingSpinner className='flex h-full w-full items-center justify-center' />;
 
 	if (pages.length === 0)
 		return (
@@ -67,29 +65,29 @@ function NotificationContainer() {
 		);
 
 	return (
-		<main className='box-border flex h-full w-full flex-row gap-2 overflow-y-auto p-2'>
-			<section className='flex flex-row justify-end'>
-				<Button title={i18n.t('mark-as-read-all')} onClick={() => handleMarkAsReadAll()}>
+		<main className='box-border flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
+			<section className='flex w-full flex-row justify-end gap-2'>
+				<Button className='px-2 py-1' title={i18n.t('mark-as-read-all')} onClick={() => handleMarkAsReadAll()}>
 					<Trans i18nKey='mark-as-read-all' />
 				</Button>
-				<Button title={i18n.t('delete-all')} onClick={() => handleDeleteAll()}>
+				<Button className='px-2 py-1' title={i18n.t('delete-all')} onClick={() => handleDeleteAll()}>
 					<Trans i18nKey='delete-all' />
 				</Button>
 			</section>
 			{pages.map((notification) => (
-				<section className='notification medium-padding box-border flex flex-row flex-wrap justify-between' key={notification.id}>
+				<section className='box-border flex flex-col flex-wrap justify-between bg-slate-900 p-4' key={notification.id}>
 					<section className='flex flex-row'>
-						<h3>{notification.header}</h3>
+						<span className='text-xl'>{notification.header}</span>
 						<Markdown>{notification.content}</Markdown>
 					</section>
-					<section className='align-self-end flex flex-row gap-2'>
-						<Trans i18nKey='time' />: <DateDisplay time={notification.time} />
+					<section className='flex flex-row gap-2 self-end'>
+						<Trans i18nKey='time' /> <DateDisplay time={notification.time} />
 						<section className='center flex flex-row justify-start gap-2'>
 							<IfTrue
 								condition={notification.read === false}
-								whenTrue={<IconButton title={i18n.t('mark-as-read')} icon='/assets/icons/check.png' onClick={() => handleMarkAsRead(notification)} />}
+								whenTrue={<IconButton className='px-2 py-1' title={i18n.t('mark-as-read')} icon='/assets/icons/check.png' onClick={() => handleMarkAsRead(notification)} />}
 							/>
-							<IconButton title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => handleDelete(notification)} />
+							<IconButton className='px-2 py-1' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => handleDelete(notification)} />
 						</section>
 					</section>
 				</section>

@@ -48,15 +48,15 @@ export default function VerifyPostPage() {
 	function verifyPost(post: Post, tags: TagChoice[]) {
 		setVisibility(false);
 		API.verifyPost(post, tags) //
-			.then(() => API.postNotification(post.authorId, 'Your post submission has be accept', 'Post post success'))
+			.then(() => API.postNotification(post.authorId, 'Your post submission has been accept', 'Post post success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => usePage.filter((p) => p !== post));
 	}
 
 	return (
-		<main id='verify-post' className='flex h-full w-full flex-row'>
-			<section className='flex flex-row gap-2' children={pages} />
+		<main id='verify-post' className='flex h-full w-full flex-col'>
+			<section className='flex flex-col gap-2' children={pages} />
 			<footer className='flex items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
@@ -106,6 +106,7 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 	const { postUploadTag } = useTags();
 	const [tags, setTags] = useState<TagChoice[]>(Tags.parseArray(post.tags, postUploadTag));
 	const [tag, setTag] = useState('');
+	const [currentPost, setCurrentPost] = useState(post);
 
 	const verifyDialog = useDialog();
 	const rejectDialog = useDialog();
@@ -123,11 +124,19 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 	}
 
 	return (
-		<main className='box-border flex h-full w-full flex-row justify-between gap-2 overflow-y-auto p-8'>
-			<section className='editor-background relative box-border flex h-full w-full flex-row gap-2 p-8'>
+		<section className='box-border flex h-full w-full flex-col justify-between gap-2 overflow-y-auto p-4'>
+			<section className='flex flex-row justify-end gap-2'>
+				<a className='rounded-lg border-2 border-slate-500 bg-slate-900 px-2 py-1' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
+					<Trans i18nKey='how-to-write-markdown' />
+				</a>
+				<Button className='bg-slate-900 px-2 py-1' title={i18n.t('show-preview')} onClick={() => setVisibility(true)}>
+					<Trans i18nKey='show-preview' />
+				</Button>
+			</section>
+			<section className='relative box-border flex h-full w-full flex-col gap-2 bg-slate-900 p-4 rounded-lg'>
 				<section className='align-end flex w-full flex-row gap-2'>
-					<input className='box-border w-full' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
 					<SearchBox
+						className='h-10 w-full p-2'
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
 						items={postUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
@@ -136,45 +145,45 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 						mapper={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
+				<div className='box-border w-full bg-slate-900 text-xl outline-none'>{currentPost.header}</div>
 				<TagEditContainer tags={tags} onRemove={handleRemoveTag} />
-				<textarea className=' h-full w-full' value={post.content} disabled={true} />
-				<section className='right absolute top-0 m-2 flex flex-row gap-2'>
-					<a className='button' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
-						<Trans i18nKey='how-to-write-markdown' />
-					</a>
-					<Button title={i18n.t('show-preview')} onClick={() => setVisibility(true)}>
-						<Trans i18nKey='show-preview' />
-					</Button>
-				</section>
+				<textarea
+					className='h-full w-full bg-slate-900 outline-none'
+					value={currentPost.content}
+					onChange={(event) =>
+						setCurrentPost((prev) => {
+							return { ...prev, content: event.target.value };
+						})
+					}
+				/>
 			</section>
-
-			<section className='grid-auto-column grid w-fit grid-flow-col gap-2'>
-				<Button title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
-				<AdminOnly children={<Button title={i18n.t('verify')} children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
-				<Button title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
+			<section className='flex flex-row justify-end gap-2'>
+				<Button className='px-2 py-1' title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
+				<AdminOnly children={<Button className='px-2 py-1' title={i18n.t('verify')} children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
+				<Button className='px-2 py-1' title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
 				<ConfirmBox
-					onConfirm={() => handleVerifyPost(post, tags)} //
+					onConfirm={() => handleVerifyPost(currentPost, tags)} //
 					onClose={() => verifyDialog.setVisibility(false)}>
 					<Trans i18nKey='verify' />
 				</ConfirmBox>,
 			)}
 			{rejectDialog.dialog(
 				<MessageBox
-					onSubmit={(reason) => handleRejectPost(post, reason)} //
+					onSubmit={(reason) => handleRejectPost(currentPost, reason)} //
 					onClose={() => rejectDialog.setVisibility(false)}>
 					<Trans i18nKey='reject-reason' />
 				</MessageBox>,
 			)}
 			{model(
-				<section className='relative h-full w-full overflow-y-auto'>
-					<PostView post={post} />
-					<Button title={i18n.t('hide-preview')} className='right absolute top-0 m-2' onClick={() => setVisibility(false)}>
+				<section className='flex h-full w-full flex-col overflow-y-auto p-4'>
+					<Button title={i18n.t('hide-preview')} className='self-end bg-slate-900 px-2 py-1' onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>
+					<PostView post={currentPost} />
 				</section>,
 			)}
-		</main>
+		</section>
 	);
 }

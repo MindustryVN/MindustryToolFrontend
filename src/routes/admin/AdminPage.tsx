@@ -2,13 +2,14 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 import SwitchBar from 'src/components/SwitchBar';
 import SwitchName from 'src/components/SwitchName';
+import LogPage from 'src/routes/admin/log/LogPage';
 import VerifyMapPage from 'src/routes/admin/verify/VerifyMapPage';
 import VerifyPostPage from 'src/routes/admin/verify/VerifyPostPage';
 import VerifySchematicPage from 'src/routes/admin/verify/VerifySchematicPage';
 
 export default function AdminPage() {
 	return (
-		<main id='admin' className='box-border flex h-full w-full flex-row gap-2 p-2'>
+		<div id='admin' className='box-border flex h-full w-full flex-row gap-2 p-2'>
 			<SwitchBar
 				className='h-full w-full'
 				elements={[
@@ -39,8 +40,17 @@ export default function AdminPage() {
 						),
 						element: <VerifyPostPage />,
 					},
+					{
+						id: 'log',
+						name: (
+							<SwitchName>
+								<Trans i18nKey='log' />
+							</SwitchName>
+						),
+						element: <LogPage />,
+					},
 				]}
 			/>
-		</main>
+		</div>
 	);
 }

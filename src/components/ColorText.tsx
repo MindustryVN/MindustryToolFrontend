@@ -35,7 +35,16 @@ export default function ColorText({ text, className }: ColorTextProps) {
 		if (color.includes('#')) {
 			color = color.padEnd(7, '0');
 		}
-		s.color = color;
+
+		switch (color) {
+			case 'accent':
+				s.color = 'yellow';
+				break;
+
+			default:
+				s.color = color;
+				break;
+		}
 
 		if (arr.length < 2) {
 			add(text.substring(arr[0].length), s.color);

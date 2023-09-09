@@ -5,5 +5,5 @@ interface PostTitleProps {
 }
 
 export default function PostTitle({ title }: PostTitleProps) {
-	return <span className='title'>{title}</span>;
+	return <span className='text-xl'>{title}</span>;
 }
