@@ -1,7 +1,0 @@
-.tag-dropbox {
-	width: min(512px, 50vw);
-}
-
-label {
-	font-size: calc(1rem * 40 / 3 / 16);
-}

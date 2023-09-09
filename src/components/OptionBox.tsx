@@ -6,30 +6,32 @@ import { cn } from 'src/util/Utils';
 interface OptionBoxProps<T> {
 	className?: string;
 	items: T[];
+	children?: ReactNode;
 	mapper: (items: T, index: number) => ReactNode;
 	onChoose: (item: T) => void;
 }
 
-export default function OptionBox<T>({ className, items, mapper, onChoose }: OptionBoxProps<T>) {
+export default function OptionBox<T>({ className, items, children, mapper, onChoose }: OptionBoxProps<T>) {
 	const [choice, setChoice] = useState(items[0]);
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<div>
-			<button
-				className={cn('w-full h-full bg-transparent flex flex-row justify-between items-center gap-2 p-2 border-2 border-slate-500 rounded-lg', className)}
-				type='button'
-				onClick={() => setShowDropbox((prev) => !prev)}
-				onFocus={() => () => setShowDropbox((prev) => !prev)}
-				onKeyDown={(event) => {
-					if (event.key === 'Enter') setShowDropbox((prev) => !prev);
-				}}>
-				{mapper(choice, 0)}
-				{showDropbox ? <ArrowUpIcon className='w-4 h-4 flex items-center justify-center' /> : <ArrowDownIcon className='w-4 h-4 flex items-center justify-center' />}
-			</button>
-			<div className='relative'>
+		<button
+			type='button'
+			className={cn('flex h-full flex-col justify-center rounded-lg outline outline-2 outline-slate-500', className)}
+			onClick={() => setShowDropbox((prev) => !prev)}
+			onFocus={() => () => setShowDropbox((prev) => !prev)}
+			onKeyDown={(event) => {
+				if (event.key === 'Enter') setShowDropbox((prev) => !prev);
+			}}>
+			<section className='flex h-full w-full flex-row items-center justify-between gap-2 px-1'>
+				<div>{mapper(choice, 0)}</div>
+				{children}
+				{showDropbox ? <ArrowUpIcon className='flex h-4 w-4 items-center justify-center' /> : <ArrowDownIcon className='flex h-4 w-4 items-center justify-center' />}
+			</section>
+			<div className='relative w-full'>
 				{showDropbox && (
-					<section className='absolute w-full top-1 left-0 border-2 border-slate-500 rounded-lg overflow-x-auto bg-slate-900 no-scrollbar z-overlay'>
+					<section className='no-scrollbar absolute left-0 top-1 z-overlay w-full overflow-x-auto rounded-lg border-2 border-slate-500 bg-slate-900 px-1'>
 						{items
 							.filter((item) => item !== choice)
 							.map((item, index) => (
@@ -46,6 +48,6 @@ export default function OptionBox<T>({ className, items, mapper, onChoose }: Opt
 					</section>
 				)}
 			</div>
-		</div>
+		</button>
 	);
 }

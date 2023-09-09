@@ -18,28 +18,30 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<div className='flex flex-col w-full'>
-			<section className={cn('flex justify-center h-full gap-2 px-1 border-2 border-slate-500 rounded-lg', className)}>
+		<div
+			className={cn('flex h-full flex-col justify-center rounded-lg outline outline-2 outline-slate-500', className)}
+			role='button'
+			onClick={() => setShowDropbox((prev) => !prev)}
+			onFocus={() => () => setShowDropbox((prev) => !prev)}
+			onKeyDown={(event) => {
+				if (event.key === 'Enter') setShowDropbox((prev) => !prev);
+			}}>
+			<section className='flex h-full w-full flex-row justify-center gap-2 px-1'>
 				<input
-					className='w-full h-full bg-transparent placeholder:bg-transparent shadow-none focus:border-none focus:outline-none'
+					className='h-full w-full bg-transparent shadow-none placeholder:bg-transparent focus:border-none focus:outline-none'
 					type='text'
 					value={value}
 					title={placeholder}
 					placeholder={placeholder}
-					onClick={() => setShowDropbox((prev) => !prev)}
-					onFocus={() => () => setShowDropbox((prev) => !prev)}
 					onChange={(event) => {
 						if (onChange) onChange(event);
-					}}
-					onKeyDown={(event) => {
-						if (event.key === 'Enter') setShowDropbox((prev) => !prev);
 					}}
 				/>
 				{children}
 			</section>
-			<section className='relative'>
+			<section className='relative w-full'>
 				{showDropbox && (
-					<section className='absolute flex flex-col justify-start items-start w-full z-overlay max-h-[50vh] mt-2 overflow-x-hidden overflow-y-auto border-2 border-slate-500 rounded-lg bg-slate-900'>
+					<section className='absolute z-overlay mt-2 flex max-h-[50vh] w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden rounded-lg border-2 border-slate-500 bg-slate-900'>
 						{items ? (
 							items.map((node, index) => (
 								<DropboxElement

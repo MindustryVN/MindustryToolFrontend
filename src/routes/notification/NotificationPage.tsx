@@ -61,13 +61,13 @@ function NotificationContainer() {
 
 	if (pages.length === 0)
 		return (
-			<div className='flex justify-center items-center'>
+			<div className='flex items-center justify-center'>
 				<Trans i18nKey='no-notification' />
 			</div>
 		);
 
 	return (
-		<main className='h-full w-full overflow-y-auto flex flex-row p-2 gap-2 box-border'>
+		<main className='box-border flex h-full w-full flex-row gap-2 overflow-y-auto p-2'>
 			<section className='flex flex-row justify-end'>
 				<Button title={i18n.t('mark-as-read-all')} onClick={() => handleMarkAsReadAll()}>
 					<Trans i18nKey='mark-as-read-all' />
@@ -77,14 +77,14 @@ function NotificationContainer() {
 				</Button>
 			</section>
 			{pages.map((notification) => (
-				<section className='notification flex flex-row flex-wrap space-between medium-padding box-border' key={notification.id}>
+				<section className='notification medium-padding box-border flex flex-row flex-wrap justify-between' key={notification.id}>
 					<section className='flex flex-row'>
 						<h3>{notification.header}</h3>
 						<Markdown>{notification.content}</Markdown>
 					</section>
-					<section className='flex flex-row gap-2 align-self-end'>
+					<section className='align-self-end flex flex-row gap-2'>
 						<Trans i18nKey='time' />: <DateDisplay time={notification.time} />
-						<section className='flex flex-row gap-2 center justify-start'>
+						<section className='center flex flex-row justify-start gap-2'>
 							<IfTrue
 								condition={notification.read === false}
 								whenTrue={<IconButton title={i18n.t('mark-as-read')} icon='/assets/icons/check.png' onClick={() => handleMarkAsRead(notification)} />}

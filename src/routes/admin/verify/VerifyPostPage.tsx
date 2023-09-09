@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import Button from 'src/components/Button';
-import ClearIconButton from 'src/components/ClearIconButton';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import IfTrue from 'src/components/IfTrue';
-import ConfirmDialog from 'src/components/ConfirmDialog';
+import ConfirmBox from 'src/components/ConfirmBox';
 import SearchBox from 'src/components/Searchbox';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import PostPreview from 'src/components/PostPreview';
@@ -21,6 +20,7 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import AdminOnly from 'src/components/AdminOnly';
 import { useTags } from 'src/context/TagProvider';
+import { MessageBox } from 'src/components/MessageBox';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
@@ -55,9 +55,9 @@ export default function VerifyPostPage() {
 	}
 
 	return (
-		<main id='verify-post' className='flex flex-row h-full w-full'>
+		<main id='verify-post' className='flex h-full w-full flex-row'>
 			<section className='flex flex-row gap-2' children={pages} />
-			<footer className='flex justify-center items-center'>
+			<footer className='flex items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
@@ -123,10 +123,10 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 	}
 
 	return (
-		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
-			<section className='editor-background relative flex flex-row w-full h-full gap-2 p-8 box-border'>
-				<section className='flex flex-row gap-2 w-full align-end'>
-					<input className='title-editor w-full box-border' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
+		<main className='box-border flex h-full w-full flex-row justify-between gap-2 overflow-y-auto p-8'>
+			<section className='editor-background relative box-border flex h-full w-full flex-row gap-2 p-8'>
+				<section className='align-end flex w-full flex-row gap-2'>
+					<input className='box-border w-full' type='text' value={post.header} placeholder={i18n.t('title').toString()} disabled={true} />
 					<SearchBox
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
@@ -137,8 +137,8 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 					/>
 				</section>
 				<TagEditContainer tags={tags} onRemove={handleRemoveTag} />
-				<textarea className='content-editor w-full h-full' value={post.content} disabled={true} />
-				<section className='flex flex-row absolute top-0 right medium-margin gap-2'>
+				<textarea className=' h-full w-full' value={post.content} disabled={true} />
+				<section className='right absolute top-0 m-2 flex flex-row gap-2'>
 					<a className='button' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 						<Trans i18nKey='how-to-write-markdown' />
 					</a>
@@ -148,56 +148,33 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 				</section>
 			</section>
 
-			<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
+			<section className='grid-auto-column grid w-fit grid-flow-col gap-2'>
 				<Button title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />
 				<AdminOnly children={<Button title={i18n.t('verify')} children={<Trans i18nKey='verify' />} onClick={() => verifyDialog.setVisibility(true)} />} />
 				<Button title={i18n.t('back')} onClick={() => handleCloseModel()} children={<Trans i18nKey='back' />} />
 			</section>
 			{verifyDialog.dialog(
-				<ConfirmDialog
+				<ConfirmBox
 					onConfirm={() => handleVerifyPost(post, tags)} //
 					onClose={() => verifyDialog.setVisibility(false)}>
 					<Trans i18nKey='verify' />
-				</ConfirmDialog>,
+				</ConfirmBox>,
 			)}
 			{rejectDialog.dialog(
-				<TypeDialog
+				<MessageBox
 					onSubmit={(reason) => handleRejectPost(post, reason)} //
-					onClose={() => rejectDialog.setVisibility(false)}
-				/>,
+					onClose={() => rejectDialog.setVisibility(false)}>
+					<Trans i18nKey='reject-reason' />
+				</MessageBox>,
 			)}
 			{model(
-				<section className='relative w-full h-full overflow-y-auto'>
+				<section className='relative h-full w-full overflow-y-auto'>
 					<PostView post={post} />
-					<Button title={i18n.t('hide-preview')} className='absolute top-0 right medium-margin' onClick={() => setVisibility(false)}>
+					<Button title={i18n.t('hide-preview')} className='right absolute top-0 m-2' onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>
 				</section>,
 			)}
 		</main>
-	);
-}
-
-interface TypeDialogProps {
-	onSubmit: (content: string) => void;
-	onClose: () => void;
-}
-
-function TypeDialog({ onSubmit, onClose }: TypeDialogProps) {
-	const [content, setContent] = useState('');
-
-	return (
-		<section className='flex flex-row'>
-			<header className='flex flex-row space-between p-2'>
-				<Trans i18nKey='reject-reason' />
-				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
-			</header>
-			<textarea className='type-dialog' title='reason' onChange={(event) => setContent(event.target.value)} />
-			<section className='flex flex-row justify-end w-full p-2 box-border'>
-				<Button title={i18n.t('reject')} onClick={() => onSubmit(content)}>
-					<Trans i18nKey='reject' />
-				</Button>
-			</section>
-		</section>
 	);
 }

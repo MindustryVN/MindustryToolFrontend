@@ -11,7 +11,7 @@ import { useMe } from 'src/context/MeProvider';
 
 import PreviewImage from 'src/components/PreviewImage';
 import PreviewCard from 'src/components/PreviewCard';
-import SchematicDescription from 'src/components/Description';
+import Description from 'src/components/Description';
 import ItemRequirement from 'src/components/ItemRequirement';
 import InfoImage from 'src/components/InfoImage';
 import PreviewContainer from 'src/components/PreviewContainer';
@@ -20,7 +20,7 @@ import TagEditContainer from 'src/components/TagEditContainer';
 import ClearIconButton from 'src/components/ClearIconButton';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import DownloadButton from 'src/components/DownloadButton';
-import ConfirmDialog from 'src/components/ConfirmDialog';
+import ConfirmBox from 'src/components/ConfirmBox';
 import LoadUserName from 'src/components/LoadUserName';
 import useClipboard from 'src/hooks/UseClipboard';
 import TagContainer from 'src/components/TagContainer';
@@ -45,6 +45,7 @@ import { useTags } from 'src/context/TagProvider';
 import { getDownloadUrl } from 'src/util/Utils';
 import OptionBox from 'src/components/OptionBox';
 import ClearButton from 'src/components/ClearButton';
+import Author from 'src/components/Author';
 
 export default function SchematicPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -131,9 +132,9 @@ export default function SchematicPage() {
 	}
 
 	return (
-		<main id='schematic' className='h-full w-full overflow-y-auto flex flex-col gap-2 p-2'>
-			<header className='flex flex-col gap-2 w-full'>
-				<section className='flex flex-row justify-start items-center w-3/4 md:w-3/5 m-auto mt-8 gap-2'>
+		<main id='schematic' className='flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
+			<header className='flex w-full flex-col gap-2'>
+				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
 						className='h-10 w-full bg-slate-900'
 						placeholder={i18n.t('search-with-tag').toString()}
@@ -142,10 +143,10 @@ export default function SchematicPage() {
 						onChange={(event) => setTag(event.target.value)}
 						onChoose={(item) => handleAddTag(item)}
 						mapper={(t, index) => <TagPick key={index} tag={t} />}>
-						<ClearIconButton className='p-1' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
+						<ClearIconButton className='h-5' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 					<OptionBox
-						className='h-10 w-40 bg-slate-900'
+						className='h-10 w-full max-w-[10rem] bg-slate-900'
 						items={Tags.SORT_TAG}
 						mapper={(item, index) => (
 							<span key={index} className='whitespace-nowrap'>
@@ -155,23 +156,23 @@ export default function SchematicPage() {
 						onChoose={(item) => handleSetSortQuery(item)}
 					/>
 				</section>
-				<TagEditContainer tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
+				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 			</header>
-			<section className='flex flex-row justify-center items-center p-2'>
+			<section className='flex flex-row items-center justify-center p-2'>
 				<Trans i18nKey='total-schematic' /> : {totalSchematic > 0 ? totalSchematic : 0}
 			</section>
 			<PreviewContainer children={pages} />
-			<footer className='flex w-full justify-center items-center'>
+			<footer className='flex w-full items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 				/>
 			</footer>
-			<section className='fixed bottom-4 right-0 flex flex-col justify-center items-center'>
+			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/schematic')}>
-					<AddIcon className='w-10 h-10' />
+					<AddIcon className='h-10 w-10' />
 				</ClearButton>
-				<ScrollToTopButton className='w-10 h-10 ' containerId='schematic' />
+				<ScrollToTopButton className='h-10 w-10 ' containerId='schematic' />
 			</section>
 			<IfTrue
 				condition={currentSchematic}
@@ -199,14 +200,14 @@ export function SchematicPreview({ schematic, handleOpenModel }: SchematicPrevie
 	const { copy } = useClipboard();
 
 	return (
-		<PreviewCard className='relative w-full h-full' key={schematic.id}>
+		<PreviewCard className='relative h-full w-full' key={schematic.id}>
 			<ClearIconButton
-				className='absolute top-0 left-0 p-2'
+				className='absolute left-0 top-0 p-2'
 				title={i18n.t('copy-link')}
 				icon='/assets/icons/copy.png'
 				onClick={() => copy(`${FRONTEND_URL}schematic/${schematic.id}`)}></ClearIconButton>
 			<PreviewImage src={`${API_BASE_URL}schematic/${schematic.id}/image`} onClick={() => handleOpenModel(schematic)} />
-			<ColorText className='capitalize p-4 flex justify-center items-center text-center' text={schematic.name} />
+			<ColorText className='flex items-center justify-center p-4 text-center capitalize' text={schematic.name} />
 			<SchematicPreviewButton schematic={schematic} />
 		</PreviewCard>
 	);
@@ -222,12 +223,12 @@ function SchematicPreviewButton({ schematic }: SchematicPreviewButtonProps) {
 	schematic.like = likeService.likes;
 
 	return (
-		<section className='flex flex-row  gap-2 p-2'>
-			<IconButton className='w-8 h-8' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-			<LikeCount className='w-8 h-8' count={likeService.likes} />
-			<IconButton className='w-8 h-8' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<IconButton className='w-8 h-8' title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
-			<DownloadButton className='w-8 h-8' href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
+		<section className='flex flex-row gap-2 p-2'>
+			<IconButton className='h-8 w-full' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+			<LikeCount className='h-8 w-full' count={likeService.likes} />
+			<IconButton className='h-8 w-full' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+			<IconButton className='h-8 w-full' title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
+			<DownloadButton className='h-8 w-full' href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 		</section>
 	);
 }
@@ -244,24 +245,22 @@ export function SchematicInfo({ schematic, handleCloseModel, handleDeleteSchemat
 	const { schematicSearchTag } = useTags();
 
 	return (
-		<main className='flex flex-col space-between w-full h-full gap-4 p-8 box-border overflow-y-auto'>
+		<main className='box-border flex h-full w-full flex-col justify-between gap-4 overflow-y-auto p-8'>
 			<section className='relative flex flex-row flex-wrap gap-2'>
 				<InfoImage src={`${API_BASE_URL}schematic/${schematic.id}/image`} />
 				<ClearIconButton
-					className='absolute top-0 left-0 p-2'
+					className='absolute left-0 top-0 p-2'
 					title={i18n.t('copy-link').toString()}
 					icon='/assets/icons/copy.png'
 					onClick={() => copy(`${FRONTEND_URL}schematic/${schematic.id}`)}
 				/>
-				<section className='flex flex-col gap-2'>
-					<ColorText className='capitalize text-2xl' text={schematic.name} />
-					<section className='flex flex-row whitespace-nowrap gap-2'>
-						<Trans i18nKey='author' /> <LoadUserName userId={schematic.authorId} />
-					</section>
-					<SchematicDescription description={schematic.description} />
+				<section className='flex flex-col flex-wrap gap-2'>
+					<ColorText className='text-2xl capitalize' text={schematic.name} />
+					<Author authorId={schematic.authorId} />
+					<Description description={schematic.description} />
 					<ItemRequirement requirement={schematic.requirement} />
 					<TagContainer tags={Tags.parseArray(schematic.tags, schematicSearchTag)} />
-					<section className='flex flex-row whitespace-nowrap gap-2'>
+					<section className='flex flex-row gap-2 whitespace-nowrap'>
 						<Trans i18nKey='verify-by' /> <LoadUserName userId={schematic.verifyAdmin} />
 					</section>
 				</section>
@@ -294,24 +293,24 @@ function SchematicInfoButton({ schematic, handleCloseModel, handleDeleteSchemati
 	return (
 		<section className='flex flex-row justify-between'>
 			<section className='flex flex-row gap-2'>
-				<IconButton className='w-8 h-8' title='up-vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
-				<LikeCount className='w-8 h-8' count={likeService.likes} />
-				<IconButton className='w-8 h-8' title='down-vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-				<IconButton className='w-8 h-8' title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
-				<DownloadButton className='w-8 h-8' href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
+				<IconButton className='h-8 w-8' title='up-vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
+				<LikeCount className='h-8 w-8' count={likeService.likes} />
+				<IconButton className='h-8 w-8' title='down-vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
+				<IconButton className='h-8 w-8' title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
+				<DownloadButton className='h-8 w-8' href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 				<IfTrue
 					condition={Users.isAuthorOrAdmin(schematic.id, me)} //
-					whenTrue={<IconButton className='w-8 h-8' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
+					whenTrue={<IconButton className='h-8 w-8' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 				/>
 			</section>
-			<Button className='w-8 h-8 p-1' title={i18n.t('back')} onClick={() => handleCloseModel()}>
+			<Button className='h-8 w-8 p-1' title={i18n.t('back')} onClick={() => handleCloseModel()}>
 				<BackIcon />
 			</Button>
 			{dialog(
-				<ConfirmDialog onClose={() => setVisibility(false)} onConfirm={() => handleDeleteSchematic(schematic)}>
+				<ConfirmBox onClose={() => setVisibility(false)} onConfirm={() => handleDeleteSchematic(schematic)}>
 					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />
 					<Trans i18nKey='delete-schematic-dialog' />
-				</ConfirmDialog>,
+				</ConfirmBox>,
 			)}
 		</section>
 	);

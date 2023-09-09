@@ -1,5 +1,3 @@
-import './UploadSchematicPage.css';
-
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import SearchBox from 'src/components/Searchbox';
@@ -13,14 +11,14 @@ import TagPick from 'src/components/TagPick';
 import { Trans } from 'react-i18next';
 import Button from 'src/components/Button';
 import TagEditContainer from 'src/components/TagEditContainer';
-import LoadUserName from 'src/components/LoadUserName';
-import SchematicDescription from 'src/components/Description';
+import Description from 'src/components/Description';
 import ItemRequirement from 'src/components/ItemRequirement';
 import ColorText from 'src/components/ColorText';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useMe } from 'src/context/MeProvider';
 import SchematicUploadPreview from 'src/data/SchematicUploadPreview';
 import { useTags } from 'src/context/TagProvider';
+import Author from 'src/components/Author';
 
 const tabs = ['file', 'code'];
 
@@ -136,16 +134,18 @@ export default function UploadSchematicPage() {
 			case tabs[0]:
 				return (
 					<>
-						<label className='button' htmlFor='ufb'>
-							<Trans i18nKey='upload-a-file' />
-						</label>
-						<input id='ufb' type='file' onChange={(event) => handleFileChange(event)} />
+						<Button className='p-1' title='' onClick={() => {}}>
+							<label className='button' htmlFor='file'>
+								<Trans i18nKey='upload-a-file' />
+							</label>
+						</Button>
+						<input className='hidden' id='file' type='file' onChange={(event) => handleFileChange(event)} />
 					</>
 				);
 
 			case tabs[1]:
 				return (
-					<Button title={i18n.t('copy-from-clipboard')} onClick={() => handleCodeChange()}>
+					<Button className='p-1' title={i18n.t('copy-from-clipboard')} onClick={() => handleCodeChange()}>
 						<Trans i18nKey='copy-from-clipboard' />
 					</Button>
 				);
@@ -162,16 +162,17 @@ export default function UploadSchematicPage() {
 		return <Trans i18nKey='ok' />;
 	}
 
-	if (isLoading) return <LoadingSpinner />;
+	if (isLoading) return <LoadingSpinner className='flex h-full w-full items-center justify-center' />;
 
 	return (
-		<main className='flex flex-row space-between w-full h-full gap-2 p-8 box-border overflow-y-auto'>
+		<main className='box-border flex h-full w-full flex-col justify-between gap-2 overflow-y-auto p-8'>
 			<header className='flex flex-row gap-2'>
-				<section className='flex justify-center items-center'>
-					<section className='code-file grid grid-auto-column grid-flow-col w-fit gap-2 p-2'>
+				<section className='flex items-center justify-center'>
+					<section className='code-file grid-auto-column grid w-fit grid-flow-col gap-2 p-2'>
 						{tabs.map((name, index) => (
 							<Button
-								className={'code-file-button ' + (currentTab === name ? 'active' : '')}
+								className='w-fit px-2 py-1'
+								active={currentTab === name}
 								key={index}
 								title={name}
 								onClick={() => {
@@ -184,22 +185,23 @@ export default function UploadSchematicPage() {
 						))}
 					</section>
 				</section>
-				<section className='flex justify-center items-center'>{renderTab(currentTab)}</section>
+				<section className='flex items-center justify-center'>{renderTab(currentTab)}</section>
 			</header>
 			{preview && (
 				<section className='flex flex-row flex-wrap gap-2'>
 					<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
-					<section className='flex flex-row space-between'>
-						<section className='flex flex-row gap-2 flex-wrap'>
-							<ColorText className='capitalize h2' text={preview.name} />
-							<Trans i18nKey='author' /> <LoadUserName userId={me ? me.id : 'community'} />
-							<SchematicDescription description={preview.description} />
+					<section className='flex flex-row justify-between'>
+						<section className='flex flex-row flex-wrap gap-2'>
+							<ColorText className='h2 capitalize' text={preview.name} />
+							<Author authorId={me ? me.id : 'community'} />
+							<Description description={preview.description} />
 							<ItemRequirement requirement={preview.requirement} />
 							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 						</section>
 					</section>
-					<section className='flex flex-row flex-nowrap gap-2 w-full'>
+					<section className='flex w-full flex-row flex-nowrap gap-2'>
 						<SearchBox
+							className='w-full h-10'
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
 							items={schematicUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
@@ -210,9 +212,9 @@ export default function UploadSchematicPage() {
 					</section>
 				</section>
 			)}
-			<footer className='flex flex-row center gap-2 medium-padding'>
+			<footer className='flex flex-col items-center justify-center gap-2 p-2'>
 				<span children={checkUploadRequirement()} />
-				<Button title={i18n.t('upload')} onClick={() => handleSubmit()}>
+				<Button className=' w-fit px-2 py-1' title={i18n.t('upload')} onClick={() => handleSubmit()}>
 					<Trans i18nKey='upload' />
 				</Button>
 			</footer>

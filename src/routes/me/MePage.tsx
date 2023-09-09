@@ -9,6 +9,7 @@ import UserMapUploadTab from 'src/routes/me/MeMapUploadTab';
 import UserPostUploadTab from 'src/routes/me/MePostUploadTab';
 import MeInfoTab from 'src/routes/me/MeInfoTab';
 import MeSchematicUploadTab from 'src/routes/me/MeSchematicUploadTab';
+import SwitchName from 'src/components/SwitchName';
 
 export default function MePage() {
 	const { me } = useMe();
@@ -16,47 +17,47 @@ export default function MePage() {
 	if (!me) return <Navigate to='/login' />;
 
 	return (
-		<main className='flex flex-col w-full h-full'>
+		<main className='flex h-full w-full flex-col'>
 			<SwitchBar
-				className='flex flex-col w-full h-full'
+				className='flex h-full w-full flex-col'
 				elements={[
 					{
 						id: 'info',
 						name: (
-							<div className='flex flex-row justify-end items-center gap-1'>
-								<InfoIcon className='w-6 h-6' />
+							<SwitchName>
+								<InfoIcon className='h-6 w-6' />
 								<Trans i18nKey='information' />
-							</div>
+							</SwitchName>
 						),
 						element: <MeInfoTab me={me} />,
 					},
 					{
 						id: 'schematic',
 						name: (
-							<div className='flex flex-row justify-end items-center gap-1'>
-								<SchematicIcon className='w-6 h-6' />
+							<SwitchName>
+								<SchematicIcon className='h-6 w-6' />
 								<Trans i18nKey='schematic' />
-							</div>
+							</SwitchName>
 						),
 						element: <MeSchematicUploadTab />,
 					},
 					{
 						id: 'map',
 						name: (
-							<div className='flex flex-row justify-end items-center gap-1'>
-								<MapIcon className='w-6 h-6' />
+							<SwitchName>
+								<MapIcon className='h-6 w-6' />
 								<Trans i18nKey='map' />
-							</div>
+							</SwitchName>
 						),
 						element: <UserMapUploadTab />,
 					},
 					{
 						id: 'post',
 						name: (
-							<div className='flex flex-row justify-end items-center gap-1'>
-								<PostIcon className='w-6 h-6' />
+							<SwitchName>
+								<PostIcon className='h-6 w-6' />
 								<Trans i18nKey='post' />
-							</div>
+							</SwitchName>
 						),
 						element: <UserPostUploadTab />,
 					},

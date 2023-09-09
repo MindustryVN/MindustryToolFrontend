@@ -65,6 +65,12 @@ body,
 	b {
 		font-weight: bold;
 	}
+
+	ul li {
+		list-style-position: outside;
+		margin-left: 1rem;
+		padding: 0.25rem;
+	}
 }
 
 *::-webkit-scrollbar-track {

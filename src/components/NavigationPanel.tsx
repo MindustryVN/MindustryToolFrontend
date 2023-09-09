@@ -11,7 +11,7 @@ import { ReactNode } from 'react-markdown/lib/ast-to-react';
 import IfTrue from 'src/components/IfTrue';
 import ClearButton from 'src/components/ClearButton';
 import i18n from 'src/util/I18N';
-import { AdminIcon, BellIcon, HomeIcon, LogicIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
+import { AdminIcon, BellIcon, HomeIcon, LogicIcon, LoginIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
 import LineDivider from 'src/components/LineDivider';
 import UserRoleDisplay from 'src/components/UserRoleDisplay';
 import UserAvatar from 'src/components/UserAvatar';
@@ -35,49 +35,49 @@ export default function NavigationPanel() {
 			name: i18n.t('home'),
 			to: '/home',
 			admin: false,
-			icon: <HomeIcon className='w-6 h-6' />,
+			icon: <HomeIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('user'),
 			to: '/user',
 			admin: false,
-			icon: <UserIcon className='w-6 h-6' />,
+			icon: <UserIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('schematic'),
 			to: '/schematic',
 			admin: false,
-			icon: <SchematicIcon className='w-6 h-6' />,
+			icon: <SchematicIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('map'),
 			to: '/map',
 			admin: false,
-			icon: <MapIcon className='w-6 h-6' />,
+			icon: <MapIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('post'),
 			to: '/post',
 			admin: false,
-			icon: <PostIcon className='w-6 h-6' />,
+			icon: <PostIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('server'),
 			to: '/server',
 			admin: false,
-			icon: <ServerIcon className='w-6 h-6' />,
+			icon: <ServerIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('logic'),
 			to: '/logic',
 			admin: false,
-			icon: <LogicIcon className='w-6 h-6' />,
+			icon: <LogicIcon className='h-6 w-6' />,
 		},
 		{
 			name: i18n.t('admin'),
 			to: '/admin',
 			admin: true,
-			icon: <AdminIcon className='w-6 h-6' />,
+			icon: <AdminIcon className='h-6 w-6' />,
 		},
 	];
 
@@ -98,26 +98,24 @@ export default function NavigationPanel() {
 
 		return (
 			<ClearButton className='flex flex-row gap-2 rounded-lg p-2 hover:bg-blue-500' active={window.location.pathname.endsWith(to)} title={name} onClick={() => navigateTo(to, admin)}>
-				<span className='flex gap-2'>
-					{icon}
-					{name}
-				</span>
+				{icon}
+				{name}
 			</ClearButton>
 		);
 	}
 
 	function UserDisplay({ me }: { me: User }) {
 		return (
-			<div className='flex flex-row gap-2 justify-between items-center cursor-pointer' onClick={() => navigateTo(`/user/${me.id}`, false)}>
-				<section className='flex flex-row justify-center items-center gap-2'>
-					<UserAvatar className='w-12 h-12 rounded-xl' user={me} />
-					<section className='h-full text-xl flex flex-col'>
+			<div className='flex cursor-pointer flex-row items-center justify-between gap-2' onClick={() => navigateTo(`/user/${me.id}`, false)}>
+				<section className='flex flex-row items-center justify-center gap-2'>
+					<UserAvatar className='h-12 w-12 rounded-xl' user={me} />
+					<section className='flex h-full flex-col text-xl'>
 						<p className='capitalize'>{me.name}</p>
 						<UserRoleDisplay roles={me.role} />
 					</section>
 				</section>
-				<ClearButton className='flex flex-row justify-center items-center gap-2 p-2 dark:hover:bg-blue-500 dark:hover:text-white rounded-lg' title={i18n.t('logout')} onClick={handleLogout}>
-					<LogoutIcon className='w-6 h-6' />
+				<ClearButton className='flex flex-row items-center justify-center gap-2 rounded-lg p-2 dark:hover:bg-blue-500 dark:hover:text-white' title={i18n.t('logout')} onClick={handleLogout}>
+					<LogoutIcon className='h-6 w-6' />
 				</ClearButton>
 			</div>
 		);
@@ -125,8 +123,9 @@ export default function NavigationPanel() {
 
 	function LoginButton() {
 		return (
-			<section className='flex flex-col'>
-				<ClearButton className='flex flex-col dark:hover:bg-blue-500 dark:hover:text-white p-2 rounded-lg' title={i18n.t('login')} onClick={() => navigateTo('/login', false)}>
+			<section className='flex flex-row items-center px-2'>
+				<LoginIcon className='h-6 w-6' />
+				<ClearButton className='flex flex-col rounded-lg p-2 dark:hover:bg-blue-500 dark:hover:text-white' title={i18n.t('login')} onClick={() => navigateTo('/login', false)}>
 					<Trans i18nKey='login' />
 				</ClearButton>
 			</section>
@@ -137,16 +136,16 @@ export default function NavigationPanel() {
 		if (!showNavigatePanel) return <></>;
 
 		return (
-			<div className='backdrop-blur-sm fixed w-screen h-screen top-0 left-0 z-nav-bar'>
+			<div className='fixed left-0 top-0 z-nav-bar h-screen w-screen backdrop-blur-sm'>
 				<OutsideAlerter
-					className='animate-popup flex flex-col p-2 absolute h-screen min-w-[min(300px,30%)] top-0 left-0 bg-gray-900 overflow-hidden'
+					className='absolute left-0 top-0 box-border flex h-screen min-w-[min(300px,30%)] animate-popup flex-col overflow-hidden bg-gray-900 p-2'
 					onClickOutside={() => setShowNavigatePanel(false)}>
-					<div className='flex flex-col justify-between h-full'>
-						<div className='flex flex-col gap-2 w-full'>
+					<div className='flex h-full flex-col justify-between'>
+						<div className='flex w-full flex-col gap-2'>
 							<Link className='text-2xl' to='/'>
 								MINDUSTRYTOOL
 							</Link>
-							<div className='bg-gray-800 h-8 px-2 py-1 text-sm min-w-sm'>{WEB_VERSION}</div>
+							<div className='min-w-sm h-8 bg-gray-800 px-2 py-1 text-sm'>{WEB_VERSION}</div>
 							<LineDivider />
 							<section
 								className='flex flex-col gap-2'
@@ -156,7 +155,7 @@ export default function NavigationPanel() {
 							/>
 						</div>
 						<div className='flex flex-col'>
-							<div className='border-b-2 my-2 border-gray-600' />
+							<div className='my-2 border-b-2 border-gray-600' />
 							{me ? <UserDisplay me={me} /> : <LoginButton />}
 						</div>
 					</div>
@@ -166,28 +165,28 @@ export default function NavigationPanel() {
 	}
 
 	return (
-		<nav className='h-12 w-screen justify-between items-center bg-gray-950 rounded-b-lg flex flex-row p-2'>
-			<section className='flex flex-row justify-between items-center w-full gap-4'>
+		<nav className='box-border flex h-12 w-screen flex-row items-center justify-between rounded-b-lg bg-gray-950 p-2'>
+			<section className='flex w-full flex-row items-center justify-between gap-4'>
 				<div className='flex flex-row items-center'>
 					<button
 						type='button'
 						onClick={() => setShowNavigatePanel(true)} //
 						onFocus={() => setShowNavigatePanel(true)}
 						onMouseEnter={() => setShowNavigatePanel(true)}>
-						<img className='w-8 h-8 pixelated' src='/assets/icons/dots.png' alt='menu' />
+						<img className='pixelated h-8 w-8' src='/assets/icons/dots.png' alt='menu' />
 					</button>
 				</div>
-				<section className='flex flex-row gap-2 items-center'>
+				<section className='flex flex-row items-center gap-2'>
 					<ClearButton className='relative cursor-pointer' onClick={() => navigate('notification')} title=''>
 						<IfTrue
 							condition={unreadNotifications}
 							whenTrue={
-								<span className='absolute items-center justify-center text-white text-xs bg-red-600 right-0 top-0 px-1 rounded-sm translate-x-2 translate-y-[-50%]'>
+								<span className='absolute right-0 top-0 translate-x-2 translate-y-[-50%] items-center justify-center rounded-sm bg-red-600 px-1 text-xs text-white'>
 									{(unreadNotifications <= 0 ? 0 : unreadNotifications) <= 100 ? unreadNotifications : '100+'}
 								</span>
 							}
 						/>
-						<BellIcon className='w-6 h-6' />
+						<BellIcon className='h-6 w-6' />
 					</ClearButton>
 					<WebIcon />
 				</section>

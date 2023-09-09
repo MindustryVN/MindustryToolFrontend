@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from 'src/util/Utils';
 
 interface DateDisplayProps {
 	className?: string;
@@ -6,5 +7,5 @@ interface DateDisplayProps {
 }
 
 export default function DateDisplay({ className, time }: DateDisplayProps) {
-	return <span className={className ? className : ''}>{new Date(time).toLocaleString('en-GB')}</span>;
+	return <span className={cn(className)}>{new Date(time).toLocaleString('en-GB')}</span>;
 }

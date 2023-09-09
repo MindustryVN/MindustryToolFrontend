@@ -1,5 +1,3 @@
-import './UploadPostPage.css';
-
 import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
 import { TagChoice, Tags } from 'src/components/Tag';
@@ -91,10 +89,10 @@ export default function UploadPostPage() {
 	if (isLoading) return <LoadingSpinner />;
 
 	return (
-		<main className='w-full h-full gap-2 box-border'>
-			<section className='editor-background relative flex flex-row w-full h-full gap-2 p-8 box-border'>
-				<section className='flex flex-row gap-2 w-full align-end'>
-					<input className='title-editor w-full box-border' type='text' placeholder={i18n.t('title').toString()} value={title} onChange={(event) => setTitle(event.target.value)} />
+		<main className='box-border h-full w-full gap-2'>
+			<section className='editor-background relative box-border flex h-full w-full flex-row gap-2 p-8'>
+				<section className='align-end flex w-full flex-row gap-2'>
+					<input className='box-border w-full' type='text' placeholder={i18n.t('title').toString()} value={title} onChange={(event) => setTitle(event.target.value)} />
 					<SearchBox
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
@@ -105,8 +103,8 @@ export default function UploadPostPage() {
 					/>
 				</section>
 				<TagEditContainer tags={tags} onRemove={handleRemoveTag} />
-				<textarea className='content-editor w-full h-full' value={content} onChange={(event) => setContent(event.target.value)} />
-				<section className='flex flex-row absolute top-0 right medium-margin gap-2'>
+				<textarea className=' h-full w-full' value={content} onChange={(event) => setContent(event.target.value)} />
+				<section className='right absolute top-0 m-2 flex flex-row gap-2'>
 					<a className='button' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 						<Trans i18nKey='how-to-write-markdown' />
 					</a>
@@ -114,12 +112,12 @@ export default function UploadPostPage() {
 						<Trans i18nKey='show-preview' />
 					</Button>
 				</section>
-				<Button className='flex flex-row absolute bottom right medium-margin' title={i18n.t('submit')} onClick={() => handleSubmit()}>
+				<Button className='bottom right absolute m-2 flex flex-row' title={i18n.t('submit')} onClick={() => handleSubmit()}>
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>
 			{model(
-				<section className='relative w-full h-full overflow-y-auto'>
+				<section className='relative h-full w-full overflow-y-auto'>
 					<PostView
 						post={{
 							id: '',
@@ -131,7 +129,7 @@ export default function UploadPostPage() {
 							time: new Date().toString(),
 						}}
 					/>
-					<Button className='absolute top-0 right medium-margin' title={i18n.t('hide-preview')} onClick={() => setVisibility(false)}>
+					<Button className='right absolute top-0 m-2' title={i18n.t('hide-preview')} onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>
 				</section>,

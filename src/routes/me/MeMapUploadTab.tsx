@@ -10,7 +10,7 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import { MapUploadInfo, MapUploadPreview } from 'src/routes/admin/verify/map/VerifyMapPage';
+import { MapUploadInfo, MapUploadPreview } from 'src/routes/admin/verify/VerifyMapPage';
 import PreviewContainer from 'src/components/PreviewContainer';
 
 export default function UserMapUploadTab() {
@@ -36,9 +36,9 @@ export default function UserMapUploadTab() {
 	}
 
 	return (
-		<main id='map-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
+		<main id='map-tab' className='flex h-full w-full flex-row gap-2 overflow-y-auto'>
 			<PreviewContainer children={pages} />
-			<footer className='flex justify-center items-center'>
+			<footer className='flex items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //

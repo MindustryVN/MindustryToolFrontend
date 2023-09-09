@@ -167,7 +167,11 @@ export class API {
 		const form = new FormData();
 		if (file) form.append('file', file);
 
-		return API.REQUEST.post('map-upload/preview', form);
+		return API.REQUEST.post('map-upload/preview', form, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
 	}
 
 	static postSchematicUpload(code: string, file: File | undefined, tags: TagChoice[]) {

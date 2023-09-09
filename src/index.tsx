@@ -11,23 +11,26 @@ import TagProvider from 'src/context/TagProvider';
 import UserProvider from 'src/context/MeProvider';
 import PopupMessageProvider from 'src/context/PopupMessageProvider';
 import NotificationProvider from 'src/context/NotificationProvider';
+import { WindowContextProvider } from 'src/context/WindowFocusContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
 	<React.StrictMode>
-		<Router>
-			<I18nextProvider i18n={i18n}>
-				<PopupMessageProvider>
-					<TagProvider>
-						<UserProvider>
-							<NotificationProvider>
-								<App />
-							</NotificationProvider>
-						</UserProvider>
-					</TagProvider>
-				</PopupMessageProvider>
-			</I18nextProvider>
-		</Router>
+		<WindowContextProvider>
+			<Router>
+				<I18nextProvider i18n={i18n}>
+					<PopupMessageProvider>
+						<TagProvider>
+							<UserProvider>
+								<NotificationProvider>
+									<App />
+								</NotificationProvider>
+							</UserProvider>
+						</TagProvider>
+					</PopupMessageProvider>
+				</I18nextProvider>
+			</Router>
+		</WindowContextProvider>
 	</React.StrictMode>,
 );
