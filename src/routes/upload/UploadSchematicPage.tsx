@@ -4,7 +4,7 @@ import SearchBox from 'src/components/Searchbox';
 import { TagChoice } from 'src/components/Tag';
 import { PNG_IMAGE_PREFIX, SCHEMATIC_FILE_EXTENSION } from 'src/config/Config';
 import i18n from 'src/util/I18N';
-import { getFileExtension } from 'src/util/StringUtils';
+import { getFileExtension } from 'src/util/Utils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import { Link } from 'react-router-dom';
 import TagPick from 'src/components/TagPick';

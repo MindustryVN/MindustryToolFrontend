@@ -28,8 +28,8 @@ export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>
 
 	if (!useInfinitePage.isLoading && useInfinitePage.isError) {
 		pages.push(
-			<div className='flex justify-center'>
-				<Button className='px-2 py-1' title={i18n.t('load-more')} key={useInfinitePage.url + 'button'} onClick={() => useInfinitePage.loadNextPage()}>
+			<div className='col-span-full flex items-center justify-center' key={useInfinitePage.url + 'button'}>
+				<Button className='px-2 py-1' title={i18n.t('load-more')} onClick={() => useInfinitePage.loadNextPage()}>
 					<Trans i18nKey='load-more' />
 				</Button>
 			</div>,

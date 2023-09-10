@@ -11,7 +11,7 @@ import { ReactNode } from 'react-markdown/lib/ast-to-react';
 import IfTrue from 'src/components/IfTrue';
 import ClearButton from 'src/components/ClearButton';
 import i18n from 'src/util/I18N';
-import { AdminIcon, BellIcon, HomeIcon, LogicIcon, LoginIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
+import { AdminIcon, BellIcon, CalculatorIcon, HomeIcon, LogicIcon, LoginIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
 import LineDivider from 'src/components/LineDivider';
 import UserRoleDisplay from 'src/components/UserRoleDisplay';
 import UserAvatar from 'src/components/UserAvatar';
@@ -67,6 +67,11 @@ export default function NavigationPanel() {
 				name: i18n.t('logic'),
 				to: '/logic',
 				icon: <LogicIcon className='h-6 w-6' />,
+			},
+			{
+				name: i18n.t('ratio-calculator'),
+				to: '/ratio-calculator',
+				icon: <CalculatorIcon className='h-6 w-6' />,
 			},
 			{
 				name: i18n.t('notification'),
@@ -131,7 +136,7 @@ export default function NavigationPanel() {
 						onClickOutside={() => setShowNavigatePanel(false)}>
 						<div className='flex h-full flex-col justify-between'>
 							<div className='flex w-full flex-col gap-2'>
-								<Link className='text-2xl text-emerald-500' to='/'>
+								<Link className='bg-gradient-to-r from-emerald-500 to-sky-500 bg-clip-text text-2xl text-transparent' to='/'>
 									MINDUSTRYTOOL
 								</Link>
 								<div className='min-w-sm h-8 bg-gray-800 px-2 py-1 text-sm'>{WEB_VERSION}</div>

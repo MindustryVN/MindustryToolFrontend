@@ -136,7 +136,7 @@ export default function SchematicPage() {
 			<header className='flex w-full flex-col gap-2'>
 				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
-						className='h-10 w-full bg-slate-900'
+						className='flex h-10 w-full'
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={schematicSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}

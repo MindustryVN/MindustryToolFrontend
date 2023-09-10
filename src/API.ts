@@ -22,6 +22,9 @@ export class API {
 			timeout: 600000,
 		});
 	}
+	static get(url: string, searchConfig?: AxiosRequestConfig<any>) {
+		return API.REQUEST.get(url, searchConfig);
+	}
 
 	static getTotalSchematic(searchConfig?: AxiosRequestConfig<any>) {
 		return API.REQUEST.get('schematic/total', searchConfig);
@@ -131,10 +134,6 @@ export class API {
 
 	static setDislike(contentType: string, targetId: string) {
 		return API.REQUEST.get(`like/${contentType}/${targetId}/dislike`);
-	}
-
-	static get(url: string, searchConfig?: AxiosRequestConfig<any>) {
-		return API.REQUEST.get(url, searchConfig);
 	}
 
 	static deleteLog(contentType: string, logId: string) {

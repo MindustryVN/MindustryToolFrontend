@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import { TagChoice } from 'src/components/Tag';
 import { MAP_FILE_EXTENSION, PNG_IMAGE_PREFIX } from 'src/config/Config';
-import { getFileExtension } from 'src/util/StringUtils';
+import { getFileExtension } from 'src/util/Utils';
 import { PopupMessageContext } from 'src/context/PopupMessageProvider';
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import SearchBox from 'src/components/Searchbox';

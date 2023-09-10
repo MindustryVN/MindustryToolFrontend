@@ -25,13 +25,14 @@ const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/Min
 const UploadSchematic = React.lazy(() => import('src/routes/upload/UploadSchematicPage'));
 const UploadMap = React.lazy(() => import('src/routes/upload/UploadMapPage'));
 const UploadPost = React.lazy(() => import('src/routes/upload/UploadPostPage'));
+const SchematicRatioCalculator = React.lazy(() => import('src/routes/schematic-ratio-calculator/SchematicRatioCalculator'));
 
 export default function App() {
 	return (
-		<main className='flex flex-col w-full h-full overflow-hidden background-gradient'>
+		<main className='background-gradient flex h-full w-full flex-col overflow-hidden'>
 			<ErrorBoundary>
 				<NavigationPanel />
-				<section className='flex flex-col w-screen h-[calc(100%-3rem)] overflow-hidden'>
+				<section className='flex h-[calc(100%-3rem)] w-screen flex-col overflow-hidden'>
 					<Suspense fallback={<Loading />}>
 						<Routes>
 							<Route path='/' element={<Navigate to='/home' />} />
@@ -53,6 +54,7 @@ export default function App() {
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
 							<Route path='/notification' element={<Notification />} />
 							<Route path='/server' element={<MindustryServer />} />
+							<Route path='/ratio-calculator' element={<SchematicRatioCalculator />} />
 						</Routes>
 					</Suspense>
 				</section>

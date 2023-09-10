@@ -7,5 +7,5 @@ interface ModelProps {
 }
 
 export default function Model({ className, children }: ModelProps) {
-	return <section className={cn('background-gradient fixed left-0 top-[3rem] z-model h-[calc(100vh-3rem)] w-screen overflow-hidden', className)}>{children}</section>;
+	return <section className={cn('background-gradient fixed left-0 right-0 bottom-0 top-[3rem] z-model overflow-auto', className)}>{children}</section>;
 }
