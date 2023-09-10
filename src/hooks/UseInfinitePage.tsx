@@ -1,9 +1,10 @@
 import { AxiosRequestConfig } from 'axios';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import { array2dToArray1d } from 'src/util/Utils';
 
 export interface UseInfinitePage<T> {
+	url: string;
 	pages: T[];
 	isLoading: boolean;
 	isError: boolean;
@@ -18,7 +19,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsError] = useState(false);
-	const [hasMore, setHasMore] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
 
 	function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
 		cancelRequest.current.abort();
@@ -59,30 +60,28 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 		return () => cancelRequest.current.abort();
 	}, [searchConfig, itemPerPage, url]);
 
-	const handleSetPage = useCallback(
-		(pageNumber: number, data: T[]) => {
-			if (data.length < itemPerPage) setHasMore(false);
-			else setHasMore(true);
+	function handleSetPage(pageNumber: number, data: T[]) {
+		if (data.length < itemPerPage) setHasMore(false);
+		else setHasMore(true);
 
-			if (pages.length <= pageNumber) {
-				setPages((prev) => [...prev, data]);
-			} else {
-				setPages((prev) => {
-					prev[prev.length - 1] = data;
-					return [...prev];
-				});
-			}
-		},
-		[itemPerPage, pages],
-	);
+		if (pages.length <= pageNumber) {
+			setPages((prev) => [...prev, data]);
+		} else {
+			setPages((prev) => {
+				prev[prev.length - 1] = data;
+				return [...prev];
+			});
+		}
+	}
 
 	return {
+		url: url,
 		pages: array2dToArray1d(pages),
 		isLoading: isLoading,
 		isError: isError,
 		hasMore: hasMore,
 
-		loadNextPage: useCallback(() => {
+		loadNextPage: function loadNextPage() {
 			if (isLoading) return;
 
 			setIsError(false);
@@ -95,9 +94,9 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 				.then((result) => handleSetPage(requestPage, result.data))
 				.catch(() => setIsError(true))
 				.finally(() => setIsLoading(false)); //
-		}, [handleSetPage, isLoading, itemPerPage, url, searchConfig, pages]),
+		},
 
-		reloadPage: () => {
+		reloadPage: function reloadPage() {
 			if (isLoading) return;
 
 			setIsError(false);

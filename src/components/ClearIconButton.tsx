@@ -11,12 +11,12 @@ interface ClearIconButtonProps {
 
 export default function ClearIconButton({ className, icon, title, onClick }: ClearIconButtonProps) {
 	return (
-		<button className='flex items-center justify-center' type='button' title={title} onClick={() => onClick()}>
-			<img
-				className={cn(className)} //
-				src={icon}
-				alt={title}
-			/>
-		</button>
+		<img
+			className={cn(className)} //
+			role='button'
+			onClick={() => onClick()}
+			src={icon}
+			alt={title}
+		/>
 	);
 }

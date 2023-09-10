@@ -14,15 +14,15 @@ export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>
 	});
 
 	useEffect(() => {
-		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading && windowIsFocus) {
+		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading && !useInfinitePage.isError && windowIsFocus) {
 			useInfinitePage.loadNextPage();
 		}
 	}, [entry, useInfinitePage, windowIsFocus]);
 
 	const pages = useInfinitePage.pages.map((m, index) => mapper(m, index));
 
-	if (useInfinitePage.hasMore) {
-		pages.push(<div key={-1} ref={ref} />);
+	if (useInfinitePage.hasMore || useInfinitePage.hasMore) {
+		pages.push(<div key={useInfinitePage.url} ref={ref} />);
 	}
 
 	return { ...useInfinitePage, pages: pages };

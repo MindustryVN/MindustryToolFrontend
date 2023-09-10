@@ -17,8 +17,8 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
 	<React.StrictMode>
-		<WindowContextProvider>
-			<Router>
+		<Router>
+			<WindowContextProvider>
 				<I18nextProvider i18n={i18n}>
 					<PopupMessageProvider>
 						<TagProvider>
@@ -30,7 +30,7 @@ root.render(
 						</TagProvider>
 					</PopupMessageProvider>
 				</I18nextProvider>
-			</Router>
-		</WindowContextProvider>
+			</WindowContextProvider>
+		</Router>
 	</React.StrictMode>,
 );

@@ -60,7 +60,7 @@ export default function VerifyPostPage() {
 			<footer className='flex items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
+					whenTrue={<LoadingSpinner className='flex w-full items-center justify-center' />} //
 				/>
 				<ScrollToTopButton containerId='verify-post' />
 			</footer>
@@ -133,7 +133,7 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 					<Trans i18nKey='show-preview' />
 				</Button>
 			</section>
-			<section className='relative box-border flex h-full w-full flex-col gap-2 bg-slate-900 p-4 rounded-lg'>
+			<section className='relative box-border flex h-full w-full flex-col gap-2 rounded-lg bg-slate-900 p-4'>
 				<section className='align-end flex w-full flex-row gap-2'>
 					<SearchBox
 						className='h-10 w-full p-2'
