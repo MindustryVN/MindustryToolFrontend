@@ -131,7 +131,7 @@ export default function NavigationPanel() {
 						onClickOutside={() => setShowNavigatePanel(false)}>
 						<div className='flex h-full flex-col justify-between'>
 							<div className='flex w-full flex-col gap-2'>
-								<Link className='text-2xl text-emerald-500' to='/'>
+								<Link className='bg-gradient-to-r from-emerald-500 to-sky-500 bg-clip-text text-2xl text-transparent' to='/'>
 									MINDUSTRYTOOL
 								</Link>
 								<div className='min-w-sm h-8 bg-gray-800 px-2 py-1 text-sm'>{WEB_VERSION}</div>

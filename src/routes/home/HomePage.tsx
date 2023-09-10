@@ -9,14 +9,14 @@ export default function HomePage() {
 	const navigate = useNavigate();
 
 	return (
-		<main className='grid h-full overflow-y-auto px-8 pt-8'>
-				<h2 >Bạn đang tìm kiếm thứ gì?</h2>
+		<main className='grid h-full overflow-y-auto px-8 pt-2'>
+			<span className='text-2xl text-white'>Chào mừng đến với MindustryTool</span>
 			<section className='flex flex-col gap-4 p-4'>
 				<b className='text-white'>Tải game miễn phí?</b>
 				<ul>
 					<li>
 						<a
-							className='text-blue-600 hover:text-emerald-500'
+							className='text-emerald-500 hover:text-emerald-500'
 							href='https://anuke.itch.io/mindustry?fbclid=IwAR2HgdkixMrQEDhcj1an_qtWnnq6YmOlm-c8VoyPsNp5bMtu5aWq_ff7K2M'
 							target='_blank'
 							rel='noopener noreferrer'>
@@ -24,7 +24,7 @@ export default function HomePage() {
 						</a>
 					</li>
 					<li>
-						<Link className='text-blue-600 hover:text-emerald-500' to='/post/post/64ca803ea51a933422a49aac'>
+						<Link className='text-emerald-500 hover:text-emerald-500' to='/post/post/64ca803ea51a933422a49aac'>
 							Cách tải game miễn phí
 						</Link>
 					</li>
@@ -32,17 +32,17 @@ export default function HomePage() {
 				<b className='text-white'>Muốn tìm người chơi game cùng?</b>
 				<ul>
 					<li>
-						<a className='text-blue-600 hover:text-emerald-500' href='https://discord.gg/mindustry' target='_blank' rel='noopener noreferrer'>
+						<a className='text-emerald-500 hover:text-emerald-500' href='https://discord.gg/mindustry' target='_blank' rel='noopener noreferrer'>
 							Máy chủ discord Mindustry chính chủ
 						</a>
 					</li>
 					<li>
-						<a className='text-blue-600 hover:text-emerald-500' href='https://discord.gg/DCX5yrRUyp' target='_blank' rel='noopener noreferrer'>
+						<a className='text-emerald-500 hover:text-emerald-500' href='https://discord.gg/DCX5yrRUyp' target='_blank' rel='noopener noreferrer'>
 							Máy chủ discord Mindustry Việt Nam
 						</a>
 					</li>
 					<li>
-						<a className='text-blue-600 hover:text-emerald-500' href='https://www.reddit.com/r/Mindustry' target='_blank' rel='noopener noreferrer'>
+						<a className='text-emerald-500 hover:text-emerald-500' href='https://www.reddit.com/r/Mindustry' target='_blank' rel='noopener noreferrer'>
 							Reddit r/Mindustry
 						</a>
 					</li>
@@ -50,21 +50,21 @@ export default function HomePage() {
 				<b className='text-white'>Tìm kiếm bản thiết kế?</b>
 				<ul>
 					<li>
-						<a className='text-blue-600 hover:text-emerald-500' href='/schematic'>
-							Schematic
+						<a className='text-emerald-500 hover:text-emerald-500' href='/schematic'>
+							<Trans i18nKey='schematic'/>
 						</a>
 					</li>
 				</ul>
 				<b className='text-white'>Tìm kiếm bản đồ?</b>
 				<ul>
 					<li>
-						<a className='text-blue-600 hover:text-emerald-500' href='/map'>
-							Map
+						<a className='text-emerald-500 hover:text-emerald-500' href='/map'>
+							<Trans i18nKey='map'/>
 						</a>
 					</li>
 				</ul>
 			</section>
-			<h2 >Thông tin về Website</h2>
+			<h2>Thông tin về Website</h2>
 			<section className='grid grid-cols-2 items-start justify-start gap-y-2 px-8'>
 				<p className='list-item whitespace-nowrap'>
 					<Trans i18nKey='page-owner' />
@@ -84,7 +84,7 @@ export default function HomePage() {
 				<LoadUserName userId='64b7f3cf830ef61869872548' />
 			</section>
 			<footer className='mt-8'>
-				<section className='flex w-full flex-row items-center justify-evenly  bg-gray-950 p-2 text-white'>
+				<section className='flex w-full flex-row items-center justify-evenly rounded-lg bg-black p-2 text-white'>
 					<ClearButton className='capitalize' title={i18n.t('services')} onClick={() => navigate('/')}>
 						<Trans i18nKey='services' />
 					</ClearButton>

@@ -19,14 +19,14 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 
 	return (
 		<div
-			className={cn('flex h-full flex-col justify-center rounded-lg outline outline-2 outline-slate-500', className)}
+			className={cn('flex h-full flex-col justify-center rounded-lg outline outline-2 outline-slate-500 bg-slate-900', className)}
 			role='button'
 			onClick={() => setShowDropbox((prev) => !prev)}
 			onFocus={() => () => setShowDropbox((prev) => !prev)}
 			onKeyDown={(event) => {
 				if (event.key === 'Enter') setShowDropbox((prev) => !prev);
 			}}>
-			<section className='flex h-full w-full flex-row justify-center gap-2 px-1'>
+			<section className='flex h-full w-full flex-row justify-center items-center gap-2 px-1'>
 				<input
 					className='h-full w-full bg-transparent shadow-none placeholder:bg-transparent focus:border-none focus:outline-none'
 					type='text'
