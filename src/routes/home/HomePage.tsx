@@ -9,9 +9,9 @@ export default function HomePage() {
 	const navigate = useNavigate();
 
 	return (
-		<main className='flex h-full flex-col justify-between overflow-y-auto p-8 pt-8'>
-			<section className='flex flex-col gap-4'>
-				<h2>Bạn đang tìm kiếm thứ gì?</h2>
+		<main className='grid h-full overflow-y-auto px-8 pt-8'>
+				<h2 >Bạn đang tìm kiếm thứ gì?</h2>
+			<section className='flex flex-col gap-4 p-4'>
 				<b className='text-white'>Tải game miễn phí?</b>
 				<ul>
 					<li>
@@ -64,13 +64,13 @@ export default function HomePage() {
 					</li>
 				</ul>
 			</section>
-
-			<section className='grid w-fit grid-cols-2 gap-4 rounded-lg p-2'>
-				<p className='flex flex-row gap-2 whitespace-nowrap'>
+			<h2 >Thông tin về Website</h2>
+			<section className='grid grid-cols-2 items-start justify-start gap-y-2 px-8'>
+				<p className='list-item whitespace-nowrap'>
 					<Trans i18nKey='page-owner' />
 				</p>
 				<LoadUserName userId='64b63239e53d0c354d505733' />
-				<p className='flex flex-row gap-2 whitespace-nowrap'>
+				<p className='list-item whitespace-nowrap'>
 					<Trans i18nKey='admin' />
 				</p>
 				<div className='grid'>
@@ -78,24 +78,23 @@ export default function HomePage() {
 					<LoadUserName userId='64b8c74b2ab2c664a63d9f0d' />
 					<LoadUserName userId='64ba2279c92ba71c46dc7355' />
 				</div>
-				<p className='flex flex-row gap-2 whitespace-nowrap'>
+				<p className='list-item whitespace-nowrap'>
 					<Trans i18nKey='contributor' />
 				</p>
 				<LoadUserName userId='64b7f3cf830ef61869872548' />
 			</section>
-
-			<footer>
-				<section className='flex w-full flex-row items-center justify-evenly rounded-xl bg-gray-950 p-2 text-white'>
-					<ClearButton title={i18n.t('services')} onClick={() => navigate('/')}>
+			<footer className='mt-8'>
+				<section className='flex w-full flex-row items-center justify-evenly  bg-gray-950 p-2 text-white'>
+					<ClearButton className='capitalize' title={i18n.t('services')} onClick={() => navigate('/')}>
 						<Trans i18nKey='services' />
 					</ClearButton>
-					<ClearButton title={i18n.t('about')} onClick={() => navigate('/info')}>
+					<ClearButton className='capitalize' title={i18n.t('about')} onClick={() => navigate('/info')}>
 						<Trans i18nKey='about' />
 					</ClearButton>
-					<a href='https://discord.gg/DCX5yrRUyp'>
+					<a className='capitalize' href='https://discord.gg/DCX5yrRUyp'>
 						<Trans i18nKey='contact' />
 					</a>
-					<a href='https://discord.gg/DCX5yrRUyp'>
+					<a className='capitalize' href='https://discord.gg/DCX5yrRUyp'>
 						<Trans i18nKey='community' />
 					</a>
 				</section>

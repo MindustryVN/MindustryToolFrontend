@@ -125,7 +125,7 @@ export default function NavigationPanel() {
 					</div>
 					<WebIcon />
 				</section>
-				<div className={cn('fixed left-0 top-0 z-nav-bar h-screen w-screen backdrop-blur-sm', { hidden: !showNavigatePanel })}>
+				<div className={cn('fixed left-0 top-0 z-nav-bar h-full w-full backdrop-blur-sm', { hidden: !showNavigatePanel })}>
 					<OutsideAlerter
 						className='absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-hidden bg-gray-900 p-2'
 						onClickOutside={() => setShowNavigatePanel(false)}>

@@ -45,6 +45,9 @@ export default function MeProvider({ children }: MeProviderProps) {
 				.catch((error) => {
 					ref.current.addPopup(i18n.t('login-fail'), 5, 'error');
 					console.log(error);
+					if (process.env.NODE_ENV === 'production') {
+						handleLogOut();
+					}
 				})
 				.finally(() => setLoading(false));
 		} else setLoading(false);
