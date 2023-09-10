@@ -19,14 +19,14 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 
 	return (
 		<div
-			className={cn('flex h-full flex-col justify-center rounded-lg outline outline-2 outline-slate-500 bg-slate-900', className)}
+			className={cn('flex h-full flex-col justify-center rounded-lg bg-slate-900 outline outline-2 outline-slate-500', className)}
 			role='button'
 			onClick={() => setShowDropbox((prev) => !prev)}
 			onFocus={() => () => setShowDropbox((prev) => !prev)}
 			onKeyDown={(event) => {
 				if (event.key === 'Enter') setShowDropbox((prev) => !prev);
 			}}>
-			<section className='flex h-full w-full flex-row justify-center items-center gap-2 px-1'>
+			<section className='flex h-full w-full flex-row items-center justify-center gap-2 px-1'>
 				<input
 					className='h-full w-full bg-transparent shadow-none placeholder:bg-transparent focus:border-none focus:outline-none'
 					type='text'
@@ -41,7 +41,7 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 			</section>
 			<section className='relative w-full'>
 				{showDropbox && (
-					<section className='absolute z-overlay mt-2 flex max-h-[50vh] w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden rounded-lg border-2 border-slate-500 bg-slate-900'>
+					<section className='absolute z-overlay mb-4 mt-2 flex max-h-[50vh] w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden rounded-lg border-2 border-slate-500 bg-slate-900'>
 						{items ? (
 							items.map((node, index) => (
 								<DropboxElement

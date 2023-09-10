@@ -11,7 +11,7 @@ import { ReactNode } from 'react-markdown/lib/ast-to-react';
 import IfTrue from 'src/components/IfTrue';
 import ClearButton from 'src/components/ClearButton';
 import i18n from 'src/util/I18N';
-import { AdminIcon, BellIcon, HomeIcon, LogicIcon, LoginIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
+import { AdminIcon, BellIcon, CalculatorIcon, HomeIcon, LogicIcon, LoginIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
 import LineDivider from 'src/components/LineDivider';
 import UserRoleDisplay from 'src/components/UserRoleDisplay';
 import UserAvatar from 'src/components/UserAvatar';
@@ -67,6 +67,11 @@ export default function NavigationPanel() {
 				name: i18n.t('logic'),
 				to: '/logic',
 				icon: <LogicIcon className='h-6 w-6' />,
+			},
+			{
+				name: i18n.t('ratio-calculator'),
+				to: '/ratio-calculator',
+				icon: <CalculatorIcon className='h-6 w-6' />,
 			},
 			{
 				name: i18n.t('notification'),

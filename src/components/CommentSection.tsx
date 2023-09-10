@@ -43,7 +43,7 @@ export default function CommentSection({ contentType, targetId }: CommentSection
 	if (isLoading || loading) return <LoadingSpinner className='flex items-center justify-center' />;
 
 	return (
-		<section className='flex w-full flex-col gap-4'>
+		<section className='flex w-full flex-col gap-4 mb-4'>
 			<CommentInputArea targetId={targetId} handleAddComment={handleAddComment} />
 			{pages}
 		</section>

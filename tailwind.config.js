@@ -30,11 +30,20 @@ module.exports = {
 					transform: 'rotate(360deg)',
 				},
 			},
+			appear: {
+				'0%': {
+					opacity: 0,
+				},
+				'100%': {
+					opacity: 1,
+				},
+			},
 		},
 		animation: {
 			popup: 'popup 0.2s forwards',
 			spin: 'spin 1s linear infinite',
 			'slide-in': 'slide-in 0.5s forwards',
+			appear: 'appear 1s',
 		},
 
 		plugins: [require('@tailwindcss/typography')],
