@@ -3,6 +3,9 @@ import React, { useEffect, useRef } from 'react';
 import { ReactNode } from 'react-markdown/lib/ast-to-react';
 import { UseInfinitePage } from 'src/hooks/UseInfinitePage';
 import useWindowFocus from 'src/context/WindowFocusContext';
+import Button from 'src/components/Button';
+import i18n from 'src/util/I18N';
+import { Trans } from 'react-i18next';
 
 export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>, mapper: (v: T, index?: number) => ReactNode) {
 	const { windowIsFocus } = useWindowFocus();
@@ -14,15 +17,23 @@ export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>
 	});
 
 	useEffect(() => {
-		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading && windowIsFocus) {
+		if (entry?.isIntersecting && useInfinitePage.hasMore && !useInfinitePage.isLoading && !useInfinitePage.isError && windowIsFocus) {
 			useInfinitePage.loadNextPage();
 		}
 	}, [entry, useInfinitePage, windowIsFocus]);
 
 	const pages = useInfinitePage.pages.map((m, index) => mapper(m, index));
 
-	if (useInfinitePage.hasMore) {
-		pages.push(<div key={-1} ref={ref} />);
+	pages.push(<div key={useInfinitePage.url} ref={ref} />);
+
+	if (!useInfinitePage.isLoading && useInfinitePage.isError) {
+		pages.push(
+			<div className='flex justify-center'>
+				<Button className='px-2 py-1' title={i18n.t('load-more')} key={useInfinitePage.url + 'button'} onClick={() => useInfinitePage.loadNextPage()}>
+					<Trans i18nKey='load-more' />
+				</Button>
+			</div>,
+		);
 	}
 
 	return { ...useInfinitePage, pages: pages };

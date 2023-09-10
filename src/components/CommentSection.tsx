@@ -15,6 +15,7 @@ import { EllipsisIcon } from 'src/components/Icon';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import IconButton from 'src/components/IconButton';
 
 interface CommentSectionProps {
 	contentType: string;
@@ -39,10 +40,10 @@ export default function CommentSection({ contentType, targetId }: CommentSection
 			.finally(() => setLoading(false));
 	}
 
-	if (isLoading || loading) return <LoadingSpinner className='flex justify-center items-center' />;
+	if (isLoading || loading) return <LoadingSpinner className='flex items-center justify-center' />;
 
 	return (
-		<section className='flex flex-col gap-4 w-full'>
+		<section className='flex w-full flex-col gap-4'>
 			<CommentInputArea targetId={targetId} handleAddComment={handleAddComment} />
 			{pages}
 		</section>
@@ -87,17 +88,17 @@ function Reply({ contentType, comment, nestLevel }: ReplyProps) {
 			.then(() => usePage.filter((c) => c !== comment));
 	}
 
-	if (loading) return <LoadingSpinner className='flex justify-center items-center' />;
+	if (loading) return <LoadingSpinner className='flex items-center justify-center' />;
 
 	return (
 		<section className='relative flex flex-col'>
-			<div className='flex flex-row gap-2 p-2 flex-wrap bg-slate-700'>
+			<div className='flex flex-row flex-wrap gap-2 bg-slate-700 p-2'>
 				<LoadUserName userId={comment.authorId} />
 				<p>{comment.content}</p>
 			</div>
-			<section className='flex flex-row gap-2 justify-center items-center self-end align-bottom h-8'>
+			<section className='flex h-8 flex-row items-center justify-center gap-2 self-end align-bottom'>
 				<ClearButton className='flex flex-row gap-2' title={i18n.t('reply')} onClick={() => setShowInput((prev) => !prev)}>
-					<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+					<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='h-6 w-6'>
 						<path
 							strokeLinecap='round'
 							strokeLinejoin='round'
@@ -139,15 +140,15 @@ function Reply({ contentType, comment, nestLevel }: ReplyProps) {
 				whenTrue={
 					<IfTrueElse
 						condition={isLoading}
-						whenTrue={<LoadingSpinner className='flex justify-center items-center' />}
-						whenFalse={<section className='flex flex-col gap-4 w-full pl-2'>{pages}</section>}
+						whenTrue={<LoadingSpinner className='flex items-center justify-center' />}
+						whenFalse={<section className='flex w-full flex-col gap-4 pl-2'>{pages}</section>}
 					/>
 				}
 			/>
 			<IfTrue
 				condition={Users.isAuthorOrAdmin(comment.id, me)}
 				whenTrue={
-					<section className='absolute top-0 right-0 flex flex-col center p-2'>
+					<section className='center absolute right-0 top-0 flex flex-col p-2'>
 						<ClearButton title={i18n.t('option')} onClick={() => setShowDropdown((prev) => !prev)}>
 							<EllipsisIcon />
 						</ClearButton>
@@ -170,7 +171,7 @@ interface CommentInputProps {
 function CommentInput({ content, onChange }: CommentInputProps) {
 	return (
 		<textarea
-			className='bg-transparent outline-none w-full box-border resize-none' //
+			className='box-border w-full resize-none bg-transparent outline-none' //
 			placeholder={i18n.t('write-a-comment').toString()}
 			maxLength={200}
 			value={content}
@@ -188,10 +189,10 @@ function CommentInputArea({ targetId, handleAddComment }: CommentInputAreaProps)
 	const [content, setMessage] = useState('');
 
 	return (
-		<section className='w-full flex flex-row border-b-2 border-slate-500'>
+		<section className='flex w-full flex-row border-b-2 border-slate-500'>
 			<CommentInput content={content} onChange={(value) => setMessage(value)} />
 			<section className='flex flex-row justify-end'>
-				<ClearIconButton title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
+				<IconButton className='h-8 w-8 px-2 py-1' title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
 			</section>
 		</section>
 	);
@@ -207,12 +208,12 @@ function ReplyInputArea({ targetId, handleAddComment, onClose }: ReplyInputProps
 	const [content, setMessage] = useState('');
 
 	return (
-		<section className='w-full flex flex-row border-b-2 border-slate-500'>
+		<section className='flex w-full flex-row border-b-2 border-slate-500'>
 			<CommentInput content={content} onChange={(value) => setMessage(value)} />
 			<section className='flex flex-row justify-end'>
-				<section className='grid grid-auto-column grid-flow-col w-fit gap-2'>
-					<ClearIconButton title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
-					<ClearIconButton title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
+				<section className='grid-auto-column grid w-fit grid-flow-col gap-2'>
+					<ClearIconButton className='h-8 w-8 px-2 py-1' title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
+					<ClearIconButton className='h-8 w-8 px-2 py-1' title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
 				</section>
 			</section>
 		</section>

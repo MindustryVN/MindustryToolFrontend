@@ -9,6 +9,7 @@ export class API {
 	static REQUEST = axios.create({
 		baseURL: API_BASE_URL,
 		headers: { 'ngrok-skip-browser-warning': 'true' },
+		timeout: 600000,
 	});
 
 	static setBearerToken(token: string) {
@@ -18,6 +19,7 @@ export class API {
 				'ngrok-skip-browser-warning': 'true',
 				Authorization: 'Bearer ' + token,
 			},
+			timeout: 600000,
 		});
 	}
 

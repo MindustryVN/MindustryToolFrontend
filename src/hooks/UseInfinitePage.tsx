@@ -1,9 +1,10 @@
 import { AxiosRequestConfig } from 'axios';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import { array2dToArray1d } from 'src/util/Utils';
 
 export interface UseInfinitePage<T> {
+	url: string;
 	pages: T[];
 	isLoading: boolean;
 	isError: boolean;
@@ -16,15 +17,16 @@ export interface UseInfinitePage<T> {
 export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>): UseInfinitePage<T> {
 	const cancelRequest = useRef<AbortController>(new AbortController());
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
-	const [isLoading, setIsLoading] = useState(true);
-	const [isError, setIsError] = useState(false);
-	const [hasMore, setHasMore] = useState(false);
+	const [isLoading, setLoading] = useState(true);
+	const [isError, setError] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
 
 	function getPage(url: string, page: number, itemPerPage: number, searchConfig: AxiosRequestConfig<any> | undefined) {
 		cancelRequest.current.abort();
 		cancelRequest.current = new AbortController();
 
-		setIsLoading(true);
+		setLoading(true);
+		setError(false);
 
 		if (!searchConfig) {
 			searchConfig = {
@@ -41,7 +43,6 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	}
 
 	useEffect(() => {
-		setIsError(false);
 		setPages([[]]);
 
 		getPage(url, 0, itemPerPage, searchConfig) //
@@ -53,59 +54,52 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 					return [data];
 				}),
 			)
-			.catch(() => setIsError(true))
-			.finally(() => setIsLoading(false)); //
+			.catch(() => setError(true))
+			.finally(() => setLoading(false)); //
 
 		return () => cancelRequest.current.abort();
 	}, [searchConfig, itemPerPage, url]);
 
-	const handleSetPage = useCallback(
-		(pageNumber: number, data: T[]) => {
-			if (data.length < itemPerPage) setHasMore(false);
-			else setHasMore(true);
+	function handleSetPage(pageNumber: number, data: T[]) {
+		if (data.length < itemPerPage) setHasMore(false);
+		else setHasMore(true);
 
-			if (pages.length <= pageNumber) {
-				setPages((prev) => [...prev, data]);
-			} else {
-				setPages((prev) => {
-					prev[prev.length - 1] = data;
-					return [...prev];
-				});
-			}
-		},
-		[itemPerPage, pages],
-	);
+		setError(false)
+
+		if (pages.length <= pageNumber) {
+			setPages((prev) => [...prev, data]);
+		} else {
+			setPages((prev) => {
+				prev[prev.length - 1] = data;
+				return [...prev];
+			});
+		}
+	}
 
 	return {
+		url: url,
 		pages: array2dToArray1d(pages),
 		isLoading: isLoading,
 		isError: isError,
 		hasMore: hasMore,
 
-		loadNextPage: useCallback(() => {
-			if (isLoading) return;
-
-			setIsError(false);
-
+		loadNextPage: function loadNextPage() {
 			const lastIndex = pages.length - 1;
 			const newPage = pages[lastIndex].length === itemPerPage;
 			const requestPage = newPage ? lastIndex + 1 : lastIndex;
 
 			getPage(url, requestPage, itemPerPage, searchConfig)
 				.then((result) => handleSetPage(requestPage, result.data))
-				.catch(() => setIsError(true))
-				.finally(() => setIsLoading(false)); //
-		}, [handleSetPage, isLoading, itemPerPage, url, searchConfig, pages]),
+				.catch(() => setError(true))
+				.finally(() => setLoading(false)); //
+		},
 
-		reloadPage: () => {
-			if (isLoading) return;
-
-			setIsError(false);
+		reloadPage: function reloadPage() {
 			setPages([]);
 			getPage(url, 0, itemPerPage, searchConfig)
 				.then((result) => handleSetPage(0, result.data))
-				.catch(() => setIsError(true))
-				.finally(() => setIsLoading(false)); //
+				.catch(() => setError(true))
+				.finally(() => setLoading(false)); //
 		},
 
 		filter: (predicate: (prev: T) => boolean) => {
