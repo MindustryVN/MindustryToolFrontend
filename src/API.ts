@@ -42,6 +42,10 @@ export class API {
 		return API.REQUEST.get('map-upload/total');
 	}
 
+	static getTotalPostUpload() {
+		return API.REQUEST.get('post-upload/total');
+	}
+
 	static postNotification(userId: string, header: string, message: string) {
 		let form = new FormData();
 		form.append('userId', userId);
@@ -243,5 +247,15 @@ export class API {
 
 	static deletePost(postId: string) {
 		return API.REQUEST.delete(`post/${postId}`); //
+	}
+
+	static getMetric(start: Date, end: Date, collection: string) {
+		return API.get('metric', {
+			params: {
+				start: start.toISOString(),
+				end: end.toISOString(),
+				collection: collection,
+			},
+		});
 	}
 }

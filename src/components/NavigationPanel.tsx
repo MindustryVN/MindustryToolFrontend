@@ -134,7 +134,7 @@ export default function NavigationPanel() {
 					<OutsideAlerter
 						className='absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-hidden bg-gray-900 p-2'
 						onClickOutside={() => setShowNavigatePanel(false)}>
-						<div className='flex h-full flex-col justify-between'>
+						<div className='flex h-full flex-col justify-between' onMouseLeave={() => setShowNavigatePanel(false)}>
 							<div className='flex w-full flex-col gap-2'>
 								<Link className='bg-gradient-to-r from-emerald-500 to-sky-500 bg-clip-text text-2xl text-transparent' to='/'>
 									MINDUSTRYTOOL
@@ -174,7 +174,7 @@ function LinkButton({ name, to, admin, icon, onClick }: LinkButtonProps) {
 
 	return (
 		<ClearButton
-			className={cn('hidden flex-row gap-2 rounded-lg p-2 hover:bg-blue-500', {
+			className={cn('hidden flex-row gap-2 rounded-lg p-2 hover:bg-blue-500 transition-colors duration-500' , {
 				flex: !admin || Users.isAdmin(me),
 			})}
 			active={window.location.pathname.endsWith(to)}
@@ -188,9 +188,9 @@ function LinkButton({ name, to, admin, icon, onClick }: LinkButtonProps) {
 
 function LoginButton({ onClick }: { onClick: () => void }) {
 	return (
-		<section className='flex flex-row items-center px-2'>
+		<section className='flex flex-row items-center px-2 rounded-lg dark:hover:bg-blue-500 dark:hover:text-white'>
 			<LoginIcon className='h-6 w-6' />
-			<ClearButton className='flex flex-col rounded-lg p-2 dark:hover:bg-blue-500 dark:hover:text-white' title={i18n.t('login')} onClick={() => onClick()}>
+			<ClearButton className='flex flex-col p-2 dark:hover:bg-blue-500 dark:hover:text-white' title={i18n.t('login')} onClick={() => onClick()}>
 				<Trans i18nKey='login' />
 			</ClearButton>
 		</section>

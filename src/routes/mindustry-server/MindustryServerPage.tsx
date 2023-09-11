@@ -200,8 +200,8 @@ function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCard
 
 	return (
 		<section className='no-scrollbar flex h-full w-full flex-col overflow-x-auto overflow-y-hidden rounded-lg bg-slate-900 p-4'>
-			<header className='flex flex-row justify-between'>
-				<section className='center flex flex-row gap-2'>
+			<header className='flex flex-row items-center justify-between'>
+				<section className='flex flex-row flex-wrap items-center justify-center gap-2'>
 					<span className='flex flex-row gap-2'>
 						<ColorText text={server.name ? server.name : server.address} /> | <span className='capitalize'>{server.modeName ? server.mapname : server.mode}</span>
 					</span>
@@ -210,13 +210,12 @@ function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCard
 				<IfTrue
 					condition={Users.isAdmin(me)}
 					whenTrue={
-						<section className='flex flex-row'>
-							<ClearIconButton
-								title={i18n.t('delete')}
-								icon='/assets/icons/trash-16.png' //
-								onClick={() => handleRemoveServer(server.address)}
-							/>
-						</section>
+						<ClearIconButton
+							className='h-4 w-4'
+							title={i18n.t('delete')}
+							icon='/assets/icons/trash-16.png' //
+							onClick={() => handleRemoveServer(server.address)}
+						/>
 					}
 				/>
 			</header>
