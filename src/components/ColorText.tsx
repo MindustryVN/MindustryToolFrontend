@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { cn } from 'src/util/Utils';
 
 const COLOR_REGEX = /\[([^\]]+)\]/g;
 
@@ -13,7 +14,7 @@ export default function ColorText({ text, className }: ColorTextProps) {
 	let index = text.search(COLOR_REGEX);
 	let key = 0;
 
-	if (index < 0) return <div className={className ? className : ''}>{text}</div>;
+	if (index < 0) return <div className={cn(className)}>{text}</div>;
 
 	let result: ReactNode[] = [];
 
@@ -24,7 +25,7 @@ export default function ColorText({ text, className }: ColorTextProps) {
 
 	let arr = text.match(COLOR_REGEX);
 
-	if (!arr) return <div className={className ? className : ''}>{text}</div>;
+	if (!arr) return <div className={cn(className)}>{text}</div>;
 
 	const s = new Option().style;
 
@@ -89,5 +90,5 @@ export default function ColorText({ text, className }: ColorTextProps) {
 		return r;
 	}
 
-	return <span className={className ? className : ''}>{result}</span>;
+	return <span className={cn(className)}>{result}</span>;
 }
