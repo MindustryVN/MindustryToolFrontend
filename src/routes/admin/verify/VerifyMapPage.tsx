@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Buffer } from 'buffer';
 import { TagChoice, Tags } from 'src/components/Tag';
 import { API } from 'src/API';
@@ -44,14 +44,6 @@ export default function VerifyMapPage() {
 	const usePage = useInfinitePage<Map>('map-upload', 20);
 	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
 
-	const [totalMap, setTotalMap] = useState(0);
-
-	useEffect(() => {
-		API.getTotalMapUpload()
-			.then((result) => setTotalMap(result.data))
-			.catch(() => console.log('Error fletching total map'));
-	}, []);
-
 	function handleOpenMapInfo(map: Map) {
 		setCurrentMap(map);
 		setVisibility(true);
@@ -61,7 +53,6 @@ export default function VerifyMapPage() {
 		setVisibility(false);
 		API.rejectMap(map, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
-			.then(() => setTotalMap((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== map));
 	}
@@ -71,16 +62,12 @@ export default function VerifyMapPage() {
 		API.verifyMap(map, tags) //
 			.then(() => API.postNotification(map.authorId, 'Your map submission has been accept', 'Post map success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
-			.then(() => setTotalMap((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== map));
 	}
 
 	return (
 		<main id='verify-map' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
-			<section className='flex flex-row justify-center p-2'>
-				<Trans i18nKey='total-map' />:{totalMap > 0 ? totalMap : 0}
-			</section>
 			<PreviewContainer children={pages} />
 			<footer className='flex items-center justify-center'>
 				<IfTrue

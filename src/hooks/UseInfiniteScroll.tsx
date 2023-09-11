@@ -36,5 +36,13 @@ export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>
 		);
 	}
 
+	if (!useInfinitePage.hasMore) {
+		pages.push(
+			<div className='col-span-full flex items-center justify-center' key={useInfinitePage.url + 'no-more'}>
+				<Trans i18nKey='no-more' />
+			</div>,
+		);
+	}
+
 	return { ...useInfinitePage, pages: pages };
 }

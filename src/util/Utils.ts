@@ -41,3 +41,13 @@ export function isString<T, F>(x: any, whenTrue: (str: string) => T, whenFalse: 
 	if (Object.prototype.toString.call(x) === '[object String]') return whenTrue(String(x));
 	else return whenFalse(x);
 }
+
+export function getWeek(now: Date) {
+	now.setDate(now.getDate() - now.getDay() + 1);
+	let start = new Date(now);
+	now.setDate(now.getDate() + 6);
+	return {
+		start: start,
+		end: now,
+	};
+}

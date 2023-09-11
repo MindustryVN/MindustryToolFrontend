@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import { Buffer } from 'buffer';
 import { TagChoice, Tags } from 'src/components/Tag';
 import { API } from 'src/API';
@@ -45,14 +45,6 @@ export default function VerifySchematicPage() {
 	const usePage = useInfinitePage<Schematic>('schematic-upload', 20);
 	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
-	const [totalSchematic, setTotalSchematic] = useState(0);
-
-	useEffect(() => {
-		API.getTotalSchematicUpload()
-			.then((result) => setTotalSchematic(result.data))
-			.catch(() => console.log('Error fletching total schematic'));
-	}, []);
-
 	function handleOpenSchematicInfo(schematic: Schematic) {
 		setCurrentSchematic(schematic);
 		setVisibility(true);
@@ -62,7 +54,6 @@ export default function VerifySchematicPage() {
 		setVisibility(false);
 		API.rejectSchematic(schematic, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
-			.then(() => setTotalSchematic((prev) => prev - 1)) //
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
@@ -72,16 +63,12 @@ export default function VerifySchematicPage() {
 		API.verifySchematic(schematic, tags) //
 			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has been accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
-			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
 	return (
 		<main id='verify-schematic' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
-			<section className='flex flex-row justify-center p-2'>
-				<Trans i18nKey='total-schematic' />:{totalSchematic > 0 ? totalSchematic : 0}
-			</section>
 			<PreviewContainer children={pages} />
 			<footer className='flex items-center justify-center'>
 				<IfTrue
