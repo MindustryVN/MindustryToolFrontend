@@ -23,9 +23,10 @@ export default function AdminDashboard() {
 	console.log(dailyUser);
 
 	return (
-		<main>
-			<Line className='w-1/2'
-				options={{ responsive: true }}
+		<main className='h-full w-full overflow-y-auto'>
+			<Line
+				className='relative w-full'
+				options={{ responsive: true, maintainAspectRatio: true }}
 				data={{
 					labels: dailyUser.map((d) => d.time),
 					datasets: [{ label: i18n.t('daily-user').toString(), fill: true, backgroundColor: 'rgb(53, 162, 235, 0.5)', data: dailyUser.map((d) => d.value) }],
