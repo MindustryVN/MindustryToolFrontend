@@ -20,8 +20,8 @@ export default function LogPage() {
 	if (!logTypes.data) return <LoadingSpinner />;
 
 	return (
-		<section className='flex h-full w-full flex-col gap-1 overflow-y-auto'>
-			<section className='flex w-full flex-row gap-2 overflow-x-auto no-scrollbar flex-shrink-0'>
+		<section className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
+			<section className='no-scrollbar flex w-full flex-shrink-0 flex-row gap-2 overflow-x-auto'>
 				{logTypes.data.map((item, index) => (
 					<Button
 						className='w-full flex-1 px-2 py-1'
@@ -55,7 +55,7 @@ function LogContainer({ contentType }: LogContainerProps) {
 	}
 
 	return (
-		<section className='flex flex-col h-full w-full'>
+		<section className='flex h-full w-full flex-col'>
 			<section id='log' className='flex flex-col gap-2' children={pages} />
 			<footer className='flex w-full items-center justify-center'>
 				<IfTrue
