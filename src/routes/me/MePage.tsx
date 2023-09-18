@@ -17,7 +17,7 @@ export default function MePage() {
 	if (!me) return <Navigate to='/login' />;
 
 	return (
-		<main className='flex h-full w-full flex-col'>
+		<main className='flex h-full w-full flex-col px-4'>
 			<SwitchBar
 				className='flex h-full w-full flex-col'
 				elements={[

@@ -37,7 +37,7 @@ export default function UserSchematicUploadTab() {
 	}
 
 	return (
-		<main id='schematic-tab' className='flex h-full w-full flex-row gap-2 overflow-y-auto'>
+		<main id='schematic-tab' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
 			<PreviewContainer children={pages} />
 			<footer className='flex items-center justify-center'>
 				<IfTrue

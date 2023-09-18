@@ -49,9 +49,9 @@ export default function UserPage() {
 		);
 
 	return (
-		<main className='flex h-full w-full flex-col'>
+		<main className='flex h-full w-full flex-col px-4'>
 			<SwitchBar
-				className='flex h-full w-full flex-col'
+				className='flex h-full w-full flex-col gap-4'
 				elements={[
 					{
 						id: 'info',

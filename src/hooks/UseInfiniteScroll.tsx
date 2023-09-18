@@ -24,7 +24,7 @@ export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>
 
 	const pages = useInfinitePage.pages.map((m, index) => mapper(m, index));
 
-	pages.push(<div key={useInfinitePage.url} ref={ref} />);
+	pages.push(<div className='h-4' key={useInfinitePage.url} ref={ref} />);
 
 	if (!useInfinitePage.isLoading && useInfinitePage.isError) {
 		pages.push(
@@ -36,7 +36,7 @@ export default function useInfiniteScroll<T>(useInfinitePage: UseInfinitePage<T>
 		);
 	}
 
-	if (!useInfinitePage.hasMore) {
+	if (!useInfinitePage.isLoading && !useInfinitePage.hasMore) {
 		pages.push(
 			<div className='col-span-full flex items-center justify-center' key={useInfinitePage.url + 'no-more'}>
 				<Trans i18nKey='no-more' />
