@@ -9,7 +9,7 @@ export interface UseInfinitePage<T> {
 	isLoading: boolean;
 	isError: boolean;
 	hasMore: boolean;
-	itemPerPage:number;
+	itemPerPage: number;
 	loadNextPage: () => void;
 	reloadPage: () => void;
 	filter: (predicate: (data: T) => boolean) => void;
@@ -18,7 +18,7 @@ export interface UseInfinitePage<T> {
 export default function useInfinitePage<T>(url: string, itemPerPage: number, searchConfig?: AxiosRequestConfig<any>): UseInfinitePage<T> {
 	const cancelRequest = useRef<AbortController>(new AbortController());
 	const [pages, setPages] = useState<Array<Array<T>>>([[]]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [loading, setLoading] = useState(0);
 	const [isError, setIsError] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
 
@@ -26,7 +26,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 		cancelRequest.current.abort();
 		cancelRequest.current = new AbortController();
 
-		setIsLoading(true);
+		setLoading((prev) => prev + 1);
 
 		if (!searchConfig) {
 			searchConfig = {
@@ -52,11 +52,12 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 					let data: T[] = result.data;
 					if (data.length < itemPerPage) setHasMore(false);
 					else setHasMore(true);
+					setIsError(false);
 					return [data];
 				}),
 			)
 			.catch(() => setIsError(true))
-			.finally(() => setIsLoading(false)); //
+			.finally(() => setLoading((prev) => prev - 1)); //
 
 		return () => cancelRequest.current.abort();
 	}, [searchConfig, itemPerPage, url]);
@@ -64,6 +65,7 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	function handleSetPage(pageNumber: number, data: T[]) {
 		if (data.length < itemPerPage) setHasMore(false);
 		else setHasMore(true);
+		setIsError(false);
 
 		if (pages.length <= pageNumber) {
 			setPages((prev) => [...prev, data]);
@@ -76,15 +78,15 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 	}
 
 	return {
-		url : url,
+		url: url,
 		itemPerPage: itemPerPage,
 		pages: array2dToArray1d(pages),
-		isLoading: isLoading,
+		isLoading: loading > 0,
 		isError: isError,
 		hasMore: hasMore,
 
 		loadNextPage: function loadNextPage() {
-			if (isLoading) return;
+			if (loading > 0) return;
 
 			setIsError(false);
 
@@ -95,22 +97,22 @@ export default function useInfinitePage<T>(url: string, itemPerPage: number, sea
 			getPage(url, requestPage, itemPerPage, searchConfig)
 				.then((result) => handleSetPage(requestPage, result.data))
 				.catch(() => setIsError(true))
-				.finally(() => setIsLoading(false)); //
+				.finally(() => setLoading((prev) => prev - 1)); //
 		},
 
 		reloadPage: function reloadPage() {
-			if (isLoading) return;
+			if (loading > 0) return;
 
 			setIsError(false);
 			setPages([]);
 			getPage(url, 0, itemPerPage, searchConfig)
 				.then((result) => handleSetPage(0, result.data))
 				.catch(() => setIsError(true))
-				.finally(() => setIsLoading(false)); //
+				.finally(() => setLoading((prev) => prev - 1)); //
 		},
 
 		filter: (predicate: (prev: T) => boolean) => {
-			pages.map((page) => page.filter(predicate));
+			setPages((prev) => prev.map((page) => page.filter(predicate)));
 		},
 	};
 }

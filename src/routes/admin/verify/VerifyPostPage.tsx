@@ -21,9 +21,11 @@ import i18n from 'src/util/I18N';
 import AdminOnly from 'src/components/AdminOnly';
 import { useTags } from 'src/context/TagProvider';
 import { MessageBox } from 'src/components/MessageBox';
+import { useVerifyCount } from 'src/routes/admin/AdminPage';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
+	const { setTotalPost } = useVerifyCount();
 
 	const { addPopup } = usePopup();
 
@@ -41,6 +43,7 @@ export default function VerifyPostPage() {
 		setVisibility(false);
 		API.rejectPost(post, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
+			.then(() => setTotalPost((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => usePage.filter((p) => p !== post));
 	}
@@ -50,6 +53,7 @@ export default function VerifyPostPage() {
 		API.verifyPost(post, tags) //
 			.then(() => API.postNotification(post.authorId, 'Your post submission has been accept', 'Post post success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
+			.then(() => setTotalPost((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => usePage.filter((p) => p !== post));
 	}

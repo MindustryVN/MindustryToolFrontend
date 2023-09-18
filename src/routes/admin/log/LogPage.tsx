@@ -3,7 +3,6 @@ import { API } from 'src/API';
 import { Log } from 'src/data/Log';
 
 import Button from 'src/components/Button';
-import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
@@ -16,28 +15,16 @@ import i18n from 'src/util/I18N';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
-	const { addPopup } = usePopup();
-
-	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard key={v.id} log={v} handleDeleteLog={handleDeleteLog} />);
-
 	const logTypes = useQuery<string[]>('log', []);
-
-	function handleDeleteLog(id: string) {
-		API.deleteLog(contentType, id) //
-			.then(() => addPopup('delete-success', 5, 'info'))
-			.catch(() => addPopup('delete-fail', 5, 'warning'))
-			.finally(() => usePage.filter((l) => l.id !== id));
-	}
 
 	if (!logTypes.data) return <LoadingSpinner />;
 
 	return (
-		<main className='flex h-full w-full flex-col gap-1 overflow-y-auto'>
-			<section className='flex flex-row gap-2'>
+		<section className='flex h-full w-full flex-col gap-1 overflow-y-auto'>
+			<section className='flex w-full flex-row gap-2 overflow-x-auto no-scrollbar flex-shrink-0'>
 				{logTypes.data.map((item, index) => (
 					<Button
-						className='flex-1 px-2 py-1'
+						className='w-full flex-1 px-2 py-1'
 						title={i18n.t(item)}
 						key={index}
 						active={item === contentType} //
@@ -46,15 +33,37 @@ export default function LogPage() {
 					</Button>
 				))}
 			</section>
-			<section id='log' className='flex flex-col gap-2 ' children={pages} />
-			<footer className='flex items-center justify-center'>
+			<LogContainer contentType={contentType} />
+		</section>
+	);
+}
+
+interface LogContainerProps {
+	contentType: string;
+}
+
+function LogContainer({ contentType }: LogContainerProps) {
+	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
+	const { pages, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard key={v.id} log={v} handleDeleteLog={handleDeleteLog} />);
+	const { addPopup } = usePopup();
+
+	function handleDeleteLog(id: string) {
+		API.deleteLog(contentType, id) //
+			.then(() => addPopup('delete-success', 5, 'info'))
+			.catch(() => addPopup('delete-fail', 5, 'warning'))
+			.finally(() => usePage.filter((l) => l.id !== id));
+	}
+
+	return (
+		<section className='flex flex-col h-full w-full'>
+			<section id='log' className='flex flex-col gap-2' children={pages} />
+			<footer className='flex w-full items-center justify-center'>
 				<IfTrue
 					condition={isLoading}
 					whenTrue={<LoadingSpinner />} //
 				/>
-				<ScrollToTopButton containerId='log' />
 			</footer>
-		</main>
+		</section>
 	);
 }
 
@@ -70,7 +79,7 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 	detail = detail ? detail : ['No content'];
 
 	return (
-		<details className='relative overflow-auto bg-slate-900 p-2'>
+		<details className='relative bg-slate-900 p-2'>
 			<summary>
 				<p>ID: {log.id}</p>
 				<p>Environment: {log.environment}</p>
@@ -87,7 +96,7 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 			</summary>
 			<div>
 				Detail:
-				<div className='box-border p-2'>
+				<div className='p-2'>
 					{detail.map((t, index) => (
 						<p key={index}>
 							{t}

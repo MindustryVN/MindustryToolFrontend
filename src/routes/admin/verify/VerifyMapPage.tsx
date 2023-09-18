@@ -33,9 +33,11 @@ import { useTags } from 'src/context/TagProvider';
 import { BackIcon } from 'src/components/Icon';
 import Author from 'src/components/Author';
 import { MessageBox } from 'src/components/MessageBox';
+import { useVerifyCount } from 'src/routes/admin/AdminPage';
 
 export default function VerifyMapPage() {
 	const [currentMap, setCurrentMap] = useState<Map>();
+	const { setTotalMap } = useVerifyCount();
 
 	const { addPopup } = usePopup();
 
@@ -53,6 +55,7 @@ export default function VerifyMapPage() {
 		setVisibility(false);
 		API.rejectMap(map, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
+			.then(() => setTotalMap(prev => prev - 1))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== map));
 	}
@@ -62,6 +65,7 @@ export default function VerifyMapPage() {
 		API.verifyMap(map, tags) //
 			.then(() => API.postNotification(map.authorId, 'Your map submission has been accept', 'Post map success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
+			.then(() => setTotalMap((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== map));
 	}

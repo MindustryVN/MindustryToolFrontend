@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { Buffer } from 'buffer';
 import { TagChoice, Tags } from 'src/components/Tag';
 import { API } from 'src/API';
@@ -34,9 +34,11 @@ import { useTags } from 'src/context/TagProvider';
 import { BackIcon } from 'src/components/Icon';
 import Author from 'src/components/Author';
 import { MessageBox } from 'src/components/MessageBox';
+import { useVerifyCount } from 'src/routes/admin/AdminPage';
 
 export default function VerifySchematicPage() {
 	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
+	const { setTotalSchematic } = useVerifyCount();
 
 	const { addPopup } = usePopup();
 
@@ -54,6 +56,7 @@ export default function VerifySchematicPage() {
 		setVisibility(false);
 		API.rejectSchematic(schematic, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
+			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
@@ -63,6 +66,7 @@ export default function VerifySchematicPage() {
 		API.verifySchematic(schematic, tags) //
 			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has been accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
+			.then(() => setTotalSchematic((prev) => prev - 1))
 			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}

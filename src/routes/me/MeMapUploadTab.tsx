@@ -36,7 +36,7 @@ export default function UserMapUploadTab() {
 	}
 
 	return (
-		<main id='map-tab' className='flex h-full w-full flex-row gap-2 overflow-y-auto'>
+		<main id='map-tab' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
 			<PreviewContainer children={pages} />
 			<footer className='flex items-center justify-center'>
 				<IfTrue

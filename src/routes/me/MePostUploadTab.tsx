@@ -34,7 +34,7 @@ export default function UserPostUploadTab() {
 	}
 
 	return (
-		<main id='post-tab' className='flex flex-row gap-2 w-full h-full overflow-y-auto'>
+		<main id='post-tab' className='flex flex-col gap-2 w-full h-full overflow-y-auto'>
 			<section children={pages} />
 			<footer className='flex justify-center items-center'>
 				<IfTrue
