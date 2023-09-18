@@ -26,7 +26,7 @@ export default function SwitchBar({ className, elements }: SwitchBarProps) {
 	}
 
 	return (
-		<div className={cn('flex flex-col', className)}>
+		<div className={cn('flex flex-col gap-2', className)}>
 			<section className='no-scrollbar flex h-fit w-full flex-shrink-0 flex-row gap-4 overflow-x-auto'>
 				{elements.map((element) => (
 					<ClearButton
