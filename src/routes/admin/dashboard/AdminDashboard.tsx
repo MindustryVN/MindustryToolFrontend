@@ -26,14 +26,16 @@ export default function AdminDashboard() {
 	return (
 		<main className='h-full w-full overflow-y-auto p-12'>
 			<section className='grid grid-cols-[repeat(auto-fill,min(500px,80vw))]'>
-				<Line
-					className='relative h-full w-full whitespace-nowrap'
-					options={{ responsive: true, maintainAspectRatio: true }}
-					data={{
-						labels: dailyUser.map((d) => d.time),
-						datasets: [{ label: i18n.t('daily-user').toString(), fill: true, backgroundColor: 'rgb(53, 162, 235, 0.5)', data: dailyUser.map((d) => d.value) }],
-					}}
-				/>
+				<div className='bg-slate-600 bg-opacity-20 rounded-lg p-2'> 
+					<Line
+						className='relative h-full w-full whitespace-nowrap'
+						options={{ responsive: true, maintainAspectRatio: true }}
+						data={{
+							labels: dailyUser.map((d) => d.time),
+							datasets: [{ label: i18n.t('daily-user').toString(), fill: true, backgroundColor: 'rgb(53, 162, 235, 0.5)', data: dailyUser.map((d) => d.value) }],
+						}}
+					/>
+				</div>
 			</section>
 		</main>
 	);
