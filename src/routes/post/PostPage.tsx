@@ -92,7 +92,7 @@ export default function PostPage() {
 						<ClearIconButton className='h-5' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 					<OptionBox
-						className='h-10 w-full max-w-[10rem] bg-slate-900'
+						className='h-10 w-full max-w-none bg-slate-900 md:max-w-[10rem]'
 						items={Tags.SORT_TAG}
 						mapper={(item, index) => (
 							<span key={index} className='whitespace-nowrap'>
