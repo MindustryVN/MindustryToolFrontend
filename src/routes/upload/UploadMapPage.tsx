@@ -122,14 +122,14 @@ export default function UploadMapPage() {
 
 	return (
 		<main className='box-border flex h-full w-full flex-col justify-between gap-2 overflow-y-auto p-8'>
-			<header className='flex items-center justify-center'>
+			<span className='flex items-center justify-center'>
 				<Button className='p-1' title={i18n.t('upload-a-file')} onClick={() => {}}>
 					<label className='button' htmlFor='file'>
 						<Trans i18nKey='upload-a-file' />
 					</label>
 				</Button>
 				<input className='hidden' id='file' type='file' onChange={(event) => handleFileChange(event)} />
-			</header>
+			</span>
 			{preview && (
 				<section className='flex flex-row flex-wrap gap-2'>
 					<InfoImage src={PNG_IMAGE_PREFIX + preview.image} />

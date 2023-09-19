@@ -6,28 +6,32 @@ interface ErrorBoundaryProps {
 }
 
 interface ErrorBoundaryState {
-	hasError: boolean;
+	error: Error | undefined;
 }
 
 export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 	public state: ErrorBoundaryState = {
-		hasError: false,
+		error: undefined,
 	};
 
-	public static getDerivedStateFromError(_: Error): ErrorBoundaryState {
-		return { hasError: true };
+	public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+		return { error };
 	}
 
 	public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
 		console.error('Uncaught error:', error, errorInfo);
+		this.setState({ error });
 	}
 
 	public render() {
-		if (this.state.hasError) {
+		if (this.state.error !== undefined) {
 			return (
-				<h1 className='flex h-full w-full items-center justify-center'>
+				<span className='flex h-full w-full items-center justify-center'>
 					<Trans i18nKey='error' />
-				</h1>
+					{this.state.error.name}
+					<br />
+					{this.state.error.message}
+				</span>
 			);
 		}
 

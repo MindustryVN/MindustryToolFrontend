@@ -9,8 +9,19 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
 export default function AdminDashboard() {
+	return (
+		<main className='h-full w-full overflow-y-auto'>
+			<section className='grid grid-cols-[repeat(auto-fill,min(500px,80vw))]'>
+				<DailyUserChar />
+			</section>
+		</main>
+	);
+}
+
+function DailyUserChar() {
 	const [dailyUser, setDailyUser] = useState<Metric[]>([]);
 	const [loggedDailyUser, setLoggedDailyUser] = useState<Metric[]>([]);
+	const [loading, setLoading] = useState(0);
 
 	let maxLength = dailyUser.length > loggedDailyUser.length ? dailyUser.length : loggedDailyUser.length;
 
@@ -37,46 +48,48 @@ export default function AdminDashboard() {
 		start.setDate(new Date().getDate() - 30);
 		let end = new Date();
 
+		setLoading(2);
+
 		API.getMetric(start, end, 'daily_user')
 			.then((result) => setDailyUser(result.data))
+			.then(() => setLoading((prev) => prev - 1))
 			.catch((error) => console.log(error));
 
 		API.getMetric(start, end, 'logged_daily_user')
 			.then((result) => setLoggedDailyUser(result.data))
+			.then(() => setLoading((prev) => prev - 1))
 			.catch((error) => console.log(error));
 	}, []);
 
-	if (dailyUser.length === 0) return <LoadingSpinner className='flex w-full items-center justify-center' />;
-
 	return (
-		<main className='h-full w-full overflow-y-auto p-12'>
-			<section className='grid grid-cols-[repeat(auto-fill,min(500px,80vw))]'>
-				<div className='rounded-lg bg-slate-600 bg-opacity-40 p-2'>
-					<Line
-						className='relative h-full w-full whitespace-nowrap'
-						options={{ responsive: true, maintainAspectRatio: true }}
-						data={{
-							labels: timeLabel,
-							datasets: [
-								{
-									label: i18n.t('daily-user').toString(),
-									fill: true,
-									borderColor: 'rgb(53, 162, 235, 0.5)',
-									backgroundColor: 'rgb(53, 162, 235, 0.5)',
-									data: fixedDailyUser.map((d) => d.value),
-								},
-								{
-									label: i18n.t('logged-daily-user').toString(),
-									fill: true,
-									borderColor: 'rgb(34, 197, 94, 0.5)',
-									backgroundColor: 'rgb(34, 197, 94, 0.5)',
-									data: fixedLoggedDailyUser.map((d) => d.value),
-								},
-							],
-						}}
-					/>
-				</div>
-			</section>
-		</main>
+		<div className='flex h-full w-full aspect-[2] items-center justify-center rounded-lg bg-slate-600 bg-opacity-40 p-2'>
+			{loading > 0 ? (
+				<LoadingSpinner />
+			) : (
+				<Line
+					className='relative h-full w-full whitespace-nowrap'
+					options={{ responsive: true, maintainAspectRatio: true }}
+					data={{
+						labels: timeLabel,
+						datasets: [
+							{
+								label: i18n.t('daily-user').toString(),
+								fill: true,
+								borderColor: 'rgb(53, 162, 235, 0.5)',
+								backgroundColor: 'rgb(53, 162, 235, 0.5)',
+								data: fixedDailyUser.map((d) => d.value),
+							},
+							{
+								label: i18n.t('logged-daily-user').toString(),
+								fill: true,
+								borderColor: 'rgb(34, 197, 94, 0.5)',
+								backgroundColor: 'rgb(34, 197, 94, 0.5)',
+								data: fixedLoggedDailyUser.map((d) => d.value),
+							},
+						],
+					}}
+				/>
+			)}
+		</div>
 	);
 }

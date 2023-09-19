@@ -79,7 +79,7 @@ export default function PostPage() {
 
 	return (
 		<main className='flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
-			<header className='flex w-full flex-col gap-2'>
+			<span className='flex w-full flex-col gap-2'>
 				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
 						className='h-10 w-full bg-slate-900'
@@ -103,7 +103,7 @@ export default function PostPage() {
 					/>
 				</section>
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-			</header>
+			</span>
 			<section className='flex flex-col gap-2 p-4' children={pages} />
 			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/post')}>
@@ -137,11 +137,11 @@ function PostPreview({ post }: PostPreviewProps) {
 	return (
 		<section role='button' className='relative flex w-full flex-row justify-between rounded-lg bg-slate-900 p-4'>
 			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
-				<header className='flex flex-col gap-2'>
+				<span className='flex flex-col gap-2'>
 					<span className='title text-2xl'>{post.header}</span>
 					<Author authorId={post.authorId} />
 					<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
-				</header>
+				</span>
 				<section className='flex flex-col'>
 					<section className='flex w-full flex-row gap-2'>
 						<IconButton className='px-2 py-1' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
