@@ -128,7 +128,7 @@ export default function NavigationPanel() {
 							<img className='pixelated h-8 w-8' src='/assets/icons/dots.png' alt='menu' />
 						</button>
 					</div>
-					<WebIcon />
+					<div>{me ? <UserAvatar className='w-8 h-8 rounded-full' user={me} /> : <WebIcon />}</div>
 				</section>
 				<div className={cn('fixed left-0 top-0 z-nav-bar h-full w-full backdrop-blur-sm', { hidden: !showNavigatePanel })}>
 					<OutsideAlerter
@@ -174,7 +174,7 @@ function LinkButton({ name, to, admin, icon, onClick }: LinkButtonProps) {
 
 	return (
 		<ClearButton
-			className={cn('hidden flex-row gap-2 rounded-lg p-2 hover:bg-blue-500 transition-colors duration-500' , {
+			className={cn('hidden flex-row gap-2 rounded-lg p-2 transition-colors duration-500 hover:bg-blue-500', {
 				flex: !admin || Users.isAdmin(me),
 			})}
 			active={window.location.pathname.endsWith(to)}
@@ -188,9 +188,9 @@ function LinkButton({ name, to, admin, icon, onClick }: LinkButtonProps) {
 
 function LoginButton({ onClick }: { onClick: () => void }) {
 	return (
-		<section className='flex flex-row items-center px-2 rounded-lg dark:hover:bg-blue-500 dark:hover:text-white'>
+		<section className='flex flex-row items-center rounded-lg px-2 hover:bg-blue-500 hover:text-white'>
 			<LoginIcon className='h-6 w-6' />
-			<ClearButton className='flex flex-col p-2 dark:hover:bg-blue-500 dark:hover:text-white' title={i18n.t('login')} onClick={() => onClick()}>
+			<ClearButton className='flex flex-col p-2 hover:bg-blue-500 hover:text-white' title={i18n.t('login')} onClick={() => onClick()}>
 				<Trans i18nKey='login' />
 			</ClearButton>
 		</section>
@@ -211,7 +211,7 @@ function UserDisplay({ onClick }: { onClick: () => void }) {
 					<UserRoleDisplay roles={me.role} />
 				</section>
 			</section>
-			<ClearButton className='flex flex-row items-center justify-center gap-2 rounded-lg p-2 dark:hover:bg-blue-500 dark:hover:text-white' title={i18n.t('logout')} onClick={handleLogout}>
+			<ClearButton className='flex flex-row items-center justify-center gap-2 rounded-lg p-2 hover:bg-blue-500 hover:text-white' title={i18n.t('logout')} onClick={handleLogout}>
 				<LogoutIcon className='h-6 w-6' />
 			</ClearButton>
 		</div>

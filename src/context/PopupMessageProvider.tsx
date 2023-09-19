@@ -1,9 +1,11 @@
 import { v4 } from 'uuid';
 import ClearIconButton from 'src/components/ClearIconButton';
 
-import React, { ReactNode, useContext, useEffect, useRef } from 'react';
+import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { API } from 'src/API';
 import i18n from 'src/util/I18N';
+import Loading from 'src/components/Loading';
+import MessageScreen from 'src/components/MessageScreen';
 
 type PopupMessageType = 'info' | 'warning' | 'error';
 
@@ -37,7 +39,9 @@ interface PopupMessageProvider {
 }
 
 export default function AlertProvider({ children }: PopupMessageProvider) {
-	const [contents, setMessages] = React.useState<PopupMessageData[]>([]);
+	const [contents, setMessages] = useState<PopupMessageData[]>([]);
+	const [isLoading, setLoading] = useState(true);
+	const [isError, setError] = useState(false);
 
 	useEffect(() => {
 		const start = Date.now();
@@ -59,8 +63,11 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 				duration: 10,
 				type: 'info',
 			});
+
 			return () => clearTimeout(id);
-		}, 4000);
+		}, 8000);
+
+		setLoading(true);
 
 		API.getPing() //
 			.then(() => {
@@ -69,15 +76,17 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 					duration: 5,
 					type: 'info',
 				});
-				clearTimeout(id);
 			}) //
-			.catch(() =>
+			.catch(() => {
+				setError(true);
 				addMessage({
 					content: i18n.t('lost-connection'),
 					duration: 5,
 					type: 'error',
-				}),
-			);
+				});
+			})
+			.finally(() => setLoading(false))
+			.then(() => clearTimeout(id));
 	}, []);
 
 	function addMessage(content: ReactNode, duration: number, type: PopupMessageType) {
@@ -109,7 +118,26 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 					/>
 				))}
 			</section>
-			{children}
+			{isLoading ? (
+				<Loading />
+			) : isError ? (
+				<MessageScreen>
+					<div className='flex flex-col gap-2'>
+						<h1>Something is wrong, please refresh the page or contact with admin</h1>{' '}
+						<a
+							className='flex flex-row items-center justify-center gap-x-4 rounded-md bg-blue-800 px-16 py-1' //
+							href='https://discord.gg/DCX5yrRUyp'>
+							<span>Discord Server</span>
+							<img
+								className='icon'
+								src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC10lEQVR4AcVXxZLbQBDV2Sd/hUtn/4yX0RBmuIWPiW5hZmZmZjjtKcy4ZCZJnX7KaGFKI3PlVXV5PE1vuKVVi7ZYMhiJJrsiseSOtmjyBbeHuc+MsKDN8oplB/+HTVBrDpA4pXOiXZw0x22qUmC7C751J+ZRBDipwb8lBK1PHF+DJVDrqENt0dQQgjRDeBBDLKHqkkdT4Tasr3BuIgnEDFceeazJySUSyploizprrp725i5HwIuAIRu3kIQhn3G9rcrd3jcnRQPz5H70sW5ulQSiyRKT0KeOfpefQ2JRmg6eKNCb9yZZlk1PX5Vo7YYsGZtzjqD9jPuggw1s4VNhFnZpALMJ+l0y0QUpGk9ZVCvGkxZ8/WYhh9wg0OXH9NrtItUJ+FZaii4Q2KEymLM8TeWyTXUCvojhR2AHCLxSGZy9XKAGgRh+++AFCCgvnuERi2T8+mNRNmeTjGzWdnQy/nAMnxkYBgHTS7lkZYZknLlU+Hfk5qfo63eTXKA9yH3QwUYGYikImFqbgsCm3TmSMXvZ5HoeOzOZCG23HzYyNu3KeRJAbuUSnLxQIBnr+Ly7+nuPS+QCbbcfd4KMk+cLvkvwwkt51eP4jYxatOdwni7dKJJt2+QC7cvcBx1sZCCWgsAr5TG8fqdITQJiKY+h8iI6JS1BvmDT3UclyudtUgE62MB2CrCcqmPYpbyKOxMpOnyqMC3Ypy8mLV2VoTXrs850n75YgDjttdy3jHWfv5rTCB06WaCOhGfyHArdio9RYnEaR8u52z98MkUwb4Huw2eTxtgWxOK+D5J4jAQBHU8kFH7BxVn3FdjAtnKxmtT/W0HSJhck4lkOsLS+JEMOr5JMkAihcGwZgaiiKJWWItyKylh8yqnLcnkmmrkciMWiHLmyTGcng39LDSQuic+7gFYfRMUcre3jFLbCR9eaBXFjduH+5t9XLMNOLcGCNssLoetiqfrz/C+xqsDlSf0bLQAAAABJRU5ErkJggg=='
+								alt='Discord'></img>
+						</a>
+					</div>
+				</MessageScreen>
+			) : (
+				children
+			)}
 		</PopupMessageContext.Provider>
 	);
 }

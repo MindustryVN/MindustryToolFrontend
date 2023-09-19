@@ -7,7 +7,6 @@ import IfTrue from 'src/components/IfTrue';
 import ConfirmBox from 'src/components/ConfirmBox';
 import SearchBox from 'src/components/Searchbox';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import PostPreview from 'src/components/PostPreview';
 import PostView from 'src/components/PostView';
 import { TagChoice, Tags } from 'src/components/Tag';
 import TagEditContainer from 'src/components/TagEditContainer';
@@ -22,6 +21,11 @@ import AdminOnly from 'src/components/AdminOnly';
 import { useTags } from 'src/context/TagProvider';
 import { MessageBox } from 'src/components/MessageBox';
 import { useVerifyCount } from 'src/routes/admin/AdminPage';
+import PostCard from 'src/components/PostCard';
+import TagContainer from 'src/components/TagContainer';
+import DateDisplay from 'src/components/Date';
+import Author from 'src/components/Author';
+import PostTitle from 'src/components/PostTitle';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
@@ -92,9 +96,17 @@ interface PostUploadPreviewProps {
 }
 
 export function PostUploadPreview({ post, handleOpenModel }: PostUploadPreviewProps) {
+	const { postSearchTag } = useTags();
 	return (
 		<section role='button' onClick={() => handleOpenModel(post)}>
-			<PostPreview post={post} />
+			<PostCard>
+				<div className='grid gap-2'>
+					<PostTitle title={post.header} />
+					<Author authorId={post.authorId} />
+					<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
+				</div>
+				<DateDisplay className='self-end' time={post.time} />
+			</PostCard>
 		</section>
 	);
 }

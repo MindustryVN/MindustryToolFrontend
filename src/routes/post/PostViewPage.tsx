@@ -47,11 +47,11 @@ export default function PostViewPage() {
 
 	return (
 		<section className='box-border flex h-full w-full flex-col gap-2 overflow-y-auto p-8'>
-			<header className='flex flex-col gap-2'>
+			<span className='flex flex-col gap-2'>
 				<span className='text-2xl'>{data.header}</span>
 				<LoadUserName userId={data.authorId} />
 				<TagContainer tags={Tags.parseArray(data.tags, postSearchTag)} />
-			</header>
+			</span>
 			<Markdown children={data.content} />
 			<footer className='align-end flex flex-row justify-between gap-2'>
 				<DateDisplay className='flex items-end align-end' time={data.time} />

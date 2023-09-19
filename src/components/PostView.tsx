@@ -16,11 +16,11 @@ export default function PostView({ post }: PostViewProps) {
 
 	return (
 		<section className='box-border flex flex-col gap-2 p-4'>
-			<header className='flex flex-col gap-2'>
+			<span className='flex flex-col gap-2'>
 				<PostTitle title={post.header} />
 				<Author authorId={post.authorId} />
 				<TagContainer tags={Tags.parseArray(post.tags, postSearchTag)} />
-			</header>
+			</span>
 			<Markdown children={post.content} />
 			<footer className='flex flex-row justify-end'>
 				<DateDisplay time={post.time} />

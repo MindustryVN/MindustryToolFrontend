@@ -133,7 +133,7 @@ export default function SchematicPage() {
 
 	return (
 		<main id='schematic' className='flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
-			<header className='flex w-full flex-col gap-2'>
+			<span className='flex w-full flex-col gap-2'>
 				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
 						className='flex h-10 w-full'
@@ -146,7 +146,7 @@ export default function SchematicPage() {
 						<ClearIconButton className='h-5' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 					<OptionBox
-						className='h-10 w-full max-w-[10rem] bg-slate-900'
+						className='h-10 w-full max-w-none bg-slate-900 md:max-w-[10rem]'
 						items={Tags.SORT_TAG}
 						mapper={(item, index) => (
 							<span key={index} className='whitespace-nowrap'>
@@ -157,7 +157,7 @@ export default function SchematicPage() {
 					/>
 				</section>
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-			</header>
+			</span>
 			<section className='flex flex-row items-center justify-center p-2'>
 				<Trans i18nKey='total-schematic' /> : {totalSchematic > 0 ? totalSchematic : 0}
 			</section>

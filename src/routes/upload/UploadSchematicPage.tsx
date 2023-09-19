@@ -166,7 +166,7 @@ export default function UploadSchematicPage() {
 
 	return (
 		<main className='box-border flex h-full w-full flex-col justify-between gap-2 overflow-y-auto p-8'>
-			<header className='flex flex-row gap-2'>
+			<span className='flex flex-row gap-2'>
 				<section className='flex items-center justify-center'>
 					<section className='code-file grid-auto-column grid w-fit grid-flow-col gap-2 p-2'>
 						{tabs.map((name, index) => (
@@ -186,7 +186,7 @@ export default function UploadSchematicPage() {
 					</section>
 				</section>
 				<section className='flex items-center justify-center'>{renderTab(currentTab)}</section>
-			</header>
+			</span>
 			{preview && (
 				<section className='flex flex-row flex-wrap gap-2'>
 					<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />

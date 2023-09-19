@@ -6,7 +6,7 @@ import User from 'src/data/User';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import PostPreview from 'src/components/PostPreview';
+import { PostPreview } from 'src/routes/post/PostPage';
 
 interface UserPostTabProps {
 	user: User;

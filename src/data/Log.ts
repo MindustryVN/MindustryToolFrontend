@@ -3,4 +3,7 @@ export interface Log {
 	content: string;
 	environment: string;
 	time: string;
+	requestUrl: string;
+	ip: string;
+	userId: string;
 }

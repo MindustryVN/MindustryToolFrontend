@@ -18,19 +18,21 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
 	<React.StrictMode>
 		<Router>
-			<WindowContextProvider>
-				<I18nextProvider i18n={i18n}>
-					<PopupMessageProvider>
-						<TagProvider>
-							<UserProvider>
-								<NotificationProvider>
-									<App />
-								</NotificationProvider>
-							</UserProvider>
-						</TagProvider>
-					</PopupMessageProvider>
-				</I18nextProvider>
-			</WindowContextProvider>
+			<main className='background-gradient h-full w-full '>
+				<WindowContextProvider>
+					<I18nextProvider i18n={i18n}>
+						<PopupMessageProvider>
+							<TagProvider>
+								<UserProvider>
+									<NotificationProvider>
+										<App />
+									</NotificationProvider>
+								</UserProvider>
+							</TagProvider>
+						</PopupMessageProvider>
+					</I18nextProvider>
+				</WindowContextProvider>
+			</main>
 		</Router>
 	</React.StrictMode>,
 );
