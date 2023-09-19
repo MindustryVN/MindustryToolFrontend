@@ -83,6 +83,9 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 			<summary>
 				<p>ID: {log.id}</p>
 				<p>Environment: {log.environment}</p>
+				<p>User ID: {log.userId}</p>
+				<p>IP: {log.ip}</p>
+				<p>Request URL: {log.requestUrl}</p>
 				<p>
 					Time: <DateDisplay time={log.time} />
 				</p>
