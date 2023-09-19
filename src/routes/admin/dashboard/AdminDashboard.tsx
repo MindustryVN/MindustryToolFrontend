@@ -10,14 +10,39 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 export default function AdminDashboard() {
 	const [dailyUser, setDailyUser] = useState<Metric[]>([]);
+	const [loggedDailyUser, setLoggedDailyUser] = useState<Metric[]>([]);
+
+	let maxLength = dailyUser.length > loggedDailyUser.length ? dailyUser.length : loggedDailyUser.length;
+
+	let fixedDailyUser: Metric[] = [
+		...Array(maxLength - dailyUser.length).fill({
+			time: '0',
+			value: 0,
+		}),
+		...dailyUser,
+	];
+
+	let fixedLoggedDailyUser: Metric[] = [
+		...Array(maxLength - loggedDailyUser.length).fill({
+			time: '0',
+			value: 0,
+		}),
+		...loggedDailyUser,
+	];
+
+	let timeLabel = dailyUser.length > loggedDailyUser.length ? dailyUser.map((d) => d.time) : loggedDailyUser.map((d) => d.time);
 
 	useEffect(() => {
 		let start = new Date();
 		start.setDate(new Date().getDate() - 30);
 		let end = new Date();
 
-		API.getMetric(start, end, 'DAILY_USER')
+		API.getMetric(start, end, 'daily_user')
 			.then((result) => setDailyUser(result.data))
+			.catch((error) => console.log(error));
+
+		API.getMetric(start, end, 'logged_daily_user')
+			.then((result) => setLoggedDailyUser(result.data))
 			.catch((error) => console.log(error));
 	}, []);
 
@@ -26,13 +51,28 @@ export default function AdminDashboard() {
 	return (
 		<main className='h-full w-full overflow-y-auto p-12'>
 			<section className='grid grid-cols-[repeat(auto-fill,min(500px,80vw))]'>
-				<div className='bg-slate-600 bg-opacity-20 rounded-lg p-2'> 
+				<div className='rounded-lg bg-slate-600 bg-opacity-40 p-2'>
 					<Line
 						className='relative h-full w-full whitespace-nowrap'
 						options={{ responsive: true, maintainAspectRatio: true }}
 						data={{
-							labels: dailyUser.map((d) => d.time),
-							datasets: [{ label: i18n.t('daily-user').toString(), fill: true, backgroundColor: 'rgb(53, 162, 235, 0.5)', data: dailyUser.map((d) => d.value) }],
+							labels: timeLabel,
+							datasets: [
+								{
+									label: i18n.t('daily-user').toString(),
+									fill: true,
+									borderColor: 'rgb(53, 162, 235, 0.5)',
+									backgroundColor: 'rgb(53, 162, 235, 0.5)',
+									data: fixedDailyUser.map((d) => d.value),
+								},
+								{
+									label: i18n.t('logged-daily-user').toString(),
+									fill: true,
+									borderColor: 'rgb(34, 197, 94, 0.5)',
+									backgroundColor: 'rgb(34, 197, 94, 0.5)',
+									data: fixedLoggedDailyUser.map((d) => d.value),
+								},
+							],
 						}}
 					/>
 				</div>
