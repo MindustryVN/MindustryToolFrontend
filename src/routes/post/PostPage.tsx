@@ -126,7 +126,7 @@ interface PostPreviewProps {
 	post: Post;
 }
 
-function PostPreview({ post }: PostPreviewProps) {
+export function PostPreview({ post }: PostPreviewProps) {
 	const { copy } = useClipboard();
 	const navigate = useNavigate();
 	const { postSearchTag } = useTags();

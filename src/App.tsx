@@ -29,7 +29,7 @@ const SchematicRatioCalculator = React.lazy(() => import('src/routes/schematic-r
 
 export default function App() {
 	return (
-		<main className='background-gradient flex h-full w-full flex-col overflow-hidden'>
+		<main className='flex h-full w-full flex-col overflow-hidden'>
 			<ErrorBoundary>
 				<NavigationPanel />
 				<section className='flex h-[calc(100%-3rem)] w-screen flex-col overflow-hidden'>
