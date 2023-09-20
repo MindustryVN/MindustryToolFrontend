@@ -15,7 +15,6 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 import ColorText from 'src/components/ColorText';
 import useClipboard from 'src/hooks/UseClipboard';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import DateDisplay from 'src/components/Date';
 
 export default function MindustryServerPage() {
 	const { pages, hasMore, isLoading, loadNextPage, filter } = useInfinitePage<MindustryServer>('mindustry-server', 100);
@@ -85,9 +84,6 @@ function MindustryServerTable({ servers, handleRemoveServer }: MindustryServerTa
 						<Trans i18nKey='ping' />
 					</th>
 					<th className='border border-slate-600 p-2'>
-						<Trans i18nKey='last-ping' />
-					</th>
-					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='name' />
 					</th>
 					<th className='border border-slate-600 p-2'>
@@ -140,9 +136,6 @@ function MindustryServerTableRow({ server, handleRemoveServer }: MindustryServer
 			</td>
 			<td className='border border-slate-600 p-2'>{server.ping}</td>
 			<td className='border border-slate-600 p-2'>
-				<DateDisplay time={server.time} />
-			</td>
-			<td className='border border-slate-600 p-2'>
 				<ColorText className='max-w-[200px] overflow-auto' text={server.name} />
 			</td>
 			<td className='border border-slate-600 p-2'>
@@ -153,11 +146,16 @@ function MindustryServerTableRow({ server, handleRemoveServer }: MindustryServer
 			</td>
 			<td className='border border-slate-600 p-2'>{server.wave}</td>
 			<td className='border border-slate-600 p-2'>
-				<span className='flex flex-row gap-2'>
-					{server.players}/{server.playerLimit}
-					<span>
-						<Trans i18nKey='players' />
-					</span>
+				<span className='flex flex-row gap-1'>
+					<span>{server.players}</span>
+					{server.playerLimit ? (
+						<>
+							<span>/</span>
+							<span>{server.playerLimit}</span>
+						</>
+					) : (
+						''
+					)}
 				</span>
 			</td>
 			<td className='border border-slate-600 p-2 capitalize'>
@@ -230,17 +228,20 @@ function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCard
 			</span>
 			<section className='flex flex-col'>
 				<ColorText text={server.description} />
-				<span>
-					{`${server.players}/${server.playerLimit} `}
+				<span className='flex gap-2'>
+					<span>{server.players}</span>
+					{server.playerLimit ? (
+						<>
+							<span>/</span>
+							<span>{server.playerLimit}</span>
+						</>
+					) : (
+						''
+					)}
 					<Trans i18nKey='players' />
 				</span>
 				{'Ping: '}
 				{server.ping}ms
-				<span>
-					<Trans i18nKey='last-ping' />
-					{': '}
-					<DateDisplay time={server.time} />
-				</span>
 				<span className='flex flex-row gap-2'>
 					<Trans i18nKey='map' />: <ColorText text={server.mapname} />
 				</span>
