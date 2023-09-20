@@ -29,25 +29,19 @@ export default function useLike(contentType: string, targetId: string, initialLi
 
 	function processLike(data: LikeChange) {
 		if (data.amount === 0) {
-			addPopup(i18n.t('like-fail'), 5, 'warning');
 			return;
 		}
 
 		setUserLike(data.like);
 		setLikes((prev) => prev + data.amount);
-		if (data.amount === -1) addPopup(i18n.t('unlike-success'), 5, 'info');
-		else addPopup(i18n.t('like-success'), 5, 'info');
 	}
 
 	function processDislike(data: LikeChange) {
 		if (data.amount === 0) {
-			addPopup(i18n.t('dislike-fail'), 5, 'warning');
 			return;
 		}
 		setUserLike(data.like);
 		setLikes((prev) => prev + data.amount);
-		if (data.amount === 1) addPopup(i18n.t('un-dislike-success'), 5, 'info');
-		else addPopup(i18n.t('dislike-success'), 5, 'info');
 	}
 
 	return {
@@ -65,7 +59,7 @@ export default function useLike(contentType: string, targetId: string, initialLi
 				setLoading(true);
 				API.setLike(contentType, targetId) //
 					.then((result) => processLike(result.data))
-					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
+					.catch(() => addPopup(i18n.t('like-fail'), 5, 'warning'))
 					.finally(() => setLoading(false));
 			});
 		},
@@ -77,7 +71,7 @@ export default function useLike(contentType: string, targetId: string, initialLi
 				setLoading(true);
 				API.setDislike(contentType, targetId) //
 					.then((result) => processDislike(result.data))
-					.catch(() => addPopup(i18n.t('action-fail'), 5, 'warning'))
+					.catch(() => addPopup(i18n.t('dislike-fail'), 5, 'warning'))
 					.finally(() => setLoading(false));
 			});
 		},
