@@ -1,4 +1,4 @@
 export interface Metric{
     value : number,
-    time: string
+    time:  Date
 }

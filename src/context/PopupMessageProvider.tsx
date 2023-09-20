@@ -69,6 +69,8 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 
 		setLoading(true);
 
+		
+
 		API.getPing() //
 			.then(() => {
 				addMessage({
