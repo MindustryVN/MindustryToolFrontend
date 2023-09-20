@@ -12,6 +12,7 @@ import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import PreviewContainer from 'src/components/PreviewContainer';
 import { SchematicInfo, SchematicPreview } from 'src/routes/schematic/SchematicPage';
 import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 
 interface UserSchematicTabProps {
 	user: User;
@@ -40,9 +41,13 @@ export default function UserSchematicTab({ user }: UserSchematicTabProps) {
 	}
 
 	return (
-		<main id='schematic-tab' className='flex flex-col gap-2 p-2 box-border w-full h-full overflow-y-auto'>
+		<main id='schematic-tab' className='box-border flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
 			<PreviewContainer children={pages} />
-			<footer className='flex justify-center items-center'>
+			<footer className='flex items-center justify-center'>
+				<IfTrue
+					condition={usePage.isLoading}
+					whenTrue={<LoadingSpinner />} //
+				/>
 				<ScrollToTopButton containerId='schematic-tab' />
 			</footer>
 			<IfTrue

@@ -15,6 +15,7 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 import ColorText from 'src/components/ColorText';
 import useClipboard from 'src/hooks/UseClipboard';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
+import DateDisplay from 'src/components/Date';
 
 export default function MindustryServerPage() {
 	const { pages, hasMore, isLoading, loadNextPage, filter } = useInfinitePage<MindustryServer>('mindustry-server', 100);
@@ -41,7 +42,7 @@ export default function MindustryServerPage() {
 	return (
 		<main className='box-border flex h-full w-full flex-col gap-2 overflow-auto p-2'>
 			<section className='flex flex-row justify-end'>
-				<Button className='px-2 py-1' title={i18n.t('submit')} onClick={() => setVisibility(true)}>
+				<Button className='px-3 py-1' title={i18n.t('submit')} onClick={() => setVisibility(true)}>
 					<Trans i18nKey='submit' />
 				</Button>
 			</section>
@@ -74,36 +75,40 @@ interface MindustryServerTableProps {
 
 function MindustryServerTable({ servers, handleRemoveServer }: MindustryServerTableProps) {
 	return (
-		<table className='hidden h-full w-full border-separate border-spacing-x-8 border-spacing-y-2 lg:table'>
+		<table className='hidden w-full border-collapse border-spacing-x-8 border-spacing-y-2 border border-slate-600 lg:table'>
 			<thead>
-				<tr className='text-left'>
-					<th>
+				<tr className='border border-slate-600 text-left'>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='address' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='ping' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
+						<Trans i18nKey='last-ping' />
+					</th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='name' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='description' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='map-name' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='wave' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='players' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='mode' />
 					</th>
-					<th>
+					<th className='border border-slate-600 p-2'>
 						<Trans i18nKey='version' />
 					</th>
+					<th className='w-6 border border-slate-600 p-2'></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -126,27 +131,28 @@ function MindustryServerTableRow({ server, handleRemoveServer }: MindustryServer
 	const { copy } = useClipboard();
 
 	return (
-		<tr className='p-2'>
-			<td>
-				<section className='flex max-w-[200px] flex-row gap-2 overflow-x-auto'>
+		<tr className='border border-slate-600 p-2'>
+			<td className='border border-slate-600 p-2'>
+				<section className='no-scrollbar flex max-w-[200px] flex-row items-center justify-start gap-2 overflow-x-auto'>
 					<ClearIconButton title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(server.address)} />
 					{server.address}
 				</section>
 			</td>
-			<td>
-				<span>{server.ping}</span>
+			<td className='border border-slate-600 p-2'>{server.ping}</td>
+			<td className='border border-slate-600 p-2'>
+				<DateDisplay time={server.time} />
 			</td>
-			<td>
+			<td className='border border-slate-600 p-2'>
 				<ColorText className='max-w-[200px] overflow-auto' text={server.name} />
 			</td>
-			<td>
+			<td className='border border-slate-600 p-2'>
 				<ColorText className='max-w-[200px] overflow-auto' text={server.description} />
 			</td>
-			<td>
+			<td className='border border-slate-600 p-2'>
 				<ColorText className='max-w-[200px] overflow-auto' text={server.mapname} />
 			</td>
-			<td>{server.wave}</td>
-			<td>
+			<td className='border border-slate-600 p-2'>{server.wave}</td>
+			<td className='border border-slate-600 p-2'>
 				<span className='flex flex-row gap-2'>
 					{server.players}/{server.playerLimit}
 					<span>
@@ -154,19 +160,22 @@ function MindustryServerTableRow({ server, handleRemoveServer }: MindustryServer
 					</span>
 				</span>
 			</td>
-			<td className='capitalize'>
+			<td className='border border-slate-600 p-2 capitalize'>
 				<div className='max-w-[200px] overflow-auto'>{server.modeName ? server.mapname : server.mode}</div>
 			</td>
-			<td>{server.version === -1 ? server.versionType : server.version}</td>
+			<td className='border border-slate-600 p-2'>{server.version === -1 ? server.versionType : server.version}</td>
 			<IfTrue
 				condition={Users.isAdmin(me)}
 				whenTrue={
 					<td>
-						<ClearIconButton
-							title={i18n.t('delete')}
-							icon='/assets/icons/trash-16.png' //
-							onClick={() => handleRemoveServer(server.address)}
-						/>
+						<div className='flex items-center justify-center'>
+							<ClearIconButton
+								className='h-4 w-4'
+								title={i18n.t('delete')}
+								icon='/assets/icons/trash-16.png' //
+								onClick={() => handleRemoveServer(server.address)}
+							/>
+						</div>
 					</td>
 				}
 			/>
@@ -199,7 +208,7 @@ function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCard
 	const { copy } = useClipboard();
 
 	return (
-		<section className='no-scrollbar flex h-full w-full flex-col overflow-x-auto overflow-y-hidden rounded-lg bg-slate-900 p-4'>
+		<section className='no-scrollbar flex h-full w-full flex-col rounded-lg bg-slate-900 p-4'>
 			<span className='flex flex-row items-center justify-between'>
 				<section className='flex flex-row flex-wrap items-center justify-center gap-2'>
 					<span className='flex flex-row gap-2'>
@@ -225,7 +234,13 @@ function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCard
 					{`${server.players}/${server.playerLimit} `}
 					<Trans i18nKey='players' />
 				</span>
-				Ping: {server.ping}ms
+				{'Ping: '}
+				{server.ping}ms
+				<span>
+					<Trans i18nKey='last-ping' />
+					{': '}
+					<DateDisplay time={server.time} />
+				</span>
 				<span className='flex flex-row gap-2'>
 					<Trans i18nKey='map' />: <ColorText text={server.mapname} />
 				</span>
@@ -250,7 +265,7 @@ function InputAddressDialog({ onClose, onSubmit }: InputAddressDialogProps) {
 
 	return (
 		<section className='flex w-[50vw] flex-col gap-2 rounded-lg border-2 border-slate-500 bg-slate-900 p-2'>
-			<span className='flex flex-row justify-between p-2'>
+			<span className='flex flex-row items-center justify-between p-2'>
 				<Trans i18nKey='type-ip-address' />
 				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
 			</span>

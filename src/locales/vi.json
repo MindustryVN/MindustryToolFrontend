@@ -16,8 +16,8 @@
 	"copy-from-clipboard": "Sao chép từ bộ nhớ tạm",
 	"copy-link": "Sao chép liên kết",
 	"daily-user": "Số người dùng mỗi ngày",
-	"logged-daily-user":"Số người dùng đăng nhập mỗi ngày",
-	"dashboard": "Dashboard",
+	"logged-daily-user": "Số người dùng đăng nhập mỗi ngày",
+	"dashboard": "Thông tin",
 	"delete": "Xóa",
 	"delete-schematic-dialog": "Xóa bản thiết kế?",
 	"description": "Mô tả",
@@ -64,6 +64,8 @@
 	"server": "Máy chủ",
 	"show-reply": "Hiện phản hồi",
 	"submit": "Đăng",
+	"last-ping": "Lần ping cuối",
+	"verify-success": "Duyệt thành công",
 	"tag": {
 		"category": {
 			"name": "Loại",
