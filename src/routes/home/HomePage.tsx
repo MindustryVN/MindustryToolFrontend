@@ -6,7 +6,7 @@ import LoadUserName from 'src/components/LoadUserName';
 export default function HomePage() {
 	return (
 		<main className='grid h-full overflow-y-auto pt-2'>
-			<section className='px-8 '>
+			<section className='p-8'>
 				<span className='text-2xl text-white'>Chào mừng đến với MindustryTool</span>
 				<section className='flex flex-col gap-4 p-4'>
 					<b className='text-white'>Tải game miễn phí?</b>
@@ -41,6 +41,14 @@ export default function HomePage() {
 						<li>
 							<a className='text-emerald-500 hover:text-emerald-500' href='https://www.reddit.com/r/Mindustry' target='_blank' rel='noopener noreferrer'>
 								Reddit r/Mindustry
+							</a>
+						</li>
+					</ul>
+					<b className='text-white'>Kênh Youtube về Mindustry dành cho người Việt Nam</b>
+					<ul>
+						<li>
+							<a className='text-emerald-500 hover:text-emerald-500' href='https://www.youtube.com/@FourGamingStudio' target='_blank' rel='noopener noreferrer'>
+								Four Gaming Studio
 							</a>
 						</li>
 					</ul>
