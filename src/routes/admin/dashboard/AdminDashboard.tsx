@@ -13,7 +13,7 @@ const NUMBER_OF_DAY = 15;
 export default function AdminDashboard() {
 	return (
 		<main className='h-full w-full overflow-y-auto'>
-			<section className='grid grid-cols-[repeat(auto-fill,min(500px,80vw))]'>
+			<section className='grid grid-cols-[repeat(auto-fill,min(800px,100vw))]'>
 				<DailyUserChar />
 			</section>
 		</main>
@@ -83,7 +83,7 @@ function DailyUserChar() {
 	}, []);
 
 	const data = {
-		labels: fixedDailyUser.map((v) => `${v.time.getFullYear()}-${v.time.getMonth()}-${v.time.getDate()}`),
+		labels: fixedDailyUser.map((v) => `${v.time.getFullYear()}-${v.time.getMonth() + 1}-${v.time.getDate()}`),
 		datasets: [
 			{
 				label: i18n.t('daily-user').toString(),
