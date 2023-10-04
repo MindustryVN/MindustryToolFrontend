@@ -76,7 +76,7 @@ export default function PostPage() {
 
 	return (
 		<main className='flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
-			<span className='flex w-full flex-col gap-2'>
+			<div className='flex w-full flex-col gap-2'>
 				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
 						className='h-10 w-full bg-slate-900'
@@ -100,8 +100,8 @@ export default function PostPage() {
 					/>
 				</section>
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-			</span>
-			<InfiniteScroll className='flex flex-col gap-2 p-4' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />} />
+			</div>
+			<InfiniteScroll className='flex flex-col gap-2' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />} />
 			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/post')}>
 					<AddIcon className='h-10 w-10' />
