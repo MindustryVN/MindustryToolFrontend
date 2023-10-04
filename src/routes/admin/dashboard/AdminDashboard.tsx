@@ -25,8 +25,10 @@ function DailyUserChar() {
 	const [loggedDailyUser, setLoggedDailyUser] = useState<Metric[]>([]);
 	const [loading, setLoading] = useState(0);
 
-	let fixedDailyUser: Metric[] = fill(new Date(), NUMBER_OF_DAY, dailyUser, 0);
-	let fixedLoggedDailyUser: Metric[] = fill(new Date(), NUMBER_OF_DAY, loggedDailyUser, 0);
+	const start = new Date();
+
+	let fixedDailyUser: Metric[] = fill(start, NUMBER_OF_DAY, dailyUser, 0);
+	let fixedLoggedDailyUser: Metric[] = fill(start, NUMBER_OF_DAY, loggedDailyUser, 0);
 
 	function fill(start: Date, numberOfDay: number, array: Metric[], defaultValue: number) {
 		let result: Metric[] = [];
