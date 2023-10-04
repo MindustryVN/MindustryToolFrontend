@@ -46,7 +46,7 @@ export default function PostViewPage() {
 		);
 
 	return (
-		<section className='box-border flex h-full w-full flex-col gap-2 overflow-y-auto p-8'>
+		<section className='box-border flex h-full w-full flex-col  gap-2 overflow-y-auto p-8'>
 			<span className='flex flex-col gap-2'>
 				<span className='text-2xl'>{data.header}</span>
 				<LoadUserName userId={data.authorId} />
@@ -54,7 +54,7 @@ export default function PostViewPage() {
 			</span>
 			<Markdown children={data.content} />
 			<footer className='align-end flex flex-row justify-between gap-2'>
-				<DateDisplay className='flex items-end align-end' time={data.time} />
+				<DateDisplay className='align-end flex items-end' time={data.time} />
 				<IfTrue
 					condition={Users.isAuthorOrAdmin(data.authorId, me)}
 					whenTrue={<IconButton className='h-8 w-8 px-2 py-1' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => handleDeletePost(data)} />}

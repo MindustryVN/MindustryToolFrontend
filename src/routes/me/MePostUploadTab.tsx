@@ -2,14 +2,12 @@ import { API } from 'src/API';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { PostUploadInfo, PostUploadPreview } from 'src/routes/admin/verify/VerifyPostPage';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function UserPostUploadTab() {
 	const currentPost = useRef<Post>();
@@ -18,7 +16,6 @@ export default function UserPostUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Post>(`user/post-upload`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function rejectPost(post: Post, reason: string) {
 		setVisibility(false);
@@ -34,29 +31,20 @@ export default function UserPostUploadTab() {
 	}
 
 	return (
-		<main id='post-tab' className='flex flex-col gap-2 w-full h-full overflow-y-auto'>
-			<section children={pages} />
-			<footer className='flex justify-center items-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
+		<main id='post-tab' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
+			<InfiniteScroll infinitePage={usePage} mapper={(v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />} />
+			<footer className='flex items-center justify-center'>
 				<ScrollToTopButton containerId='post-tab' />
 			</footer>
-			<IfTrue
-				condition={currentPost}
-				whenTrue={
-					currentPost.current &&
-					model(
-						<PostUploadInfo
-							post={currentPost.current} //
-							handleCloseModel={() => setVisibility(false)}
-							handleRejectPost={rejectPost}
-							handleVerifyPost={() => {}}
-						/>,
-					)
-				}
-			/>
+			{currentPost.current &&
+				model(
+					<PostUploadInfo
+						post={currentPost.current} //
+						handleCloseModel={() => setVisibility(false)}
+						handleRejectPost={rejectPost}
+						handleVerifyPost={() => {}}
+					/>,
+				)}
 		</main>
 	);
 }

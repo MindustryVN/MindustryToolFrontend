@@ -96,6 +96,9 @@
 }
 
 @layer components {
+	.preview-container {
+		@apply grid grid-cols-[repeat(auto-fill,var(--preview-image-min-size))] items-start justify-center gap-4;
+	}
 	.background-gradient {
 		background: rgb(3, 19, 66);
 		background: linear-gradient(43deg, rgba(10, 10, 40, 1) 17%, rgba(40, 50, 90, 1) 76%, rgba(10, 10, 40, 1) 100%);

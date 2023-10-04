@@ -9,10 +9,8 @@ import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
-import PreviewContainer from 'src/components/PreviewContainer';
 import { SchematicInfo, SchematicPreview } from 'src/routes/schematic/SchematicPage';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import LoadingSpinner from 'src/components/LoadingSpinner';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 interface UserSchematicTabProps {
 	user: User;
@@ -25,7 +23,6 @@ export default function UserSchematicTab({ user }: UserSchematicTabProps) {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/${user.id}/schematic`, 20);
-	const { pages } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function handleDeleteSchematic(schematic: Schematic) {
 		setVisibility(false);
@@ -42,12 +39,8 @@ export default function UserSchematicTab({ user }: UserSchematicTabProps) {
 
 	return (
 		<main id='schematic-tab' className='box-border flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
-			<PreviewContainer children={pages} />
+			<InfiniteScroll className='preview-container' infinitePage={usePage} mapper={(v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />} />
 			<footer className='flex items-center justify-center'>
-				<IfTrue
-					condition={usePage.isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
 				<ScrollToTopButton containerId='schematic-tab' />
 			</footer>
 			<IfTrue

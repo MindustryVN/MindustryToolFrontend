@@ -3,15 +3,12 @@ import Map from 'src/data/Map';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { MapUploadInfo, MapUploadPreview } from 'src/routes/admin/verify/VerifyMapPage';
-import PreviewContainer from 'src/components/PreviewContainer';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function UserMapUploadTab() {
 	const currentMap = useRef<Map>();
@@ -20,7 +17,6 @@ export default function UserMapUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/map-upload`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
 
 	function rejectMap(map: Map, reason: string) {
 		setVisibility(false);
@@ -37,28 +33,19 @@ export default function UserMapUploadTab() {
 
 	return (
 		<main id='map-tab' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
-			<PreviewContainer children={pages} />
+			<InfiniteScroll className='preview-container' infinitePage={usePage} mapper={(v) => <MapUploadPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />} />
 			<footer className='flex items-center justify-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
 				<ScrollToTopButton containerId='map-tab' />
 			</footer>
-			<IfTrue
-				condition={currentMap}
-				whenTrue={
-					currentMap.current &&
-					model(
-						<MapUploadInfo
-							map={currentMap.current} //
-							handleCloseModel={() => setVisibility(false)}
-							handleRejectMap={rejectMap}
-							handleVerifyMap={() => {}}
-						/>,
-					)
-				}
-			/>
+			{currentMap.current &&
+				model(
+					<MapUploadInfo
+						map={currentMap.current} //
+						handleCloseModel={() => setVisibility(false)}
+						handleRejectMap={rejectMap}
+						handleVerifyMap={() => {}}
+					/>,
+				)}
 		</main>
 	);
 }

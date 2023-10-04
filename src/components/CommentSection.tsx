@@ -14,8 +14,8 @@ import ClearButton from 'src/components/ClearButton';
 import { EllipsisIcon } from 'src/components/Icon';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import IconButton from 'src/components/IconButton';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 interface CommentSectionProps {
 	contentType: string;
@@ -25,8 +25,7 @@ interface CommentSectionProps {
 export default function CommentSection({ contentType, targetId }: CommentSectionProps) {
 	const commentUrl = useRef(`comment/${contentType}/${targetId}`);
 	const usePage = useInfinitePage<Comment>(commentUrl.current, 20);
-
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={contentType + '_reply'} comment={v} nestLevel={0} />);
+	const { isLoading } = usePage;
 
 	const { addPopup } = usePopup();
 
@@ -43,9 +42,9 @@ export default function CommentSection({ contentType, targetId }: CommentSection
 	if (isLoading || loading) return <LoadingSpinner className='flex items-center justify-center' />;
 
 	return (
-		<section className='flex w-full flex-col gap-4 mb-4'>
+		<section className='mb-4 flex w-full flex-col gap-4'>
 			<CommentInputArea targetId={targetId} handleAddComment={handleAddComment} />
-			{pages}
+			<InfiniteScroll infinitePage={usePage} mapper={(v) => <Reply key={v.id} contentType={contentType + '_reply'} comment={v} nestLevel={0} />} />
 		</section>
 	);
 }
@@ -69,7 +68,7 @@ function Reply({ contentType, comment, nestLevel }: ReplyProps) {
 	const replyUrl = useRef(`comment/${contentType}/${comment.id}`);
 
 	const usePage = useInfinitePage<Comment>(replyUrl.current, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <Reply key={v.id} contentType={contentType} comment={v} nestLevel={nestLevel + 1} />);
+	const { pages } = usePage;
 
 	function handleAddComment(content: string, targetId: string) {
 		setLoading(true);
@@ -135,16 +134,7 @@ function Reply({ contentType, comment, nestLevel }: ReplyProps) {
 					/>
 				}
 			/>
-			<IfTrue
-				condition={showReply}
-				whenTrue={
-					<IfTrueElse
-						condition={isLoading}
-						whenTrue={<LoadingSpinner className='flex items-center justify-center' />}
-						whenFalse={<section className='flex w-full flex-col gap-4 pl-2'>{pages}</section>}
-					/>
-				}
-			/>
+			<IfTrue condition={showReply} whenTrue={<InfiniteScroll infinitePage={usePage} mapper={(v) => <Reply key={v.id} contentType={contentType} comment={v} nestLevel={nestLevel + 1} />} />} />
 			<IfTrue
 				condition={Users.isAuthorOrAdmin(comment.id, me)}
 				whenTrue={

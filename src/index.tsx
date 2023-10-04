@@ -21,15 +21,15 @@ root.render(
 			<main className='background-gradient h-full w-full '>
 				<WindowContextProvider>
 					<I18nextProvider i18n={i18n}>
-						<PopupMessageProvider>
-							<TagProvider>
-								<UserProvider>
+						<UserProvider>
+							<PopupMessageProvider>
+								<TagProvider>
 									<NotificationProvider>
 										<App />
 									</NotificationProvider>
-								</UserProvider>
-							</TagProvider>
-						</PopupMessageProvider>
+								</TagProvider>
+							</PopupMessageProvider>
+						</UserProvider>
 					</I18nextProvider>
 				</WindowContextProvider>
 			</main>

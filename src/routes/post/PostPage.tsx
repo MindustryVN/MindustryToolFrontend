@@ -12,17 +12,15 @@ import useClipboard from 'src/hooks/UseClipboard';
 import LikeCount from 'src/components/LikeCount';
 import IconButton from 'src/components/IconButton';
 import useLike from 'src/hooks/UseLike';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import DateDisplay from 'src/components/Date';
 import TagContainer from 'src/components/TagContainer';
-import IfTrue from 'src/components/IfTrue';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { useTags } from 'src/context/TagProvider';
 import OptionBox from 'src/components/OptionBox';
 import Author from 'src/components/Author';
 import ClearButton from 'src/components/ClearButton';
 import { AddIcon } from 'src/components/Icon';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function PostPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -47,8 +45,7 @@ export default function PostPage() {
 	});
 
 	const usePage = useInfinitePage<Post>('post', 20, searchConfig.current);
-
-	const { pages, isLoading, loadNextPage } = useInfiniteScroll(usePage, (v) => <PostPreview key={v.id} post={v} />);
+	const { loadNextPage } = usePage;
 
 	function setSearchConfig(sort: TagChoice, tags: TagChoice[]) {
 		searchConfig.current = {
@@ -79,7 +76,7 @@ export default function PostPage() {
 
 	return (
 		<main className='flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
-			<span className='flex w-full flex-col gap-2'>
+			<div className='flex w-full flex-col gap-2'>
 				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
 						className='h-10 w-full bg-slate-900'
@@ -103,8 +100,8 @@ export default function PostPage() {
 					/>
 				</section>
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
-			</span>
-			<section className='flex flex-col gap-2 p-4' children={pages} />
+			</div>
+			<InfiniteScroll className='flex flex-col gap-2' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />} />
 			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/post')}>
 					<AddIcon className='h-10 w-10' />
@@ -112,10 +109,6 @@ export default function PostPage() {
 				<ScrollToTopButton className='h-10 w-10 ' containerId='schematic' />
 			</section>
 			<footer className='flex w-full items-center justify-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
 				<ScrollToTopButton containerId='schematic' />
 			</footer>
 		</main>

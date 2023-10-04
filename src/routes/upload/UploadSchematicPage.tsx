@@ -189,19 +189,17 @@ export default function UploadSchematicPage() {
 			</span>
 			{preview && (
 				<section className='flex flex-row flex-wrap gap-2'>
-					<img className='schematic-info-image' src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
-					<section className='flex flex-row justify-between'>
-						<section className='flex flex-row flex-wrap gap-2'>
-							<ColorText className='h2 capitalize' text={preview.name} />
-							<Author authorId={me ? me.id : 'community'} />
-							<Description description={preview.description} />
-							<ItemRequirement requirement={preview.requirement} />
-							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
-						</section>
+					<img src={PNG_IMAGE_PREFIX + preview.image} alt='Error' />
+					<section className='flex flex-col flex-wrap gap-2'>
+						<ColorText className='h2 capitalize' text={preview.name} />
+						<Author authorId={me ? me.id : 'community'} />
+						<Description description={preview.description} />
+						<ItemRequirement requirement={preview.requirement} />
+						<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 					</section>
-					<section className='flex w-full flex-row flex-nowrap gap-2'>
+					<section className='flex w-full flex-col flex-nowrap gap-2'>
 						<SearchBox
-							className='w-full h-10'
+							className='h-10 w-full'
 							placeholder={i18n.t('add-tag').toString()}
 							value={tag}
 							items={schematicUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}

@@ -128,7 +128,7 @@ export default function NavigationPanel() {
 							<img className='pixelated h-8 w-8' src='/assets/icons/dots.png' alt='menu' />
 						</button>
 					</div>
-					<div>{me ? <UserAvatar className='w-8 h-8 rounded-full' user={me} /> : <WebIcon />}</div>
+					<div>{me ? <UserAvatar className='h-8 w-8 rounded-full' user={me} /> : <WebIcon />}</div>
 				</section>
 				<div className={cn('fixed left-0 top-0 z-nav-bar h-full w-full backdrop-blur-sm', { hidden: !showNavigatePanel })}>
 					<OutsideAlerter

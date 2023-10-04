@@ -3,16 +3,13 @@ import Map from 'src/data/Map';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import { MapInfo, MapPreview } from 'src/routes/map/MapPage';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import PreviewContainer from 'src/components/PreviewContainer';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 interface UserMapTabProps {
 	user: User;
@@ -25,7 +22,6 @@ export default function UserMapTab({ user }: UserMapTabProps) {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/${user.id}/map`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview map={v} key={v.id} handleOpenModel={handleOpenMapInfo} />);
 
 	function handleDeleteMap(map: Map) {
 		setVisibility(false);
@@ -41,28 +37,19 @@ export default function UserMapTab({ user }: UserMapTabProps) {
 	}
 
 	return (
-		<main id='map-tab' className='flex flex-col gap-2 p-2 box-border w-full h-full overflow-y-auto'>
-			<PreviewContainer children={pages} />
-			<footer className='flex justify-center items-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
+		<main id='map-tab' className='box-border flex h-full w-full flex-col gap-2 overflow-y-auto p-2'>
+			<InfiniteScroll className='preview-container' infinitePage={usePage} mapper={(v) => <MapPreview map={v} key={v.id} handleOpenModel={handleOpenMapInfo} />} />
+			<footer className='flex items-center justify-center'>
 				<ScrollToTopButton containerId='map-tab' />
 			</footer>
-			<IfTrue
-				condition={currentMap}
-				whenTrue={
-					currentMap.current &&
-					model(
-						<MapInfo
-							map={currentMap.current} //
-							handleCloseModel={() => setVisibility(false)}
-							handleDeleteMap={handleDeleteMap}
-						/>,
-					)
-				}
-			/>
+			{currentMap.current &&
+				model(
+					<MapInfo
+						map={currentMap.current} //
+						handleCloseModel={() => setVisibility(false)}
+						handleDeleteMap={handleDeleteMap}
+					/>,
+				)}
 		</main>
 	);
 }
