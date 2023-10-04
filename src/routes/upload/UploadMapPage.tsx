@@ -133,15 +133,13 @@ export default function UploadMapPage() {
 			{preview && (
 				<section className='flex flex-row flex-wrap gap-2'>
 					<InfoImage src={PNG_IMAGE_PREFIX + preview.image} />
-					<section className='flex flex-row justify-between'>
-						<section className='flex flex-col flex-wrap gap-2'>
-							<ColorText className='h2 capitalize' text={preview.name} />
-							<Author authorId={me ? me.id : 'community'} />
-							<Description description={preview.description} />
-							<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
-						</section>
+					<section className='flex flex-col flex-wrap gap-2'>
+						<ColorText className='h2 capitalize' text={preview.name} />
+						<Author authorId={me ? me.id : 'community'} />
+						<Description description={preview.description} />
+						<TagEditContainer tags={tags} onRemove={(index) => handleRemoveTag(index)} />
 					</section>
-					<section className='flex w-full flex-row flex-nowrap gap-2'>
+					<section className='flex w-full flex-col flex-nowrap gap-2'>
 						<SearchBox
 							className='h-10 w-full'
 							placeholder={i18n.t('add-tag').toString()}

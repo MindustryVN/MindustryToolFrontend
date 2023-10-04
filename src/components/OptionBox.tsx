@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import DropboxElement from 'src/components/DropboxElement';
-import { ArrowDownIcon, ArrowUpIcon } from 'src/components/Icon';
+import { ArrowUpIcon } from 'src/components/Icon';
 import OutsideAlerter from 'src/components/OutsideAlerter';
 import { cn } from 'src/util/Utils';
 
@@ -30,7 +30,11 @@ export default function OptionBox<T>({ className, defaultValue, items, children,
 				<section className='flex h-full w-full flex-row items-center justify-between gap-2 px-1'>
 					<div>{mapper(choice, 0)}</div>
 					{children}
-					{showDropbox ? <ArrowUpIcon className='flex h-4 w-4 items-center justify-center' /> : <ArrowDownIcon className='flex h-4 w-4 items-center justify-center' />}
+					<ArrowUpIcon
+						className={cn('flex h-4 w-4 items-center justify-center transition-transform delay-200 ease-linear', {
+							'rotate-180': !showDropbox,
+						})}
+					/>
 				</section>
 				<div className='relative w-full'>
 					{showDropbox && (

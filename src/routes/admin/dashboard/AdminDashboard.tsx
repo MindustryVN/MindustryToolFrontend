@@ -13,7 +13,7 @@ const NUMBER_OF_DAY = 15;
 export default function AdminDashboard() {
 	return (
 		<main className='h-full w-full overflow-y-auto'>
-			<section className='grid grid-cols-[repeat(auto-fill,min(800px,100%))]'>
+			<section className='grid grid-cols-[repeat(auto-fill,max(50%,min(600px,100%)))]'>
 				<DailyUserChar />
 			</section>
 		</main>
