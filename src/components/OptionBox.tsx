@@ -7,13 +7,14 @@ import { cn } from 'src/util/Utils';
 interface OptionBoxProps<T> {
 	className?: string;
 	items: T[];
+	defaultValue?: T;
 	children?: ReactNode;
 	mapper: (items: T, index: number) => ReactNode;
 	onChoose: (item: T) => void;
 }
 
-export default function OptionBox<T>({ className, items, children, mapper, onChoose }: OptionBoxProps<T>) {
-	const [choice, setChoice] = useState(items[0]);
+export default function OptionBox<T>({ className, defaultValue, items, children, mapper, onChoose }: OptionBoxProps<T>) {
+	const [choice, setChoice] = useState(defaultValue ? defaultValue : items[0]);
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
@@ -42,7 +43,7 @@ export default function OptionBox<T>({ className, items, children, mapper, onCho
 										onClick={() => {
 											setChoice(item);
 											onChoose(item);
-											setShowDropbox(false);
+											setShowDropbox(true);
 										}}>
 										{mapper(item, index)}
 									</DropboxElement>

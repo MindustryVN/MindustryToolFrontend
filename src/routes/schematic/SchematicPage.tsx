@@ -14,11 +14,9 @@ import PreviewCard from 'src/components/PreviewCard';
 import Description from 'src/components/Description';
 import ItemRequirement from 'src/components/ItemRequirement';
 import InfoImage from 'src/components/InfoImage';
-import PreviewContainer from 'src/components/PreviewContainer';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import TagEditContainer from 'src/components/TagEditContainer';
 import ClearIconButton from 'src/components/ClearIconButton';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import DownloadButton from 'src/components/DownloadButton';
 import ConfirmBox from 'src/components/ConfirmBox';
 import LoadUserName from 'src/components/LoadUserName';
@@ -33,19 +31,19 @@ import SearchBox from 'src/components/Searchbox';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useLike from 'src/hooks/UseLike';
 import TagPick from 'src/components/TagPick';
-import Button from 'src/components/Button';
 import IfTrue from 'src/components/IfTrue';
-import Icon, { AddIcon, BackIcon } from 'src/components/Icon';
+import Icon, { AddIcon } from 'src/components/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
 import CommentSection from 'src/components/CommentSection';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { Users } from 'src/data/User';
 import { useTags } from 'src/context/TagProvider';
 import { getDownloadUrl } from 'src/util/Utils';
 import OptionBox from 'src/components/OptionBox';
 import ClearButton from 'src/components/ClearButton';
 import Author from 'src/components/Author';
+import BackButton from 'src/components/BackButton';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function SchematicPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -76,7 +74,7 @@ export default function SchematicPage() {
 	const navigate = useNavigate();
 
 	const usePage = useInfinitePage<Schematic>('schematic', 20, searchConfig.current);
-	const { pages, isLoading, loadNextPage } = useInfiniteScroll(usePage, (v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
+	const { loadNextPage } = usePage;
 
 	const getTotalSchematic = useCallback(() => {
 		API.getTotalSchematic(searchConfig.current)
@@ -161,32 +159,22 @@ export default function SchematicPage() {
 			<section className='flex flex-row items-center justify-center p-2'>
 				<Trans i18nKey='total-schematic' /> : {totalSchematic > 0 ? totalSchematic : 0}
 			</section>
-			<PreviewContainer children={pages} />
-			<footer className='flex w-full items-center justify-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
-			</footer>
+			<InfiniteScroll className='preview-container' infinitePage={usePage} mapper={(v) => <SchematicPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />} />
+			<footer className='flex w-full items-center justify-center'></footer>
 			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/schematic')}>
 					<AddIcon className='h-10 w-10' />
 				</ClearButton>
 				<ScrollToTopButton className='h-10 w-10 ' containerId='schematic' />
 			</section>
-			<IfTrue
-				condition={currentSchematic}
-				whenTrue={
-					currentSchematic.current &&
-					model(
-						<SchematicInfo
-							schematic={currentSchematic.current} //
-							handleCloseModel={() => setVisibility(false)}
-							handleDeleteSchematic={handleDeleteSchematic}
-						/>,
-					)
-				}
-			/>
+			{currentSchematic.current &&
+				model(
+					<SchematicInfo
+						schematic={currentSchematic.current} //
+						handleCloseModel={() => setVisibility(false)}
+						handleDeleteSchematic={handleDeleteSchematic}
+					/>,
+				)}
 		</main>
 	);
 }
@@ -303,9 +291,7 @@ function SchematicInfoButton({ schematic, handleCloseModel, handleDeleteSchemati
 					whenTrue={<IconButton className='h-8 w-8' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 				/>
 			</section>
-			<Button className='h-8 w-8 p-1' title={i18n.t('back')} onClick={() => handleCloseModel()}>
-				<BackIcon />
-			</Button>
+			<BackButton onClick={handleCloseModel} />
 			{dialog(
 				<ConfirmBox onClose={() => setVisibility(false)} onConfirm={() => handleDeleteSchematic(schematic)}>
 					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />

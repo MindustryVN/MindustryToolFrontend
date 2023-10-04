@@ -3,16 +3,13 @@ import { Trans } from 'react-i18next';
 import { API } from 'src/API';
 import Button from 'src/components/Button';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
-import IfTrue from 'src/components/IfTrue';
 import ConfirmBox from 'src/components/ConfirmBox';
 import SearchBox from 'src/components/Searchbox';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import PostView from 'src/components/PostView';
 import { TagChoice, Tags } from 'src/components/Tag';
 import TagEditContainer from 'src/components/TagEditContainer';
 import TagPick from 'src/components/TagPick';
 import useDialog from 'src/hooks/UseDialog';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import useModel from 'src/hooks/UseModel';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
@@ -26,6 +23,7 @@ import TagContainer from 'src/components/TagContainer';
 import DateDisplay from 'src/components/Date';
 import Author from 'src/components/Author';
 import PostTitle from 'src/components/PostTitle';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
@@ -35,8 +33,6 @@ export default function VerifyPostPage() {
 
 	const usePage = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();
-
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />);
 
 	function handleOpenPostInfo(post: Post) {
 		setCurrentPost(post);
@@ -64,28 +60,19 @@ export default function VerifyPostPage() {
 
 	return (
 		<main id='verify-post' className='flex h-full w-full flex-col'>
-			<section className='flex flex-col gap-2' children={pages} />
+			<InfiniteScroll className='flex flex-col gap-2' infinitePage={usePage} mapper={(v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />} />
 			<footer className='flex items-center justify-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner className='flex w-full items-center justify-center' />} //
-				/>
 				<ScrollToTopButton containerId='verify-post' />
 			</footer>
-			<IfTrue
-				condition={currentPost}
-				whenTrue={
-					currentPost &&
-					model(
-						<PostUploadInfo
-							post={currentPost} //
-							handleCloseModel={() => setVisibility(false)}
-							handleVerifyPost={verifyPost}
-							handleRejectPost={rejectPost}
-						/>,
-					)
-				}
-			/>
+			{currentPost &&
+				model(
+					<PostUploadInfo
+						post={currentPost} //
+						handleCloseModel={() => setVisibility(false)}
+						handleVerifyPost={verifyPost}
+						handleRejectPost={rejectPost}
+					/>,
+				)}
 		</main>
 	);
 }

@@ -8,7 +8,6 @@ import { API } from 'src/API';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import TagEditContainer from 'src/components/TagEditContainer';
 import ClearIconButton from 'src/components/ClearIconButton';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import DownloadButton from 'src/components/DownloadButton';
 import ConfirmBox from 'src/components/ConfirmBox';
 import LoadUserName from 'src/components/LoadUserName';
@@ -32,8 +31,6 @@ import useDialog from 'src/hooks/UseDialog';
 import CommentSection from 'src/components/CommentSection';
 import { useMe } from 'src/context/MeProvider';
 import { Users } from 'src/data/User';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import PreviewContainer from 'src/components/PreviewContainer';
 import PreviewCard from 'src/components/PreviewCard';
 import PreviewImage from 'src/components/PreviewImage';
 import InfoImage from 'src/components/InfoImage';
@@ -43,6 +40,7 @@ import { getDownloadUrl } from 'src/util/Utils';
 import OptionBox from 'src/components/OptionBox';
 import ClearButton from 'src/components/ClearButton';
 import Author from 'src/components/Author';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function MapPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -71,7 +69,7 @@ export default function MapPage() {
 	const { addPopup } = usePopup();
 
 	const usePage = useInfinitePage<Map>('map', 20, searchConfig.current);
-	const { pages, loadNextPage, isLoading } = useInfiniteScroll(usePage, (v) => <MapPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />);
+	const { loadNextPage } = usePage;
 
 	const navigate = useNavigate();
 
@@ -155,32 +153,22 @@ export default function MapPage() {
 			<section className='flex flex-row items-center justify-center p-2'>
 				<Trans i18nKey='total-map' /> : {totalMap > 0 ? totalMap : 0}
 			</section>
-			<PreviewContainer children={pages} />
-			<footer className='flex w-full items-center justify-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
-			</footer>
+			<InfiniteScroll className='preview-container' infinitePage={usePage} mapper={(v) => <MapPreview key={v.id} map={v} handleOpenModel={handleOpenMapInfo} />} />
+			<footer className='flex w-full items-center justify-center'></footer>
 			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-map')} onClick={() => navigate('/upload/map')}>
 					<AddIcon className='h-10 w-10' />
 				</ClearButton>
 				<ScrollToTopButton className='h-10 w-10' containerId='map' />
 			</section>
-			<IfTrue
-				condition={currentMap}
-				whenTrue={
-					currentMap.current &&
-					model(
-						<MapInfo
-							map={currentMap.current} //
-							handleCloseModel={() => setVisibility(false)}
-							handleDeleteMap={handleDeleteMap}
-						/>,
-					)
-				}
-			/>
+			{currentMap.current &&
+				model(
+					<MapInfo
+						map={currentMap.current} //
+						handleCloseModel={() => setVisibility(false)}
+						handleDeleteMap={handleDeleteMap}
+					/>,
+				)}
 		</main>
 	);
 }

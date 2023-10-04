@@ -3,16 +3,13 @@ import Schematic from 'src/data/Schematic';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useModel from 'src/hooks/UseModel';
 import { usePopup } from 'src/context/PopupMessageProvider';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
-import PreviewContainer from 'src/components/PreviewContainer';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
 import { SchematicUploadPreview } from 'src/routes/admin/verify/VerifySchematicPage';
 import { SchematicUploadInfo } from '../admin/verify/VerifySchematicPage';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function UserSchematicUploadTab() {
 	const currentSchematic = useRef<Schematic>();
@@ -21,7 +18,6 @@ export default function UserSchematicUploadTab() {
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/schematic-upload`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v) => <SchematicUploadPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />);
 
 	function rejectSchematic(schematic: Schematic, reason: string) {
 		setVisibility(false);
@@ -38,28 +34,19 @@ export default function UserSchematicUploadTab() {
 
 	return (
 		<main id='schematic-tab' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
-			<PreviewContainer children={pages} />
+			<InfiniteScroll className='preview-container' infinitePage={usePage} mapper={(v) => <SchematicUploadPreview key={v.id} schematic={v} handleOpenModel={handleOpenSchematicInfo} />} />
 			<footer className='flex items-center justify-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
 				<ScrollToTopButton containerId='schematic-tab' />
 			</footer>
-			<IfTrue
-				condition={currentSchematic}
-				whenTrue={
-					currentSchematic.current &&
-					model(
-						<SchematicUploadInfo
-							schematic={currentSchematic.current} //
-							handleCloseModel={() => setVisibility(false)}
-							handleRejectSchematic={rejectSchematic}
-							handleVerifySchematic={() => {}}
-						/>,
-					)
-				}
-			/>
+			{currentSchematic.current &&
+				model(
+					<SchematicUploadInfo
+						schematic={currentSchematic.current} //
+						handleCloseModel={() => setVisibility(false)}
+						handleRejectSchematic={rejectSchematic}
+						handleVerifySchematic={() => {}}
+					/>,
+				)}
 		</main>
 	);
 }

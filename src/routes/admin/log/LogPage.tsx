@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { API } from 'src/API';
 import { Log } from 'src/data/Log';
 
-import Button from 'src/components/Button';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import ClearIconButton from 'src/components/ClearIconButton';
 import DateDisplay from 'src/components/Date';
-import useInfiniteScroll from 'src/hooks/UseInfiniteScroll';
-import IfTrue from 'src/components/IfTrue';
 import useQuery from 'src/hooks/UseQuery';
-import i18n from 'src/util/I18N';
+import OptionBox from 'src/components/OptionBox';
+import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
@@ -20,20 +18,14 @@ export default function LogPage() {
 	if (!logTypes.data) return <LoadingSpinner />;
 
 	return (
-		<section className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
-			
-			<section className='no-scrollbar flex w-full flex-shrink-0 flex-row gap-2 overflow-x-auto'>
-				{logTypes.data.map((item, index) => (
-					<Button
-						className='w-full flex-1 px-2 py-1'
-						title={i18n.t(item)}
-						key={index}
-						active={item === contentType} //
-						onClick={() => setContentType(item)}>
-						{item}
-					</Button>
-				))}
-			D</section>
+		<section className='flex h-full w-full flex-col gap-2 overflow-y-auto overflow-x-hidden'>
+			<OptionBox
+				className='m-2 h-8 flex-shrink-0 bg-slate-900'
+				items={logTypes.data}
+				defaultValue='system'
+				mapper={(item, index) => <span className='capitalize' key={index} children={item} />}
+				onChoose={(item) => setContentType(item)}
+			/>
 			<LogContainer contentType={contentType} />
 		</section>
 	);
@@ -45,7 +37,6 @@ interface LogContainerProps {
 
 function LogContainer({ contentType }: LogContainerProps) {
 	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
-	const { pages, isLoading } = useInfiniteScroll(usePage, (v: Log) => <LogCard key={v.id} log={v} handleDeleteLog={handleDeleteLog} />);
 	const { addPopup } = usePopup();
 
 	function handleDeleteLog(id: string) {
@@ -57,13 +48,8 @@ function LogContainer({ contentType }: LogContainerProps) {
 
 	return (
 		<section className='flex h-full w-full flex-col'>
-			<section id='log' className='flex flex-col gap-2' children={pages} />
-			<footer className='flex w-full items-center justify-center'>
-				<IfTrue
-					condition={isLoading}
-					whenTrue={<LoadingSpinner />} //
-				/>
-			</footer>
+			<InfiniteScroll id='log' className='flex flex-col gap-2' infinitePage={usePage} mapper={(v: Log) => <LogCard key={v.id} log={v} handleDeleteLog={handleDeleteLog} />} />
+			<footer className='flex w-full items-center justify-center'></footer>
 		</section>
 	);
 }
