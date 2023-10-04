@@ -125,7 +125,7 @@ export class API {
 	}
 
 	static getPing() {
-		return API.REQUEST.get('ping'); //
+		return API.SECURE_REQUEST.get('ping'); //
 	}
 
 	static getLikes(contentType: string, targetId: string) {
