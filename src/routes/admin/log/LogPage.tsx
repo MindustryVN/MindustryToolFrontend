@@ -23,7 +23,7 @@ export default function LogPage() {
 				className='m-2 h-8 flex-shrink-0 bg-slate-900'
 				items={logTypes.data}
 				defaultValue='system'
-				mapper={(item, index) => <span className='capitalize' key={index} children={item} />}
+				mapper={(item, index) => <span className='uppercase' key={index} children={item} />}
 				onChoose={(item) => setContentType(item)}
 			/>
 			<LogContainer contentType={contentType} />

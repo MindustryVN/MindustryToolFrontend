@@ -144,8 +144,8 @@ export const BellIcon = ({ className }: { className?: string }) => (
 	</svg>
 );
 
-export const WebIcon = () => (
-	<img className='h-8 w-8 rounded-lg' src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='mindustry-vn-logo' />
+export const WebIcon = ({ className }: { className?: string }) => (
+	<img className={cn(className)} src='https://cdn.discordapp.com/attachments/1009013837946695730/1106504291465834596/a_cda53ec40b5d02ffdefa966f2fc013b8.gif' alt='mindustry-vn-logo' />
 );
 
 export const ArrowDownIcon = ({ className }: { className?: string }) => (

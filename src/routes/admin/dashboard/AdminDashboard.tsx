@@ -82,6 +82,19 @@ function DailyUserChar() {
 			.catch((error) => console.log(error));
 	}, []);
 
+	const option = {
+		responsive: true,
+		maintainAspectRatio: true,
+		scales: {
+			y: {
+				beginAtZero: true,
+				ticks: {
+					precision: 0,
+				},
+			},
+		},
+	};
+
 	const data = {
 		labels: fixedDailyUser.map((v) => `${v.time.getFullYear()}-${v.time.getMonth() + 1}-${v.time.getDate()}`),
 		datasets: [
@@ -104,7 +117,7 @@ function DailyUserChar() {
 
 	return (
 		<div className='flex aspect-[2] h-full w-full items-center justify-center rounded-lg bg-slate-600 bg-opacity-40 p-2'>
-			{loading > 0 ? <LoadingSpinner /> : <Line className='relative h-full w-full whitespace-nowrap' options={{ responsive: true, maintainAspectRatio: true }} data={data} />}
+			{loading > 0 ? <LoadingSpinner /> : <Line className='relative h-full w-full whitespace-nowrap' options={option} data={data} />}
 		</div>
 	);
 }
