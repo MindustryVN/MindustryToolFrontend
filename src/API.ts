@@ -8,22 +8,22 @@ import { TagChoice, Tags } from 'src/components/Tag';
 export class API {
 	static REQUEST = axios.create({
 		baseURL: API_BASE_URL,
-		headers: { 'ngrok-skip-browser-warning': 'true' },
 		timeout: 600000,
 	});
 
+	static SECURE_REQUEST = this.REQUEST;
+
 	static setBearerToken(token: string) {
-		API.REQUEST = axios.create({
+		API.SECURE_REQUEST = axios.create({
 			baseURL: API_BASE_URL,
 			headers: {
-				'ngrok-skip-browser-warning': 'true',
 				Authorization: 'Bearer ' + token,
 			},
 			timeout: 600000,
 		});
 	}
 	static get(url: string, searchConfig?: AxiosRequestConfig<any>) {
-		return API.REQUEST.get(url, searchConfig);
+		return API.SECURE_REQUEST.get(url, searchConfig);
 	}
 
 	static getTotalSchematic(searchConfig?: AxiosRequestConfig<any>) {
@@ -31,7 +31,7 @@ export class API {
 	}
 
 	static getTotalSchematicUpload() {
-		return API.REQUEST.get('schematic-upload/total');
+		return API.SECURE_REQUEST.get('schematic-upload/total');
 	}
 
 	static getTotalMap(searchConfig?: AxiosRequestConfig<any>) {
@@ -39,11 +39,11 @@ export class API {
 	}
 
 	static getTotalMapUpload() {
-		return API.REQUEST.get('map-upload/total');
+		return API.SECURE_REQUEST.get('map-upload/total');
 	}
 
 	static getTotalPostUpload() {
-		return API.REQUEST.get('post-upload/total');
+		return API.SECURE_REQUEST.get('post-upload/total');
 	}
 
 	static postNotification(userId: string, header: string, message: string) {
@@ -51,15 +51,15 @@ export class API {
 		form.append('userId', userId);
 		form.append('header', header);
 		form.append('message', message);
-		return API.REQUEST.post('notification', form);
+		return API.SECURE_REQUEST.post('notification', form);
 	}
 
 	static markAsReadNotificationAll() {
-		return API.REQUEST.put('notification/all');
+		return API.SECURE_REQUEST.put('notification/all');
 	}
 
 	static deleteNotificationAll() {
-		return API.REQUEST.delete('notification/all');
+		return API.SECURE_REQUEST.delete('notification/all');
 	}
 
 	static verifySchematic(schematic: Schematic, tags: TagChoice[]) {
@@ -70,11 +70,11 @@ export class API {
 		form.append('id', schematic.id);
 		form.append('tags', tagString);
 
-		return API.REQUEST.post('schematic', form);
+		return API.SECURE_REQUEST.post('schematic', form);
 	}
 
 	static rejectSchematic(schematic: Schematic, reason: string) {
-		return API.REQUEST.delete(`schematic-upload/${schematic.id}`) //
+		return API.SECURE_REQUEST.delete(`schematic-upload/${schematic.id}`) //
 			.then(() => API.postNotification(schematic.authorId, 'Your map submission has been reject', reason));
 	}
 
@@ -86,11 +86,11 @@ export class API {
 		form.append('id', map.id);
 		form.append('tags', tagString);
 
-		return API.REQUEST.post('map', form);
+		return API.SECURE_REQUEST.post('map', form);
 	}
 
 	static rejectMap(map: Map, reason: string) {
-		return API.REQUEST.delete(`map-upload/${map.id}`) //
+		return API.SECURE_REQUEST.delete(`map-upload/${map.id}`) //
 			.then(() => API.postNotification(map.authorId, 'Your map submission has been reject', reason));
 	}
 
@@ -101,11 +101,11 @@ export class API {
 		form.append('content', content);
 		form.append('contentType', contentType);
 
-		return API.REQUEST.post(url, form);
+		return API.SECURE_REQUEST.post(url, form);
 	}
 
 	static deleteComment(contentType: string, commentId: string) {
-		return API.REQUEST.delete(`comment/${contentType}/${commentId}`);
+		return API.SECURE_REQUEST.delete(`comment/${contentType}/${commentId}`);
 	}
 
 	static getTagByName(tag: string) {
@@ -117,11 +117,11 @@ export class API {
 	}
 
 	static getMe() {
-		return API.REQUEST.get('/user/me');
+		return API.SECURE_REQUEST.get('/user/me');
 	}
 
 	static getUnreadNotification() {
-		return API.REQUEST.get('notification/unread'); //
+		return API.SECURE_REQUEST.get('notification/unread'); //
 	}
 
 	static getPing() {
@@ -129,35 +129,35 @@ export class API {
 	}
 
 	static getLikes(contentType: string, targetId: string) {
-		return API.REQUEST.get(`like/${contentType}/${targetId}/likes`);
+		return API.SECURE_REQUEST.get(`like/${contentType}/${targetId}/likes`);
 	}
 
 	static setLike(contentType: string, targetId: string) {
-		return API.REQUEST.get(`like/${contentType}/${targetId}/like`);
+		return API.SECURE_REQUEST.get(`like/${contentType}/${targetId}/like`);
 	}
 
 	static setDislike(contentType: string, targetId: string) {
-		return API.REQUEST.get(`like/${contentType}/${targetId}/dislike`);
+		return API.SECURE_REQUEST.get(`like/${contentType}/${targetId}/dislike`);
 	}
 
 	static deleteLog(contentType: string, logId: string) {
-		return API.REQUEST.delete(`log/${contentType}/${logId}`); //
+		return API.SECURE_REQUEST.delete(`log/${contentType}/${logId}`); //
 	}
 
 	static markNotificationAsRead(notificationId: string) {
-		return API.REQUEST.put(`notification/${notificationId}`); //
+		return API.SECURE_REQUEST.put(`notification/${notificationId}`); //
 	}
 
 	static deleteNotification(notificationId: string) {
-		return API.REQUEST.delete(`notification/${notificationId}`);
+		return API.SECURE_REQUEST.delete(`notification/${notificationId}`);
 	}
 
 	static deleteSchematic(schematicId: string) {
-		return API.REQUEST.delete(`schematic/${schematicId}`); //
+		return API.SECURE_REQUEST.delete(`schematic/${schematicId}`); //
 	}
 
 	static deleteMap(mapId: string) {
-		return API.REQUEST.delete(`map/${mapId}`); //
+		return API.SECURE_REQUEST.delete(`map/${mapId}`); //
 	}
 
 	static getSchematicPreview(code: string, file: File | undefined) {
@@ -165,18 +165,14 @@ export class API {
 		if (file) form.append('file', file);
 		else form.append('code', code);
 
-		return API.REQUEST.post('schematic-upload/preview', form);
+		return API.SECURE_REQUEST.post('schematic-upload/preview', form);
 	}
 
 	static getMapPreview(file: File | undefined) {
 		const form = new FormData();
 		if (file) form.append('file', file);
 
-		return API.REQUEST.post('map-upload/preview', form, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-			},
-		});
+		return API.SECURE_REQUEST.post('map-upload/preview', form);
 	}
 
 	static postSchematicUpload(code: string, file: File | undefined, tags: TagChoice[]) {
@@ -190,7 +186,7 @@ export class API {
 
 		formData.append('code', code);
 
-		return API.REQUEST.post('schematic-upload', formData);
+		return API.SECURE_REQUEST.post('schematic-upload', formData);
 	}
 
 	static postMapUpload(file: File, tags: TagChoice[]) {
@@ -202,7 +198,7 @@ export class API {
 
 		formData.append('file', file);
 
-		return API.REQUEST.post('map-upload', formData);
+		return API.SECURE_REQUEST.post('map-upload', formData);
 	}
 
 	static postMindustryServer(address: string) {
@@ -213,7 +209,7 @@ export class API {
 	}
 
 	static deleteServer(address: string) {
-		return this.REQUEST.delete(`mindustry-server/${address}`);
+		return this.SECURE_REQUEST.delete(`mindustry-server/${address}`);
 	}
 
 	static postPost(title: string, content: string, tags: TagChoice[]) {
@@ -225,7 +221,7 @@ export class API {
 
 		form.append('tags', tagString);
 
-		return this.REQUEST.post('post-upload', form);
+		return this.SECURE_REQUEST.post('post-upload', form);
 	}
 
 	static verifyPost(post: Post, tags: TagChoice[]) {
@@ -237,20 +233,20 @@ export class API {
 		form.append('content', post.content);
 		form.append('tags', tagString);
 
-		return API.REQUEST.post('post', form);
+		return API.SECURE_REQUEST.post('post', form);
 	}
 
 	static rejectPost(post: Post, reason: string) {
-		return API.REQUEST.delete(`post-upload/${post.id}`) //
+		return API.SECURE_REQUEST.delete(`post-upload/${post.id}`) //
 			.then(() => API.postNotification(post.authorId, 'Your post submission has been reject', reason));
 	}
 
 	static deletePost(postId: string) {
-		return API.REQUEST.delete(`post/${postId}`); //
+		return API.SECURE_REQUEST.delete(`post/${postId}`); //
 	}
 
 	static getMetric(start: Date, end: Date, collection: string) {
-		return API.get('metric', {
+		return API.SECURE_REQUEST.get('metric', {
 			params: {
 				start: start.toISOString(),
 				end: end.toISOString(),
