@@ -134,7 +134,7 @@ export default function NavigationPanel() {
 								<UserAvatar className='h-8 w-8 rounded-full' user={me} />
 							</Link>
 						) : (
-							<WebIcon />
+							<WebIcon className='h-7 w-7 rounded-md' />
 						)}
 					</div>
 				</section>
