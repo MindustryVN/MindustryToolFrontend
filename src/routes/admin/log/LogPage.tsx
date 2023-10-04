@@ -21,6 +21,7 @@ export default function LogPage() {
 
 	return (
 		<section className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
+			
 			<section className='no-scrollbar flex w-full flex-shrink-0 flex-row gap-2 overflow-x-auto'>
 				{logTypes.data.map((item, index) => (
 					<Button
@@ -32,7 +33,7 @@ export default function LogPage() {
 						{item}
 					</Button>
 				))}
-			</section>
+			D</section>
 			<LogContainer contentType={contentType} />
 		</section>
 	);
@@ -74,40 +75,62 @@ interface LogCardProps {
 
 function LogCard({ log, handleDeleteLog }: LogCardProps) {
 	const content: string[] = log.content.split('\n');
-	const header = content[0];
 	let detail: string[] = content.slice(1);
-	detail = detail ? detail : ['No content'];
+
+	if (detail && detail.length > 0)
+		return (
+			<details className='relative bg-slate-900 p-2'>
+				<summary>
+					<LogContent log={log} handleDeleteLog={handleDeleteLog} />
+				</summary>
+				<LogDetail detail={detail} />
+			</details>
+		);
 
 	return (
-		<details className='relative bg-slate-900 p-2'>
-			<summary>
-				<p>ID: {log.id}</p>
-				<p>Environment: {log.environment}</p>
-				{log.userId && <p>User ID: {log.userId}</p>}
-				{log.ip && <p>IP: {log.ip}</p>}
-				{log.requestUrl && <p>Request URL: {log.requestUrl}</p>}
-				<p>
-					Time: <DateDisplay time={log.time} />
-				</p>
-				<p>Message: {header}</p>
-				<ClearIconButton
-					className='absolute right-0 top-0 m-2' //
-					icon='/assets/icons/trash-16.png'
-					title='delete'
-					onClick={() => handleDeleteLog(log.id)}
-				/>
-			</summary>
-			<div>
-				Detail:
-				<div className='p-2'>
-					{detail.map((t, index) => (
-						<p key={index}>
-							{t}
-							<br />
-						</p>
-					))}
-				</div>
+		<div className='relative bg-slate-900 p-2'>
+			<LogContent log={log} handleDeleteLog={handleDeleteLog} />
+		</div>
+	);
+}
+
+function LogContent({ log, handleDeleteLog }: LogCardProps) {
+	const content: string[] = log.content.split('\n');
+	const header = content[0];
+
+	return (
+		<>
+			<p>ID: {log.id}</p>
+			<p>Environment: {log.environment}</p>
+			{log.userId && <p>User ID: {log.userId}</p>}
+			{log.ip && <p>IP: {log.ip}</p>}
+			{log.requestUrl && <p>Request URL: {log.requestUrl}</p>}
+			<p>
+				Time: <DateDisplay time={log.time} />
+			</p>
+			<p>Message: {header}</p>
+			<ClearIconButton
+				className='absolute right-0 top-0 m-2' //
+				icon='/assets/icons/trash-16.png'
+				title='delete'
+				onClick={() => handleDeleteLog(log.id)}
+			/>
+		</>
+	);
+}
+
+function LogDetail({ detail }: { detail: string[] }) {
+	return (
+		<div>
+			Detail:
+			<div className='p-2'>
+				{detail.map((t, index) => (
+					<p key={index}>
+						{t}
+						<br />
+					</p>
+				))}
 			</div>
-		</details>
+		</div>
 	);
 }

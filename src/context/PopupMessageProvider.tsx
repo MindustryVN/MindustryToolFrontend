@@ -69,16 +69,8 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 
 		setLoading(true);
 
-		
-
 		API.getPing() //
-			.then(() => {
-				addMessage({
-					content: `Ping: ${Date.now() - start}ms`,
-					duration: 5,
-					type: 'info',
-				});
-			}) //
+			.then(() => console.log(`Ping: ${Date.now() - start}ms`)) //
 			.catch(() => {
 				setError(true);
 				addMessage({
@@ -90,6 +82,8 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 			.finally(() => setLoading(false))
 			.then(() => clearTimeout(id));
 	}, []);
+
+	
 
 	function addMessage(content: ReactNode, duration: number, type: PopupMessageType) {
 		let uuid: string = v4();
