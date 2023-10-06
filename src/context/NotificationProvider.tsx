@@ -37,13 +37,5 @@ export default function NotificationProvider({ children }: NotificationProviderP
 		}
 	}, [me]);
 
-	return (
-		<NotificationContext.Provider
-			value={{
-				unreadNotifications: unreadNotifications, //
-				setUnreadNotifications: setUnreadNotifications,
-			}}>
-			{children}
-		</NotificationContext.Provider>
-	);
+	return <NotificationContext.Provider value={{ unreadNotifications, setUnreadNotifications }}>{children}</NotificationContext.Provider>;
 }
