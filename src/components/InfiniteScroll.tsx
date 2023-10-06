@@ -3,19 +3,19 @@ import React, { ReactNode, useEffect, useRef } from 'react';
 import { Trans } from 'react-i18next';
 import Button from 'src/components/Button';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import useWindowFocus from 'src/context/WindowFocusContext';
+import useWindowFocus from 'src/context/WindowFocusProvider';
 import { UseInfinitePage } from 'src/hooks/UseInfinitePage';
 import i18n from 'src/util/I18N';
 import { cn } from 'src/util/Utils';
 
 interface InfiniteScrollProps<T> {
 	className?: string;
-    id?:string;
+	id?: string;
 	infinitePage: UseInfinitePage<T>;
 	mapper: (v: T, index?: number) => ReactNode;
 }
 
-export default function InfiniteScroll<T>({id, className, infinitePage, mapper }: InfiniteScrollProps<T>) {
+export default function InfiniteScroll<T>({ id, className, infinitePage, mapper }: InfiniteScrollProps<T>) {
 	const { windowIsFocus } = useWindowFocus();
 	const { url, hasMore, isLoading, isError, pages, loadNextPage } = infinitePage;
 
@@ -32,7 +32,7 @@ export default function InfiniteScroll<T>({id, className, infinitePage, mapper }
 	}, [entry, hasMore, isError, isLoading, windowIsFocus, loadNextPage]);
 
 	const nodes = pages.map((m, index) => mapper(m, index));
-	const loadingSpinner = isLoading || hasMore ? <LoadingSpinner className='w-full flex justify-center items-center' /> : <></>;
+	const loadingSpinner = isLoading || hasMore ? <LoadingSpinner className='flex w-full items-center justify-center' /> : <></>;
 	const loadMore = !isLoading && isError && (
 		<div className='col-span-full flex items-center justify-center' key={url + 'load-more'}>
 			<Button className='px-2 py-1' title={i18n.t('load-more')} onClick={() => loadNextPage()}>
@@ -49,7 +49,9 @@ export default function InfiniteScroll<T>({id, className, infinitePage, mapper }
 
 	return (
 		<>
-			<section id={id} className={cn(className)}>{nodes}</section>
+			<section id={id} className={cn(className)}>
+				{nodes}
+			</section>
 			<div className='h-4' key={url} ref={ref} />
 			{loadingSpinner}
 			{loadMore}

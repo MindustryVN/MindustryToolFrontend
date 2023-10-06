@@ -11,7 +11,7 @@ import TagProvider from 'src/context/TagProvider';
 import UserProvider from 'src/context/MeProvider';
 import PopupMessageProvider from 'src/context/PopupMessageProvider';
 import NotificationProvider from 'src/context/NotificationProvider';
-import { WindowContextProvider } from 'src/context/WindowFocusContext';
+import { WindowContextProvider } from 'src/context/WindowFocusProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -21,15 +21,15 @@ root.render(
 			<main className='background-gradient h-full w-full '>
 				<WindowContextProvider>
 					<I18nextProvider i18n={i18n}>
-						<UserProvider>
-							<PopupMessageProvider>
+						<PopupMessageProvider>
+							<UserProvider>
 								<TagProvider>
 									<NotificationProvider>
 										<App />
 									</NotificationProvider>
 								</TagProvider>
-							</PopupMessageProvider>
-						</UserProvider>
+							</UserProvider>
+						</PopupMessageProvider>
 					</I18nextProvider>
 				</WindowContextProvider>
 			</main>
