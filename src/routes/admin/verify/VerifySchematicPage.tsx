@@ -37,7 +37,7 @@ export default function VerifySchematicPage() {
 	const [currentSchematic, setCurrentSchematic] = useState<Schematic>();
 	const { setTotalSchematic } = useVerifyCount();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
 

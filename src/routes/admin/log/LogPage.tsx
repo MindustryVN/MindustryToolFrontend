@@ -37,7 +37,7 @@ interface LogContainerProps {
 
 function LogContainer({ contentType }: LogContainerProps) {
 	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	function handleDeleteLog(id: string) {
 		API.deleteLog(contentType, id) //

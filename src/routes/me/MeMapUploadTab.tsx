@@ -13,7 +13,7 @@ import InfiniteScroll from 'src/components/InfiniteScroll';
 export default function UserMapUploadTab() {
 	const currentMap = useRef<Map>();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/map-upload`, 20);

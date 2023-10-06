@@ -22,15 +22,15 @@ export default function UserPage() {
 
 	const [user, setUser] = React.useState<User>();
 
-	const popup = useContext(PopupMessageContext);
+	const addPopup = useContext(PopupMessageContext);
 
 	useEffect(() => {
 		if (userId)
 			API.getUser(userId) //
 				.then((result) => setUser(result.data)) //
-				.catch(() => popup.addPopup(i18n.t('user.load-fail'), 5, 'error'))
+				.catch(() => addPopup(i18n.t('user.load-fail'), 5, 'error'))
 				.finally(() => setLoading(false));
-	}, [userId, popup]);
+	}, [userId, addPopup]);
 
 	if (!userId)
 		return (

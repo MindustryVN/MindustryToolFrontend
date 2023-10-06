@@ -69,7 +69,7 @@ export default function SchematicPage() {
 	const [totalSchematic, setTotalSchematic] = useState(0);
 
 	const { model, setVisibility } = useModel();
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const navigate = useNavigate();
 

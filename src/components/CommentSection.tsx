@@ -27,7 +27,7 @@ export default function CommentSection({ contentType, targetId }: CommentSection
 	const usePage = useInfinitePage<Comment>(commentUrl.current, 20);
 	const { isLoading } = usePage;
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const [loading, setLoading] = useState(false);
 
@@ -63,7 +63,7 @@ function Reply({ contentType, comment, nestLevel }: ReplyProps) {
 
 	const { me } = useMe();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const replyUrl = useRef(`comment/${contentType}/${comment.id}`);
 

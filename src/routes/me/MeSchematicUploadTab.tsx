@@ -14,7 +14,7 @@ import InfiniteScroll from 'src/components/InfiniteScroll';
 export default function UserSchematicUploadTab() {
 	const currentSchematic = useRef<Schematic>();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/schematic-upload`, 20);

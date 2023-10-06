@@ -12,7 +12,7 @@ import InfiniteScroll from 'src/components/InfiniteScroll';
 export default function UserPostUploadTab() {
 	const currentPost = useRef<Post>();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Post>(`user/post-upload`, 20);

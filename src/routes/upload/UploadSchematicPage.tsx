@@ -47,20 +47,20 @@ export default function UploadSchematicPage() {
 	const popup = useRef(useContext(PopupMessageContext));
 
 	useEffect(() => {
-		if (!loading && !me) popup.current.addPopup(notLoginMessage, 20, 'warning');
+		if (!loading && !me) popup.current(notLoginMessage, 20, 'warning');
 	}, [me, loading]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0 || !files[0]) {
-			popup.current.addPopup(i18n.t('invalid-schematic-file'), 5, 'error');
+			popup.current(i18n.t('invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== SCHEMATIC_FILE_EXTENSION) {
-			popup.current.addPopup(i18n.t('invalid-schematic-file'), 5, 'error');
+			popup.current(i18n.t('invalid-schematic-file'), 5, 'error');
 			return;
 		}
 
@@ -74,7 +74,7 @@ export default function UploadSchematicPage() {
 			.readText() //
 			.then((text) => {
 				if (!text.startsWith('bXNja')) {
-					popup.current.addPopup(i18n.t('not-schematic-code'), 5, 'warning');
+					popup.current(i18n.t('not-schematic-code'), 5, 'warning');
 					return;
 				}
 
@@ -88,18 +88,18 @@ export default function UploadSchematicPage() {
 
 		API.getSchematicPreview(code, file) //
 			.then((result) => setPreview(result.data)) //
-			.catch(() => popup.current.addPopup(i18n.t(`invalid-schematic`), 10, 'error')) //
+			.catch(() => popup.current(i18n.t(`invalid-schematic`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 
 	function handleSubmit() {
 		if (!file && !code) {
-			popup.current.addPopup(i18n.t('no-data'), 5, 'error');
+			popup.current(i18n.t('no-data'), 5, 'error');
 			return;
 		}
 
 		if (!tags || tags.length === 0) {
-			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
+			popup.current(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
 
@@ -111,9 +111,9 @@ export default function UploadSchematicPage() {
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				popup.current.addPopup(i18n.t('upload-success'), 10, 'info');
+				popup.current(i18n.t('upload-success'), 10, 'info');
 			})
-			.catch((error) => popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error')) //
+			.catch((error) => popup.current(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error')) //
 			.finally(() => setIsLoading(false));
 	}
 

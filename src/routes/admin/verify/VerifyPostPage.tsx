@@ -29,7 +29,7 @@ export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();
 	const { setTotalPost } = useVerifyCount();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const usePage = useInfinitePage<Post>('post-upload', 20);
 	const { model, setVisibility } = useModel();

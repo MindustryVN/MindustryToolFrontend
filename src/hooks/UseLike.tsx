@@ -14,7 +14,7 @@ export default function useLike(contentType: string, targetId: string, initialLi
 
 	const PrivateAlert = usePrivateAlert();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const refUrl = useRef({ contentType, targetId });
 

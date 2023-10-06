@@ -18,7 +18,7 @@ import useInfinitePage from 'src/hooks/UseInfinitePage';
 
 export default function MindustryServerPage() {
 	const { pages, hasMore, isLoading, loadNextPage, filter } = useInfinitePage<MindustryServer>('mindustry-server', 100);
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 	const { dialog, setVisibility } = useDialog();
 
 	function handleAddServer(address: string) {
