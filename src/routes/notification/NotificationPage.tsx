@@ -24,7 +24,7 @@ function NotificationContainer() {
 
 	const { setUnreadNotifications } = useNotification();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	function handleMarkAsRead(notification: Notification) {
 		API.markNotificationAsRead(notification.id) //

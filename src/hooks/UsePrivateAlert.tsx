@@ -4,7 +4,7 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 import { useMe } from 'src/context/MeProvider';
 
 export default function usePrivateAlert() {
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 	const { me } = useMe();
 
 	const loginMessage = (

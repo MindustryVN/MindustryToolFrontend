@@ -23,7 +23,7 @@ export default function PostViewPage() {
 
 	const navigate = useNavigate();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { me } = useMe();
 

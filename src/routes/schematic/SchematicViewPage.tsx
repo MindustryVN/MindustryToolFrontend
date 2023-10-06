@@ -16,7 +16,7 @@ export default function SchematicPreviewPage() {
 
 	const navigate = useNavigate();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	let schematic = data;
 
@@ -27,11 +27,11 @@ export default function SchematicPreviewPage() {
 			.catch(() => addPopup(i18n.t('schematic.delete-fail'), 5, 'warning'));
 	}
 
-	if (isLoading) return <LoadingSpinner className='flex justify-center items-center h-full' />;
+	if (isLoading) return <LoadingSpinner className='flex h-full items-center justify-center' />;
 
 	if (isError || !schematic)
 		return (
-			<div className='flex justify-center items-center w-full h-full'>
+			<div className='flex h-full w-full items-center justify-center'>
 				<Trans i18nKey='schematic-not-found' />
 			</div>
 		);

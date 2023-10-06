@@ -16,13 +16,9 @@ export function usePopup() {
 	return useContext(PopupMessageContext);
 }
 
-interface PopupMessageContextProps {
-	addPopup: (content: ReactNode, duration: number, type: PopupMessageType) => void;
-}
+type PopupMessageContextProps = (content: ReactNode, duration: number, type: PopupMessageType) => void;
 
-export const PopupMessageContext = React.createContext<PopupMessageContextProps>({
-	addPopup: (_: ReactNode, __: number, ___: PopupMessageType) => {},
-});
+export const PopupMessageContext = React.createContext<PopupMessageContextProps>((_: ReactNode, __: number, ___: PopupMessageType) => {});
 
 interface PopupMessageProvider {
 	children: ReactNode;
@@ -48,7 +44,7 @@ export default function AlertProvider({ children }: PopupMessageProvider) {
 	}
 
 	return (
-		<PopupMessageContext.Provider value={{ addPopup: addMessage }}>
+		<PopupMessageContext.Provider value={addMessage}>
 			<section className='pointer-events-none absolute right-0 top-12 z-popup flex h-[calc(100vh-3rem)] w-screen flex-col items-end gap-1 overflow-hidden'>
 				{contents.map((val) => (
 					<PopupMessage //

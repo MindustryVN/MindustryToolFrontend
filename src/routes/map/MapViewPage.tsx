@@ -16,7 +16,7 @@ export default function MapPreviewPage() {
 
 	const navigate = useNavigate();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	let map = data;
 
@@ -31,7 +31,7 @@ export default function MapPreviewPage() {
 
 	if (isError || !map)
 		return (
-			<div className='flex justify-center items-center w-full h-full'>
+			<div className='flex h-full w-full items-center justify-center'>
 				<Trans i18nKey='map-not-found' />
 			</div>
 		);

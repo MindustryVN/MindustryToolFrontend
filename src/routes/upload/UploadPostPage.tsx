@@ -40,7 +40,7 @@ export default function UploadPostPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const { postUploadTag } = useTags();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	function handleRemoveTag(index: number) {
 		setTags((prev) => [...prev.filter((_, i) => i !== index)]);

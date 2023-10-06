@@ -42,20 +42,20 @@ export default function UploadMapPage() {
 	const { mapUploadTag } = useTags();
 
 	useEffect(() => {
-		if (!loading && !me) popup.current.addPopup(notLoginMessage, 20, 'warning');
+		if (!loading && !me) popup.current(notLoginMessage, 20, 'warning');
 	}, [me, loading]);
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files || files.length <= 0) {
-			popup.current.addPopup(i18n.t('invalid-map-file'), 5, 'error');
+			popup.current(i18n.t('invalid-map-file'), 5, 'error');
 			return;
 		}
 
 		const extension: string = getFileExtension(files[0]);
 
 		if (extension !== MAP_FILE_EXTENSION) {
-			popup.current.addPopup(i18n.t('invalid-map-file'), 5, 'error');
+			popup.current(i18n.t('invalid-map-file'), 5, 'error');
 			return;
 		}
 
@@ -66,7 +66,7 @@ export default function UploadMapPage() {
 		API.getMapPreview(files[0]) //
 			.then((result) => setPreview(result.data)) //
 			.catch((error) => {
-				popup.current.addPopup(i18n.t(`invalid-map`) + error.response.data, 10, 'error');
+				popup.current(i18n.t(`invalid-map`) + error.response.data, 10, 'error');
 				console.log(error);
 			})
 			.finally(() => setIsLoading(false));
@@ -74,12 +74,12 @@ export default function UploadMapPage() {
 
 	function handleSubmit() {
 		if (!file) {
-			popup.current.addPopup(i18n.t('no-data'), 5, 'error');
+			popup.current(i18n.t('no-data'), 5, 'error');
 			return;
 		}
 
 		if (!tags || tags.length === 0) {
-			popup.current.addPopup(i18n.t('no-tag'), 5, 'error');
+			popup.current(i18n.t('no-tag'), 5, 'error');
 			return;
 		}
 
@@ -90,10 +90,10 @@ export default function UploadMapPage() {
 				setFile(undefined);
 				setPreview(undefined);
 				setTags([]);
-				popup.current.addPopup(i18n.t('upload-success'), 10, 'info');
+				popup.current(i18n.t('upload-success'), 10, 'info');
 			})
 			.catch((error) => {
-				popup.current.addPopup(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error');
+				popup.current(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error');
 				console.log(error);
 			}) //
 			.finally(() => setIsLoading(false));

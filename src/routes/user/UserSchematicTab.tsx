@@ -19,7 +19,7 @@ interface UserSchematicTabProps {
 export default function UserSchematicTab({ user }: UserSchematicTabProps) {
 	const currentSchematic = useRef<Schematic>();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Schematic>(`user/${user.id}/schematic`, 20);

@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import User from 'src/data/User';
 import { ACCESS_TOKEN } from 'src/config/Config';
 import { API } from 'src/API';
@@ -32,7 +32,7 @@ export default function MeProvider({ children }: MeProviderProps) {
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [isError, setError] = useState(false);
 
-	const { addPopup } = usePopup();
+	const addPopup = useRef(usePopup());
 
 	useEffect(() => {
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
@@ -50,22 +50,22 @@ export default function MeProvider({ children }: MeProviderProps) {
 				.catch((error) => console.log(error))
 				.finally(() => setLoading(false));
 
+			const id: NodeJS.Timeout = setTimeout(() => {
+				addPopup.current(i18n.t('high-ping-reason').toString(), 10, 'info');
+
+				return () => clearTimeout(id);
+			}, 8000);
+
 			API.getPing() //
 				.then(() => console.log(`Ping: ${Date.now() - start}ms`)) //
 				.catch(() => {
 					setError(true);
-					addPopup(i18n.t('lost-connection'), 5, 'error');
+					addPopup.current(i18n.t('lost-connection'), 5, 'error');
 				})
 				.finally(() => setLoading(false))
 				.then(() => clearTimeout(id));
-
-			const id: NodeJS.Timeout = setTimeout(() => {
-				addPopup(i18n.t('high-ping-reason').toString(), 10, 'info');
-
-				return () => clearTimeout(id);
-			}, 8000);
 		}
-	}, [addPopup]);
+	}, []);
 
 	function handleLogOut() {
 		setMe(undefined);

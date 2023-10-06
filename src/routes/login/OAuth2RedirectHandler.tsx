@@ -7,7 +7,7 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 import { getUrlParam } from 'src/util/Utils';
 
 export default function OAuth2RedirectHandler() {
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const token = getUrlParam('token');
 

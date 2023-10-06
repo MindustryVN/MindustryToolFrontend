@@ -18,7 +18,7 @@ interface UserMapTabProps {
 export default function UserMapTab({ user }: UserMapTabProps) {
 	const currentMap = useRef<Map>();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
 	const usePage = useInfinitePage<Map>(`user/${user.id}/map`, 20);

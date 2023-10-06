@@ -36,7 +36,7 @@ export default function VerifyMapPage() {
 	const [currentMap, setCurrentMap] = useState<Map>();
 	const { setTotalMap } = useVerifyCount();
 
-	const { addPopup } = usePopup();
+	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
 
