@@ -108,7 +108,7 @@ export default function UploadPostPage() {
 						onChange={(event) => setTitle(event.target.value)}
 					/>
 					<SearchBox
-						className='h-20 w-full bg-slate-900'
+						className='w-full bg-slate-900 h-10'
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
 						items={postUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}

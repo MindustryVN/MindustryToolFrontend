@@ -24,9 +24,8 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 	}
 
 	public render() {
-		window.location.reload();
-
 		if (this.state.error !== undefined) {
+			window.location.reload();
 			return (
 				<span className='flex h-full w-full items-center justify-center'>
 					<Trans i18nKey='error' />
