@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { TagChoice, Tags } from 'src/components/Tag';
 import useModel from 'src/hooks/UseModel';
@@ -13,6 +13,8 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 import { API } from 'src/API';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useTags } from 'src/context/TagProvider';
+
+const LAST_POST = 'last-post';
 
 const defaultContent = `> ## Cách để tải mindustry free
 - Ấn vào link bên dưới để đến trang tải xuống (Itch.io) [Link tải Mindustry free cho Window, Linux, MacOS, Android (Và tất nhiên là không có IOS)](https://anuke.itch.io/mindustry?fbclid=IwAR2HgdkixMrQEDhcj1an_qtWnnq6YmOlm-c8VoyPsNp5bMtu5aWq_ff7K2M)
@@ -41,6 +43,25 @@ export default function UploadPostPage() {
 	const { postUploadTag } = useTags();
 
 	const addPopup = usePopup();
+
+	if (content !== defaultContent) {
+		localStorage.setItem(
+			LAST_POST,
+			JSON.stringify({
+				title,
+				content,
+			}),
+		);
+	}
+
+	useEffect(() => {
+		const prev = localStorage.getItem(LAST_POST);
+		if (prev) {
+			const post = JSON.parse(prev);
+			setTitle(post.title);
+			setContent(post.content);
+		}
+	}, []);
 
 	function handleRemoveTag(index: number) {
 		setTags((prev) => [...prev.filter((_, i) => i !== index)]);
@@ -86,7 +107,7 @@ export default function UploadPostPage() {
 		setTags([]);
 	}
 
-	if (isLoading) return <LoadingSpinner />;
+	if (isLoading) return <LoadingSpinner className='flex h-full w-full items-center justify-center' />;
 
 	return (
 		<section className='box-border h-full w-full gap-2 rounded-lg bg-slate-900 p-4'>
@@ -108,7 +129,7 @@ export default function UploadPostPage() {
 						onChange={(event) => setTitle(event.target.value)}
 					/>
 					<SearchBox
-						className='w-full bg-slate-900 h-10'
+						className='h-10 w-full bg-slate-900'
 						placeholder={i18n.t('add-tag').toString()}
 						value={tag}
 						items={postUploadTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tags.includes(t))}
