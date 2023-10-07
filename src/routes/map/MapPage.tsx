@@ -41,6 +41,7 @@ import OptionBox from 'src/components/OptionBox';
 import ClearButton from 'src/components/ClearButton';
 import Author from 'src/components/Author';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import BackButton from 'src/components/BackButton';
 
 export default function MapPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -273,9 +274,7 @@ function MapInfoButton({ map, handleCloseModel, handleDeleteMap }: MapInfoButton
 					whenTrue={<IconButton className='h-8 w-8' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
 				/>
 			</section>
-			<Button className='h-8 w-8' title={i18n.t('back')} onClick={() => handleCloseModel()}>
-				<BackIcon className='h-6 w-6' />
-			</Button>
+			<BackButton onClick={() => handleCloseModel()} />
 			{dialog(
 				<ConfirmBox onClose={() => setVisibility(false)} onConfirm={() => handleDeleteMap(map)}>
 					<Icon className='h-4 w-4 p-2' icon='/assets/icons/info.png' />
