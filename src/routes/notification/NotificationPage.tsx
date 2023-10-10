@@ -75,7 +75,7 @@ function NotificationContainer() {
 				</Button>
 			</section>
 			{pages.map((notification) => (
-				<section className='box-border flex flex-col flex-wrap justify-between bg-slate-900 p-4' key={notification.id}>
+				<section className='box-border flex flex-col flex-wrap justify-between bg-slate-950 p-4' key={notification.id}>
 					<section className='flex flex-row'>
 						<span className='text-xl'>{notification.header}</span>
 						<Markdown>{notification.content}</Markdown>

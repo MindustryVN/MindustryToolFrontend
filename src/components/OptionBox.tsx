@@ -18,7 +18,7 @@ export default function OptionBox<T>({ className, defaultValue, items, children,
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<OutsideAlerter className={cn('flex h-full flex-col justify-center rounded-lg outline outline-2 outline-slate-500', className)} onClickOutside={() => setShowDropbox(false)}>
+		<OutsideAlerter className={cn('flex h-full flex-col justify-center rounded-lg bg-transparent outline outline-2 outline-slate-500', className)} onClickOutside={() => setShowDropbox(false)}>
 			<div
 				role='button'
 				className={'flex h-full flex-col justify-center'}
@@ -38,7 +38,7 @@ export default function OptionBox<T>({ className, defaultValue, items, children,
 				</section>
 				<div className='relative w-full'>
 					{showDropbox && (
-						<section className='no-scrollbar absolute left-0 top-1 z-overlay w-full overflow-x-auto rounded-lg border-2 border-slate-500 bg-slate-900'>
+						<section className='no-scrollbar absolute left-0 top-1 z-overlay w-full overflow-x-auto rounded-lg border-2 border-slate-500 bg-slate-950'>
 							{items
 								.filter((item) => item !== choice)
 								.map((item, index) => (

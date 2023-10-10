@@ -128,7 +128,7 @@ export default function MapPage() {
 			<span className='flex w-full flex-col gap-2'>
 				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
-						className='h-10 w-full bg-slate-900'
+						className='h-10 w-full'
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={mapSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
@@ -138,7 +138,7 @@ export default function MapPage() {
 						<ClearIconButton className='h-5' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 					<OptionBox
-						className='h-10 w-full max-w-none bg-slate-900 md:max-w-[10rem]'
+						className='h-10 w-full max-w-none md:max-w-[10rem]'
 						items={Tags.SORT_TAG}
 						mapper={(item, index) => (
 							<span key={index} className='whitespace-nowrap'>

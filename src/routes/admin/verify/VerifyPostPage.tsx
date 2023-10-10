@@ -129,14 +129,14 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 	return (
 		<section className='box-border flex h-full w-full flex-col justify-between gap-2 overflow-y-auto p-4'>
 			<section className='flex flex-row justify-end gap-2'>
-				<a className='rounded-lg border-2 border-slate-500 bg-slate-900 px-2 py-1' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
+				<a className='rounded-lg border-2 border-slate-500 bg-slate-950 px-2 py-1' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 					<Trans i18nKey='how-to-write-markdown' />
 				</a>
-				<Button className='bg-slate-900 px-2 py-1' title={i18n.t('show-preview')} onClick={() => setVisibility(true)}>
+				<Button className='bg-slate-950 px-2 py-1' title={i18n.t('show-preview')} onClick={() => setVisibility(true)}>
 					<Trans i18nKey='show-preview' />
 				</Button>
 			</section>
-			<section className='relative box-border flex h-full w-full flex-col gap-2 rounded-lg bg-slate-900 p-4'>
+			<section className='relative box-border flex h-full w-full flex-col gap-2 rounded-lg bg-slate-950 p-4'>
 				<section className='align-end flex w-full flex-row gap-2'>
 					<SearchBox
 						className='h-10 w-full p-2'
@@ -148,10 +148,10 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 						mapper={(t, index) => <TagPick key={index} tag={t} />}
 					/>
 				</section>
-				<div className='box-border w-full bg-slate-900 text-xl outline-none'>{currentPost.header}</div>
+				<div className='box-border w-full bg-slate-950 text-xl outline-none'>{currentPost.header}</div>
 				<TagEditContainer tags={tags} onRemove={handleRemoveTag} />
 				<textarea
-					className='h-full w-full bg-slate-900 outline-none'
+					className='h-full w-full bg-slate-950 outline-none'
 					value={currentPost.content}
 					onChange={(event) =>
 						setCurrentPost((prev) => {
@@ -181,7 +181,7 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 			)}
 			{model(
 				<section className='flex h-full w-full flex-col overflow-y-auto p-4'>
-					<Button title={i18n.t('hide-preview')} className='self-end bg-slate-900 px-2 py-1' onClick={() => setVisibility(false)}>
+					<Button title={i18n.t('hide-preview')} className='self-end bg-slate-950 px-2 py-1' onClick={() => setVisibility(false)}>
 						<Trans i18nKey='hide-preview' />
 					</Button>
 					<PostView post={currentPost} />

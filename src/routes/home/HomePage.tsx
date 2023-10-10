@@ -5,9 +5,12 @@ import LoadUserName from 'src/components/LoadUserName';
 
 export default function HomePage() {
 	return (
-		<main className='grid h-full overflow-y-auto pt-2'>
-			<section className='p-8'>
-				<span className='text-2xl text-white'>Chào mừng đến với MindustryTool</span>
+		<main className='background-image grid h-full overflow-y-auto p-8 pt-10'>
+			<section className='bg-slate-800 p-8 bg-opacity-90 rounded-2xl'>
+				<span className='text-2xl text-white'>Chào mừng đến với </span>
+				<Link className='bg-gradient-to-r from-emerald-500 to-sky-500 bg-clip-text text-2xl text-transparent' to='/'>
+					MINDUSTRYTOOL
+				</Link>
 				<section className='flex flex-col gap-4 p-4'>
 					<b className='text-white'>Tải game miễn phí?</b>
 					<ul>
@@ -73,6 +76,7 @@ export default function HomePage() {
 							</a>
 						</li>
 					</ul>
+					sp
 				</section>
 				<h2>Thông tin về Website</h2>
 				<section className='grid grid-cols-2 items-start justify-start gap-y-2 px-8'>

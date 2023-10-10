@@ -19,7 +19,7 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 	const [showDropbox, setShowDropbox] = useState(false);
 
 	return (
-		<OutsideAlerter className={cn('flex h-full flex-col justify-center rounded-lg bg-slate-900 outline outline-2 outline-slate-500', className)} onClickOutside={() => setShowDropbox(false)}>
+		<OutsideAlerter className={cn('flex h-full flex-col justify-center rounded-lg bg-transparent outline outline-2 outline-slate-500', className)} onClickOutside={() => setShowDropbox(false)}>
 			<div
 				className={cn('flex h-full flex-col justify-center', className)}
 				role='button'
@@ -42,7 +42,7 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 				</section>
 				<section className='relative w-full'>
 					{showDropbox && (
-						<section className='absolute z-overlay mb-4 mt-2 flex max-h-[50vh] w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden rounded-lg border-2 border-slate-500 bg-slate-900'>
+						<section className='absolute z-overlay mb-4 mt-2 flex max-h-[50vh] w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden rounded-lg border-2 border-slate-500 bg-slate-950'>
 							{items.length !== 0 ? (
 								items.map((node, index) => (
 									<DropboxElement

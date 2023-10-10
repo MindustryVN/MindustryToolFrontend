@@ -117,7 +117,7 @@ export default function NavigationPanel() {
 
 	return useMemo(
 		() => (
-			<nav className='flex h-[49px] w-screen flex-row items-center justify-between bg-gray-950 p-2'>
+			<nav className='flex h-[49px] w-screen flex-row items-center justify-between bg-slate-950 p-2'>
 				<section className='flex w-full flex-row items-center justify-between gap-4'>
 					<div className='flex flex-row items-center'>
 						<button
@@ -140,7 +140,7 @@ export default function NavigationPanel() {
 				</section>
 				<div className={cn('fixed left-0 top-0 z-nav-bar h-full w-full backdrop-blur-sm', { hidden: !showNavigatePanel })}>
 					<OutsideAlerter
-						className='absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-hidden bg-gray-900 p-2'
+						className='absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-hidden bg-slate-950 p-2'
 						onClickOutside={() => setShowNavigatePanel(false)}>
 						<div className='flex h-full flex-col justify-between' onMouseLeave={() => setShowNavigatePanel(false)}>
 							<div className='flex w-full flex-col gap-2'>

@@ -206,7 +206,7 @@ function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCard
 	const { copy } = useClipboard();
 
 	return (
-		<section className='no-scrollbar flex h-full w-full flex-col rounded-lg bg-slate-900 p-4'>
+		<section className='no-scrollbar flex h-full w-full flex-col rounded-lg bg-slate-950 p-4'>
 			<span className='flex flex-row items-center justify-between'>
 				<section className='flex flex-row flex-wrap items-center justify-center gap-2'>
 					<span className='flex flex-row gap-2'>
@@ -265,12 +265,12 @@ function InputAddressDialog({ onClose, onSubmit }: InputAddressDialogProps) {
 	const [content, setContent] = useState<string>('');
 
 	return (
-		<section className='flex w-[50vw] flex-col gap-2 rounded-lg border-2 border-slate-500 bg-slate-900 p-2'>
+		<section className='flex w-[50vw] flex-col gap-2 rounded-lg border-2 border-slate-500 bg-slate-950 p-2'>
 			<span className='flex flex-row items-center justify-between p-2'>
 				<Trans i18nKey='type-ip-address' />
 				<ClearIconButton title={i18n.t('close')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
 			</span>
-			<input className='rounded-lg bg-slate-500 p-2 outline-none' type='text' title='address' onChange={(event) => setContent(event.target.value)} />
+			<input className='bg-bl border-2 border-slate-500 bg-slate-950 p-2 outline-none' type='text' title='address' onChange={(event) => setContent(event.target.value)} />
 			<section className='box-border flex w-full flex-row justify-end p-2'>
 				<Button className='px-2 py-1' title={i18n.t('submit')} onClick={() => onSubmit(content)}>
 					<Trans i18nKey='submit' />

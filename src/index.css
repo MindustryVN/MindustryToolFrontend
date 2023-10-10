@@ -75,9 +75,8 @@
 }
 
 *::-webkit-scrollbar-track {
-	border-radius: 10px;
-
 	width: 10px;
+	@apply bg-slate-400 bg-opacity-20
 }
 
 *::-webkit-scrollbar {
@@ -101,7 +100,13 @@
 	}
 	.background-gradient {
 		background: rgb(3, 19, 66);
-		background: linear-gradient(43deg, rgba(10, 10, 40, 1) 17%, rgba(40, 50, 90, 1) 76%, rgba(10, 10, 40, 1) 100%);
+		background: linear-gradient(43deg, rgba(5, 5, 5, 1) 17%, rgba(20, 20, 40, 1) 76%, rgba(5, 5, 5, 1) 100%);
+	}
+
+	.background-image {
+		background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/public/assets/images/background/light_theme.png');
+		background-position: center;
+		background-size: cover;
 	}
 	.pixelated {
 		image-rendering: pixelated;
