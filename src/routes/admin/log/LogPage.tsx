@@ -20,7 +20,7 @@ export default function LogPage() {
 	return (
 		<section className='flex h-full w-full flex-col gap-2 overflow-y-auto overflow-x-hidden'>
 			<OptionBox
-				className='m-2 h-8 flex-shrink-0 bg-slate-900'
+				className='m-2 h-8 flex-shrink-0'
 				items={logTypes.data}
 				defaultValue='system'
 				mapper={(item, index) => <span className='uppercase' key={index} children={item} />}
@@ -65,7 +65,7 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 
 	if (detail && detail.length > 0)
 		return (
-			<details className='relative bg-slate-900 p-2'>
+			<details className='relative bg-slate-950 p-2'>
 				<summary>
 					<LogContent log={log} handleDeleteLog={handleDeleteLog} />
 				</summary>
@@ -74,7 +74,7 @@ function LogCard({ log, handleDeleteLog }: LogCardProps) {
 		);
 
 	return (
-		<div className='relative bg-slate-900 p-2'>
+		<div className='relative bg-slate-950 p-2'>
 			<LogContent log={log} handleDeleteLog={handleDeleteLog} />
 		</div>
 	);

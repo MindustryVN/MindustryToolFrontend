@@ -14,7 +14,7 @@ export function MessageBox({ children, onSubmit, onClose }: MessageBoxProps) {
 	const [content, setContent] = useState<string>('');
 
 	return (
-		<section className='flex h-[20vh] w-[80vw] flex-col gap-2 rounded-lg border-2 border-slate-500 bg-slate-900 p-2 md:h-[50vh] md:w-[50vw]'>
+		<section className='flex h-[20vh] w-[80vw] flex-col gap-2 rounded-lg border-2 border-slate-500 bg-slate-950 p-2 md:h-[50vh] md:w-[50vw]'>
 			<span className='flex flex-row justify-between p-2'>
 				{children}
 				<ClearIconButton title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => onClose()} />

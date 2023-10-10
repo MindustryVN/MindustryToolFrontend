@@ -21,6 +21,7 @@ import Author from 'src/components/Author';
 import ClearButton from 'src/components/ClearButton';
 import { AddIcon } from 'src/components/Icon';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import PostCard from 'src/components/PostCard';
 
 export default function PostPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -79,7 +80,7 @@ export default function PostPage() {
 			<div className='flex w-full flex-col gap-2'>
 				<section className='m-auto mt-8 flex w-3/4 flex-row flex-wrap items-center justify-start gap-2 md:w-3/5 md:flex-nowrap'>
 					<SearchBox
-						className='h-10 w-full bg-slate-900'
+						className='h-10 w-full'
 						placeholder={i18n.t('search-with-tag').toString()}
 						value={tag}
 						items={postSearchTag.filter((t) => t.toDisplayString().toLowerCase().includes(tag.toLowerCase()) && !tagQuery.includes(t))}
@@ -89,7 +90,7 @@ export default function PostPage() {
 						<ClearIconButton className='h-5' icon='/assets/icons/search.png' title='search' onClick={() => loadNextPage()} />
 					</SearchBox>
 					<OptionBox
-						className='h-10 w-full max-w-none bg-slate-900 md:max-w-[10rem]'
+						className='h-10 w-full max-w-none md:max-w-[10rem]'
 						items={Tags.SORT_TAG}
 						mapper={(item, index) => (
 							<span key={index} className='whitespace-nowrap'>
@@ -101,7 +102,7 @@ export default function PostPage() {
 				</section>
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 			</div>
-			<InfiniteScroll className='flex flex-col gap-2' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />} />
+			<InfiniteScroll className='flex flex-row flex-wrap gap-2' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />} />
 			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/post')}>
 					<AddIcon className='h-10 w-10' />
@@ -128,7 +129,7 @@ export function PostPreview({ post }: PostPreviewProps) {
 	post.like = likeService.likes;
 
 	return (
-		<section role='button' className='relative flex w-full flex-row justify-between rounded-lg bg-slate-900 p-4'>
+		<PostCard>
 			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
 				<span className='flex flex-col gap-2'>
 					<span className='title text-2xl'>{post.header}</span>
@@ -152,6 +153,6 @@ export function PostPreview({ post }: PostPreviewProps) {
 				/>
 			</div>
 			<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />
-		</section>
+		</PostCard>
 	);
 }

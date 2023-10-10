@@ -181,7 +181,7 @@ function CommentInputArea({ targetId, handleAddComment }: CommentInputAreaProps)
 	return (
 		<section className='flex w-full flex-row border-b-2 border-slate-500'>
 			<CommentInput content={content} onChange={(value) => setMessage(value)} />
-			<section className='flex flex-row justify-end'>
+			<section className='flex flex-row items-center justify-end'>
 				<IconButton className='h-8 w-8 px-2 py-1' title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
 			</section>
 		</section>
@@ -201,9 +201,9 @@ function ReplyInputArea({ targetId, handleAddComment, onClose }: ReplyInputProps
 		<section className='flex w-full flex-row border-b-2 border-slate-500'>
 			<CommentInput content={content} onChange={(value) => setMessage(value)} />
 			<section className='flex flex-row justify-end'>
-				<section className='grid-auto-column grid w-fit grid-flow-col gap-2'>
-					<ClearIconButton className='h-8 w-8 px-2 py-1' title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
-					<ClearIconButton className='h-8 w-8 px-2 py-1' title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
+				<section className='flex flex-row items-center gap-2'>
+					<IconButton className='h-8 w-8 px-2 py-1' title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => onClose()} />
+					<IconButton className='h-8 w-8 px-2 py-1' title={i18n.t('upload')} icon='/assets/icons/check.png' onClick={() => handleAddComment(content, targetId)} />
 				</section>
 			</section>
 		</section>

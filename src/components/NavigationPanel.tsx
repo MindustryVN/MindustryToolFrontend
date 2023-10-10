@@ -117,7 +117,7 @@ export default function NavigationPanel() {
 
 	return useMemo(
 		() => (
-			<nav className='flex h-[49px] w-screen flex-row items-center justify-between bg-gray-950 p-2'>
+			<nav className='flex h-[49px] w-screen flex-row items-center justify-between bg-slate-950 p-2'>
 				<section className='flex w-full flex-row items-center justify-between gap-4'>
 					<div className='flex flex-row items-center'>
 						<button
@@ -140,7 +140,7 @@ export default function NavigationPanel() {
 				</section>
 				<div className={cn('fixed left-0 top-0 z-nav-bar h-full w-full backdrop-blur-sm', { hidden: !showNavigatePanel })}>
 					<OutsideAlerter
-						className='absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-hidden bg-gray-900 p-2'
+						className='absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-hidden bg-slate-950 p-2'
 						onClickOutside={() => setShowNavigatePanel(false)}>
 						<div className='flex h-full flex-col justify-between' onMouseLeave={() => setShowNavigatePanel(false)}>
 							<div className='flex w-full flex-col gap-2'>
@@ -206,7 +206,7 @@ function LoginButton({ onClick }: { onClick: () => void }) {
 }
 
 function UserDisplay({ onClick }: { onClick: () => void }) {
-	const { me, handleLogout } = useMe();
+	const { me, logout } = useMe();
 
 	if (!me) return <Fragment />;
 
@@ -219,7 +219,7 @@ function UserDisplay({ onClick }: { onClick: () => void }) {
 					<UserRoleDisplay roles={me.role} />
 				</section>
 			</section>
-			<ClearButton className='flex flex-row items-center justify-center gap-2 rounded-lg p-2 hover:bg-blue-500 hover:text-white' title={i18n.t('logout')} onClick={handleLogout}>
+			<ClearButton className='flex flex-row items-center justify-center gap-2 rounded-lg p-2 hover:bg-blue-500 hover:text-white' title={i18n.t('logout')} onClick={logout}>
 				<LogoutIcon className='h-6 w-6' />
 			</ClearButton>
 		</div>

@@ -15,7 +15,7 @@ interface ConfirmBoxProps {
 export default function ConfirmBox({ className, children, onClose, onConfirm }: ConfirmBoxProps) {
 	return (
 		<Dialog className={className}>
-			<section className='center flex w-[50vw] flex-col gap-4 rounded-lg border-2 border-slate-500 bg-slate-900 p-4 md:w-[30vw]'>
+			<section className='center flex w-[50vw] flex-col gap-4 rounded-lg border-2 border-black bg-slate-950 p-4 md:w-[30vw]'>
 				<span className='flex flex-row justify-between'>
 					{children}
 					<ClearIconButton title={i18n.t('quit')} icon='/assets/icons/quit.png' onClick={() => onClose()} />

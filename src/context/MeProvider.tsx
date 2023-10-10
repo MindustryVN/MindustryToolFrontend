@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import User from 'src/data/User';
 import { ACCESS_TOKEN } from 'src/config/Config';
 import { API } from 'src/API';
@@ -10,13 +10,15 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 interface MeContextProps {
 	me: User | undefined;
 	loading: boolean;
-	handleLogout: () => void;
+	login: () => void;
+	logout: () => void;
 }
 
 export const MeContext = React.createContext<MeContextProps>({
 	me: undefined,
 	loading: false,
-	handleLogout: () => {},
+	login: () => {},
+	logout: () => {},
 });
 
 export function useMe() {
@@ -34,10 +36,8 @@ export default function MeProvider({ children }: MeProviderProps) {
 
 	const addPopup = useRef(usePopup());
 
-	useEffect(() => {
+	const login = useCallback(() => {
 		let accessToken = localStorage.getItem(ACCESS_TOKEN);
-		const start = Date.now();
-
 		if (accessToken) {
 			setLoading(true);
 			API.setBearerToken(accessToken);
@@ -50,6 +50,11 @@ export default function MeProvider({ children }: MeProviderProps) {
 				.catch((error) => console.log(error))
 				.finally(() => setLoading(false));
 		}
+	}, []);
+
+	useEffect(() => {
+		const start = Date.now();
+		login();
 		const id: NodeJS.Timeout = setTimeout(() => {
 			addPopup.current(i18n.t('high-ping-reason').toString(), 10, 'info');
 
@@ -64,15 +69,15 @@ export default function MeProvider({ children }: MeProviderProps) {
 			})
 			.finally(() => setLoading(false))
 			.then(() => clearTimeout(id));
-	}, []);
+	}, [login]);
 
-	function handleLogOut() {
+	function logout() {
 		setMe(undefined);
 		localStorage.removeItem(ACCESS_TOKEN);
 	}
 
 	return (
-		<MeContext.Provider value={{ me: me, loading: isLoading, handleLogout: handleLogOut }}>
+		<MeContext.Provider value={{ me: me, loading: isLoading, logout: logout, login: login }}>
 			{isLoading ? (
 				<Loading />
 			) : isError ? (

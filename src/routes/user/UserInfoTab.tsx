@@ -9,9 +9,9 @@ interface UserInfoTabProps {
 
 export default function UserInfoTab({ user }: UserInfoTabProps) {
 	return (
-		<section className='flex flex-row justify-start items-start p-4 gap-2'>
-			<UserAvatar className='w-32 h-32 rounded-xl text-4xl' user={user} />
-			<section className='flex gap-2 items-end text-xl bg-slate-950 p-2 rounded-xl'>
+		<section className='flex flex-row items-start justify-start gap-2 p-4'>
+			<UserAvatar className='h-32 w-32 rounded-xl text-4xl' user={user} />
+			<section className='flex items-end gap-2 rounded-xl bg-slate-950 p-2 text-xl'>
 				<span className='capitalize'>{user.name}</span>
 				<UserRoleDisplay roles={user.role} />
 			</section>

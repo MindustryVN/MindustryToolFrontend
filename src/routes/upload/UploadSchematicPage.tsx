@@ -113,7 +113,10 @@ export default function UploadSchematicPage() {
 				setTags([]);
 				popup.current(i18n.t('upload-success'), 10, 'info');
 			})
-			.catch((error) => popup.current(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error')) //
+			.catch((error) => {
+				popup.current(i18n.t('upload-fail') + ' ' + i18n.t(`${error.response.data}`), 10, 'error');
+				console.log(error);
+			}) //
 			.finally(() => setIsLoading(false));
 	}
 

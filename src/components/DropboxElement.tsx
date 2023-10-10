@@ -7,7 +7,7 @@ interface DropboxElementProps {
 
 export default function DropboxElement({ children, onClick }: DropboxElementProps) {
 	return (
-		<button className='flex w-full active:bg-slate-600 hover:bg-slate-600 focus:bg-slate-600 px-2 py-1' title='' type='button' onClick={() => onClick()}>
+		<button className='flex w-full px-2 py-1 hover:bg-slate-700 focus:bg-slate-700 active:bg-slate-700' title='' type='button' onClick={() => onClick()}>
 			{children}
 		</button>
 	);
