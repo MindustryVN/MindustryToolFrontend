@@ -49,22 +49,21 @@ export default function MeProvider({ children }: MeProviderProps) {
 				})
 				.catch((error) => console.log(error))
 				.finally(() => setLoading(false));
-
-			const id: NodeJS.Timeout = setTimeout(() => {
-				addPopup.current(i18n.t('high-ping-reason').toString(), 10, 'info');
-
-				return () => clearTimeout(id);
-			}, 8000);
-
-			API.getPing() //
-				.then(() => console.log(`Ping: ${Date.now() - start}ms`)) //
-				.catch(() => {
-					setError(true);
-					addPopup.current(i18n.t('lost-connection'), 5, 'error');
-				})
-				.finally(() => setLoading(false))
-				.then(() => clearTimeout(id));
 		}
+		const id: NodeJS.Timeout = setTimeout(() => {
+			addPopup.current(i18n.t('high-ping-reason').toString(), 10, 'info');
+
+			return () => clearTimeout(id);
+		}, 8000);
+
+		API.getPing() //
+			.then(() => console.log(`Ping: ${Date.now() - start}ms`)) //
+			.catch(() => {
+				setError(true);
+				addPopup.current(i18n.t('lost-connection'), 5, 'error');
+			})
+			.finally(() => setLoading(false))
+			.then(() => clearTimeout(id));
 	}, []);
 
 	function handleLogOut() {

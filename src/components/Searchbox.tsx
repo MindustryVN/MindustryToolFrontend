@@ -18,8 +18,6 @@ interface SearchBoxProps<T> {
 export default function SearchBox<T>({ className, placeholder, value, items, children, mapper, onChoose, onChange }: SearchBoxProps<T>) {
 	const [showDropbox, setShowDropbox] = useState(false);
 
-	console.log(showDropbox);
-
 	return (
 		<OutsideAlerter className={cn('flex h-full flex-col justify-center rounded-lg bg-slate-900 outline outline-2 outline-slate-500', className)} onClickOutside={() => setShowDropbox(false)}>
 			<div

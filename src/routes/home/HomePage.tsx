@@ -25,6 +25,11 @@ export default function HomePage() {
 								Cách tải game miễn phí
 							</Link>
 						</li>
+						<li>
+							<Link className='text-emerald-500 hover:text-emerald-500' to='/post/post/6520298fa61f817d3a535be4'>
+								Cách chơi chung với bạn bè
+							</Link>
+						</li>
 					</ul>
 					<b className='text-white'>Muốn tìm người chơi game cùng?</b>
 					<ul>
