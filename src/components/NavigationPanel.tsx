@@ -206,7 +206,7 @@ function LoginButton({ onClick }: { onClick: () => void }) {
 }
 
 function UserDisplay({ onClick }: { onClick: () => void }) {
-	const { me, handleLogout } = useMe();
+	const { me, logout } = useMe();
 
 	if (!me) return <Fragment />;
 
@@ -219,7 +219,7 @@ function UserDisplay({ onClick }: { onClick: () => void }) {
 					<UserRoleDisplay roles={me.role} />
 				</section>
 			</section>
-			<ClearButton className='flex flex-row items-center justify-center gap-2 rounded-lg p-2 hover:bg-blue-500 hover:text-white' title={i18n.t('logout')} onClick={handleLogout}>
+			<ClearButton className='flex flex-row items-center justify-center gap-2 rounded-lg p-2 hover:bg-blue-500 hover:text-white' title={i18n.t('logout')} onClick={logout}>
 				<LogoutIcon className='h-6 w-6' />
 			</ClearButton>
 		</div>
