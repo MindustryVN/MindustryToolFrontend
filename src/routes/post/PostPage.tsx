@@ -149,7 +149,7 @@ export function PostPreview({ post }: PostPreviewProps) {
 					className='flex h-8 w-8 flex-col justify-start p-2 align-top'
 					title={i18n.t('copy-link').toString()}
 					icon='/assets/icons/copy.png'
-					onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
+					onClick={() => copy(`${FRONTEND_URL}post/${post.id}`)}
 				/>
 			</div>
 			<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />

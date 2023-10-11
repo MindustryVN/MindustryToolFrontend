@@ -48,7 +48,7 @@ export default function App() {
 							<Route path='/schematic' element={<Schematic />} />
 							<Route path='/schematic/:schematicId' element={<SchematicView />} />
 							<Route path='/post' element={<Forum />} />
-							<Route path='/post/post/:postId' element={<ForumView />} />
+							<Route path='/post/:postId' element={<ForumView />} />
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />

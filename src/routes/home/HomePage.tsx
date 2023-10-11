@@ -6,7 +6,7 @@ import LoadUserName from 'src/components/LoadUserName';
 export default function HomePage() {
 	return (
 		<main className='background-image grid h-full overflow-y-auto p-8 pt-10'>
-			<section className='bg-slate-800 p-8 bg-opacity-90 rounded-2xl'>
+			<section className='rounded-2xl bg-slate-800 bg-opacity-90 p-8'>
 				<span className='text-2xl text-white'>Chào mừng đến với </span>
 				<Link className='bg-gradient-to-r from-emerald-500 to-sky-500 bg-clip-text text-2xl text-transparent' to='/'>
 					MINDUSTRYTOOL
@@ -24,12 +24,12 @@ export default function HomePage() {
 							</a>
 						</li>
 						<li>
-							<Link className='text-emerald-500 hover:text-emerald-500' to='/post/post/64ca803ea51a933422a49aac'>
+							<Link className='text-emerald-500 hover:text-emerald-500' to='/post/64ca803ea51a933422a49aac'>
 								Cách tải game miễn phí
 							</Link>
 						</li>
 						<li>
-							<Link className='text-emerald-500 hover:text-emerald-500' to='/post/post/6520298fa61f817d3a535be4'>
+							<Link className='text-emerald-500 hover:text-emerald-500' to='/post/6520298fa61f817d3a535be4'>
 								Cách chơi chung với bạn bè
 							</Link>
 						</li>
