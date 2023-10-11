@@ -1,3 +1,5 @@
+import { Like } from "src/data/Like";
+
 export default interface Schematic {
 	id: string;
 	name: string;
@@ -10,6 +12,7 @@ export default interface Schematic {
 	height: number;
 	width: number;
 	verifyAdmin: string;
+	userLike: Like;
 }
 
 export interface ItemRequirement {

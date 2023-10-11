@@ -22,6 +22,7 @@ import ClearButton from 'src/components/ClearButton';
 import { AddIcon } from 'src/components/Icon';
 import InfiniteScroll from 'src/components/InfiniteScroll';
 import PostCard from 'src/components/PostCard';
+import Post from 'src/data/Post';
 
 export default function PostPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -125,12 +126,12 @@ export function PostPreview({ post }: PostPreviewProps) {
 	const navigate = useNavigate();
 	const { postSearchTag } = useTags();
 
-	const likeService = useLike('post', post.id, post.like);
+	const likeService = useLike('post', post.id, post.like, post.userLike);
 	post.like = likeService.likes;
 
 	return (
 		<PostCard>
-			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
+			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`/post/${post.id}`)}>
 				<span className='flex flex-col gap-2'>
 					<span className='title text-2xl'>{post.header}</span>
 					<Author authorId={post.authorId} />
@@ -149,7 +150,7 @@ export function PostPreview({ post }: PostPreviewProps) {
 					className='flex h-8 w-8 flex-col justify-start p-2 align-top'
 					title={i18n.t('copy-link').toString()}
 					icon='/assets/icons/copy.png'
-					onClick={() => copy(`${FRONTEND_URL}post/post/${post.id}`)}
+					onClick={() => copy(`${FRONTEND_URL}post/${post.id}`)}
 				/>
 			</div>
 			<DateDisplay className='align-self-end absolute bottom-0 right-0 p-2' time={post.time} />

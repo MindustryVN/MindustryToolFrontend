@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { HTMLProps, ReactNode } from 'react';
 import { cn } from 'src/util/Utils';
 
 interface ButtonProps {
@@ -9,15 +9,16 @@ interface ButtonProps {
 	onClick: () => void;
 }
 
-export default function Button({ className, children, title, active, onClick }: ButtonProps) {
+export default function Button({ className, children, title, active, onClick, ...props }: ButtonProps & HTMLProps<HTMLButtonElement>) {
 	return (
 		<button
+			{...props}
 			className={cn(`flex items-center justify-center rounded-md border-2 border-slate-500 hover:bg-blue-500`, className, {
 				'bg-blue-500': active,
 			})}
 			title={title}
-			type='button'
-			onClick={() => onClick()}>
+			onClick={() => onClick()}
+			type='button'>
 			{children}
 		</button>
 	);

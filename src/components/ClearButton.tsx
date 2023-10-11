@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { HTMLProps, ReactNode } from 'react';
 import { cn } from 'src/util/Utils';
 
 interface ClearButtonProps {
@@ -9,9 +9,10 @@ interface ClearButtonProps {
 	onClick: () => void;
 }
 
-export default function ClearButton({ children, className, title, active, onClick }: ClearButtonProps) {
+export default function ClearButton({ children, className, title, active, onClick, ...props }: ClearButtonProps & HTMLProps<HTMLButtonElement>) {
 	return (
 		<button
+			{...props}
 			className={cn(className, {
 				'bg-blue-500': active,
 			})}

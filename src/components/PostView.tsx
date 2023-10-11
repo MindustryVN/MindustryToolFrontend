@@ -6,6 +6,7 @@ import DateDisplay from 'src/components/Date';
 import { useTags } from 'src/context/TagProvider';
 import PostTitle from 'src/components/PostTitle';
 import Author from 'src/components/Author';
+import Post from 'src/data/Post';
 
 interface PostViewProps {
 	post: Post;

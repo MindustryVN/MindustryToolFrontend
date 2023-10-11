@@ -53,7 +53,7 @@ export default function VerifySchematicPage() {
 		API.rejectSchematic(schematic, reason) //
 			.then(() => addPopup(i18n.t('delete-success'), 5, 'info')) //
 			.then(() => setTotalSchematic((prev) => prev - 1))
-			.catch(() => addPopup(i18n.t('delete-fail'), 5, 'error'))
+			.catch((error) => addPopup(i18n.t('delete-fail') + error.response.data, 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 
@@ -63,7 +63,7 @@ export default function VerifySchematicPage() {
 			.then(() => API.postNotification(schematic.authorId, 'Your schematic submission has been accept', 'Post schematic success'))
 			.then(() => addPopup(i18n.t('verify-success'), 5, 'info'))
 			.then(() => setTotalSchematic((prev) => prev - 1))
-			.catch(() => addPopup(i18n.t('verify-fail'), 5, 'error'))
+			.catch((error) => addPopup(i18n.t('verify-fail') + error.response.data, 5, 'error'))
 			.finally(() => usePage.filter((sc) => sc !== schematic));
 	}
 

@@ -24,6 +24,7 @@ import DateDisplay from 'src/components/Date';
 import Author from 'src/components/Author';
 import PostTitle from 'src/components/PostTitle';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import Post from 'src/data/Post';
 
 export default function VerifyPostPage() {
 	const [currentPost, setCurrentPost] = useState<Post>();

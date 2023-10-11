@@ -53,8 +53,9 @@ export default function MeProvider({ children }: MeProviderProps) {
 	}, []);
 
 	useEffect(() => {
-		const start = Date.now();
 		login();
+
+		const start = Date.now();
 		const id: NodeJS.Timeout = setTimeout(() => {
 			addPopup.current(i18n.t('high-ping-reason').toString(), 10, 'info');
 

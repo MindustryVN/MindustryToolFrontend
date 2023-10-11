@@ -199,7 +199,7 @@ interface MapPreviewButtonProps {
 }
 
 function MapPreviewButton({ map }: MapPreviewButtonProps) {
-	const likeService = useLike('map', map.id, map.like);
+	const likeService = useLike('map', map.id, map.like, map.userLike);
 	map.like = likeService.likes;
 
 	return (
@@ -258,7 +258,7 @@ function MapInfoButton({ map, handleCloseModel, handleDeleteMap }: MapInfoButton
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike('map', map.id, map.like);
+	const likeService = useLike('map', map.id, map.like, map.userLike);
 	map.like = likeService.likes;
 
 	return (

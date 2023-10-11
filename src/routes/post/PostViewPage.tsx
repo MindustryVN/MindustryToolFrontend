@@ -16,6 +16,7 @@ import IfTrue from 'src/components/IfTrue';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 import { useTags } from 'src/context/TagProvider';
+import Post from 'src/data/Post';
 
 export default function PostViewPage() {
 	const { postId } = useParams();
