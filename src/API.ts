@@ -46,11 +46,12 @@ export class API {
 		return API.SECURE_REQUEST.get('post-upload/total');
 	}
 
-	static postNotification(userId: string, header: string, message: string) {
+	static postNotification(userId: string, header: string, content: string) {
 		let form = new FormData();
 		form.append('userId', userId);
 		form.append('header', header);
-		form.append('message', message);
+		form.append('content', content);
+
 		return API.SECURE_REQUEST.post('notification', form);
 	}
 

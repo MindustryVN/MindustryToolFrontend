@@ -95,7 +95,7 @@ export default function UploadPostPage() {
 
 		API.postPost(title, content, tags) //
 			.then(() => {
-				addPopup(i18n.t('post-success'), 10, 'info');
+				addPopup(i18n.t('upload-success'), 10, 'info');
 				setContent('');
 				setTitle('');
 				setTag('');

@@ -130,7 +130,7 @@ export function PostPreview({ post }: PostPreviewProps) {
 
 	return (
 		<PostCard>
-			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`post/${post.id}`)}>
+			<div className='flex h-full w-full flex-col justify-between gap-2' onClick={() => navigate(`/post/${post.id}`)}>
 				<span className='flex flex-col gap-2'>
 					<span className='title text-2xl'>{post.header}</span>
 					<Author authorId={post.authorId} />

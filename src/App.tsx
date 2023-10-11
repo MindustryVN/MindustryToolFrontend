@@ -18,7 +18,7 @@ const SchematicView = React.lazy(() => import('src/routes/schematic/SchematicVie
 const Login = React.lazy(() => import('src/routes/login/LoginPage'));
 const Admin = React.lazy(() => import('src/routes/admin/AdminPage'));
 const Forum = React.lazy(() => import('src/routes/post/PostPage'));
-const ForumView = React.lazy(() => import('src/routes/post/PostViewPage'));
+const PostView = React.lazy(() => import('src/routes/post/PostViewPage'));
 const User = React.lazy(() => import('src/routes/user/UserPage'));
 const Notification = React.lazy(() => import('src/routes/notification/NotificationPage'));
 const MindustryServer = React.lazy(() => import('src/routes/mindustry-server/MindustryServerPage'));
@@ -48,7 +48,7 @@ export default function App() {
 							<Route path='/schematic' element={<Schematic />} />
 							<Route path='/schematic/:schematicId' element={<SchematicView />} />
 							<Route path='/post' element={<Forum />} />
-							<Route path='/post/:postId' element={<ForumView />} />
+							<Route path='/post/:postId' element={<PostView />} />
 							<Route path='/user' element={<PrivateRoute element={<Me />} />} />
 							<Route path='/user/:userId' element={<PrivateRoute element={<User />} />} />
 							<Route path='/admin' element={<AdminRoute element={<Admin />} />} />
