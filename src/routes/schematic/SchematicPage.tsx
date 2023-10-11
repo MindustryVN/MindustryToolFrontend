@@ -207,7 +207,7 @@ interface SchematicPreviewButtonProps {
 function SchematicPreviewButton({ schematic }: SchematicPreviewButtonProps) {
 	const { copy } = useClipboard();
 
-	const likeService = useLike('schematic', schematic.id, schematic.like);
+	const likeService = useLike('schematic', schematic.id, schematic.like, schematic.userLike);
 	schematic.like = likeService.likes;
 
 	return (
@@ -275,7 +275,7 @@ function SchematicInfoButton({ schematic, handleCloseModel, handleDeleteSchemati
 
 	const { dialog, setVisibility } = useDialog();
 
-	const likeService = useLike('schematic', schematic.id, schematic.like);
+	const likeService = useLike('schematic', schematic.id, schematic.like, schematic.userLike);
 	schematic.like = likeService.likes;
 
 	return (

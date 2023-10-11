@@ -8,6 +8,7 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import { PostUploadInfo, PostUploadPreview } from 'src/routes/admin/verify/VerifyPostPage';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import Post from 'src/data/Post';
 
 export default function UserPostUploadTab() {
 	const currentPost = useRef<Post>();

@@ -1,4 +1,6 @@
-interface Post {
+import { Like } from "src/data/Like";
+
+export default interface Post {
 	id: string;
 	authorId: string;
 	header: string;
@@ -6,4 +8,5 @@ interface Post {
 	like: number;
 	tags: string[];
 	time: string;
+	userLike: Like;
 }

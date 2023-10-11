@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { HTMLProps } from 'react';
 import { IconType } from 'src/data/Icons';
 import { cn } from 'src/util/Utils';
 
@@ -9,9 +9,10 @@ interface ClearIconButtonProps {
 	onClick: () => void;
 }
 
-export default function ClearIconButton({ className, icon, title, onClick }: ClearIconButtonProps) {
+export default function ClearIconButton({ className, icon, title, onClick, ...props }: ClearIconButtonProps & HTMLProps<HTMLImageElement>) {
 	return (
 		<img
+			{...props}
 			className={cn(className)} //
 			role='button'
 			onClick={() => onClick()}

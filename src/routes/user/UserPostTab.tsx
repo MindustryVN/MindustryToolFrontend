@@ -5,6 +5,7 @@ import User from 'src/data/User';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import { PostPreview } from 'src/routes/post/PostPage';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import Post from 'src/data/Post';
 
 interface UserPostTabProps {
 	user: User;

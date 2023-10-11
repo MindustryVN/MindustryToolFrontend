@@ -161,6 +161,11 @@ export default function UploadPostPage() {
 							tags: Tags.toStringArray(tags),
 							like: 0,
 							time: new Date().toString(),
+							userLike: {
+								userId: '',
+								targetId: '',
+								state: 0
+							}
 						}}
 					/>
 				</section>,

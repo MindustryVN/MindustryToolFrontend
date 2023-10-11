@@ -22,6 +22,7 @@ import ClearButton from 'src/components/ClearButton';
 import { AddIcon } from 'src/components/Icon';
 import InfiniteScroll from 'src/components/InfiniteScroll';
 import PostCard from 'src/components/PostCard';
+import Post from 'src/data/Post';
 
 export default function PostPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -125,7 +126,7 @@ export function PostPreview({ post }: PostPreviewProps) {
 	const navigate = useNavigate();
 	const { postSearchTag } = useTags();
 
-	const likeService = useLike('post', post.id, post.like);
+	const likeService = useLike('post', post.id, post.like, post.userLike);
 	post.like = likeService.likes;
 
 	return (
