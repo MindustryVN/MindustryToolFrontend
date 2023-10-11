@@ -4,6 +4,7 @@ import { API_BASE_URL } from './config/Config';
 import Schematic from 'src/data/Schematic';
 import Map from 'src/data/Map';
 import { TagChoice, Tags } from 'src/components/Tag';
+import Post from 'src/data/Post';
 
 export class API {
 	static REQUEST = axios.create({
