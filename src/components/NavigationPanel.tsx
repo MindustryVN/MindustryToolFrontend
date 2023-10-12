@@ -4,11 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import usePrivateAlert from 'src/hooks/UsePrivateAlert';
 import { useMe } from 'src/context/MeProvider';
-import useNotification from 'src/hooks/UseNotification';
 import { WEB_VERSION } from 'src/config/Config';
 import OutsideAlerter from 'src/components/OutsideAlerter';
 import { ReactNode } from 'react-markdown/lib/ast-to-react';
-import IfTrue from 'src/components/IfTrue';
 import ClearButton from 'src/components/ClearButton';
 import i18n from 'src/util/I18N';
 import { AdminIcon, BellIcon, CalculatorIcon, HomeIcon, LogicIcon, LoginIcon, LogoutIcon, MapIcon, PostIcon, SchematicIcon, ServerIcon, UserIcon, WebIcon } from 'src/components/Icon';
@@ -16,6 +14,8 @@ import LineDivider from 'src/components/LineDivider';
 import UserRoleDisplay from 'src/components/UserRoleDisplay';
 import UserAvatar from 'src/components/UserAvatar';
 import { cn } from 'src/util/Utils';
+import IfTrue from 'src/components/IfTrue';
+import { useNotification } from 'src/context/NotificationProvider';
 
 interface Path {
 	name: string;

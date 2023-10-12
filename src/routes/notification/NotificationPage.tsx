@@ -8,12 +8,12 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 import IconButton from 'src/components/IconButton';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/IfTrue';
 import Markdown from 'src/components/Markdown';
 import PrivateRoute from 'src/components/PrivateRoute';
-import useNotification from 'src/hooks/UseNotification';
 import Button from 'src/components/Button';
 import DateDisplay from 'src/components/Date';
+import IfTrue from 'src/components/IfTrue';
+import { useNotification } from 'src/context/NotificationProvider';
 
 export default function NotificationPage() {
 	return <PrivateRoute element={<NotificationContainer />} />;

@@ -23,7 +23,6 @@ import useInfinitePage from 'src/hooks/UseInfinitePage';
 import useLike from 'src/hooks/UseLike';
 import Map from 'src/data/Map';
 import TagPick from 'src/components/TagPick';
-import IfTrue from 'src/components/IfTrue';
 import Icon, { AddIcon } from 'src/components/Icon';
 import i18n from 'src/util/I18N';
 import useDialog from 'src/hooks/UseDialog';
@@ -41,6 +40,7 @@ import ClearButton from 'src/components/ClearButton';
 import Author from 'src/components/Author';
 import InfiniteScroll from 'src/components/InfiniteScroll';
 import BackButton from 'src/components/BackButton';
+import IfTrue from 'src/components/IfTrue';
 
 export default function MapPage() {
 	const [searchParam, setSearchParam] = useSearchParams();
@@ -179,7 +179,7 @@ interface MapPreviewProps {
 }
 
 export function MapPreview({ map, handleOpenModel }: MapPreviewProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<PreviewCard className='relative' key={map.id}>
@@ -219,7 +219,8 @@ interface MapInfoProps {
 }
 
 export function MapInfo({ map, handleCloseModel, handleDeleteMap }: MapInfoProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
+
 	const { mapSearchTag } = useTags();
 
 	return (

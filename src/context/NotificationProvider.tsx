@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { API } from 'src/API';
 import { useMe } from 'src/context/MeProvider';
 
@@ -11,6 +11,10 @@ export const NotificationContext = React.createContext<NotificationContextProps>
 	unreadNotifications: 0,
 	setUnreadNotifications: (_: (number: number) => number) => {},
 });
+
+export function useNotification() {
+	return useContext(NotificationContext);
+}
 
 interface NotificationProviderProps {
 	children: React.ReactNode;

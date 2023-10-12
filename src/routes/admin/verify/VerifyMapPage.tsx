@@ -91,7 +91,7 @@ interface MapUploadPreviewProps {
 }
 
 export function MapUploadPreview({ map, handleOpenModel }: MapUploadPreviewProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<PreviewCard>
@@ -124,7 +124,7 @@ export function MapUploadInfo({ map, handleRejectMap, handleCloseModel, handleVe
 	const verifyDialog = useDialog();
 	const rejectDialog = useDialog();
 
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	function handleAddTag(tag: TagChoice) {
 		tags.filter((q) => q !== tag);

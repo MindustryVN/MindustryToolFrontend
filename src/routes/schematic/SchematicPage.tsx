@@ -185,7 +185,7 @@ interface SchematicPreviewProps {
 }
 
 export function SchematicPreview({ schematic, handleOpenModel }: SchematicPreviewProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<PreviewCard className='relative h-full w-full' key={schematic.id}>
@@ -205,7 +205,7 @@ interface SchematicPreviewButtonProps {
 }
 
 function SchematicPreviewButton({ schematic }: SchematicPreviewButtonProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	const likeService = useLike('schematic', schematic.id, schematic.like, schematic.userLike);
 	schematic.like = likeService.likes;
@@ -228,7 +228,7 @@ interface SchematicInfoProps {
 }
 
 export function SchematicInfo({ schematic, handleCloseModel, handleDeleteSchematic }: SchematicInfoProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	const { schematicSearchTag } = useTags();
 
@@ -271,7 +271,7 @@ interface SchematicInfoButtonProps {
 
 function SchematicInfoButton({ schematic, handleCloseModel, handleDeleteSchematic }: SchematicInfoButtonProps) {
 	const { me } = useMe();
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	const { dialog, setVisibility } = useDialog();
 

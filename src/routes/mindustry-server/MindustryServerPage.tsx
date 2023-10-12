@@ -8,13 +8,13 @@ import { API } from 'src/API';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import i18n from 'src/util/I18N';
 import IfTrueElse from 'src/components/IfTrueElse';
-import IfTrue from 'src/components/IfTrue';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import ColorText from 'src/components/ColorText';
 import useClipboard from 'src/hooks/UseClipboard';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
+import IfTrue from 'src/components/IfTrue';
 
 export default function MindustryServerPage() {
 	const { pages, hasMore, isLoading, loadNextPage, filter } = useInfinitePage<MindustryServer>('mindustry-server', 100);
@@ -124,7 +124,7 @@ interface MindustryServerTableRowProps {
 function MindustryServerTableRow({ server, handleRemoveServer }: MindustryServerTableRowProps) {
 	const { me } = useMe();
 
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<tr className='border border-slate-600 p-2'>
@@ -203,7 +203,7 @@ interface MindustryServerCardProps {
 function MindustryServerCard({ server, handleRemoveServer }: MindustryServerCardProps) {
 	const { me } = useMe();
 
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<section className='no-scrollbar flex h-full w-full flex-col rounded-lg bg-slate-950 p-4'>

@@ -3,14 +3,13 @@ import Schematic from 'src/data/Schematic';
 import React, { useRef } from 'react';
 
 import i18n from 'src/util/I18N';
-import IfTrue from 'src/components/IfTrue';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
-import useModel from 'src/hooks/UseModel';
 import User from 'src/data/User';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import { SchematicInfo, SchematicPreview } from 'src/routes/schematic/SchematicPage';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import useModel from 'src/hooks/UseModel';
 
 interface UserSchematicTabProps {
 	user: User;
@@ -43,19 +42,14 @@ export default function UserSchematicTab({ user }: UserSchematicTabProps) {
 			<footer className='flex items-center justify-center'>
 				<ScrollToTopButton containerId='schematic-tab' />
 			</footer>
-			<IfTrue
-				condition={currentSchematic}
-				whenTrue={
-					currentSchematic.current &&
-					model(
-						<SchematicInfo
-							schematic={currentSchematic.current} //
-							handleCloseModel={() => setVisibility(false)}
-							handleDeleteSchematic={handleDeleteSchematic}
-						/>,
-					)
-				}
-			/>
+			{currentSchematic.current &&
+				model(
+					<SchematicInfo
+						schematic={currentSchematic.current} //
+						handleCloseModel={() => setVisibility(false)}
+						handleDeleteSchematic={handleDeleteSchematic}
+					/>,
+				)}
 		</main>
 	);
 }

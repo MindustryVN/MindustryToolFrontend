@@ -92,7 +92,7 @@ interface SchematicUploadPreviewProps {
 }
 
 export function SchematicUploadPreview({ schematic, handleOpenModel }: SchematicUploadPreviewProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<PreviewCard>
@@ -125,7 +125,7 @@ export function SchematicUploadInfo({ schematic, handleRejectSchematic, handleCl
 	const verifyDialog = useDialog();
 	const rejectDialog = useDialog();
 
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	function handleAddTag(tag: TagChoice) {
 		tags.filter((q) => q !== tag);
