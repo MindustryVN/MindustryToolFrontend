@@ -5,7 +5,6 @@ import i18n from 'src/util/I18N';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
 import { usePopup } from 'src/context/PopupMessageProvider';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import IfTrue from 'src/components/IfTrue';
 import LoadUserName from 'src/components/LoadUserName';
 import { Trans } from 'react-i18next';
 import IfTrueElse from 'src/components/IfTrueElse';
@@ -16,6 +15,7 @@ import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 import IconButton from 'src/components/IconButton';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import IfTrue from 'src/components/IfTrue';
 
 interface CommentSectionProps {
 	contentType: string;

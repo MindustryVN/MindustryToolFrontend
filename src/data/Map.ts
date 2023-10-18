@@ -3,7 +3,6 @@ import { Like } from 'src/data/Like';
 export default interface Map {
 	id: string;
 	name: string;
-	data: string;
 	authorId: string;
 	description: string;
 	tags: Array<string>;

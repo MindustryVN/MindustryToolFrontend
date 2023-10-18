@@ -11,7 +11,7 @@ import { SchematicUploadPreview } from 'src/routes/admin/verify/VerifySchematicP
 import { SchematicUploadInfo } from '../admin/verify/VerifySchematicPage';
 import InfiniteScroll from 'src/components/InfiniteScroll';
 
-export default function UserSchematicUploadTab() {
+export default function MeSchematicUploadTab() {
 	const currentSchematic = useRef<Schematic>();
 
 	const addPopup = usePopup();

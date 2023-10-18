@@ -24,7 +24,6 @@ import Button from 'src/components/Button';
 import PreviewCard from 'src/components/PreviewCard';
 import useDialog from 'src/hooks/UseDialog';
 import ConfirmBox from 'src/components/ConfirmBox';
-import { getDownloadUrl } from 'src/util/Utils';
 import { useTags } from 'src/context/TagProvider';
 import Author from 'src/components/Author';
 import { MessageBox } from 'src/components/MessageBox';
@@ -91,17 +90,22 @@ interface MapUploadPreviewProps {
 }
 
 export function MapUploadPreview({ map, handleOpenModel }: MapUploadPreviewProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<PreviewCard>
 			<PreviewImage src={`${API_BASE_URL}map-upload/${map.id}/image`} onClick={() => handleOpenModel(map)} />
 			<ColorText className='flex items-center justify-center p-2 text-center capitalize' text={map.name} />
 			<section className='flex flex-row gap-2 p-2'>
-				<IconButton className='h-8 w-full' title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(map.data, 'base64').toString())} />
+				<IconButton
+					className='h-8 w-full'
+					title='copy'
+					icon='/assets/icons/copy.png'
+					onClick={() => API.get(`map-upload/${map.id}/data`).then((result) => copy(result.data))}
+				/>
 				<DownloadButton
 					className='h-8 w-full'
-					href={getDownloadUrl(map.data)} //
+					href={`map-upload/${map.id}/download`} //
 					download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 			</section>
@@ -124,7 +128,7 @@ export function MapUploadInfo({ map, handleRejectMap, handleCloseModel, handleVe
 	const verifyDialog = useDialog();
 	const rejectDialog = useDialog();
 
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	function handleAddTag(tag: TagChoice) {
 		tags.filter((q) => q !== tag);
@@ -161,10 +165,15 @@ export function MapUploadInfo({ map, handleRejectMap, handleCloseModel, handleVe
 				</section>
 				<section className='flex flex-row justify-between'>
 					<section className='flex flex-row gap-2'>
-						<IconButton className='h-8 w-8' title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(map.data, 'base64').toString())} />
+						<IconButton
+							className='h-8 w-8'
+							title={i18n.t('copy')}
+							icon='/assets/icons/copy.png'
+							onClick={() => API.get(`map-upload/${map.id}/data`).then((result) => copy(result.data))}
+						/>
 						<DownloadButton
 							className='h-8 w-8'
-							href={getDownloadUrl(map.data)} //
+							href={`map-upload/${map.id}/download`} //
 							download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msch`}
 						/>
 						<Button className='h-8 p-1' title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />

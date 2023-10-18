@@ -10,7 +10,7 @@ import { PostUploadInfo, PostUploadPreview } from 'src/routes/admin/verify/Verif
 import InfiniteScroll from 'src/components/InfiniteScroll';
 import Post from 'src/data/Post';
 
-export default function UserPostUploadTab() {
+export default function MePostUploadTab() {
 	const currentPost = useRef<Post>();
 
 	const addPopup = usePopup();
@@ -33,7 +33,11 @@ export default function UserPostUploadTab() {
 
 	return (
 		<main id='post-tab' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
-			<InfiniteScroll infinitePage={usePage} mapper={(v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />} />
+			<InfiniteScroll
+				className='grid grid-cols-[repeat(auto-fill,min(400px,100%))] gap-2'
+				infinitePage={usePage}
+				mapper={(v) => <PostUploadPreview key={v.id} post={v} handleOpenModel={handleOpenPostInfo} />}
+			/>
 			<footer className='flex items-center justify-center'>
 				<ScrollToTopButton containerId='post-tab' />
 			</footer>

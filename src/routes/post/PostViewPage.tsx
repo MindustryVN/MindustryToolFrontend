@@ -12,11 +12,11 @@ import TagContainer from 'src/components/TagContainer';
 import Markdown from 'src/components/Markdown';
 import DateDisplay from 'src/components/Date';
 import IconButton from 'src/components/IconButton';
-import IfTrue from 'src/components/IfTrue';
 import { Users } from 'src/data/User';
 import { useMe } from 'src/context/MeProvider';
 import { useTags } from 'src/context/TagProvider';
 import Post from 'src/data/Post';
+import IfTrue from 'src/components/IfTrue';
 
 export default function PostViewPage() {
 	const { postId } = useParams();

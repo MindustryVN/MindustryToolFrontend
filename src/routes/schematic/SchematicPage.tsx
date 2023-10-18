@@ -38,7 +38,6 @@ import useDialog from 'src/hooks/UseDialog';
 import CommentSection from 'src/components/CommentSection';
 import { Users } from 'src/data/User';
 import { useTags } from 'src/context/TagProvider';
-import { getDownloadUrl } from 'src/util/Utils';
 import OptionBox from 'src/components/OptionBox';
 import ClearButton from 'src/components/ClearButton';
 import Author from 'src/components/Author';
@@ -185,7 +184,7 @@ interface SchematicPreviewProps {
 }
 
 export function SchematicPreview({ schematic, handleOpenModel }: SchematicPreviewProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	return (
 		<PreviewCard className='relative h-full w-full' key={schematic.id}>
@@ -205,7 +204,7 @@ interface SchematicPreviewButtonProps {
 }
 
 function SchematicPreviewButton({ schematic }: SchematicPreviewButtonProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	const likeService = useLike('schematic', schematic.id, schematic.like, schematic.userLike);
 	schematic.like = likeService.likes;
@@ -215,8 +214,8 @@ function SchematicPreviewButton({ schematic }: SchematicPreviewButtonProps) {
 			<IconButton className='h-8 w-full' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount className='h-8 w-full' count={likeService.likes} />
 			<IconButton className='h-8 w-full' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<IconButton className='h-8 w-full' title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
-			<DownloadButton className='h-8 w-full' href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
+			<IconButton className='h-8 w-full' title='copy' icon='/assets/icons/copy.png' onClick={() => API.get(`schematic/${schematic.id}/data`).then((result) => copy(result.data))} />
+			<DownloadButton className='h-8 w-full' href={`schematic/${schematic.id}/download`} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 		</section>
 	);
 }
@@ -228,7 +227,7 @@ interface SchematicInfoProps {
 }
 
 export function SchematicInfo({ schematic, handleCloseModel, handleDeleteSchematic }: SchematicInfoProps) {
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	const { schematicSearchTag } = useTags();
 
@@ -271,7 +270,7 @@ interface SchematicInfoButtonProps {
 
 function SchematicInfoButton({ schematic, handleCloseModel, handleDeleteSchematic }: SchematicInfoButtonProps) {
 	const { me } = useMe();
-	const { copy } = useClipboard();
+	const copy = useClipboard();
 
 	const { dialog, setVisibility } = useDialog();
 
@@ -284,8 +283,8 @@ function SchematicInfoButton({ schematic, handleCloseModel, handleDeleteSchemati
 				<IconButton className='h-8 w-8' title='up-vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 				<LikeCount className='h-8 w-8' count={likeService.likes} />
 				<IconButton className='h-8 w-8' title='down-vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-				<IconButton className='h-8 w-8' title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
-				<DownloadButton className='h-8 w-8' href={getDownloadUrl(schematic.data)} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
+				<IconButton className='h-8 w-8' title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => API.get(`schematic/${schematic.id}/data`).then((result) => copy(result.data))} />
+				<DownloadButton className='h-8 w-8' href={`schematic/${schematic.id}/download`} download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`} />
 				<IfTrue
 					condition={Users.isAuthorOrAdmin(schematic.id, me)} //
 					whenTrue={<IconButton className='h-8 w-8' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}
