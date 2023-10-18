@@ -16,7 +16,7 @@ export default function UserPostTab({ user }: UserPostTabProps) {
 
 	return (
 		<main id='post-tab' className='flex h-full w-full flex-col gap-2 overflow-y-auto'>
-			<InfiniteScroll infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />}></InfiniteScroll>
+			<InfiniteScroll className='grid grid-cols-[repeat(auto-fill,min(400px,100%))] gap-2' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />}></InfiniteScroll>
 			<footer className='flex items-center justify-center'>
 				<ScrollToTopButton containerId='post-tab' />
 			</footer>

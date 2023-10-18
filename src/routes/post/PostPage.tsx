@@ -103,7 +103,7 @@ export default function PostPage() {
 				</section>
 				<TagEditContainer className='m-auto flex w-3/4 items-center justify-center' tags={tagQuery} onRemove={(index) => handleRemoveTag(index)} />
 			</div>
-			<InfiniteScroll className='flex flex-row flex-wrap gap-2' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />} />
+			<InfiniteScroll className='grid grid-cols-[repeat(auto-fill,min(400px,100%))] gap-2' infinitePage={usePage} mapper={(v) => <PostPreview key={v.id} post={v} />} />
 			<section className='fixed bottom-4 right-0 flex flex-col items-center justify-center'>
 				<ClearButton title={i18n.t('upload-your-schematic')} onClick={() => navigate('/upload/post')}>
 					<AddIcon className='h-10 w-10' />

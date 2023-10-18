@@ -1,6 +1,6 @@
 import { API } from 'src/API';
 import Map from 'src/data/Map';
-import React, { useRef } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 
 import i18n from 'src/util/I18N';
 import useInfinitePage from 'src/hooks/UseInfinitePage';
@@ -9,8 +9,36 @@ import { usePopup } from 'src/context/PopupMessageProvider';
 import ScrollToTopButton from 'src/components/ScrollToTopButton';
 import { MapUploadInfo, MapUploadPreview } from 'src/routes/admin/verify/VerifyMapPage';
 import InfiniteScroll from 'src/components/InfiniteScroll';
+import { cn } from 'src/util/Utils';
+import UserMapTab from 'src/routes/user/UserMapTab';
+import { useMe } from 'src/context/MeProvider';
 
-export default function UserMapUploadTab() {
+export default function MeMap() {
+	const [enabled, setEnable] = useState(true);
+	const { me } = useMe();
+
+	if (!me) return <Fragment></Fragment>;
+
+	return (
+		<div>
+			<button
+				className={cn('fixed bottom-0 right-0 m-4 flex h-6 w-12 flex-row items-center overflow-hidden rounded-3xl border-2 border-white', {
+					'border-green-500': enabled,
+				})}
+				onClick={() => setEnable((prev) => !prev)}>
+				<div
+					className={cn('h-6 w-6 rounded-3xl bg-white transition-transform delay-75', {
+						'translate-x-[100%]': enabled,
+						'bg-green-500': enabled,
+					})}
+				/>
+			</button>
+			{enabled ? <UserMapTab user={me} /> : <MeMapUploadTab />}
+		</div>
+	);
+}
+
+function MeMapUploadTab() {
 	const currentMap = useRef<Map>();
 
 	const addPopup = usePopup();

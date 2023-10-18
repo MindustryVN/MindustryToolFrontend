@@ -34,7 +34,6 @@ import PreviewImage from 'src/components/PreviewImage';
 import InfoImage from 'src/components/InfoImage';
 import Description from 'src/components/Description';
 import { useTags } from 'src/context/TagProvider';
-import { getDownloadUrl } from 'src/util/Utils';
 import OptionBox from 'src/components/OptionBox';
 import ClearButton from 'src/components/ClearButton';
 import Author from 'src/components/Author';
@@ -207,7 +206,7 @@ function MapPreviewButton({ map }: MapPreviewButtonProps) {
 			<IconButton className='h-8 w-full' title='up vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 			<LikeCount className='h-8 w-full' count={likeService.likes} />
 			<IconButton className='h-8 w-full' title='down vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-			<DownloadButton className='h-8 w-full' href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msav`} />
+			<DownloadButton className='h-8 w-full' href={`map/${map.id}/download`} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msav`} />
 		</section>
 	);
 }
@@ -268,7 +267,7 @@ function MapInfoButton({ map, handleCloseModel, handleDeleteMap }: MapInfoButton
 				<IconButton className='h-8 w-8' title='up-vote' active={likeService.liked} icon='/assets/icons/up-vote.png' onClick={() => likeService.like()} />
 				<LikeCount className='h-8 w-8' count={likeService.likes} />
 				<IconButton className='h-8 w-8' title='down-vote' active={likeService.disliked} icon='/assets/icons/down-vote.png' onClick={() => likeService.dislike()} />
-				<DownloadButton className='h-8 w-8' href={getDownloadUrl(map.data)} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msch`} />
+				<DownloadButton className='h-8 w-8' href={`map/${map.id}/download`} download={`${('map_' + map.name).trim().replaceAll(' ', '_')}.msch`} />
 				<IfTrue
 					condition={Users.isAuthorOrAdmin(map.id, me)} //
 					whenTrue={<IconButton className='h-8 w-8' title={i18n.t('delete')} icon='/assets/icons/trash-16.png' onClick={() => setVisibility(true)} />}

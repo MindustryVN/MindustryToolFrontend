@@ -50,51 +50,57 @@ export default function UserPage() {
 
 	return (
 		<main className='flex h-full w-full flex-col px-4'>
-			<SwitchBar
-				className='flex h-full w-full flex-col'
-				elements={[
-					{
-						id: 'info',
-						name: (
-							<SwitchName>
-								<InfoIcon className='h-6 w-6' />
-								<Trans i18nKey='information' />
-							</SwitchName>
-						),
-						element: <UserInfoTab user={user} />,
-					},
-					{
-						id: 'schematic',
-						name: (
-							<SwitchName>
-								<SchematicIcon className='h-6 w-6' />
-								<Trans i18nKey='schematic' />
-							</SwitchName>
-						),
-						element: <UserSchematicTab user={user} />,
-					},
-					{
-						id: 'map',
-						name: (
-							<SwitchName>
-								<MapIcon className='h-6 w-6' />
-								<Trans i18nKey='map' />
-							</SwitchName>
-						),
-						element: <UserMapTab user={user} />,
-					},
-					{
-						id: 'post',
-						name: (
-							<SwitchName>
-								<PostIcon className='h-6 w-6' />
-								<Trans i18nKey='post' />
-							</SwitchName>
-						),
-						element: <UserPostTab user={user} />,
-					},
-				]}
-			/>
+			<UserPanel user={user} />
 		</main>
+	);
+}
+
+function UserPanel({ user }: { user: User }) {
+	return (
+		<SwitchBar
+			className='flex h-full w-full flex-col'
+			elements={[
+				{
+					id: 'info',
+					name: (
+						<SwitchName>
+							<InfoIcon className='h-6 w-6' />
+							<Trans i18nKey='information' />
+						</SwitchName>
+					),
+					element: <UserInfoTab user={user} />,
+				},
+				{
+					id: 'schematic',
+					name: (
+						<SwitchName>
+							<SchematicIcon className='h-6 w-6' />
+							<Trans i18nKey='schematic' />
+						</SwitchName>
+					),
+					element: <UserSchematicTab user={user} />,
+				},
+				{
+					id: 'map',
+					name: (
+						<SwitchName>
+							<MapIcon className='h-6 w-6' />
+							<Trans i18nKey='map' />
+						</SwitchName>
+					),
+					element: <UserMapTab user={user} />,
+				},
+				{
+					id: 'post',
+					name: (
+						<SwitchName>
+							<PostIcon className='h-6 w-6' />
+							<Trans i18nKey='post' />
+						</SwitchName>
+					),
+					element: <UserPostTab user={user} />,
+				},
+			]}
+		/>
 	);
 }

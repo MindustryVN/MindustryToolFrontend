@@ -2,12 +2,6 @@ import { Buffer } from 'buffer';
 import { twMerge } from 'tailwind-merge';
 import { clsx, ClassValue } from 'clsx';
 
-export function getDownloadUrl(data: string): string {
-	const blob = new Blob([Buffer.from(Buffer.from(data, 'base64').toString(), 'base64')], {
-		type: 'octet/stream',
-	});
-	return window.URL.createObjectURL(blob);
-}
 
 export function array2dToArray1d<T>(arr2d: T[][]) {
 	const arr: T[] = [];

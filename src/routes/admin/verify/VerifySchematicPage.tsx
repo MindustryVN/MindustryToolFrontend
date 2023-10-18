@@ -25,7 +25,6 @@ import Button from 'src/components/Button';
 import PreviewCard from 'src/components/PreviewCard';
 import useDialog from 'src/hooks/UseDialog';
 import ConfirmBox from 'src/components/ConfirmBox';
-import { getDownloadUrl } from 'src/util/Utils';
 import { useTags } from 'src/context/TagProvider';
 import Author from 'src/components/Author';
 import { MessageBox } from 'src/components/MessageBox';
@@ -99,10 +98,10 @@ export function SchematicUploadPreview({ schematic, handleOpenModel }: Schematic
 			<PreviewImage src={`${API_BASE_URL}schematic-upload/${schematic.id}/image`} onClick={() => handleOpenModel(schematic)} />
 			<ColorText className='flex items-center justify-center p-2 text-center capitalize' text={schematic.name} />
 			<section className='flex flex-row gap-2 p-2'>
-				<IconButton className='h-8 w-full' title='copy' icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
+				<IconButton className='h-8 w-full' title='copy' icon='/assets/icons/copy.png' onClick={() => API.get(`schematic-upload/${schematic.id}/data`).then((result) => copy(result.data))} />
 				<DownloadButton
 					className='h-8 w-full'
-					href={getDownloadUrl(schematic.data)} //
+					href={`schematic-upload/${schematic.id}/download`} //
 					download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}
 				/>
 			</section>
@@ -163,10 +162,15 @@ export function SchematicUploadInfo({ schematic, handleRejectSchematic, handleCl
 				</section>
 				<section className='flex flex-row justify-between'>
 					<section className='flex flex-row gap-2'>
-						<IconButton className='h-8 w-8' title={i18n.t('copy')} icon='/assets/icons/copy.png' onClick={() => copy(Buffer.from(schematic.data, 'base64').toString())} />
+						<IconButton
+							className='h-8 w-8'
+							title={i18n.t('copy')}
+							icon='/assets/icons/copy.png'
+							onClick={() => API.get(`schematic-upload/${schematic.id}/data`).then((result) => copy(result.data))}
+						/>
 						<DownloadButton
 							className='h-8 w-8'
-							href={getDownloadUrl(schematic.data)} //
+							href={`schematic-upload/${schematic.id}/download`} //
 							download={`${('schematic_' + schematic.name).trim().replaceAll(' ', '_')}.msch`}
 						/>
 						<Button className='h-8 p-1' title={i18n.t('reject')} children={<Trans i18nKey='reject' />} onClick={() => rejectDialog.setVisibility(true)} />

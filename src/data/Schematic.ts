@@ -3,7 +3,6 @@ import { Like } from "src/data/Like";
 export default interface Schematic {
 	id: string;
 	name: string;
-	data: string;
 	authorId: string;
 	description: string;
 	requirement: Array<ItemRequirement>;
