@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Buffer } from 'buffer';
 import { TagChoice, Tags } from 'src/components/Tag';
 import { API } from 'src/API';
 import { API_BASE_URL } from 'src/config/Config';
