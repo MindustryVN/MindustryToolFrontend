@@ -6,7 +6,6 @@ import { API_BASE_URL, FRONTEND_URL } from 'src/config/Config';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { API } from 'src/API';
-import { Buffer } from 'buffer';
 import { useMe } from 'src/context/MeProvider';
 
 import PreviewImage from 'src/components/PreviewImage';
