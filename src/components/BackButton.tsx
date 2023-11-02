@@ -10,7 +10,7 @@ interface BackButtonProps {
 
 export default function BackButton({ onClick, ...props }: BackButtonProps & HTMLProps<HTMLButtonElement>) {
 	return (
-		<Button className='flex items-center justify-center gap-1 p-1' title={i18n.t('back')} onClick={() => onClick()} {...props}>
+		<Button className='flex items-center justify-center gap-1 p-1 whitespace-nowrap' title={i18n.t('back')} onClick={() => onClick()} {...props}>
 			<BackIcon className='h-4 w-4' />
 			<Trans className='text-center' i18nKey='back' />
 		</Button>
