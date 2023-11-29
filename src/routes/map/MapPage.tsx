@@ -67,7 +67,7 @@ export default function MapPage() {
 	const { model, setVisibility } = useModel();
 	const addPopup = usePopup();
 
-	const usePage = useInfinitePage<Map>('map', 20, searchConfig.current);
+	const usePage = useInfinitePage<Map>('maps', 20, searchConfig.current);
 	const { loadNextPage } = usePage;
 
 	const navigate = useNavigate();

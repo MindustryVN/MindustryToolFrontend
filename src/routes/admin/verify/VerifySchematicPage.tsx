@@ -39,7 +39,7 @@ export default function VerifySchematicPage() {
 
 	const { model, setVisibility } = useModel();
 
-	const usePage = useInfinitePage<Schematic>('schematic-upload', 20);
+	const usePage = useInfinitePage<Schematic>('schematics/upload', 20);
 
 	function handleOpenSchematicInfo(schematic: Schematic) {
 		setCurrentSchematic(schematic);

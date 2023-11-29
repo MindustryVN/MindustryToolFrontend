@@ -13,7 +13,7 @@ import InfiniteScroll from 'src/components/InfiniteScroll';
 
 export default function LogPage() {
 	const [contentType, setContentType] = useState('system');
-	const logTypes = useQuery<string[]>('log', []);
+	const logTypes = useQuery<string[]>('logs', []);
 
 	if (!logTypes.data) return <LoadingSpinner />;
 
@@ -36,7 +36,7 @@ interface LogContainerProps {
 }
 
 function LogContainer({ contentType }: LogContainerProps) {
-	const usePage = useInfinitePage<Log>(`log/${contentType}`, 20);
+	const usePage = useInfinitePage<Log>(`logs/${contentType}`, 20);
 	const addPopup = usePopup();
 
 	function handleDeleteLog(id: string) {

@@ -38,7 +38,7 @@ export default function VerifyMapPage() {
 
 	const { model, setVisibility } = useModel();
 
-	const usePage = useInfinitePage<Map>('map-upload', 20);
+	const usePage = useInfinitePage<Map>('maps/upload', 20);
 
 	function handleOpenMapInfo(map: Map) {
 		setCurrentMap(map);

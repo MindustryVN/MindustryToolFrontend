@@ -32,7 +32,7 @@ export default function VerifyPostPage() {
 
 	const addPopup = usePopup();
 
-	const usePage = useInfinitePage<Post>('post-upload', 20);
+	const usePage = useInfinitePage<Post>('posts/upload', 20);
 	const { model, setVisibility } = useModel();
 
 	function handleOpenPostInfo(post: Post) {
