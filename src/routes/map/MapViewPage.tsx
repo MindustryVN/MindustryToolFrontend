@@ -12,7 +12,7 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 
 export default function MapPreviewPage() {
 	const { mapId } = useParams();
-	const { data, isLoading, isError } = useQuery<Map>(`map/${mapId}`);
+	const { data, isLoading, isError } = useQuery<Map>(`maps/${mapId}`);
 
 	const navigate = useNavigate();
 

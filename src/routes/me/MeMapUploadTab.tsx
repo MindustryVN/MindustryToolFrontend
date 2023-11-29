@@ -44,7 +44,7 @@ function MeMapUploadTab() {
 	const addPopup = usePopup();
 
 	const { model, setVisibility } = useModel();
-	const usePage = useInfinitePage<Map>(`user/map-upload`, 20);
+	const usePage = useInfinitePage<Map>(`users/@me/maps`, 20);
 
 	function rejectMap(map: Map, reason: string) {
 		setVisibility(false);

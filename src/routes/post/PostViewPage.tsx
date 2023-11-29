@@ -20,7 +20,7 @@ import IfTrue from 'src/components/IfTrue';
 
 export default function PostViewPage() {
 	const { postId } = useParams();
-	const { data, isLoading, isError } = useQuery<Post>(`post/${postId}`);
+	const { data, isLoading, isError } = useQuery<Post>(`posts/${postId}`);
 
 	const navigate = useNavigate();
 

@@ -12,7 +12,7 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 
 export default function SchematicPreviewPage() {
 	const { schematicId } = useParams();
-	const { data, isLoading, isError } = useQuery<Schematic>(`schematic/${schematicId}`);
+	const { data, isLoading, isError } = useQuery<Schematic>(`schematics/${schematicId}`);
 
 	const navigate = useNavigate();
 

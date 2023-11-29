@@ -6,13 +6,13 @@ interface UserRoleDisplayProps {
 }
 
 export default function UserRoleDisplay({ roles }: UserRoleDisplayProps) {
-	let arr: ReactNode[] = [];
-
-	for (let i = 0; i < roles.length; i++) {
-		arr.push(<Role key={i} role={roles[i]} />);
-	}
-
-	return <section className='flex gap-1'>{arr}</section>;
+	return (
+		<section className='flex gap-1'>
+			{roles.map((role, index) => (
+				<Role key={index} role={role} />
+			))}
+		</section>
+	);
 }
 
 function Role({ role }: { role: UserRole }): ReactNode {
@@ -21,6 +21,6 @@ function Role({ role }: { role: UserRole }): ReactNode {
 			return <span className='text-green-500'>{role}</span>;
 
 		default:
-			return <></>;
+			return null;
 	}
 }
