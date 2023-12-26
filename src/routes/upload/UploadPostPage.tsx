@@ -115,7 +115,7 @@ export default function UploadPostPage() {
 			<section className='box-border flex h-full w-full flex-col gap-2'>
 				<section className='flex w-full flex-col gap-2'>
 					<section className='flex flex-row justify-end gap-2'>
-						<a className='rounded-lg border-2 border-slate-500 bg-slate-950 px-2 py-1' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
+						<a className='rounded-lg border border-slate-500 bg-slate-950 px-2 py-1' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 							<Trans i18nKey='how-to-write-markdown' />
 						</a>
 						<Button className='bg-slate-950 px-2 py-1' title={i18n.t('show-preview')} onClick={() => setVisibility(true)}>

@@ -22,7 +22,7 @@ export default function MeMap() {
 	return (
 		<div>
 			<button
-				className={cn('fixed bottom-0 right-0 m-4 flex h-6 w-12 flex-row items-center overflow-hidden rounded-3xl border-2 border-white', {
+				className={cn('fixed bottom-0 right-0 m-4 flex h-6 w-12 flex-row items-center overflow-hidden rounded-3xl border border-white', {
 					'border-green-500': enabled,
 				})}
 				onClick={() => setEnable((prev) => !prev)}>
