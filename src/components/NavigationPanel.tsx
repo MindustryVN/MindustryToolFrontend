@@ -140,7 +140,7 @@ export default function NavigationPanel() {
 				</section>
 				<div className={cn('fixed left-0 top-0 z-nav-bar h-full w-full backdrop-blur-sm', { hidden: !showNavigatePanel })}>
 					<OutsideAlerter
-						className='absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-x-hidden overflow-y-auto no-scrollbar bg-slate-950 p-2'
+						className='no-scrollbar absolute left-0 top-0 box-border flex h-full min-w-[min(300px,30%)] animate-popup flex-col overflow-y-auto overflow-x-hidden bg-slate-950 p-2'
 						onClickOutside={() => setShowNavigatePanel(false)}>
 						<div className='flex h-full flex-col justify-between' onMouseLeave={() => setShowNavigatePanel(false)}>
 							<div className='flex w-full flex-col gap-2'>
