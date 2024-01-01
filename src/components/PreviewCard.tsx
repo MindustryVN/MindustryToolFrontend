@@ -7,5 +7,5 @@ interface PreviewCardProps {
 }
 
 export default function PreviewCard({ className, children }: PreviewCardProps) {
-	return <section className={cn(`w-[var(--preview-image-min-size)] animate-appear rounded-lg overflow-hidden border-slate-500 border-2 flex flex-col justify-between `, className)}>{children}</section>;
+	return <section className={cn(`w-[var(--preview-image-min-size)] animate-appear rounded-lg overflow-hidden border-slate-500 border flex flex-col justify-between `, className)}>{children}</section>;
 }

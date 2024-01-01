@@ -42,7 +42,7 @@ export default function SearchBox<T>({ className, placeholder, value, items, chi
 				</section>
 				<section className='relative w-full'>
 					{showDropbox && (
-						<section className='absolute z-overlay mb-4 mt-2 flex max-h-[50vh] w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden rounded-lg border-2 border-slate-500 bg-slate-950'>
+						<section className='absolute z-overlay mb-4 mt-2 flex max-h-[50vh] w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden rounded-lg border border-slate-500 bg-slate-950'>
 							{items.length !== 0 ? (
 								items.map((node, index) => (
 									<DropboxElement

@@ -13,7 +13,7 @@ export default function Button({ className, children, title, active, onClick, ..
 	return (
 		<button
 			{...props}
-			className={cn(`flex items-center justify-center rounded-md border-2 border-slate-500 hover:bg-blue-500`, className, {
+			className={cn(`flex items-center justify-center rounded-md border border-slate-500 hover:bg-blue-500`, className, {
 				'bg-blue-500': active,
 			})}
 			title={title}

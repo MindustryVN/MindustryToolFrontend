@@ -130,7 +130,7 @@ export function PostUploadInfo({ post, handleCloseModel, handleVerifyPost, handl
 	return (
 		<section className='box-border flex h-full w-full flex-col justify-between gap-2 overflow-y-auto p-4'>
 			<section className='flex flex-row justify-end gap-2'>
-				<a className='rounded-lg border-2 border-slate-500 bg-slate-950 px-2 py-1' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
+				<a className='rounded-lg border border-slate-500 bg-slate-950 px-2 py-1' href='https://vi.wikipedia.org/wiki/Markdown' target='_blank' rel='noreferrer'>
 					<Trans i18nKey='how-to-write-markdown' />
 				</a>
 				<Button className='bg-slate-950 px-2 py-1' title={i18n.t('show-preview')} onClick={() => setVisibility(true)}>

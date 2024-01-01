@@ -30,7 +30,7 @@ export default function LoadUserName({ userId }: LoadUserNameProps) {
 						setDisplayUser(result.data);
 						LoadingUserCache.users.cache[userId] = result.data;
 					}) //
-					.catch(() => console.log(`User not found: ${userId}`))
+					.catch(() => console.error(`User not found: ${userId}`))
 					.finally(() => setLoading(false));
 			}
 		}
